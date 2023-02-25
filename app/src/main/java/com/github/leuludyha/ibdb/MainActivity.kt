@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
@@ -39,6 +40,7 @@ fun MainContent() {
     val username = remember { mutableStateOf("") }
 
     Column(
+        modifier = Modifier.testTag("main::column"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
