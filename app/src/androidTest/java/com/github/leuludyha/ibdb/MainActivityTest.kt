@@ -13,7 +13,7 @@ import org.junit.Test
 
 class MainActivityTest {
 
-    @get:Rule 
+    @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
