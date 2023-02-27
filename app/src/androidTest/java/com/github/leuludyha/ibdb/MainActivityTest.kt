@@ -1,19 +1,15 @@
 package com.github.leuludyha.ibdb
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.ext.junit.rules.ActivityScenarioRule
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.hamcrest.Matcher
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
 
 class MainActivityTest {
 
@@ -26,15 +22,13 @@ class MainActivityTest {
 
         val username = "Super Cool Username"
 
-        val column = composeTestRule.onNode(hasTestTag("main::column"))
-
-        // Click on text
-        column.onChildAt(0)
+        // Click on text and input username
+        composeTestRule.onNode(hasTestTag("main::text_field"))
             .performClick()
             .performTextInput(username)
 
         // Click on button
-        column.onChildAt(1)
+        composeTestRule.onNode(hasTestTag("main::start_button"))
             .performClick()
 
         intended(hasExtra(GreetingActivity.DeclaredIntents.username, username))
