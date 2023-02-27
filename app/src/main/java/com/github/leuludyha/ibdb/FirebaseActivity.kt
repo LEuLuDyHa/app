@@ -13,6 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import java.util.concurrent.CompletableFuture
 
 class FirebaseActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,7 @@ class FirebaseActivity : ComponentActivity() {
 fun FirebaseContent() {
     val email = remember { mutableStateOf("") }
     val phone = remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -55,40 +60,35 @@ fun FirebaseContent() {
             placeholder = { Text(text = "Enter phone number")}
         )
         Row {
+            val db: DatabaseReference = Firebase.database.reference
             Button(
                 onClick = {
+                    val future = CompletableFuture<String>()
 
+                    db.child(phone.value).get().addOnSuccessListener {
+                        if (it.value == null) future.completeExceptionally(NoSuchFieldException())
+                        else future.complete(it.value as String)
+                    }.addOnFailureListener {
+                        future.completeExceptionally(it)
+                    }
+
+                    future.thenAccept {
+                        email.value= it
+                    }
                 }
             ) {
                 Text(text = "Get")
             }
             Button(
-                onClick = { }
+                onClick = {
+                    db.child(phone.value).setValue(email.value)
+                }
             ) {
                 Text(text = "Set")
             }
         }
     }
 }
-
-//@Composable
-//fun GetButton(){
-//    Button(
-//        onClick = { }
-//    ) {
-//        Text(text = "Get")
-//    }
-//
-//}
-//
-//@Composable
-//fun SetButton(){
-//    Button(
-//        onClick = { }
-//    ) {
-//        Text(text = "Set")
-//    }
-//}
 
 @Preview(showBackground = true)
 @Composable
