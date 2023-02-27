@@ -26,15 +26,13 @@ class MainActivityTest {
 
         val username = "Super Cool Username"
 
-        val column = composeTestRule.onNode(hasTestTag("main::column"))
-
-        // Click on text
-        column.onChildAt(0)
+        // Click on text and input username
+        composeTestRule.onNode(hasTestTag("main::text_field"))
             .performClick()
             .performTextInput(username)
 
         // Click on button
-        column.onChildAt(1)
+        composeTestRule.onNode(hasTestTag("main::start_button"))
             .performClick()
 
         intended(hasExtra(GreetingActivity.DeclaredIntents.username, username))

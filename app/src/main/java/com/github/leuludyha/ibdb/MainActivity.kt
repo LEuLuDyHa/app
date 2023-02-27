@@ -40,23 +40,32 @@ fun MainContent() {
     val username = remember { mutableStateOf("") }
 
     Column(
-        modifier = Modifier.testTag("main::column"),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        BasicTextField(value = username.value, onValueChange = { username.value = it })
-        StartButton(username.value)
+        BasicTextField(
+            modifier = Modifier.testTag("main::text_field"),
+            value = username.value,
+            onValueChange = { username.value = it }
+        )
+        StartButton(
+            modifier = Modifier.testTag("main::start_button"),
+            username = username.value
+        )
     }
 }
 
 @Composable
-fun StartButton(username: String) {
+fun StartButton(username: String, modifier: Modifier) {
     val context = LocalContext.current
 
     val intent = Intent(context, GreetingActivity::class.java)
     intent.putExtra(GreetingActivity.DeclaredIntents.username, username)
 
-    Button(onClick = { context.startActivity(intent) }) {
+    Button(
+        onClick = { context.startActivity(intent) },
+        modifier
+    ) {
         Text(text = "Start !")
     }
 }
