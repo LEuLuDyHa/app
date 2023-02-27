@@ -26,7 +26,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
         debug {
             testCoverageEnabled true
         }
@@ -80,7 +79,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
 
     debugImplementation "androidx.fragment:fragment-testing:1.5.5"
-
 }
 
 tasks.withType(Test) {
@@ -95,6 +93,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
     }
 
     def fileFilter = [
+            // TODO if we use Hilt later on, special case to handle (see bootcamp week 1)
             '**/R.class',
             '**/R$*.class',
             '**/BuildConfig.*',
@@ -102,7 +101,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
             '**/*Test*.*',
             'android/**/*.*',
     ]
-    def debugTree = fileTree(dir: "$project.buildDir/intermediates/javac/debug/classes", excludes: fileFilter)
+    def debugTree = fileTree(dir: "$project.buildDir/tmp/kotlin-classes/debug", excludes: fileFilter)
     def mainSrc = "$project.projectDir/src/main/java"
 
     sourceDirectories.setFrom(files([mainSrc]))
