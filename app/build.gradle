@@ -60,7 +60,6 @@ dependencies {
 
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation 'androidx.fragment:fragment-ktx:1.5.5'
 
     implementation "androidx.compose.material3:material3:$material_version"
     // It is not recommended to use this directly as the archive size is ~30MB apparently
@@ -77,8 +76,6 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
-
-    debugImplementation "androidx.fragment:fragment-testing:1.5.5"
 }
 
 tasks.withType(Test) {
