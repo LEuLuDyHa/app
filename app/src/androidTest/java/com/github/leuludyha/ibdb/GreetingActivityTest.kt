@@ -15,7 +15,7 @@ import org.junit.Test
 class GreetingActivityTest {
 
     @get:Rule
-    val composeRule = createEmptyComposeRule() 
+    val composeRule = createEmptyComposeRule()
 
     @Test
     fun usernameIsDisplayedOnActivityStartedWithIntent() {
