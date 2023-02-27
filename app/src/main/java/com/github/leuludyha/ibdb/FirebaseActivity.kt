@@ -21,6 +21,7 @@ import java.util.concurrent.CompletableFuture
 class FirebaseActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             IBDBTheme {
                 // A surface container using the 'background' color from the theme
