@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -18,6 +19,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.CompletableFuture
 
+private val db: DatabaseReference = Firebase.database.reference
 class FirebaseActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,33 +63,42 @@ fun FirebaseContent() {
             placeholder = { Text(text = "Enter phone number")}
         )
         Row {
-            val db: DatabaseReference = Firebase.database.reference
-            Button(
-                onClick = {
-                    val future = CompletableFuture<String>()
+            GetButton(email = email, phone = phone.value )
+            SetButton(email = email.value, phone = phone.value)
+        }
+    }
+}
 
-                    db.child(phone.value).get().addOnSuccessListener {
-                        if (it.value == null) future.completeExceptionally(NoSuchFieldException())
-                        else future.complete(it.value as String)
-                    }.addOnFailureListener {
-                        future.completeExceptionally(it)
-                    }
+@Composable
+fun GetButton(email: MutableState<String>, phone: String) {
+    Button(
+        onClick = {
+            val future = CompletableFuture<String>()
 
-                    future.thenAccept {
-                        email.value= it
-                    }
-                }
-            ) {
-                Text(text = "Get")
+            db.child(phone).get().addOnSuccessListener {
+                if (it.value == null) future.completeExceptionally(NoSuchFieldException())
+                else future.complete(it.value as String)
+            }.addOnFailureListener {
+                future.completeExceptionally(it)
             }
-            Button(
-                onClick = {
-                    db.child(phone.value).setValue(email.value)
-                }
-            ) {
-                Text(text = "Set")
+
+            future.thenAccept {
+                email.value = it
             }
         }
+    ) {
+        Text(text = "Get")
+    }
+}
+
+@Composable
+fun SetButton(email: String, phone: String) {
+    Button(
+        onClick = {
+            db.child(phone).setValue(email)
+        }
+    ) {
+        Text(text = "Set")
     }
 }
 
