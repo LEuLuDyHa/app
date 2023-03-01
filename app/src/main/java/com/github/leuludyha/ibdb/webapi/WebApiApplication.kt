@@ -2,12 +2,10 @@ package com.github.leuludyha.ibdb.webapi
 
 import android.app.Application
 import com.github.leuludyha.ibdb.database.*
-import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 
 // TODO Modify this application to have a more general one
-@HiltAndroidApp
 open class WebApiApplication : Application() {
     open fun getBaseUrl() = "https://www.boredapi.com/api/"
 
