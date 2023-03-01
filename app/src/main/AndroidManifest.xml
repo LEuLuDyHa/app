@@ -18,7 +18,7 @@
         tools:targetApi="31">
         <activity
             android:name=".webapi.WebApiActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_web_api"
             android:theme="@style/Theme.IBDB" />
         <activity

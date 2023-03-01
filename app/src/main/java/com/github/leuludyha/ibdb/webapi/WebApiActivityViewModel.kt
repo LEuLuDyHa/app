@@ -1,14 +1,17 @@
 package com.github.leuludyha.ibdb.webapi
 
-import androidx.lifecycle.*
-import com.github.leuludyha.ibdb.boredapi.*
-import com.github.leuludyha.ibdb.database.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.github.leuludyha.ibdb.boredapi.ActivityResponse
+import com.github.leuludyha.ibdb.boredapi.BoredActivity
+import com.github.leuludyha.ibdb.boredapi.BoredApi
+import com.github.leuludyha.ibdb.database.ActivityItem
+import com.github.leuludyha.ibdb.database.ActivityRepository
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class WebApiActivityViewModel(private val repository: ActivityRepository) : ViewModel() {
 
@@ -33,13 +36,13 @@ class WebApiActivityViewModel(private val repository: ActivityRepository) : View
         repository.deleteAll()
     }
 
-    fun requestActivity(onActivityReceived: (ActivityResponse) -> Unit) {
-        // Create BoredAPI using Retrofit
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.boredapi.com/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val boredApi = retrofit.create(BoredApi::class.java)
+    fun requestActivity(boredApi: BoredApi, onActivityReceived: (ActivityResponse) -> Unit) {
+//        // Create BoredAPI using Retrofit
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("https://www.boredapi.com/api/")
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .build()
+//        val boredApi = retrofit.create(BoredApi::class.java)
 
         boredApi.getActivity().enqueue(object : Callback<BoredActivity> {
             val errorMessage = "Something bad happened :("
@@ -58,14 +61,3 @@ class WebApiActivityViewModel(private val repository: ActivityRepository) : View
         })
     }
 }
-
-class ActivityViewModelFactory(private val repository: ActivityRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(WebApiActivityViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return WebApiActivityViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
-    }
-}
-

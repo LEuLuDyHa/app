@@ -21,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import com.github.leuludyha.ibdb.boredapi.ActivityResponse
+import com.github.leuludyha.ibdb.boredapi.BoredApi
 import com.github.leuludyha.ibdb.connectivity.ConnectionState
 import com.github.leuludyha.ibdb.connectivity.connectivityState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -103,7 +104,7 @@ class WebApiActivity : ComponentActivity() {
         Button(
             onClick = {
                 if (isConnected)
-                    viewModel.requestActivity(onActivityReceived = onActivityReceived)
+                    viewModel.requestActivity(BoredApi.getInstance(application), onActivityReceived = onActivityReceived)
                 else
                     onNoConnection()
             },
