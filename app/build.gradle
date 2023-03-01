@@ -16,7 +16,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "com.github.leuludyha.ibdb.MockTestRunner"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -79,7 +79,7 @@ dependencies {
 //========== ======== ==== ==
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
 
     implementation 'com.google.code.gson:gson:2.9.0'
 
@@ -91,6 +91,11 @@ dependencies {
 
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.5.0"
+
+//========== ======== ==== ==
+//        Mock Web Server
+//========== ======== ==== ==
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
 }
 
 tasks.withType(Test) {

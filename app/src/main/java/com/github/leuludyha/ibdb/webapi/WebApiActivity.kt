@@ -19,6 +19,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.github.leuludyha.ibdb.boredapi.ActivityResponse
 import com.github.leuludyha.ibdb.boredapi.BoredApi
@@ -84,7 +85,10 @@ class WebApiActivity : ComponentActivity() {
                             modifier = Modifier
                                 .padding(16.dp)
                         )
-                        Text(activity)
+                        Text(
+                            text = activity,
+                            modifier = Modifier.testTag("activity_text")
+                        )
                     }
                 }
             }
@@ -109,6 +113,7 @@ class WebApiActivity : ComponentActivity() {
                     onNoConnection()
             },
             modifier = modifier
+                .testTag("ask_activity_button"),
         ) {
             Text("New activity!")
         }
