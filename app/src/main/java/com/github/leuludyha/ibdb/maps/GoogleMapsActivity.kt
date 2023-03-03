@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.ibdb.maps
 
 import android.os.Bundle
 import android.widget.Toast
@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +45,8 @@ class GoogleMapsActivity : ComponentActivity() {
 @Composable
 fun GoogleMaps() {
     val epfl = LatLng(46.520536, 6.568318)
-    val epflLimits = listOf(LatLng(46.522259, 6.563326),
+    val epflLimits = listOf(
+        LatLng(46.522259, 6.563326),
         LatLng(46.515126, 6.560001),
         LatLng(46.518263, 6.572170),
         LatLng(46.521600, 6.571801),
@@ -58,10 +60,13 @@ fun GoogleMaps() {
     val context = LocalContext.current
 
     GoogleMap(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .testTag("GoogleMap"),
         cameraPositionState = cameraPositionState
     ) {
         MarkerInfoWindowContent(
+            tag = "test_tag",
             state = MarkerState(position = epfl),
             onInfoWindowClick = {
                 showEpflLimits.value = true
@@ -71,10 +76,11 @@ fun GoogleMaps() {
             },
             content = {
                 Column(
+                    modifier = Modifier.testTag("info_window_epfl"),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(text = "EPFL", fontWeight = FontWeight.Bold)
-                    Text(text = stringResource(id = R.string.title_activity_google_maps))
+                    Text(text = stringResource(id = com.github.leuludyha.ibdb.R.string.title_activity_google_maps))
                     Text(text = "Click to see its limits!")
                 }
             }
