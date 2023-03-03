@@ -73,17 +73,19 @@ fun FirebaseContent() {
 fun GetButton(email: MutableState<String>, phone: String) {
     Button(
         onClick = {
-            val future = CompletableFuture<String>()
+            if (phone.isNotEmpty()){
+                val future = CompletableFuture<String>()
 
-            db.child(phone).get().addOnSuccessListener {
-                if (it.value == null) future.completeExceptionally(NoSuchFieldException())
-                else future.complete(it.value as String)
-            }.addOnFailureListener {
-                future.completeExceptionally(it)
-            }
+                db.child(phone).get().addOnSuccessListener {
+                    if (it.value == null) future.completeExceptionally(NoSuchFieldException())
+                    else future.complete(it.value as String)
+                }.addOnFailureListener {
+                    future.completeExceptionally(it)
+                }
 
-            future.thenAccept {
-                email.value = it
+                future.thenAccept {
+                    email.value = it
+                }
             }
         }
     ) {
@@ -95,7 +97,9 @@ fun GetButton(email: MutableState<String>, phone: String) {
 fun SetButton(email: String, phone: String) {
     Button(
         onClick = {
-            db.child(phone).setValue(email)
+            if (phone.isNotEmpty()) {
+                db.child(phone).setValue(email)
+            }
         }
     ) {
         Text(text = "Set")
