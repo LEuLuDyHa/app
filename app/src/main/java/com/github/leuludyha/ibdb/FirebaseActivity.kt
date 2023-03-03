@@ -26,15 +26,11 @@ class FirebaseActivity : ComponentActivity() {
 
         setContent {
             IBDBTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+                Surface( color = MaterialTheme.colorScheme.background) {
                     FirebaseContent()
                 }
             }
         }
-
     }
 }
 
@@ -51,7 +47,7 @@ fun FirebaseContent() {
         NewTextField(email, "Enter email")
         NewTextField(phone, "Enter phone number")
         Row {
-            GetButton(email = email, phone = phone.value )
+            if (phone.value.isNotEmpty()) GetButton(email = email, phone = phone.value )
             SetButton(email = email.value, phone = phone.value)
         }
     }
@@ -70,19 +66,17 @@ fun NewTextField(string: MutableState<String>, displayedText: String){
 fun GetButton(email: MutableState<String>, phone: String) {
     Button(
         onClick = {
-            if (phone.isNotEmpty()){
-                val future = CompletableFuture<String>()
+            val future = CompletableFuture<String>()
 
-                db.child(phone).get().addOnSuccessListener {
-                    if (it.value == null) future.completeExceptionally(NoSuchFieldException())
-                    else future.complete(it.value as String)
-                }.addOnFailureListener {
-                    future.completeExceptionally(it)
-                }
+            db.child(phone).get().addOnSuccessListener {
+                if (it.value == null) future.completeExceptionally(NoSuchFieldException())
+                else future.complete(it.value as String)
+            }.addOnFailureListener {
+                future.completeExceptionally(it)
+            }
 
-                future.thenAccept {
-                    email.value = it
-                }
+            future.thenAccept {
+                email.value = it
             }
         }
     ) {
@@ -100,13 +94,5 @@ fun SetButton(email: String, phone: String) {
         }
     ) {
         Text(text = "Set")
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun Preview() {
-    IBDBTheme {
-        FirebaseContent()
     }
 }
