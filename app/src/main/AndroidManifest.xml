@@ -23,7 +23,7 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".GoogleMapsActivity"
+            android:name=".maps.GoogleMapsActivity"
             android:exported="true"
             android:label="@string/title_activity_google_maps"
             android:theme="@style/Theme.IBDB" />
