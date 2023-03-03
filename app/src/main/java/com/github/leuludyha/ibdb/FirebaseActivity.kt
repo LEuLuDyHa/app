@@ -26,9 +26,9 @@ class FirebaseActivity : ComponentActivity() {
 
         setContent {
             IBDBTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
                 ) {
                     FirebaseContent()
                 }
@@ -42,31 +42,28 @@ class FirebaseActivity : ComponentActivity() {
 fun FirebaseContent() {
     val email = remember { mutableStateOf("") }
     val phone = remember { mutableStateOf("") }
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize()
+            .background(MaterialTheme.colorScheme.primaryContainer),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ){
-        TextField(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            value = email.value,
-            onValueChange = { email.value = it },
-            placeholder = { Text(text = "Enter email")}
-        )
-        TextField(
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            value = phone.value,
-            onValueChange = { phone.value = it },
-            placeholder = { Text(text = "Enter phone number")}
-        )
+        NewTextField(email, "Enter email")
+        NewTextField(phone, "Enter phone number")
         Row {
             GetButton(email = email, phone = phone.value )
             SetButton(email = email.value, phone = phone.value)
         }
     }
+}
+
+@Composable
+fun NewTextField(string: MutableState<String>, displayedText: String){
+    TextField(
+        value = string.value,
+        onValueChange = { string.value = it },
+        placeholder = { Text(text = displayedText)}
+    )
 }
 
 @Composable
