@@ -29,5 +29,3 @@ buildCache {
         push = isMasterBranch
     }
 }
-include ':data'
-include ':domain'
