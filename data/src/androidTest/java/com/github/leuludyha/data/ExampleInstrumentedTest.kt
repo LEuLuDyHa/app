@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.data
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry

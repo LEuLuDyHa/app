@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.domain
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
