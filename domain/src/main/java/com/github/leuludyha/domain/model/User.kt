@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.model
+package com.github.leuludyha.domain.model
 
 import java.util.*
 
