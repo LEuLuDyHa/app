@@ -40,17 +40,15 @@ check_android_task:
   check_script:
     ./gradlew check connectedCheck
   report_codeclimate_script: |
-                               export JACOCO_SOURCE_PATH=app/src/main/java/
-                               ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
-                               export JACOCO_SOURCE_PATH=data/src/main/java/
-                               ./cc-test-reporter format-coverage ./data/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
-                               export JACOCO_SOURCE_PATH=domain/src/main/java/
-                               ./cc-test-reporter format-coverage ./domain/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+    export JACOCO_SOURCE_PATH=app/src/main/java/
+    ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+    export JACOCO_SOURCE_PATH=data/src/main/java/
+    ./cc-test-reporter format-coverage ./data/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
+    export JACOCO_SOURCE_PATH=domain/src/main/java/
+    ./cc-test-reporter format-coverage ./domain/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
     
-    # https://github.com/codeclimate/test-reporter/issues/434
-    # https://docs.codeclimate.com/docs/configuring-test-coverage
-                               ./cc-test-reporter sum-coverage -p 3
-                               ./cc-test-reporter upload-coverage
+    ./cc-test-reporter sum-coverage -p 3
+    ./cc-test-reporter upload-coverage
   lint_script:
     ./gradlew lintDebug
   always:
