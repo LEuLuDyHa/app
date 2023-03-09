@@ -6,7 +6,7 @@ import java.io.Serializable
 /**
  * Result of a call to the SearchApi.
  */
-data class SearchResult(
+data class Search(
     @SerializedName("numFound")
     val resultsCount: Int,
     @SerializedName("docs")
