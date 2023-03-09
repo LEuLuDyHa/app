@@ -52,7 +52,7 @@ check_android_task:
     export JACOCO_SOURCE_PATH=domain/src/main/java/
     ./cc-test-reporter format-coverage ./domain/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco -o coverage.domain.json
     
-    ./cc-test-reporter coverage.*.json sum-coverage -p 3 -o codeclimate.total.json
+    ./cc-test-reporter sum-coverage coverage.*.json -p 3 -o codeclimate.total.json
     ./cc-test-reporter upload-coverage -i codeclimate.total.json
   lint_script:
     ./gradlew lintDebug
