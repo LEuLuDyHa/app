@@ -7,6 +7,14 @@ buildscript {
         core_ktx_version = '1.9.0'
         appcompat_version = '1.6.1'
         junit_version = '4.13.2'
+
+        hilt_version = "2.40.5"
+        coroutine_version = "1.6.4"
+        room_version = "2.5.0"
+    }
+
+    dependencies {
+        classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

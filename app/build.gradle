@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'jacoco'
+    id 'kotlin-kapt'
+    id "dagger.hilt.android.plugin"
 }
 
 android {
@@ -68,6 +70,42 @@ dependencies {
     // It is not recommended to use this directly as the archive size is ~30MB apparently
     implementation "androidx.compose.material:material-icons-extended:$material_extended_icons_version"
 
+    // TODO Uncomment if needed in this project, wasn't sure
+    // implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
+    // implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
+    //  Coil
+    // implementation("io.coil-kt:coil-compose:1.4.0")
+    //  GSON
+    // implementation 'com.google.code.gson:gson:2.8.9'
+    //  System UI Controller - Accompanist
+    // implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
+
+    //hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+
+    //ROOM DB
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
+
+    // Paging 3.0
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
+
+//========== ======== ==== ==
+//        SUBMODULES
+//========== ======== ==== ==
+
+    implementation project(path: ':data')
+    implementation project(path: ':domain')
+
 //========== ======== ==== ==
 //        TESTING
 //========== ======== ==== ==
@@ -114,4 +152,8 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'crea
 
 connectedCheck {
     finalizedBy jacocoTestReport
+}
+
+kapt {
+    correctErrorTypes true
 }
