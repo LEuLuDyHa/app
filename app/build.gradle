@@ -9,6 +9,8 @@ plugins {
 android {
     compileSdk 33
 
+    namespace 'com.github.leuludyha.ibdb'
+
     defaultConfig {
         applicationId "com.github.leuludyha.ibdb"
         minSdk 24

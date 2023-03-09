@@ -7,6 +7,8 @@ plugins {
 android {
     compileSdk 33
 
+    namespace 'com.github.leuludyha.data'
+
     defaultConfig {
         minSdk 24
         targetSdk 33
