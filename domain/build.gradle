@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.github.leuludyha.ibdb'
+    namespace 'com.github.leuludyha.domain'
     compileSdk 33
 
     defaultConfig {
@@ -46,13 +46,13 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
 
     //GSON
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.9.0'
 
     //ROOM DB
     implementation "androidx.room:room-ktx:$room_version"
 
     // Paging 3.0
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
+    implementation "androidx.paging:paging-compose:$paging_version"
 }
 
 task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']) {

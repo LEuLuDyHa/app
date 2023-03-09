@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'com.github.leuludyha.ibdb'
+    namespace 'com.github.leuludyha.data'
     compileSdk 33
 
     defaultConfig {
@@ -57,7 +57,7 @@ dependencies {
     implementation "androidx.room:room-paging:$room_version"
 
     // Paging 3.0
-    implementation 'androidx.paging:paging-compose:1.0.0-alpha18'
+    implementation "androidx.paging:paging-compose:$paging_version"
 
 //========== ======== ==== ==
 //        SUBMODULES
