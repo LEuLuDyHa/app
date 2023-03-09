@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-    namespace 'com.github.leuludyha.data'
     compileSdk 33
 
     defaultConfig {
@@ -14,6 +13,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        buildConfigField("String", "API_KEY", API_KEY)
     }
 
     buildTypes {
