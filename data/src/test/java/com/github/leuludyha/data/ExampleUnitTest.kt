@@ -1,6 +1,6 @@
-package com.github.leuludyha.domain
+package com.github.leuludyha.data
 
-import com.github.leuludyha.domain.model.ret
+import com.github.leuludyha.data.api.ret
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
