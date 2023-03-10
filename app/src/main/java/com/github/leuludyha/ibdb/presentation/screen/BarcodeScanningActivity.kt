@@ -1,6 +1,6 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.ibdb.presentation.screen
 
-import BarcodeAnalyser
+import com.github.leuludyha.domain.model.BarcodeAnalyser
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -111,6 +111,7 @@ fun CameraPreview() {
                 val barcodeAnalyser = BarcodeAnalyser { barcodes ->
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
+                            //TODO: Check that the barcode is correct (not done by default)
                             barCodeVal.value = barcodeValue
                             Toast.makeText(context, barcodeValue, Toast.LENGTH_SHORT).show()
                         }

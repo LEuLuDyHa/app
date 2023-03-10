@@ -1,3 +1,5 @@
+package com.github.leuludyha.domain.model
+
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.camera.core.ImageAnalysis
@@ -37,7 +39,7 @@ class BarcodeAnalyser(
                     })
                 }
                 .addOnFailureListener {
-                    exception -> Log.d("TAG", "BarcodeAnalyser: Something went wrong $exception")
+                    exception -> Log.d("TAG", "com.github.leuludyha.domain.model.BarcodeAnalyser: Something went wrong $exception")
                 }.addOnCompleteListener {
                     imageProxy.close()
                 }

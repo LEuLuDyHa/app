@@ -20,7 +20,7 @@
             android:label="@string/title_activity_greeting"
             android:theme="@style/Theme.IBDB" />
         <activity
-            android:name=".BarcodeScanningActivity"
+            android:name=".presentation.screen.BarcodeScanningActivity"
             android:exported="true" />
         <activity
             android:name=".MainActivity"
