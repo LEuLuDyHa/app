@@ -22,8 +22,6 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField("String", "BASE_URL", BASE_URL)
-        buildConfigField("String", "POSTER_URL", POSTER_URL)
     }
 
     buildTypes {
