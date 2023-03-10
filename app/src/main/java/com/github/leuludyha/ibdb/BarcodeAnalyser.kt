@@ -39,7 +39,7 @@ class BarcodeAnalyser(
                 .addOnFailureListener {
                     exception -> Log.d("TAG", "BarcodeAnalyser: Something went wrong $exception")
                 }.addOnCompleteListener {
-                    mediaImage.close()
+                    imageProxy.close()
                 }
         }
     }
