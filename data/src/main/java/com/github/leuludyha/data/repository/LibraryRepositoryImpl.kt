@@ -9,14 +9,5 @@ import com.github.leuludyha.domain.util.Result
 class LibraryRepositoryImpl(private val libraryRemoteDataSource: LibraryRemoteDataSource) :
     LibraryRepository {
 
-    override suspend fun search(query: String) = responseToResult(libraryRemoteDataSource.search(query))
-
-    private fun responseToResult(response: Response<Search>):Result<Search>{
-        if(response.isSuccessful){
-            response.body()?.let {result->
-                return Result.Success(result)
-            }
-        }
-        return Result.Error(response.message())
-    }
+    override suspend fun search(query: String) = libraryRemoteDataSource.search(query)
 }
