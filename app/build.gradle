@@ -17,6 +17,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
+        buildConfigField("String","OPENLIBRARY_BASE_URL",OPENLIBRARY_BASE_URL)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -76,20 +77,8 @@ dependencies {
     // implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
     //  Coil
     // implementation("io.coil-kt:coil-compose:1.4.0")
-    //  GSON
-    // implementation 'com.google.code.gson:gson:2.9.0'
     //  System UI Controller - Accompanist
     // implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
-
-    //hilt
-    implementation "com.google.dagger:hilt-android:$hilt_version"
-    kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
-
-    // Retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     //ROOM DB
     implementation "androidx.room:room-runtime:$room_version"
@@ -100,16 +89,11 @@ dependencies {
     // Paging 3.0
     implementation "androidx.paging:paging-compose:$paging_version"
 
-//========== ======== ==== ==
-//        SUBMODULES
-//========== ======== ==== ==
-
+    // Submodules
     implementation project(path: ':data')
     implementation project(path: ':domain')
 
-//========== ======== ==== ==
-//        TESTING
-//========== ======== ==== ==
+    // Testing
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
@@ -118,6 +102,21 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.5.1'
+
+    // Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
+
+    // Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.3'
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes true
 }
 
 tasks.withType(Test) {
