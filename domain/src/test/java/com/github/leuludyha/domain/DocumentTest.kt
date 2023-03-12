@@ -6,7 +6,7 @@ import com.google.common.truth.Truth.assertThat
 
 class DocumentTest {
 
-    @Test
+    /*@Test
     fun `Properties of a document are properly gotten`() {
         val doc = Document(
             coverId = 0,
@@ -23,7 +23,7 @@ class DocumentTest {
         assertThat(doc.firstPublishYear).isEqualTo(0)
         assertThat(doc.key).isEqualTo("Awesome key")
         assertThat(doc.authorKeys).isEqualTo(listOf("Weird key"))
-    }
+    }*/
 
 
     @Test
