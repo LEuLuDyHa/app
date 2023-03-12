@@ -3,7 +3,7 @@ package com.github.leuludyha.data.repository.datasourceImpl
 import com.github.leuludyha.data.api.SearchApi
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.Search
-import com.github.leuludyha.domain.util.Result
+import com.github.leuludyha.domain.model.Result
 import retrofit2.Response
 
 class LibraryRemoteDataSourceImpl(private val searchApi: SearchApi): LibraryRemoteDataSource {

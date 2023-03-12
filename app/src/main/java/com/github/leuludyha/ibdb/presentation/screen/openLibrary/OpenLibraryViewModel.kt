@@ -12,7 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 
 import com.github.leuludyha.domain.model.Search
 import com.github.leuludyha.domain.useCase.SearchUseCase
-import com.github.leuludyha.domain.util.Result
+import com.github.leuludyha.domain.model.Result
 
 
 @HiltViewModel

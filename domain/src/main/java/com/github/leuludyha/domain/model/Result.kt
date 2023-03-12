@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.util
+package com.github.leuludyha.domain.model
 
 import java.io.Serializable
 
