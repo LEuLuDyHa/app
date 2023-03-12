@@ -7,6 +7,26 @@ import com.google.common.truth.Truth.assertThat
 class DocumentTest {
 
     @Test
+    fun `Properties of a document are properly gotten`() {
+        val doc = Document(
+            coverId = 0,
+            title = "Awesome book",
+            authorNames = listOf("Awesome guy"),
+            firstPublishYear = 0,
+            key = "Awesome key",
+            authorKeys = listOf("Weird key"),
+        )
+
+        assertThat(doc.coverId).isEqualTo(0)
+        assertThat(doc.title).isEqualTo("Awesome book")
+        assertThat(doc.authorNames).isEqualTo(listOf("Awesome guy"))
+        assertThat(doc.firstPublishYear).isEqualTo(0)
+        assertThat(doc.key).isEqualTo("Awesome key")
+        assertThat(doc.authorKeys).isEqualTo(listOf("Weird key"))
+    }
+
+
+    @Test
     fun `String representation of a document with 1 author is '{title}, by {author}'`() {
         val doc = Document(
             coverId = 0,
