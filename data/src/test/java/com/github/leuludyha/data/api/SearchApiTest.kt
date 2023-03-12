@@ -1,11 +1,11 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.repository.OpenLibraryRepositoryImpl
-import com.github.leuludyha.data.repository.datasource.SearchRemoteDataSource
-import com.github.leuludyha.data.repository.datasourceImpl.SearchRemoteDataSourceImpl
+import com.github.leuludyha.data.repository.LibraryRepositoryImpl
+import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
+import com.github.leuludyha.data.repository.datasourceImpl.LibraryRemoteDataSourceImpl
 import com.github.leuludyha.domain.model.Document
 import com.github.leuludyha.domain.model.Search
-import com.github.leuludyha.domain.repository.OpenLibraryRepository
+import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.util.FileReader
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,8 +22,8 @@ import java.net.HttpURLConnection
 
 class SearchApiTest {
     private lateinit var api: SearchApi
-    private lateinit var remoteDataSource: SearchRemoteDataSource
-    private lateinit var repository: OpenLibraryRepository
+    private lateinit var remoteDataSource: LibraryRemoteDataSource
+    private lateinit var repository: LibraryRepository
 
     private lateinit var mockWebServer: MockWebServer
 
@@ -36,8 +36,8 @@ class SearchApiTest {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(SearchApi::class.java)
-        remoteDataSource = SearchRemoteDataSourceImpl(api)
-        repository = OpenLibraryRepositoryImpl(remoteDataSource)
+        remoteDataSource = LibraryRemoteDataSourceImpl(api)
+        repository = LibraryRepositoryImpl(remoteDataSource)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
