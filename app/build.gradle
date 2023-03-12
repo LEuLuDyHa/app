@@ -17,7 +17,7 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        buildConfigField("String","BASE_URL",BASE_URL)
+        buildConfigField("String","OPENLIBRARY_BASE_URL",OPENLIBRARY_BASE_URL)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
