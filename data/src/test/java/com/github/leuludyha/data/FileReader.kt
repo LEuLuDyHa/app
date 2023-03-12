@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.util
+package com.github.leuludyha.data
 
 import java.io.IOException
 import java.io.InputStreamReader
