@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.screen.openLibrary
+package com.github.leuludyha.ibdb.presentation.screen.library
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +16,7 @@ import com.github.leuludyha.domain.model.Result
 
 
 @HiltViewModel
-class OpenLibraryViewModel @Inject constructor(
+class LibraryViewModel @Inject constructor(
     private val searchUseCase: SearchUseCase
 ) : ViewModel() {
     private val _searchState = mutableStateOf<Result<Search>>(Result.Loading())
