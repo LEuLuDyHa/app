@@ -23,11 +23,16 @@ data class Document(
     override fun toString(): String {
         val builder = StringBuilder()
 
-        builder.append("${title}, by ")
+        builder.append("${title?: "Unknown title"}, by ")
 
-        if (authorNames != null) {
-            for (name in authorNames) {
+        if (authorNames != null && authorNames.isNotEmpty()) {
+            for (name in authorNames.dropLast(2)) {
                 builder.append("${name}, ")
+            }
+            if (authorNames.size == 1)
+                builder.append(authorNames.last())
+            else {
+                builder.append("${authorNames.dropLast(1).last()} and ${authorNames.last()}")
             }
         } else {
             builder.append("an unknown author")
