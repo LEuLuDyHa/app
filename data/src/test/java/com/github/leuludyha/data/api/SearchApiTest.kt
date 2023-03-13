@@ -5,6 +5,7 @@ import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryRemoteDataSourceImpl
 import com.github.leuludyha.domain.model.Document
 import com.github.leuludyha.domain.model.Search
+import com.github.leuludyha.domain.model.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.data.FileReader
 import com.google.common.truth.Truth.assertThat
@@ -75,17 +76,27 @@ class SearchApiTest {
     }
 
     @Test
-    fun `for multiple documents found, api must return all documents with http code 200`() =
+    fun `for multiple documents found, SearchApi returns all documents with http code 200`() =
         twoDocsTest { s -> api.search(s).body()!! }
 
     @Test
-    fun `for multiple documents found, RemoteDataSource must return all documents with http code 200`() =
+    fun `for multiple documents found, LibraryRemoteDataSource returns all documents with http code 200`() =
         twoDocsTest { s -> remoteDataSource.search(s).data!! }
+
+    @Test
+    fun `for multiple documents found, LibraryRepository returns all documents with http code 200`() =
+        twoDocsTest { s -> repository.search(s).data!! }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `for multiple documents found, Repository must return all documents with http code 200`() =
-        twoDocsTest { s -> repository.search(s).data!! }
+    fun `On unsuccessful response, LibraryRemoteDataSource returns Result_Error`() = runTest {
+        val mockResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_BAD_METHOD)
+        mockWebServer.enqueue(mockResponse)
+
+        val actualResponse = remoteDataSource.search("test")
+        assertThat(actualResponse).isInstanceOf(Result.Error::class.java)
+    }
 
     @After
     fun tearDown() {
