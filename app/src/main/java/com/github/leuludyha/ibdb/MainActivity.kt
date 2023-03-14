@@ -17,9 +17,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            IBDBTheme { MainContent() }
-        }
+        setContent { IBDBTheme { MainContent() } }
     }
 
     @Preview(showBackground = true)
