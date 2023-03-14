@@ -136,7 +136,7 @@ fun CameraPreview() {
                         imageAnalysis
                     )
                 } catch (e: Exception) {
-                    Log.d("TAG", "CameraPreview: ${e.localizedMessage}")
+                    Log.d("BarcodeError", "CameraPreview: ${e.localizedMessage}")
                 }
             }, ContextCompat.getMainExecutor(context))
         }
