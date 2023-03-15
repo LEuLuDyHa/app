@@ -1,6 +1,5 @@
 package com.github.leuludyha.ibdb.presentation.screen
 
-import com.github.leuludyha.domain.model.BarcodeAnalyser
 import android.os.Bundle
 import android.util.Log
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.github.leuludyha.domain.model.BarcodeAnalyser
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.common.util.concurrent.ListenableFuture
@@ -33,6 +33,8 @@ import java.util.concurrent.Executors
 /*
     This class allows to scan a barcode.
     It has been built by following this tutorial: https://developer.android.com/codelabs/camerax-getting-started
+    In order to check how to get the resulting barcode from this activity and how to call it, check this page:
+    https://stackoverflow.com/questions/14785806/android-how-to-make-an-activity-return-results-to-the-activity-which-calls-it
  */
 class BarcodeScanningActivity : ComponentActivity() {
 
@@ -60,7 +62,16 @@ class BarcodeScanningActivity : ComponentActivity() {
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    CameraPreview()
+                    val barCodeVal = remember { mutableStateOf("") }
+                    CameraPreview(barCodeVal) {
+                        //TODO: Uncomment these lines once this function is called from another activity, it is commented for
+                        // now for testing purposes, so that the activity may be launched independently
+//                        val data = Intent()
+//                        data.putExtra("ISBN_code", barCodeVal.value)
+//                        setResult(RESULT_OK, data)
+//                        finish()
+                        Log.i("BarcodeTest", "The callback has been called to finish the activity.")
+                    }
                 }
             }
         }
@@ -68,11 +79,10 @@ class BarcodeScanningActivity : ComponentActivity() {
 }
 
 @Composable
-fun CameraPreview() {
+fun CameraPreview(barCodeVal: MutableState<String>, barcodeFoundCallback: () -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
-    val barCodeVal = remember { mutableStateOf("") }
 
     AndroidView(
         factory = { AndroidViewContext ->
@@ -111,9 +121,10 @@ fun CameraPreview() {
                 val barcodeAnalyser = BarcodeAnalyser { barcodes ->
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
-                            barCodeVal.value = barcodeValue
                             if(BarcodeAnalyser.checkISBNCode(barcodeValue)) {
+                                barCodeVal.value = barcodeValue
                                 Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
+                                barcodeFoundCallback()
                             }
                         }
                     }
