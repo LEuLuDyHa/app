@@ -2,6 +2,9 @@
 
 package android.util
 
+//This file and methods are meant to be called when executing tests, so that they replace
+//any calls to the log in the code.
+
 fun e(tag: String, msg: String, t: Throwable): Int {
     println("ERROR: $tag: $msg")
     return 0
