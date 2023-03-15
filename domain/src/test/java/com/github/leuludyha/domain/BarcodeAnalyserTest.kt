@@ -23,4 +23,9 @@ class BarcodeAnalyserTest {
         assertEquals(false, BarcodeAnalyser.checkISBNCode("97884206499A6"))
         assertEquals(false, BarcodeAnalyser.checkISBNCode("9788420649976"))
     }
+
+    @Test
+    fun check_barcode_analyser_with_default_image() {
+        //TODO: This has proven too difficult for me to do
+    }
 }

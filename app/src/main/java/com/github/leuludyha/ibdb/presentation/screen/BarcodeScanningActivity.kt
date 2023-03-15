@@ -111,9 +111,10 @@ fun CameraPreview() {
                 val barcodeAnalyser = BarcodeAnalyser { barcodes ->
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
-                            //TODO: Check that the barcode is correct (not done by default)
                             barCodeVal.value = barcodeValue
-                            Toast.makeText(context, barcodeValue, Toast.LENGTH_SHORT).show()
+                            if(BarcodeAnalyser.checkISBNCode(barcodeValue)) {
+                                Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
+                            }
                         }
                     }
                 }
