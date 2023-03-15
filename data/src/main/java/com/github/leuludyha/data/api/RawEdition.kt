@@ -35,6 +35,6 @@ data class RawEdition(
             id = extractIdFrom(this.key, "/books/"),
             authorIds =  this.authorRawKeys?.toIds("/authors/"),
             workIds = this.workRawKeys?.toIds("/works/"),
-            covers = covers,
+            coverIds = covers,
         )
 }
