@@ -3,10 +3,13 @@ package com.github.leuludyha.domain.model
 import com.google.gson.annotations.SerializedName
 
 /**
+ * TODO I assumed the type of a search result (Document) was ALWAYS a work, is it?
  * Document returned by the SearchApi
  * @param key document's key to fetch it in other APIs
  */
 data class Document(
+    @SerializedName("key")
+    val key: String?,
     @SerializedName("cover_i")
     val coverId: Int?,
     @SerializedName("title")
@@ -15,10 +18,10 @@ data class Document(
     val authorNames: List<String>?,
     @SerializedName("first_publish_year")
     val firstPublishYear: Int?,
-    @SerializedName("key")
-    val key: String?,
     @SerializedName("author_key")
-    val authorKeys: List<String>?
+    val authorKeys: List<String>?,
+    @SerializedName("edition_key")
+    val editionIds: List<String>?,
 ) {
     override fun toString(): String {
         val builder = StringBuilder()
