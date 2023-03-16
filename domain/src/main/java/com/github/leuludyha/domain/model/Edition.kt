@@ -5,5 +5,5 @@ data class Edition(
     val id: String?,
     val authorIds: List<String>?,
     val workIds: List<String>?,
-    val coverIds: List<Int>?,
+    val coverIds: List<Long>?,
 )

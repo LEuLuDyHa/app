@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Document
+import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
@@ -13,8 +13,8 @@ data class RawSearch(
     val documents: List<Document>?,
     @SerializedName("error")
     override val error: String?
-): Serializable, ErrorProne, Raw<List<Document>> {
-
-    override fun toModel(): List<Document> = documents?: listOf() // Empty list if docs is null
-
+): Serializable, ErrorProne, Raw<List<Work>> {
+    override fun toModel(libraryApi: LibraryApi): List<Work> = documents
+        ?.map { it.toModel(libraryApi) }
+        ?: listOf()
 }

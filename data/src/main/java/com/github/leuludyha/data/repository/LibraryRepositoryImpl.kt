@@ -12,7 +12,7 @@ class LibraryRepositoryImpl(private val libraryRemoteDataSource: LibraryRemoteDa
 {
     override suspend fun search(query: String) =
         libraryRemoteDataSource.search(query)
-    override suspend fun workById(workId: String): Result<Work>  =
+    override suspend fun workById(workId: String): Result<Work> =
         libraryRemoteDataSource.workById(workId)
     override suspend fun worksByAuthorId(authorId: String): Result<List<Work>> =
         libraryRemoteDataSource.worksByAuthorId(authorId)

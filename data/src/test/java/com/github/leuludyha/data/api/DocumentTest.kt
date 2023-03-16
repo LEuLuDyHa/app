@@ -1,6 +1,5 @@
-package com.github.leuludyha.domain
+package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Document
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 
