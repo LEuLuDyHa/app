@@ -24,12 +24,12 @@ data class RawEdition(
     @SerializedName("works")
     val workRawKeys: List<RawKey>?,
     @SerializedName("covers")
-    val covers: List<Int>?,
+    val covers: List<Long>?,
     @SerializedName("error")
     override val error: String?,
 ): Serializable, ErrorProne, Raw<Edition> {
 
-    override fun toModel(): Edition =
+    override fun toModel(libraryApi: LibraryApi): Edition =
         Edition(
             title = this.title,
             id = extractIdFrom(this.key, "/books/"),

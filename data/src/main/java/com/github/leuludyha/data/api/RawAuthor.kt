@@ -22,7 +22,7 @@ data class RawAuthor(
     override val error: String?
 ): Serializable, ErrorProne, Raw<Author> {
 
-    override fun toModel(): Author = Author(
+    override fun toModel(libraryApi: LibraryApi): Author = Author(
         wikipedia = wikipedia,
         name = name,
         id = extractIdFrom(key, "/authors/"),
