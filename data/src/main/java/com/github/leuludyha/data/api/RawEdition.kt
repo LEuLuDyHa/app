@@ -1,7 +1,9 @@
 package com.github.leuludyha.data.api
 
+import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
+import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
 import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.data.api.ApiHelper.toIds
+import com.github.leuludyha.data.api.ApiHelper.workKeysToWorks
 import com.github.leuludyha.domain.model.Edition
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -24,7 +26,7 @@ data class RawEdition(
     @SerializedName("works")
     val workRawKeys: List<RawKey>?,
     @SerializedName("covers")
-    val covers: List<Long>?,
+    val coverIds: List<Long>?,
     @SerializedName("error")
     override val error: String?,
 ): Serializable, ErrorProne, Raw<Edition> {
@@ -33,8 +35,8 @@ data class RawEdition(
         Edition(
             title = this.title,
             id = extractIdFrom(this.key, "/books/"),
-            authorIds =  this.authorRawKeys?.toIds("/authors/"),
-            workIds = this.workRawKeys?.toIds("/works/"),
-            coverIds = covers,
+            fetchAuthors =  { authorKeysToAuthors(authorRawKeys?.mapNotNull { it.key }, libraryApi) },
+            fetchWorks = { workKeysToWorks(workRawKeys?.mapNotNull { it.key }, libraryApi) },
+            coverUrls = coverIdsToCoverUrls(coverIds),
         )
 }

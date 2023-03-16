@@ -1,6 +1,7 @@
 package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
+import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -32,7 +33,7 @@ data class RawWork(
             title = this.title,
             id = extractIdFrom(this.key, "/works/"),
             fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
-            coverUrls = ApiHelper.coverIdsToCoverUrls(coverIds),
+            coverUrls = coverIdsToCoverUrls(coverIds),
             subjects = this.subjects,
         )
     }

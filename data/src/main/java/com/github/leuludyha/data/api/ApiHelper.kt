@@ -6,7 +6,7 @@ import retrofit2.Response
 
 object ApiHelper {
     fun coverIdsToCoverUrls(coverIds: List<Long>?): List<(CoverSize) -> String>? =
-        coverIds?.map(::coverIdToCoverUrl)
+        coverIds?.map(::coverIdToCoverUrl)?.ifEmpty { null }
     private fun coverIdToCoverUrl(coverId: Long) = { coverSize: CoverSize ->
         "https://covers.openlibrary.org/b/id/${coverId}-${coverSize}.jpg"
     }
@@ -41,6 +41,12 @@ object ApiHelper {
     suspend fun authorKeysToAuthors(authorKeys: List<String>?, libraryApi: LibraryApi) = authorKeys
         ?.mapNotNull { extractIdFrom(it, "/authors/") }
         ?.map { libraryApi.authorById(it) }
+        ?.ifEmpty { null }
+        ?.mapNotNull { rawResponseToModel(it, libraryApi) }
+
+    suspend fun workKeysToWorks(workKeys: List<String>?, libraryApi: LibraryApi) = workKeys
+        ?.mapNotNull { extractIdFrom(it, "/works/") }
+        ?.map { libraryApi.workById(it) }
         ?.ifEmpty { null }
         ?.mapNotNull { rawResponseToModel(it, libraryApi) }
 
