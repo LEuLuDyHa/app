@@ -6,4 +6,6 @@
     <string name="book_like">Add to Reading List</string>
     <string name="book_dislike">Remove from Reading List</string>
     <string name="reading_list_title">Reading List</string>
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="web_client_id">342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com</string>
 </resources>
