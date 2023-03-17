@@ -20,22 +20,22 @@ import androidx.room.RoomDatabase
     version = 1,
     exportSchema = false
 )
-abstract class LibraryDB : RoomDatabase() {
+abstract class LibraryDatabase : RoomDatabase() {
     abstract fun libraryDao(): LibraryDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the
         // same time.
         @Volatile
-        private var INSTANCE: LibraryDB? = null
+        private var INSTANCE: LibraryDatabase? = null
 
-        fun getDatabase(context: Context): LibraryDB {
+        fun getDatabase(context: Context): LibraryDatabase {
             // if the INSTANCE is not null, then return it,
             // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    LibraryDB::class.java,
+                    LibraryDatabase::class.java,
                     "library_databse"
                 ).build()
                 INSTANCE = instance

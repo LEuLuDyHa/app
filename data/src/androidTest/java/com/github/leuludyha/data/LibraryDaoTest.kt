@@ -16,7 +16,7 @@ import java.io.IOException
 @RunWith(AndroidJUnit4::class)
 class LibraryDaoTest {
     private lateinit var libraryDao: LibraryDao
-    private lateinit var db: LibraryDB
+    private lateinit var db: LibraryDatabase
 
     private val work1 = Work("work1", "MyWork1")
     private val work2 = Work("work2", "MyWork2")
@@ -37,7 +37,7 @@ class LibraryDaoTest {
     fun createDatabase() {
         db = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            LibraryDB::class.java
+            LibraryDatabase::class.java
         ).allowMainThreadQueries().build()
 
         libraryDao = db.libraryDao()
