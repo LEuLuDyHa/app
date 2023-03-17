@@ -2,4 +2,6 @@
     <string name="app_name">IBDB</string>
     <string name="title_activity_greeting">GreetingActivity</string>
     <string name="ui_bookCover_altText">Book cover</string>
+    <string name="title_activity_auth">AuthActivity</string>
+    <string name="web_client_id">342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com</string>
 </resources>
