@@ -4,12 +4,12 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class WorkWithAuthors(
+data class WorkWithCovers(
     @Embedded val work: Work,
     @Relation(
         parentColumn = "workId",
-        entityColumn = "authorId",
-        associateBy = Junction(WorkAuthorCrossRef::class)
+        entityColumn = "coverId",
+        associateBy = Junction(WorkCoverCrossRef::class)
     )
-    val authors: List<Author>
+    val covers: List<Cover>
 )

@@ -4,12 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
 
 @Database(
-    entities = [WorkEntity::class, AuthorEntity::class, WorkAuthorCrossRef::class],
+    entities = [
+        Work::class,
+        Author::class,
+        Cover::class,
+        Edition::class,
+        WorkAuthorCrossRef::class,
+        WorkEditionCrossRef::class,
+        WorkCoverCrossRef::class,
+        EditionAuthorCrossRef::class,
+        EditionCoverCrossRef::class,
+    ],
     version = 1,
     exportSchema = false
 )

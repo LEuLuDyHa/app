@@ -5,7 +5,8 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "covers")
-data class CoverEntity(
-    @PrimaryKey @ColumnInfo("id")
-    val id: Long
+data class Cover(
+    @PrimaryKey
+    val coverId: Long,
+    val coverUrl: String?
 )

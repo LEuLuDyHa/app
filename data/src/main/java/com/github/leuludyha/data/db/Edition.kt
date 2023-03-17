@@ -3,9 +3,9 @@ package com.github.leuludyha.data.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "works")
-data class WorkEntity (
+@Entity(tableName = "editions")
+data class Edition (
     @PrimaryKey
-    val workId: String,
+    val editionId: String,
     val title: String?,
 )
