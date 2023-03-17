@@ -1,43 +1,54 @@
 package com.github.leuludyha.ibdb.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
-import com.github.leuludyha.domain.model.Book
+import coil.compose.rememberImagePainter
+import coil.size.Scale
+import com.github.leuludyha.domain.model.Author
+import com.github.leuludyha.domain.model.CoverSize
+import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
-object BookList {
+enum class Orientation { Vertical, Horizontal }
 
-    enum class Orientation { Vertical, Horizontal }
-
-    @Composable
-    fun Component(
-        orientation: Orientation,
-        books: LazyPagingItems<Book>,
-        navController: NavHostController
-    ) {
-        val content: LazyListScope.() -> Unit = {
-            items(
-                items = books,
-                key = { book ->
-                    book.id
-                }
-            ) { book ->
-                if (book != null) { BookListItem(book = book, navController = navController) }
-            }
+@Composable
+fun WorkList(
+    orientation: Orientation,
+    works: List<Work>,
+    navController: NavHostController,
+    paddingValues: PaddingValues,
+    viewModel: WorkListViewModel = hiltViewModel()
+) {
+    val content: LazyListScope.() -> Unit = {
+        items(items = works, key = { it.id }) { work ->
+            WorkListItem(
+                work = work,
+                navController = navController,
+                viewModel = viewModel
+            )
         }
+    }
 
-        if (orientation == Orientation.Vertical) { BookColumn(content) }
-        else if (orientation == Orientation.Horizontal) { BookRow(content) }
+    Surface(modifier = Modifier.padding(paddingValues)) {
+        if (orientation == Orientation.Vertical) {
+            WorksColumn(content)
+        } else if (orientation == Orientation.Horizontal) {
+            WorksRow(content)
+        }
     }
 }
 
@@ -46,33 +57,50 @@ private val padding: PaddingValues = PaddingValues(
     vertical = 4.dp,
 )
 
-private val itemHeight: Dp = 180.dp
+private val itemHeight: Dp = 100.dp
 
 @Composable
-private fun BookColumn(content: LazyListScope.() -> Unit) {
-    LazyColumn(content = content, contentPadding = padding)
+private fun WorksColumn(content: LazyListScope.() -> Unit) {
+    LazyColumn(
+        content = content,
+        contentPadding = padding,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    )
 }
 
 @Composable
-private fun BookRow(content: LazyListScope.() -> Unit) {
-    LazyRow(content = content, contentPadding = padding)
+private fun WorksRow(content: LazyListScope.() -> Unit) {
+    LazyRow(
+        content = content,
+        contentPadding = padding,
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    )
 }
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun BookListItem(
-    book: Book,
-    navController: NavHostController
+private fun WorkListItem(
+    work: Work,
+    navController: NavHostController,
+    viewModel: WorkListViewModel
 ) {
-    OutlinedCard(
+    val (authors, setAuthors) = remember { mutableStateOf<List<Author>?>(null); }
+
+    SideEffect {
+        viewModel.getAuthorsOf(work) { setAuthors(it) }
+    }
+
+    ElevatedCard(
         modifier = Modifier
             .padding()
             .height(itemHeight)
             .fillMaxWidth(),
         // On click, navigate to the book's details screen using its id
-        onClick = { navController.navigate(
-            route = Screen.BookDetails.passBookId(book.id)
-        ) }
+        onClick = {
+            navController.navigate(
+                route = Screen.BookDetails.passBookId(work.id)
+            )
+        }
     ) {
         Row(
             modifier = Modifier
@@ -80,18 +108,39 @@ private fun BookListItem(
                 .fillMaxWidth()
         ) {
             // Display the book's thumbnail
-            book.covers?.let { book.covers[0] }
+            work.coverUrls?.let {
+                Image(
+                    painter = rememberImagePainter(
+                        data = it[0].invoke(CoverSize.Large),
+                        builder = {
+                            crossfade(true)
+                            scale(Scale.FILL)
+                        }),
+                    contentScale = ContentScale.Fit,
+                    contentDescription = stringResource(id = R.string.ui_bookCover_altText)
+                )
+            }
             // Display the book's summary info
             Column(
                 modifier = Modifier
-                    .padding(start = 2.dp, end = 5.dp, bottom = 4.dp, top = 4.dp)
+                    .padding(start = 5.dp, end = 8.dp, bottom = 4.dp, top = 4.dp)
                     .height(IntrinsicSize.Max)
             ) {
-                book.title?.let { Text(text = it, style = MaterialTheme.typography.titleMedium) }
+                // Display the title of the book
+                work.title?.let {
+                    Text(
+                        text = it, style = MaterialTheme.typography.titleMedium
+                    )
+                }
                 Spacer(modifier = Modifier.height(1.dp))
-                book.authors?.let { Text(text = it.name, style = MaterialTheme.typography.titleSmall) }
+                // Display the name of the authors
+                Text(
+                    text = "J. K. Rowling",
+                    style = MaterialTheme.typography.titleSmall
+                )
                 Spacer(modifier = Modifier.height(3.dp))
-                book.subjects?.let { SubjectList(it) }
+                // Display the list of subjects of the book
+                SubjectList(subjectNames = listOf("Fantasy", "Wizards"))
                 // Other stuff if needed
             }
         }
@@ -104,11 +153,14 @@ private fun SubjectList(
     subjectNames: List<String>
 ) {
     Row(
-        modifier = Modifier.width(IntrinsicSize.Max)
-    ) {subjectNames.map {
-        SuggestionChip(
-            onClick = { /*TODO*/ },
-            label = { Text(text = it, style = MaterialTheme.typography.labelSmall)}
-        )
-    } }
+        modifier = Modifier.width(IntrinsicSize.Max),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        subjectNames.map {
+            SuggestionChip(
+                onClick = { /*TODO*/ },
+                label = { Text(text = it, style = MaterialTheme.typography.labelSmall) }
+            )
+        }
+    }
 }

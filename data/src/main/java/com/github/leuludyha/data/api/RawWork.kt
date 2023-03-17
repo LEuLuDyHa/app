@@ -2,10 +2,10 @@ package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
 import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
+import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
-import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
 
 /**
  * Raw response of the Work API. Not user friendly. Used only in the `data` layer,
@@ -31,7 +31,7 @@ data class RawWork(
             ?.mapNotNull { it.rawKey?.key }
         return Work(
             title = this.title,
-            id = extractIdFrom(this.key, "/works/"),
+            id = extractIdFrom(this.key, "/works/").orEmpty(), // TODO CORRECT
             fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
             coverUrls = coverIdsToCoverUrls(coverIds),
             subjects = this.subjects,

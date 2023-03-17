@@ -3,11 +3,8 @@ package com.github.leuludyha.data.api
 import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
 import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
 import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
-import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
-import retrofit2.Response
 import java.io.Serializable
 
 /**
@@ -32,12 +29,12 @@ data class Document(
     val editionIds: List<String>?,
 ): Serializable, Raw<Work> {
     override fun toModel(libraryApi: LibraryApi) = Work (
-            title = title,
-            id = extractIdFrom(key, "/works/"),
-            fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
-            coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
-            subjects = null
-        )
+        title = title,
+        id = extractIdFrom(key, "/works/").orEmpty(), // TODO CORRECT
+        fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
+        coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
+        subjects = null
+    )
 
     override fun toString(): String {
         val builder = StringBuilder()
