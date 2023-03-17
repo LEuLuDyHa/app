@@ -18,6 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
         buildConfigField("String","OPENLIBRARY_BASE_URL",OPENLIBRARY_BASE_URL)
+        buildConfigField("String","OPENLIBRARY_COVERS_URL",OPENLIBRARY_COVERS_URL)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -60,7 +61,7 @@ android {
 dependencies {
 
     implementation "androidx.core:core-ktx:$core_ktx_version"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
     implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
@@ -72,11 +73,10 @@ dependencies {
     // It is not recommended to use this directly as the archive size is ~30MB apparently
     implementation "androidx.compose.material:material-icons-extended:$material_extended_icons_version"
 
-    // TODO Uncomment if needed in this project, wasn't sure
-    // implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.5.1'
-    // implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1'
-    //  Coil
-    // implementation("io.coil-kt:coil-compose:1.4.0")
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+    // Coil
+    implementation("io.coil-kt:coil-compose:1.4.0")
     // System UI Controller - Accompanist
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.17.0"
 

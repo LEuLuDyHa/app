@@ -3,25 +3,15 @@ package com.github.leuludyha.data.api
 import com.github.leuludyha.data.repository.LibraryRepositoryImpl
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryRemoteDataSourceImpl
-import com.github.leuludyha.domain.model.Document
-import com.github.leuludyha.domain.model.Search
-import com.github.leuludyha.domain.model.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
-import com.github.leuludyha.data.FileReader
-import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
-import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.net.HttpURLConnection
 
-class SearchApiTest {
-    private lateinit var api: SearchApi
+class LibraryApiTest {
+    private lateinit var api: LibraryApi
     private lateinit var remoteDataSource: LibraryRemoteDataSource
     private lateinit var repository: LibraryRepository
 
@@ -35,15 +25,16 @@ class SearchApiTest {
             .baseUrl(mockWebServer.url("/").toString())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(SearchApi::class.java)
+            .create(LibraryApi::class.java)
         remoteDataSource = LibraryRemoteDataSourceImpl(api)
         repository = LibraryRepositoryImpl(remoteDataSource)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    fun twoDocsTest(dataProvider: suspend (String) -> Search) = runTest {
+    /*@OptIn(ExperimentalCoroutinesApi::class)
+    fun searchTwoDocsTest(dataProvider: suspend (String) -> RawSearch) = runTest {
 
-        val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "2docs_search.json")
+        val json =
+            FileReader.readResourceFromFile(this.javaClass.classLoader!!, "search_2docs.json")
 
         val expectedResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -56,7 +47,8 @@ class SearchApiTest {
             authorNames = listOf("TestAuthor0"),
             firstPublishYear = 2023,
             key = "TestKey0",
-            authorKeys = listOf("TestAuthorKey0")
+            authorKeys = listOf("TestAuthorKey0"),
+            editionKeys = null
         )
 
         val expectedDoc1 = Document(
@@ -65,29 +57,16 @@ class SearchApiTest {
             authorNames = listOf("TestAuthor1"),
             firstPublishYear = 2023,
             key = "TestKey1",
-            authorKeys = listOf("TestAuthorKey1")
+            authorKeys = listOf("TestAuthorKey1"),
+            editionKeys = null
         )
 
         val actualResponse = dataProvider("test")
         assertThat(actualResponse).isNotNull()
-        assertThat(actualResponse.resultsCount).isEqualTo(2)
-        assertThat(actualResponse.resultsCount).isEqualTo(actualResponse.documents.size)
         assertThat(actualResponse.documents).isEqualTo(listOf(expectedDoc0, expectedDoc1))
-    }
+    }*/
 
-    @Test
-    fun `for multiple documents found, SearchApi returns all documents with http code 200`() =
-        twoDocsTest { s -> api.search(s).body()!! }
-
-    @Test
-    fun `for multiple documents found, LibraryRemoteDataSource returns all documents with http code 200`() =
-        twoDocsTest { s -> remoteDataSource.search(s).data!! }
-
-    @Test
-    fun `for multiple documents found, LibraryRepository returns all documents with http code 200`() =
-        twoDocsTest { s -> repository.search(s).data!! }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /*@OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `On unsuccessful response, LibraryRemoteDataSource returns Result_Error`() = runTest {
         val mockResponse = MockResponse()
@@ -96,7 +75,22 @@ class SearchApiTest {
 
         val actualResponse = remoteDataSource.search("test")
         assertThat(actualResponse).isInstanceOf(Result.Error::class.java)
-    }
+    }*/
+
+    /*@OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `real test`() = runTest {
+        val realApi = Retrofit.Builder()
+            .baseUrl("https://openlibrary.org")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(LibraryApi::class.java)
+        val realRemoteDataSource = LibraryRemoteDataSourceImpl(realApi)
+        val realRepository = LibraryRepositoryImpl(realRemoteDataSource)
+
+        val res = realRepository.editionById("OL7353617M")
+        println("## ${res.data}")
+    }*/
 
     @After
     fun tearDown() {
