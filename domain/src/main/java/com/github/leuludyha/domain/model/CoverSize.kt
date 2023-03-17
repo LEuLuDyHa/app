@@ -5,7 +5,7 @@ enum class CoverSize {
     Medium,
     Large;
 
-    override fun toString(): String = when(this) {
+    override fun toString(): String = when (this) {
         Small -> "S"
         Medium -> "M"
         Large -> "L"

@@ -26,6 +26,9 @@ fun HomeScreen(
     navController: NavHostController,
     viewModel: HomeScreenViewModel = hiltViewModel()
 ) {
+    val (query, setQuery) = remember { mutableStateOf("") }
+    val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }
+    val (queryLoading, setQueryLoading) = remember { mutableStateOf(false) }
 
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
