@@ -4,6 +4,7 @@ plugins {
     id 'jacoco'
     id 'kotlin-kapt'
     id "dagger.hilt.android.plugin"
+    id "com.google.gms.google-services"
 }
 
 android {
@@ -65,6 +66,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.6.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
+    implementation 'androidx.compose.material:material:1.2.0'
     implementation 'androidx.navigation:navigation-testing:2.5.3'
 
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
@@ -89,6 +91,15 @@ dependencies {
 
     // Paging 3.0
     implementation "androidx.paging:paging-compose:$paging_version"
+
+    //Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+
+    //Play Services
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
+    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
 
     // Submodules
     implementation project(path: ':data')
