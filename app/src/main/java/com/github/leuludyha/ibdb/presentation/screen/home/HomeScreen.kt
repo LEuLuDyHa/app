@@ -1,6 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.screen.home
 
 import android.view.KeyEvent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -50,17 +51,19 @@ fun HomeScreen(
                     value = query,
                     onValueChange = { setQuery(it) },
                     singleLine = true,
-                    modifier = Modifier.onKeyEvent {
-                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                            setQueryLoading(true)
-                            viewModel.getAllBooks(query) { works ->
-                                setWorks(works)
-                                setQueryLoading(false)
+                    modifier = Modifier
+                        .background(MaterialTheme.colorScheme.secondaryContainer)
+                        .onKeyEvent {
+                            if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                                setQueryLoading(true)
+                                viewModel.getAllBooks(query) { works ->
+                                    setWorks(works)
+                                    setQueryLoading(false)
+                                }
+                                true
                             }
-                            true
+                            false
                         }
-                        false
-                    }
                 )
             }
         },
