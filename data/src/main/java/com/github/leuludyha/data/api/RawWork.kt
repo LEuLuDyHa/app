@@ -26,17 +26,7 @@ data class RawWork(
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<Work> {
 
-    override fun toModel(libraryApi: LibraryApi): Work {
-        val authorKeys = rawAuthors
-            ?.mapNotNull { it.rawKey?.key }
-        return Work(
-            title = this.title,
-            id = extractIdFrom(this.key, "/works/"),
-            fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
-            coverUrls = coverIdsToCoverUrls(coverIds),
-            subjects = this.subjects,
-        )
-    }
+    override fun toModel(libraryApi: LibraryApi) = TODO()
 
     data class RawWorkAuthor(
         @SerializedName("author")

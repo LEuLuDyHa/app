@@ -31,13 +31,7 @@ data class Document(
     @SerializedName("edition_key")
     val editionIds: List<String>?,
 ): Serializable, Raw<Work> {
-    override fun toModel(libraryApi: LibraryApi) = Work (
-            title = title,
-            id = extractIdFrom(key, "/works/"),
-            fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
-            coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
-            subjects = null
-        )
+    override fun toModel(libraryApi: LibraryApi) = TODO()
 
     override fun toString(): String {
         val builder = StringBuilder()
