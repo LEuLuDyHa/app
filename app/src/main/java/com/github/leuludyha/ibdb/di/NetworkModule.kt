@@ -1,7 +1,7 @@
 package com.github.leuludyha.ibdb.di
 
+import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.ibdb.BuildConfig
-import com.github.leuludyha.data.api.SearchApi
 
 import dagger.Module
 import dagger.Provides
@@ -38,8 +38,8 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideSearchApi(retrofit: Retrofit): SearchApi {
-        return retrofit.create(SearchApi::class.java)
+    fun provideLibraryApi(retrofit: Retrofit): LibraryApi {
+        return retrofit.create(LibraryApi::class.java)
     }
 
 }

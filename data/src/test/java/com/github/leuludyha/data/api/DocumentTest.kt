@@ -1,6 +1,5 @@
-package com.github.leuludyha.domain
+package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Document
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 
@@ -15,6 +14,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.coverId).isEqualTo(0)
@@ -23,6 +23,7 @@ class DocumentTest {
         assertThat(doc.firstPublishYear).isEqualTo(0)
         assertThat(doc.key).isEqualTo("Awesome key")
         assertThat(doc.authorKeys).isEqualTo(listOf("Weird key"))
+        assertThat(doc.editionIds).isEqualTo(listOf("key"))
     }
 
 
@@ -35,6 +36,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Awesome book, by Awesome guy")
@@ -49,6 +51,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Awesome book, by Awesome guy and Less awesome guy")
@@ -63,6 +66,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Awesome book, by 1, 2 and 3")
@@ -77,6 +81,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Awesome book, by an unknown author")
@@ -91,6 +96,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Awesome book, by an unknown author")
@@ -105,6 +111,7 @@ class DocumentTest {
             firstPublishYear = 0,
             key = "Awesome key",
             authorKeys = listOf("Weird key"),
+            editionIds = listOf("key")
         )
 
         assertThat(doc.toString()).isEqualTo("Unknown title, by an unknown author")

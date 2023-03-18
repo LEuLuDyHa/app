@@ -1,25 +1,41 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.data.api
 
+import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
+import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
+import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
+import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 /**
+ * TODO I assumed the type of a search result (Document) was ALWAYS a work, is it?
  * Document returned by the SearchApi
  * @param key document's key to fetch it in other APIs
  */
 data class Document(
+    @SerializedName("key")
+    val key: String?,
     @SerializedName("cover_i")
-    val coverId: Int?,
+    val coverId: Long?,
     @SerializedName("title")
     val title: String?,
     @SerializedName("author_name")
     val authorNames: List<String>?,
     @SerializedName("first_publish_year")
     val firstPublishYear: Int?,
-    @SerializedName("key")
-    val key: String?,
     @SerializedName("author_key")
-    val authorKeys: List<String>?
-) {
+    val authorKeys: List<String>?,
+    @SerializedName("edition_key")
+    val editionIds: List<String>?,
+): Serializable, Raw<Work> {
+    override fun toModel(libraryApi: LibraryApi) = Work (
+        title = title,
+        id = extractIdFrom(key, "/works/").orEmpty(), // TODO CORRECT
+        fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
+        coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
+        subjects = null
+    )
+
     override fun toString(): String {
         val builder = StringBuilder()
 
