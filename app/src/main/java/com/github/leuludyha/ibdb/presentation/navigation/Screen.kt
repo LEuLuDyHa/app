@@ -1,6 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.navigation
 
 sealed class Screen(val route: String) {
+    object SignIn : Screen("sign_in_screen")
     object Home : Screen("home_screen")
     object BookSearch : Screen("book_search_screen")
     object Collection : Screen("collection")

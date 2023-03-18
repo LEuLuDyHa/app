@@ -8,12 +8,15 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.github.leuludyha.ibdb.presentation.screen.auth.signin.SignInScreen
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.util.Constant
+
+// TODO some kind of linking between NavGraph and BottomToolbar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,8 +28,11 @@ fun NavGraph(navController: NavHostController) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = Screen.SignIn.route
         ) {
+            composable(route = Screen.SignIn.route) {
+                SignInScreen()
+            }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
             }
