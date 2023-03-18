@@ -25,7 +25,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val (query, setQuery) = remember { mutableStateOf("") }
     val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }

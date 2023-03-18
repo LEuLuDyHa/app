@@ -2,7 +2,7 @@ package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
-import com.github.leuludyha.domain.useCase.SearchUseCase
+import com.github.leuludyha.domain.useCase.library.SearchUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.FirebaseSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.OneTapSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases

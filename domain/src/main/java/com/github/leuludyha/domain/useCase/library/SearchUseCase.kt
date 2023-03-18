@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.useCase
+package com.github.leuludyha.domain.useCase.library
 
 import com.github.leuludyha.domain.repository.LibraryRepository
 
