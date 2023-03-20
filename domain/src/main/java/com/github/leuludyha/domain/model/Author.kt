@@ -1,9 +1,6 @@
 package com.github.leuludyha.domain.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
+// We might want to improve this in the future but I figured this is the minimum we need
 data class Author(
     var pk: Long = 0,
     val wikipedia: String?,

@@ -6,5 +6,8 @@ data class Work(
     val id: String?,
     val authorIds: List<String>?,
     val covers: List<Cover>?,
+    val id: String,
+    private val fetchAuthors: suspend () -> List<Author>?,
+    val coverUrls: List<(CoverSize) -> String>?,
     val subjects: List<String>?,
 )
