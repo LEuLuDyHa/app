@@ -31,5 +31,12 @@ data class RawEdition(
     override val error: String?,
 ): Serializable, ErrorProne, Raw<Edition> {
 
-    override fun toModel(libraryApi: LibraryApi): Edition = TODO()
+    override fun toModel(libraryApi: LibraryApi): Edition =
+        Edition(
+            title = this.title,
+            id = extractIdFrom(this.key, "/books/"),
+            fetchAuthors =  { authorKeysToAuthors(authorRawKeys?.mapNotNull { it.key }, libraryApi) },
+            fetchWorks = { workKeysToWorks(workRawKeys?.mapNotNull { it.key }, libraryApi) },
+            coverUrls = coverIdsToCoverUrls(coverIds),
+        )
 }
