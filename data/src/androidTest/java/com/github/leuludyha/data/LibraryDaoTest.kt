@@ -12,6 +12,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
+import kotlin.math.exp
 
 @RunWith(AndroidJUnit4::class)
 class LibraryDaoTest {
@@ -110,7 +111,11 @@ class LibraryDaoTest {
             work = work1,
             authors = listOf(author1, author2, author3)
         )
-        runBlocking { assertThat(libraryDao.getWorkWithAuthors(work1.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithAuthors(work1.workId).first()
+            assertThat(result.authors).isEqualTo(expected.authors)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -119,7 +124,11 @@ class LibraryDaoTest {
             work = work2,
             authors = listOf()
         )
-        runBlocking { assertThat(libraryDao.getWorkWithAuthors(work2.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithAuthors(work2.workId).first()
+            assertThat(result.authors).isEqualTo(expected.authors)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -128,7 +137,11 @@ class LibraryDaoTest {
             work = work1,
             editions = listOf(edition1, edition2, edition3)
         )
-        runBlocking { assertThat(libraryDao.getWorkWithEditions(work1.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithEditions(work1.workId).first()
+            assertThat(result.editions).isEqualTo(expected.editions)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -137,7 +150,11 @@ class LibraryDaoTest {
             work = work2,
             editions = listOf()
         )
-        runBlocking { assertThat(libraryDao.getWorkWithEditions(work2.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithEditions(work2.workId).first()
+            assertThat(result.editions).isEqualTo(expected.editions)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -146,7 +163,11 @@ class LibraryDaoTest {
             work = work1,
             covers = listOf(cover1, cover2, cover3)
         )
-        runBlocking { assertThat(libraryDao.getWorkWithCovers(work1.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithCovers(work1.workId).first()
+            assertThat(result.covers).isEqualTo(expected.covers)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -155,7 +176,11 @@ class LibraryDaoTest {
             work = work2,
             covers = listOf()
         )
-        runBlocking { assertThat(libraryDao.getWorkWithCovers(work2.workId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getWorkWithCovers(work2.workId).first()
+            assertThat(result.covers).isEqualTo(expected.covers)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
     }
 
     @Test
@@ -164,7 +189,11 @@ class LibraryDaoTest {
             author = author1,
             works = listOf(work1, work3)
         )
-        runBlocking { assertThat(libraryDao.getAuthorWithWorks(author1.authorId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getAuthorWithWorks(author1.authorId).first()
+            assertThat(result.works).isEqualTo(expected.works)
+            assertThat(result.author).isEqualTo(expected.author)
+        }
     }
 
     @Test
@@ -173,7 +202,11 @@ class LibraryDaoTest {
             author = author4,
             works = listOf()
         )
-        runBlocking { assertThat(libraryDao.getAuthorWithWorks(author4.authorId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getAuthorWithWorks(author4.authorId).first()
+            assertThat(result.works).isEqualTo(expected.works)
+            assertThat(result.author).isEqualTo(expected.author)
+        }
     }
 
     @Test
@@ -182,7 +215,11 @@ class LibraryDaoTest {
             edition = edition1,
             works = listOf(work1, work3)
         )
-        runBlocking { assertThat(libraryDao.getEditionWithWorks(edition1.editionId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getEditionWithWorks(edition1.editionId).first()
+            assertThat(result.works).isEqualTo(expected.works)
+            assertThat(result.edition).isEqualTo(expected.edition)
+        }
     }
 
     @Test
@@ -191,7 +228,11 @@ class LibraryDaoTest {
             edition = edition4,
             works = listOf()
         )
-        runBlocking { assertThat(libraryDao.getEditionWithWorks(edition4.editionId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getEditionWithWorks(edition4.editionId).first()
+            assertThat(result.works).isEqualTo(expected.works)
+            assertThat(result.edition).isEqualTo(expected.edition)
+        }
     }
 
     @Test
@@ -200,7 +241,11 @@ class LibraryDaoTest {
             edition = edition1,
             authors = listOf(author1, author2, author3)
         )
-        runBlocking { assertThat(libraryDao.getEditionWithAuthors(edition1.editionId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getEditionWithAuthors(edition1.editionId).first()
+            assertThat(result.authors).isEqualTo(expected.authors)
+            assertThat(result.edition).isEqualTo(expected.edition)
+        }
     }
 
     @Test
@@ -209,7 +254,11 @@ class LibraryDaoTest {
             edition = edition1,
             covers = listOf(cover1, cover2, cover3)
         )
-        runBlocking { assertThat(libraryDao.getEditionWithCovers(edition1.editionId).first()).isEqualTo(expected) }
+        runBlocking {
+            val result = libraryDao.getEditionWithCovers(edition1.editionId).first()
+            assertThat(result.covers).isEqualTo(expected.covers)
+            assertThat(result.edition).isEqualTo(expected.edition)
+        }
     }
 
     @After
