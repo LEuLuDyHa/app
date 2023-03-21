@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.Work
 import com.github.leuludyha.ibdb.presentation.components.Orientation
 import com.github.leuludyha.ibdb.presentation.components.WorkList
-import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 // TODO REMOVE
@@ -25,7 +24,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    viewModel: HomeScreenViewModel = hiltViewModel()
+    outerPadding: PaddingValues,
+    viewModel: HomeScreenViewModel = hiltViewModel(),
 ) {
     val (query, setQuery) = remember { mutableStateOf("") }
     val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }
@@ -38,59 +38,54 @@ fun HomeScreen(
         systemUiController.setStatusBarColor(color = systemBarColor)
     }
 
-    Scaffold(
-        topBar = {
-            Row(
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = query,
+                onValueChange = { setQuery(it) },
+                singleLine = true,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutlinedTextField(
-                    value = query,
-                    onValueChange = { setQuery(it) },
-                    singleLine = true,
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.secondaryContainer)
-                        .onKeyEvent {
-                            if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
-                                setQueryLoading(true)
-                                viewModel.getAllBooks(query) { works ->
-                                    setWorks(works)
-                                    setQueryLoading(false)
-                                }
-                                true
+                    .background(MaterialTheme.colorScheme.secondaryContainer)
+                    .onKeyEvent {
+                        if (it.nativeKeyEvent.keyCode == KeyEvent.KEYCODE_ENTER) {
+                            setQueryLoading(true)
+                            viewModel.getAllBooks(query) { works ->
+                                setWorks(works)
+                                setQueryLoading(false)
                             }
-                            false
+                            true
                         }
-                )
+                        false
+                    }
+            )
+        }
+        if (queryLoading) {
+            Column(
+                modifier = Modifier
+                    .padding(outerPadding)
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-        },
-        bottomBar = { BottomToolbar() },
-        content = { paddingValues ->
-            if (queryLoading) {
-                Column(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                }
-            } else {
-                works?.let {
-                    WorkList(
-                        orientation = Orientation.Vertical,
-                        works = it,
-                        navController = navController,
-                        paddingValues = paddingValues
-                    )
+        } else {
+            works?.let {
+                WorkList(
+                    orientation = Orientation.Vertical,
+                    works = it,
+                    navController = navController,
+                    paddingValues = outerPadding
+                )
 
-                }
             }
         }
-    )
+    }
 }
