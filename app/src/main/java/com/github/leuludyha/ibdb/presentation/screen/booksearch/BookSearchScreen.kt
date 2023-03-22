@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.screen.home
+package com.github.leuludyha.ibdb.presentation.screen.booksearch
 
 import android.view.KeyEvent
 import androidx.compose.foundation.background
