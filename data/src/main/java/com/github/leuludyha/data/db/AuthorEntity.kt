@@ -2,9 +2,9 @@ package com.github.leuludyha.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.github.leuludyha.domain.model.Author
 import kotlinx.coroutines.flow.map
 
-import com.github.leuludyha.domain.model.Author as ModelAuthor
 
 @Entity(tableName = "authors")
 data class AuthorEntity (
@@ -14,9 +14,9 @@ data class AuthorEntity (
     val name: String?,
     val bio: String?,
     val entityType: String?,
-): Raw<ModelAuthor> {
-    override fun toModel(libraryDao: LibraryDao): ModelAuthor =
-        ModelAuthor(
+): Raw<Author> {
+    override fun toModel(libraryDao: LibraryDao): Author =
+        Author(
             id = authorId,
             name = name,
             bio = bio,

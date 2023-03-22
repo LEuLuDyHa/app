@@ -4,15 +4,14 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.map
-import com.github.leuludyha.domain.model.Work as ModelWork
 
 @Entity(tableName = "works")
 data class WorkEntity (
     @PrimaryKey
     val workId: String,
     val title: String?,
-): Raw<ModelWork> {
-    override fun toModel(libraryDao: LibraryDao): ModelWork {
+): Raw<Work> {
+    override fun toModel(libraryDao: LibraryDao): Work {
         val authorsFlow = libraryDao.getWorkWithAuthors(workId).map { it.authors }
         val modelAuthors = authorsFlow
             .map { authors -> authors
