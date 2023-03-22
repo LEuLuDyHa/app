@@ -22,10 +22,10 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 // TODO REMOVE
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun BookSearchScreen(
     navController: NavHostController,
     outerPadding: PaddingValues,
-    viewModel: HomeScreenViewModel = hiltViewModel(),
+    viewModel: BookSearchScreenViewModel = hiltViewModel(),
 ) {
     val (query, setQuery) = remember { mutableStateOf("") }
     val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }
