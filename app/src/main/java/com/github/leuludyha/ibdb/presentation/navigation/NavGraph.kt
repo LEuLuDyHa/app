@@ -8,6 +8,8 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
+import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
 import com.github.leuludyha.ibdb.util.Constant
@@ -20,10 +22,13 @@ fun NavGraph(navController: NavHostController) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.BookSearch.route
+            startDestination = Screen.Home.route
         ) {
             composable(route = Screen.Home.route) {
-                // TODO Add home screen composable here
+                HomeScreen(navController = navController, outerPadding = padding)
+            }
+            composable(route = Screen.BarcodeScan.route) {
+                BarcodeScreen(navController, padding)
             }
             composable(route = Screen.BookSearch.route) {
                 BookSearchScreen(navController, padding)

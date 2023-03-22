@@ -31,7 +31,7 @@ data class RawWork(
             ?.mapNotNull { it.rawKey?.key }
         return Work(
             title = this.title,
-            id = extractIdFrom(this.key, "/works/").orEmpty(), // TODO CORRECT
+            id = extractIdFrom(this.key, "/works/").orEmpty(), //TODO CORRECT
             fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
             coverUrls = coverIdsToCoverUrls(coverIds),
             subjects = when (this.subjects == null) {
@@ -40,7 +40,6 @@ data class RawWork(
             },
         )
     }
-
     data class RawWorkAuthor(
         @SerializedName("author")
         val rawKey: RawKey?,
