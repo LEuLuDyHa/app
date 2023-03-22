@@ -20,7 +20,7 @@ fun NavGraph(navController: NavHostController) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = Screen.BookSearch.route
         ) {
             composable(route = Screen.Home.route) {
                 // TODO Add home screen composable here
