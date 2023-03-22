@@ -11,6 +11,7 @@ import androidx.room.RoomDatabase
         Author::class,
         Cover::class,
         Edition::class,
+        AuthorCoverCrossRef::class,
         WorkAuthorCrossRef::class,
         WorkEditionCrossRef::class,
         WorkCoverCrossRef::class,

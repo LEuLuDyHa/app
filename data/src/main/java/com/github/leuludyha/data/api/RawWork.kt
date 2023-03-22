@@ -26,7 +26,7 @@ data class RawWork(
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<Work> {
 
-    override fun toModel(libraryApi: LibraryApi): Work {
+    override fun toModel(libraryApi: LibraryApi) = TODO()/*: Work {
         val authorKeys = rawAuthors
             ?.mapNotNull { it.rawKey?.key }
         return Work(
@@ -36,7 +36,7 @@ data class RawWork(
             coverUrls = coverIdsToCoverUrls(coverIds),
             subjects = this.subjects,
         )
-    }
+    }*/
     data class RawWorkAuthor(
         @SerializedName("author")
         val rawKey: RawKey?,

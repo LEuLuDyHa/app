@@ -30,9 +30,9 @@ class LibraryDaoTest {
     private val edition2 = Edition("edition2", "MyEdition2")
     private val edition3 = Edition("edition3", "MyEdition3")
     private val edition4 = Edition("edition4", "MyEdition4")
-    private val cover1 = Cover(1, "coverUrl1")
-    private val cover2 = Cover(2, "coverUrl2")
-    private val cover3 = Cover(3, "coverUrl3")
+    private val cover1 = Cover(1)
+    private val cover2 = Cover(2)
+    private val cover3 = Cover(3)
 
     @Before
     fun createDatabase() {
@@ -87,6 +87,10 @@ class LibraryDaoTest {
             libraryDao.insert(EditionCoverCrossRef(edition1.editionId, cover1.coverId))
             libraryDao.insert(EditionCoverCrossRef(edition1.editionId, cover2.coverId))
             libraryDao.insert(EditionCoverCrossRef(edition1.editionId, cover3.coverId))
+
+            libraryDao.insert(AuthorCoverCrossRef(author1.authorId, cover1.coverId))
+            libraryDao.insert(AuthorCoverCrossRef(author1.authorId, cover2.coverId))
+            libraryDao.insert(AuthorCoverCrossRef(author4.authorId, cover3.coverId))
         }
     }
 
@@ -197,6 +201,19 @@ class LibraryDaoTest {
     }
 
     @Test
+    fun getAuthorWithCoversGivesExpectedResultWithMultipleWorks() {
+        val expected = AuthorWithCovers(
+            author = author1,
+            covers = listOf(cover1, cover2)
+        )
+        runBlocking {
+            val result = libraryDao.getAuthorWithCovers(author1.authorId).first()
+            assertThat(result.covers).isEqualTo(expected.covers)
+            assertThat(result.author).isEqualTo(expected.author)
+        }
+    }
+
+    @Test
     fun getAuthorWithWorksGivesExpectedResultWith0Works() {
         val expected = AuthorWithWorks(
             author = author4,
@@ -259,6 +276,50 @@ class LibraryDaoTest {
             assertThat(result.covers).isEqualTo(expected.covers)
             assertThat(result.edition).isEqualTo(expected.edition)
         }
+    }
+
+    @Test
+    fun tryingToAccessAWorkAfterDeleteAllWorksReturnsNull() {
+        runBlocking {
+            libraryDao.deleteAllWorks()
+            val result = libraryDao.getWork(work1.workId).first()
+            assertThat(result).isNull()
+        }
+
+        populateDatabase()
+    }
+
+    @Test
+    fun tryingToAccessAnAuthorAfterDeleteAllAuthorsReturnsNull() {
+        runBlocking {
+            libraryDao.deleteAllAuthors()
+            val result = libraryDao.getAuthor(author1.authorId).first()
+            assertThat(result).isNull()
+        }
+
+        populateDatabase()
+    }
+
+    @Test
+    fun tryingToAccessCoversAfterDeleteAllCoversReturnsEmpty() {
+        runBlocking {
+            libraryDao.deleteAllCovers()
+            val result = libraryDao.getWorkWithCovers(work1.workId).first()
+            assertThat(result.covers).isEmpty()
+        }
+
+        populateDatabase()
+    }
+
+    @Test
+    fun tryingToAccessAnEditionAfterDeleteAllEditionsReturnsNull() {
+        runBlocking {
+            libraryDao.deleteAllEditions()
+            val result = libraryDao.getEdition(edition1.editionId).first()
+            assertThat(result).isNull()
+        }
+
+        populateDatabase()
     }
 
     @After

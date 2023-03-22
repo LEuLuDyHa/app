@@ -9,7 +9,9 @@ interface LibraryApi {
 
     @GET("/search.json")
     suspend fun search(
-        @Query("q") query: String
+        @Query("q") query: String,
+        @Query("page") page: Int = 1,
+        @Query("limit") resultsPerPage: Int = 20,
     ): Response<RawSearch>
 
     /**

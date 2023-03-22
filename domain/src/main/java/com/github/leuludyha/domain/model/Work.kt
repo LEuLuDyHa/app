@@ -1,15 +1,11 @@
 package com.github.leuludyha.domain.model
 
+import kotlinx.coroutines.flow.Flow
+
 data class Work(
-    val title: String?,
     val id: String,
-    private val fetchAuthors: suspend () -> List<Author>?,
-    val coverUrls: List<(CoverSize) -> String>?,
+    val title: String?,
+    val authors: Flow<List<Author>>,
+    val covers: Flow<List<Cover>>,
     val subjects: List<String>?,
-) {
-    private var cachedAuthors: List<Author>? = null
-    suspend fun authors(): List<Author>? {
-        cachedAuthors?.let { cachedAuthors = fetchAuthors() }
-        return cachedAuthors
-    }
-}
+)

@@ -9,7 +9,11 @@ import com.github.leuludyha.domain.model.*
 class LibraryRemoteDataSourceImpl(
     private val libraryApi: LibraryApi,
 ): LibraryRemoteDataSource {
-    override suspend fun search(query: String): Result<List<Work>> =
+    override suspend fun search(
+        query: String,
+        page: Int,
+        resultsPerPage: Int,
+    ): Result<List<Work>> =
         rawResponseToModelResult(libraryApi.search(query), libraryApi)
     override suspend fun workById(workId: String): Result<Work> =
         rawResponseToModelResult(libraryApi.workById(workId), libraryApi)

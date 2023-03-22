@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.repository
 
+import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Edition
@@ -7,8 +8,10 @@ import com.github.leuludyha.domain.model.Result
 import com.github.leuludyha.domain.model.Work
 import com.github.leuludyha.domain.repository.LibraryRepository
 
-class LibraryRepositoryImpl(private val libraryRemoteDataSource: LibraryRemoteDataSource) :
-    LibraryRepository
+class LibraryRepositoryImpl(
+    private val libraryRemoteDataSource: LibraryRemoteDataSource,
+    private val libraryLocalDataSource: LibraryLocalDataSource
+    ) : LibraryRepository
 {
     override suspend fun search(query: String) =
         libraryRemoteDataSource.search(query)
