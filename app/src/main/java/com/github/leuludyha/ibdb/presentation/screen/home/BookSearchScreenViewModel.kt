@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeScreenViewModel @Inject constructor(
+class BookSearchScreenViewModel @Inject constructor(
     private var useCase: SearchUseCase
 ) : ViewModel() {
 
