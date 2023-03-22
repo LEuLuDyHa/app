@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.screen.home
+package com.github.leuludyha.ibdb.presentation.screen.booksearch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
