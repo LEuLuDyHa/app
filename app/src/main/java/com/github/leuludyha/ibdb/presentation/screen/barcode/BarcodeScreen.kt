@@ -63,21 +63,12 @@ fun BarcodeScreen(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        val barCodeVal = remember { mutableStateOf("") }
-        CameraPreview(barCodeVal) {
-            //TODO: Uncomment these lines once this function is called from another activity, it is commented for
-            // now for testing purposes, so that the activity may be launched independently
-//                        val data = Intent()
-//                        data.putExtra("ISBN_code", barCodeVal.value)
-//                        setResult(RESULT_OK, data)
-//                        finish()
-            Log.i("BarcodeTest", "The callback has been called to finish the activity.")
-        }
+        CameraPreview { }
     }
 }
 
 @Composable
-fun CameraPreview(barCodeVal: MutableState<String>, barcodeFoundCallback: () -> Unit) {
+fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     var preview by remember { mutableStateOf<Preview?>(null) }
@@ -120,9 +111,8 @@ fun CameraPreview(barCodeVal: MutableState<String>, barcodeFoundCallback: () -> 
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
                             if(BarcodeAnalyser.checkISBNCode(barcodeValue)) {
-                                barCodeVal.value = barcodeValue
                                 Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
-                                barcodeFoundCallback()
+                                barcodeFoundCallback(barcodeValue)
                             }
                         }
                     }
