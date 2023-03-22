@@ -12,27 +12,26 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import kotlin.math.exp
 
 @RunWith(AndroidJUnit4::class)
 class LibraryDaoTest {
     private lateinit var libraryDao: LibraryDao
     private lateinit var db: LibraryDatabase
 
-    private val work1 = Work("work1", "MyWork1")
-    private val work2 = Work("work2", "MyWork2")
-    private val work3 = Work("work3", "MyWork3")
-    private val author1 = Author("author1", null, "Author1", null, null)
-    private val author2 = Author("author2", null, "Author2", null, null)
-    private val author3 = Author("author3", null, "Author3", null, null)
-    private val author4 = Author("author4", null, "Author4", null, null)
-    private val edition1 = Edition("edition1", "MyEdition1")
-    private val edition2 = Edition("edition2", "MyEdition2")
-    private val edition3 = Edition("edition3", "MyEdition3")
-    private val edition4 = Edition("edition4", "MyEdition4")
-    private val cover1 = Cover(1)
-    private val cover2 = Cover(2)
-    private val cover3 = Cover(3)
+    private val work1 = WorkEntity("work1", "MyWork1")
+    private val work2 = WorkEntity("work2", "MyWork2")
+    private val work3 = WorkEntity("work3", "MyWork3")
+    private val author1 = AuthorEntity("author1", null, "Author1", null, null)
+    private val author2 = AuthorEntity("author2", null, "Author2", null, null)
+    private val author3 = AuthorEntity("author3", null, "Author3", null, null)
+    private val author4 = AuthorEntity("author4", null, "Author4", null, null)
+    private val edition1 = EditionEntity("edition1", "MyEdition1")
+    private val edition2 = EditionEntity("edition2", "MyEdition2")
+    private val edition3 = EditionEntity("edition3", "MyEdition3")
+    private val edition4 = EditionEntity("edition4", "MyEdition4")
+    private val cover1 = CoverEntity(1)
+    private val cover2 = CoverEntity(2)
+    private val cover3 = CoverEntity(3)
 
     @Before
     fun createDatabase() {

@@ -7,10 +7,10 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        Work::class,
-        Author::class,
-        Cover::class,
-        Edition::class,
+        WorkEntity::class,
+        AuthorEntity::class,
+        CoverEntity::class,
+        EditionEntity::class,
         AuthorCoverCrossRef::class,
         WorkAuthorCrossRef::class,
         WorkEditionCrossRef::class,

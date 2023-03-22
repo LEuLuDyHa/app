@@ -5,11 +5,11 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 data class AuthorWithCovers(
-    @Embedded val author: Author,
+    @Embedded val author: AuthorEntity,
     @Relation(
         parentColumn = "authorId",
         entityColumn = "coverId",
         associateBy = Junction(AuthorCoverCrossRef::class)
     )
-    val covers: List<Cover>
+    val covers: List<CoverEntity>
 )

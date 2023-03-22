@@ -1,12 +1,12 @@
 package com.github.leuludyha.data.repository.datasource
 
 import com.github.leuludyha.data.db.*
+import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.Flow
 
-import com.github.leuludyha.domain.model.Work as ModelWork
 
 interface LibraryLocalDataSource {
-    fun getWork(workId: String): Flow<ModelWork>
+    fun getWork(workId: String): Flow<Work>
 
     fun getEdition(editionId: String): Flow<EditionEntity>
 

@@ -7,16 +7,16 @@ import kotlinx.coroutines.flow.Flow
 interface LibraryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(work: Work)
+    suspend fun insert(work: WorkEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(edition: Edition)
+    suspend fun insert(edition: EditionEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(author: Author)
+    suspend fun insert(author: AuthorEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(cover: Cover)
+    suspend fun insert(cover: CoverEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(join: WorkAuthorCrossRef)
@@ -48,13 +48,13 @@ interface LibraryDao {
     @Query("DELETE FROM editions")
     suspend fun deleteAllEditions()
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
-    fun getWork(workId: String): Flow<Work>
+    fun getWork(workId: String): Flow<WorkEntity>
 
     @Query("SELECT * FROM editions WHERE editionId LIKE :editionId")
-    fun getEdition(editionId: String): Flow<Edition>
+    fun getEdition(editionId: String): Flow<EditionEntity>
 
     @Query("SELECT * FROM authors WHERE authorId LIKE :authorId")
-    fun getAuthor(authorId: String): Flow<Author>
+    fun getAuthor(authorId: String): Flow<AuthorEntity>
 
     @Transaction
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
