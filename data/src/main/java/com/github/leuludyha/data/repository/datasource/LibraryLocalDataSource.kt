@@ -8,9 +8,9 @@ import com.github.leuludyha.domain.model.Work as ModelWork
 interface LibraryLocalDataSource {
     fun getWork(workId: String): Flow<ModelWork>
 
-    fun getEdition(editionId: String): Flow<Edition>
+    fun getEdition(editionId: String): Flow<EditionEntity>
 
-    fun getAuthor(authorId: String): Flow<Author>
+    fun getAuthor(authorId: String): Flow<AuthorEntity>
 
     fun getWorkWithAuthors(workId: String): Flow<WorkWithAuthors>
 

@@ -2,13 +2,12 @@ package com.github.leuludyha.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.leuludyha.domain.model.Cover
 import kotlinx.coroutines.flow.map
 
 import com.github.leuludyha.domain.model.Author as ModelAuthor
 
 @Entity(tableName = "authors")
-data class Author (
+data class AuthorEntity (
     @PrimaryKey
     val authorId: String,
     val wikipedia: String?,

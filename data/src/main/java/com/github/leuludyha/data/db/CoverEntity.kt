@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.Cover as ModelCover
 
 @Entity(tableName = "covers")
-data class Cover(
+data class CoverEntity(
     @PrimaryKey
     val coverId: Long
 ): Raw<ModelCover> {
