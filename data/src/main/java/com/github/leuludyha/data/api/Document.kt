@@ -33,7 +33,7 @@ data class Document(
         id = extractIdFrom(key, "/works/").orEmpty(), // TODO CORRECT
         fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
         coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
-        subjects = null
+        subjects = listOf()
     )
 
     override fun toString(): String {
