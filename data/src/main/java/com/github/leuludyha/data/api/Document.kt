@@ -30,7 +30,7 @@ data class Document(
 ): Serializable, Raw<Work> {
     override fun toModel(libraryApi: LibraryApi) = Work (
         title = title,
-        id = extractIdFrom(key, "/works/").orEmpty(), // TODO CORRECT
+        id = extractIdFrom(key, "/works/").orEmpty(), //TODO CORRECT,
         fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
         coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
         subjects = null
