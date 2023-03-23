@@ -2,11 +2,9 @@ package com.github.leuludyha.data.repository
 
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Result
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.*
 import com.github.leuludyha.domain.repository.LibraryRepository
+import kotlinx.coroutines.flow.Flow
 
 class LibraryRepositoryImpl(
     private val libraryRemoteDataSource: LibraryRemoteDataSource,
@@ -15,16 +13,24 @@ class LibraryRepositoryImpl(
 {
     override suspend fun search(query: String) =
         libraryRemoteDataSource.search(query)
-    override suspend fun workById(workId: String): Result<Work> =
-        libraryRemoteDataSource.workById(workId)
-    override suspend fun worksByAuthorId(authorId: String): Result<List<Work>> =
-        libraryRemoteDataSource.worksByAuthorId(authorId)
-    override suspend fun editionsByWorkId(workId: String): Result<List<Edition>> =
-        libraryRemoteDataSource.editionsByWorkId(workId)
-    override suspend fun editionById(editionId: String): Result<Edition> =
-        libraryRemoteDataSource.editionById(editionId)
-    override suspend fun editionByISBN(isbn: Long): Result<Edition> =
-        libraryRemoteDataSource.editionByISBN(isbn)
-    override suspend fun authorById(authorId: String): Result<Author> =
-        libraryRemoteDataSource.authorById(authorId)
+    override fun workById(workId: String): Flow<Result<Work>> =
+        libraryRemoteDataSource.getWork(workId)
+    override fun worksByAuthorId(authorId: String): Flow<Result<List<Work>>> =
+        libraryRemoteDataSource.getWorksByAuthor(authorId)
+    override fun editionsByWorkId(workId: String): Flow<Result<List<Edition>>> =
+        libraryRemoteDataSource.getEditionsByWork(workId)
+    override fun editionById(editionId: String): Flow<Result<Edition>> =
+        libraryRemoteDataSource.getEdition(editionId)
+    override fun editionByISBN(isbn: Long): Flow<Result<Edition>> =
+        libraryRemoteDataSource.getEditionByISBN(isbn)
+    override fun authorById(authorId: String): Flow<Result<Author>> =
+        libraryRemoteDataSource.getAuthor(authorId)
+    override fun getWorkLocally(workId: String): Flow<Work> =
+        libraryLocalDataSource.getWork(workId)
+    override fun getAuthorLocally(authorId: String): Flow<Author> =
+        libraryLocalDataSource.getAuthor(authorId)
+    override fun getEditionLocally(editionId: String): Flow<Edition> =
+        libraryLocalDataSource.getEdition(editionId)
+    override fun getCoverLocally(coverId: Long): Flow<Cover> =
+        libraryLocalDataSource.getCover(coverId)
 }

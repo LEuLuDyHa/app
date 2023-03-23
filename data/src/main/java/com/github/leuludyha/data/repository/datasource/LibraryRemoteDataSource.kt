@@ -1,7 +1,7 @@
 package com.github.leuludyha.data.repository.datasource
 
-import com.github.leuludyha.data.api.Document
 import com.github.leuludyha.domain.model.*
+import kotlinx.coroutines.flow.Flow
 
 interface LibraryRemoteDataSource {
     suspend fun search(
@@ -9,10 +9,10 @@ interface LibraryRemoteDataSource {
         page: Int = 1,
         resultsPerPage: Int = 20
     ): Result<List<Work>>
-    suspend fun workById(workId: String): Result<Work>
-    suspend fun worksByAuthorId(authorId: String): Result<List<Work>>
-    suspend fun editionsByWorkId(workId: String): Result<List<Edition>>
-    suspend fun editionById(editionId: String): Result<Edition>
-    suspend fun editionByISBN(isbn: Long): Result<Edition>
-    suspend fun authorById(authorId: String): Result<Author>
+    fun getWork(workId: String): Flow<Result<Work>>
+    fun getEdition(editionId: String): Flow<Result<Edition>>
+    fun getAuthor(authorId: String): Flow<Result<Author>>
+    fun getWorksByAuthor(authorId: String): Flow<Result<List<Work>>>
+    fun getEditionsByWork(workId: String): Flow<Result<List<Edition>>>
+    fun getEditionByISBN(isbn: Long): Flow<Result<Edition>>
 }

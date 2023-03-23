@@ -4,6 +4,8 @@ import com.github.leuludyha.data.api.*
 import com.github.leuludyha.data.api.ApiHelper.rawResponseToModelResult
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 
 class LibraryRemoteDataSourceImpl(
@@ -15,16 +17,28 @@ class LibraryRemoteDataSourceImpl(
         resultsPerPage: Int,
     ): Result<List<Work>> =
         rawResponseToModelResult(libraryApi.search(query), libraryApi)
-    override suspend fun workById(workId: String): Result<Work> =
-        rawResponseToModelResult(libraryApi.workById(workId), libraryApi)
-    override suspend fun worksByAuthorId(authorId: String): Result<List<Work>> =
-        rawResponseToModelResult(libraryApi.worksByAuthorId(authorId), libraryApi)
-    override suspend fun editionsByWorkId(workId: String): Result<List<Edition>> =
-        rawResponseToModelResult(libraryApi.editionsByWorkId(workId), libraryApi)
-    override suspend fun editionById(editionId: String): Result<Edition> =
-        rawResponseToModelResult(libraryApi.editionById(editionId), libraryApi)
-    override suspend fun editionByISBN(isbn: Long): Result<Edition> =
-        rawResponseToModelResult(libraryApi.editionByISBN(isbn), libraryApi)
-    override suspend fun authorById(authorId: String): Result<Author> =
-        rawResponseToModelResult(libraryApi.authorById(authorId), libraryApi)
+
+    override fun getWork(workId: String): Flow<Result<Work>> = flow {
+        emit(rawResponseToModelResult(libraryApi.workById(workId), libraryApi))
+    }
+
+    override fun getEdition(editionId: String): Flow<Result<Edition>> = flow {
+        emit(rawResponseToModelResult(libraryApi.editionById(editionId), libraryApi))
+    }
+
+    override fun getAuthor(authorId: String): Flow<Result<Author>> = flow {
+        emit(rawResponseToModelResult(libraryApi.authorById(authorId), libraryApi))
+    }
+
+    override fun getWorksByAuthor(authorId: String): Flow<Result<List<Work>>> = flow {
+        emit(rawResponseToModelResult(libraryApi.worksByAuthorId(authorId), libraryApi))
+    }
+
+    override fun getEditionsByWork(workId: String): Flow<Result<List<Edition>>> = flow {
+        emit(rawResponseToModelResult(libraryApi.editionsByWorkId(workId), libraryApi))
+    }
+
+    override fun getEditionByISBN(isbn: Long): Flow<Result<Edition>> = flow {
+        emit(rawResponseToModelResult(libraryApi.editionByISBN(isbn), libraryApi))
+    }
 }
