@@ -19,6 +19,9 @@ interface LibraryDao {
     suspend fun insert(cover: CoverEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(subject: SubjectEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(join: WorkAuthorCrossRef)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -36,6 +39,9 @@ interface LibraryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(join: EditionCoverCrossRef)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(join: WorkSubjectCrossRef)
+
     @Query("DELETE FROM works")
     suspend fun deleteAllWorks()
 
@@ -47,6 +53,10 @@ interface LibraryDao {
 
     @Query("DELETE FROM editions")
     suspend fun deleteAllEditions()
+
+    @Query("DELETE FROM subjects")
+    suspend fun deleteAllSubjects()
+
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
     fun getWork(workId: String): Flow<WorkEntity>
 
@@ -55,6 +65,9 @@ interface LibraryDao {
 
     @Query("SELECT * FROM authors WHERE authorId LIKE :authorId")
     fun getAuthor(authorId: String): Flow<AuthorEntity>
+
+    @Query("SELECT * FROM covers WHERE coverId LIKE :coverId")
+    fun getCover(coverId: Long): Flow<CoverEntity>
 
     @Transaction
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
@@ -67,6 +80,10 @@ interface LibraryDao {
     @Transaction
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
     fun getWorkWithCovers(workId: String): Flow<WorkWithCovers>
+
+    @Transaction
+    @Query("SELECT * FROM works WHERE workId LIKE :workId")
+    fun getWorkWithSubjects(workId: String): Flow<WorkWithSubjects>
 
     @Transaction
     @Query("SELECT * FROM authors WHERE authorId LIKE :authorId")

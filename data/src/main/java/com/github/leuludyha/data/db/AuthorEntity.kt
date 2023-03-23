@@ -21,9 +21,8 @@ data class AuthorEntity (
             name = name,
             bio = bio,
             photos = libraryDao.getAuthorWithCovers(authorId)
-                .map { authorWCover ->
-                    authorWCover.covers
-                        .map { it.toModel(libraryDao)}
+                .map { authorWCover -> authorWCover.covers
+                    .map { it.toModel(libraryDao)}
                 },
             wikipedia = wikipedia,
             entityType = entityType

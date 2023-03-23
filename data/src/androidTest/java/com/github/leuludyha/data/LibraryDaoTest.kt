@@ -32,7 +32,9 @@ class LibraryDaoTest {
     private val cover1 = CoverEntity(1)
     private val cover2 = CoverEntity(2)
     private val cover3 = CoverEntity(3)
-
+    private val subject1 = SubjectEntity("subject1")
+    private val subject2 = SubjectEntity("subject2")
+    private val subject3 = SubjectEntity("subject3")
     @Before
     fun createDatabase() {
         db = Room.inMemoryDatabaseBuilder(
@@ -65,6 +67,10 @@ class LibraryDaoTest {
             libraryDao.insert(cover2)
             libraryDao.insert(cover3)
 
+            libraryDao.insert(subject1)
+            libraryDao.insert(subject2)
+            libraryDao.insert(subject3)
+
             libraryDao.insert(WorkAuthorCrossRef(work1.workId, author1.authorId))
             libraryDao.insert(WorkAuthorCrossRef(work1.workId, author2.authorId))
             libraryDao.insert(WorkAuthorCrossRef(work1.workId, author3.authorId))
@@ -78,6 +84,10 @@ class LibraryDaoTest {
             libraryDao.insert(WorkCoverCrossRef(work1.workId, cover1.coverId))
             libraryDao.insert(WorkCoverCrossRef(work1.workId, cover2.coverId))
             libraryDao.insert(WorkCoverCrossRef(work1.workId, cover3.coverId))
+
+            libraryDao.insert(WorkSubjectCrossRef(work1.workId, subject1.subjectName))
+            libraryDao.insert(WorkSubjectCrossRef(work1.workId, subject2.subjectName))
+            libraryDao.insert(WorkSubjectCrossRef(work1.workId, subject3.subjectName))
 
             libraryDao.insert(EditionAuthorCrossRef(edition1.editionId, author1.authorId))
             libraryDao.insert(EditionAuthorCrossRef(edition1.editionId, author2.authorId))
@@ -106,6 +116,11 @@ class LibraryDaoTest {
     @Test
     fun getAuthorGivesExpectedResult() {
         runBlocking { assertThat(libraryDao.getAuthor(author1.authorId).first()).isEqualTo(author1) }
+    }
+
+    @Test
+    fun getCoverGivesExpectedResult() {
+        runBlocking { assertThat(libraryDao.getCover(cover1.coverId).first()).isEqualTo(cover1) }
     }
 
     @Test
@@ -182,6 +197,19 @@ class LibraryDaoTest {
         runBlocking {
             val result = libraryDao.getWorkWithCovers(work2.workId).first()
             assertThat(result.covers).isEqualTo(expected.covers)
+            assertThat(result.work).isEqualTo(expected.work)
+        }
+    }
+
+    @Test
+    fun getWorkWithSubjectsGivesExpectedResultWithMultipleSubjects() {
+        val expected = WorkWithSubjects(
+            work = work1,
+            subjects = listOf(subject1, subject2, subject3)
+        )
+        runBlocking {
+            val result = libraryDao.getWorkWithSubjects(work1.workId).first()
+            assertThat(result.subjects).isEqualTo(expected.subjects)
             assertThat(result.work).isEqualTo(expected.work)
         }
     }
@@ -321,9 +349,21 @@ class LibraryDaoTest {
         populateDatabase()
     }
 
+    @Test
+    fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() {
+        runBlocking {
+            libraryDao.deleteAllSubjects()
+            val result = libraryDao.getWorkWithSubjects(work1.workId).first()
+            assertThat(result.subjects).isEmpty()
+        }
+
+        populateDatabase()
+    }
+
     @After
     @Throws(IOException::class)
     fun closeDb() {
+        db.clearAllTables()
         db.close()
     }
 
