@@ -19,26 +19,26 @@ class LibraryRemoteDataSourceImpl(
         rawResponseToModelResult(libraryApi.search(query), libraryApi)
 
     override fun getWork(workId: String): Flow<Result<Work>> = flow {
-        emit(rawResponseToModelResult(libraryApi.workById(workId), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getWork(workId), libraryApi))
     }
 
     override fun getEdition(editionId: String): Flow<Result<Edition>> = flow {
-        emit(rawResponseToModelResult(libraryApi.editionById(editionId), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getEdition(editionId), libraryApi))
     }
 
     override fun getAuthor(authorId: String): Flow<Result<Author>> = flow {
-        emit(rawResponseToModelResult(libraryApi.authorById(authorId), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getAuthor(authorId), libraryApi))
     }
 
     override fun getWorksByAuthor(authorId: String): Flow<Result<List<Work>>> = flow {
-        emit(rawResponseToModelResult(libraryApi.worksByAuthorId(authorId), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getWorksByAuthorId(authorId), libraryApi))
     }
 
     override fun getEditionsByWork(workId: String): Flow<Result<List<Edition>>> = flow {
-        emit(rawResponseToModelResult(libraryApi.editionsByWorkId(workId), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getEditionsByWorkId(workId), libraryApi))
     }
 
     override fun getEditionByISBN(isbn: Long): Flow<Result<Edition>> = flow {
-        emit(rawResponseToModelResult(libraryApi.editionByISBN(isbn), libraryApi))
+        emit(rawResponseToModelResult(libraryApi.getEditionByISBN(isbn), libraryApi))
     }
 }

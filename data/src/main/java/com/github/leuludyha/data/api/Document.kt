@@ -1,8 +1,5 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
-import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
-import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
@@ -26,7 +23,7 @@ data class Document(
     @SerializedName("author_key")
     val authorKeys: List<String>?,
     @SerializedName("edition_key")
-    val editionIds: List<String>?,
+    val editionKeys: List<String>?,
 ): Serializable, Raw<Work> {
     override fun toModel(libraryApi: LibraryApi) = TODO() /*Work (
         title = title,
@@ -35,25 +32,4 @@ data class Document(
         coverUrls = coverIdsToCoverUrls(if (coverId == null) null else listOf(coverId)),
         subjects = null
     )*/
-
-    override fun toString(): String {
-        val builder = StringBuilder()
-
-        builder.append("${title?: "Unknown title"}, by ")
-
-        if (authorNames != null && authorNames.isNotEmpty()) {
-            for (name in authorNames.dropLast(2)) {
-                builder.append("${name}, ")
-            }
-            if (authorNames.size == 1)
-                builder.append(authorNames.last())
-            else {
-                builder.append("${authorNames.dropLast(1).last()} and ${authorNames.last()}")
-            }
-        } else {
-            builder.append("an unknown author")
-        }
-
-        return builder.toString()
-    }
 }

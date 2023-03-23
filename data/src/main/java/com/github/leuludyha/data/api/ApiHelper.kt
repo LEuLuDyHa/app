@@ -40,13 +40,13 @@ object ApiHelper {
 
     suspend fun authorKeysToAuthors(authorKeys: List<String>?, libraryApi: LibraryApi) = authorKeys
         ?.mapNotNull { extractIdFrom(it, "/authors/") }
-        ?.map { libraryApi.authorById(it) }
+        ?.map { libraryApi.getAuthor(it) }
         ?.ifEmpty { null }
         ?.mapNotNull { rawResponseToModel(it, libraryApi) }
 
     suspend fun workKeysToWorks(workKeys: List<String>?, libraryApi: LibraryApi) = workKeys
         ?.mapNotNull { extractIdFrom(it, "/works/") }
-        ?.map { libraryApi.workById(it) }
+        ?.map { libraryApi.getWork(it) }
         ?.ifEmpty { null }
         ?.mapNotNull { rawResponseToModel(it, libraryApi) }
 

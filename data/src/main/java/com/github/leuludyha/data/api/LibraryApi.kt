@@ -19,12 +19,12 @@ interface LibraryApi {
      * For example the key might be "/works/OL27448W" whereas the work id is only OL27448W.
      */
     @GET("/works/{work_id}.json")
-    suspend fun workById(
+    suspend fun getWork(
         @Path("work_id") workId: String
     ): Response<RawWork>
 
     @GET("/authors/{author_id}/works.json")
-    suspend fun worksByAuthorId(
+    suspend fun getWorksByAuthorId(
         @Path("author_id") authorId: String
     ): Response<RawAuthorWorks>
 
@@ -32,7 +32,7 @@ interface LibraryApi {
      * Get all editions of a work.
      */
     @GET("/works/{work_id}/editions.json")
-    suspend fun editionsByWorkId(
+    suspend fun getEditionsByWorkId(
         @Path("work_id") workId: String
     ): Response<RawWorkEditions>
 
@@ -41,17 +41,17 @@ interface LibraryApi {
      * For example the key might be "/books/XXXXXXX" whereas the work id is only XXXXXXX.
      */
     @GET("/books/{edition_id}.json")
-    suspend fun editionById(
+    suspend fun getEdition(
         @Path("edition_id") editionId: String
     ): Response<RawEdition>
 
     @GET("/isbn/{isbn}.json")
-    suspend fun editionByISBN(
+    suspend fun getEditionByISBN(
         @Path("isbn") isbn: Long
     ): Response<RawEdition>
 
     @GET("/authors/{author_id}.json")
-    suspend fun authorById(
+    suspend fun getAuthor(
         @Path("author_id") authorId: String
     ): Response<RawAuthor>
 }

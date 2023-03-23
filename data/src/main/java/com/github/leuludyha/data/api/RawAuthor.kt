@@ -8,8 +8,10 @@ import java.io.Serializable
 data class RawAuthor(
     @SerializedName("wikipedia")
     val wikipedia: String?,
-    @SerializedName("personal_name")
+    @SerializedName("name")
     val name: String?,
+    @SerializedName("birth_date")
+    val birthDate: String?,
     @SerializedName("key")
     val key: String?,
     @SerializedName("photos")

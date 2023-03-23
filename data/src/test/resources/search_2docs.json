@@ -4,27 +4,38 @@
   "numFoundExact": true,
   "docs": [
     {
-      "title": "TestBook0",
+      "title": "work0",
       "cover_i": 0,
       "author_name": [
-        "TestAuthor0"
+        "Author0",
+        "Author1"
       ],
       "first_publish_year": 2023,
-      "key": "TestKey0",
+      "key": "key0",
       "author_key": [
-        "TestAuthorKey0"
+        "author0",
+        "author1"
+      ],
+      "edition_key": [
+        "edition0",
+        "edition1",
+        "edition2"
       ]
     },
     {
-      "title": "TestBook1",
+      "title": "work1",
       "cover_i": 1,
       "author_name": [
-        "TestAuthor1"
+        "Author2"
       ],
       "first_publish_year": 2023,
-      "key": "TestKey1",
+      "key": "key1",
       "author_key": [
-        "TestAuthorKey1"
+        "author2"
+      ],
+      "edition_key": [
+        "edition3",
+        "edition4"
       ]
     }
   ]

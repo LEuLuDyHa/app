@@ -22,6 +22,8 @@ data class RawWork(
     val coverIds: List<Long>?,
     @SerializedName("subjects")
     val subjects: List<String>?,
+    @SerializedName("description")
+    val description: String?,
     @SerializedName("error")
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<Work> {
