@@ -10,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,7 @@ import coil.size.Scale
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.CoverSize
 import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.formatListToText
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
@@ -134,13 +136,16 @@ private fun WorkListItem(
                 }
                 Spacer(modifier = Modifier.height(1.dp))
                 // Display the name of the authors
-                Text(
-                    text = "J. K. Rowling",
-                    style = MaterialTheme.typography.titleSmall
-                )
+                authors?.let {
+                    Text(
+                        text = formatListToText(it),
+                        style = MaterialTheme.typography.titleSmall,
+                        modifier = Modifier.testTag("worklist::author_name")
+                    )
+                }
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
-                SubjectList(subjectNames = listOf("Fantasy", "Wizards"))
+                SubjectList(subjectNames = work.subjects)
                 // Other stuff if needed
             }
         }

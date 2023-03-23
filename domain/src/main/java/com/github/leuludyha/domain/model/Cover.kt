@@ -1,7 +1,6 @@
 package com.github.leuludyha.domain.model
 
-import com.google.gson.annotations.SerializedName
-import java.io.Serializable;
+import java.io.Serializable
 
 data class Cover(
     val id: Long
