@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import com.github.leuludyha.ibdb.ui.navigation.TabDescriptor
 
 /**
  * Uses a [ComposeTestRule] created via [createEmptyComposeRule] that allows setup before the activity
@@ -11,7 +12,12 @@ import androidx.test.core.app.ApplicationProvider
  */
 inline fun <reified A: Activity> ComposeTestRule.launch(
     onBefore: () -> Unit = {},
-    intentFactory: (Context) -> Intent = { Intent(ApplicationProvider.getApplicationContext(), A::class.java) },
+    intentFactory: (Context) -> Intent = {
+        Intent(
+            ApplicationProvider.getApplicationContext(),
+            A::class.java
+        )
+    },
     onAfterLaunched: ComposeTestRule.() -> Unit
 ) {
     onBefore()
@@ -20,4 +26,8 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
     ActivityScenario.launch<A>(intentFactory(context))
 
     onAfterLaunched()
+}
+
+fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
+    return "bottomtoolbar::tab_item::${descriptor.displayName}"
 }

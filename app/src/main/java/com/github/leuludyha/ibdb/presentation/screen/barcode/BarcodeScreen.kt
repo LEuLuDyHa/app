@@ -98,7 +98,7 @@ fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
                 //Select back camera as default
-                val cameraSelector : CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                val cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
                 // Preview
                 preview = Preview.Builder().build().also {
@@ -110,7 +110,7 @@ fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
                 val barcodeAnalyser = BarcodeAnalyser { barcodes ->
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
-                            if(BarcodeAnalyser.checkISBNCode(barcodeValue)) {
+                            if (BarcodeAnalyser.checkISBNCode(barcodeValue)) {
                                 Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
                                 barcodeFoundCallback(barcodeValue)
                             }

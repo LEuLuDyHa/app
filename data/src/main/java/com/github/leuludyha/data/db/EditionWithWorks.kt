@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
-data class EditionWithWorks (
+data class EditionWithWorks(
     @Embedded val edition: Edition,
     @Relation(
         parentColumn = "editionId",

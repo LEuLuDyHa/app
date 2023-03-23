@@ -1,15 +1,11 @@
 package com.github.leuludyha.domain.model
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
 data class Edition(
     val id: String?,
     val title: String?,
     private val fetchAuthors: suspend () -> List<Author>?,
     private val fetchWorks: suspend () -> List<Work>?,
-    val coverUrls:  List<(CoverSize) -> String>?,
+    val coverUrls: List<(CoverSize) -> String>?,
 ) {
     private var cachedAuthors: List<Author>? = null
     private var cachedWorks: List<Work>? = null

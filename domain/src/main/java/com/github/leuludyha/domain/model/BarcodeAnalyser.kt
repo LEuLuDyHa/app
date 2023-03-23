@@ -16,11 +16,11 @@ import com.google.mlkit.vision.common.InputImage
 @SuppressLint("UnsafeOptInUsageError")
 class BarcodeAnalyser(
     private val onISBNBarcodeDetected: (barcodes: List<Barcode>) -> Unit,
-): ImageAnalysis.Analyzer {
+) : ImageAnalysis.Analyzer {
 
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
-        if(mediaImage != null) {
+        if (mediaImage != null) {
             val image = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
 
             //EAN13 is the format ISBN barcodes are encoded in, no need to look for the others.
@@ -32,12 +32,15 @@ class BarcodeAnalyser(
 
             scanner.process(image)
                 .addOnSuccessListener { barcodes ->
-                    onISBNBarcodeDetected(barcodes.filter {
-                        barcode -> barcode.valueType == Barcode.TYPE_ISBN
+                    onISBNBarcodeDetected(barcodes.filter { barcode ->
+                        barcode.valueType == Barcode.TYPE_ISBN
                     })
                 }
-                .addOnFailureListener {
-                    exception -> Log.d("BarcodeError", "com.github.leuludyha.domain.model.BarcodeAnalyser: Something went wrong $exception")
+                .addOnFailureListener { exception ->
+                    Log.d(
+                        "BarcodeError",
+                        "com.github.leuludyha.domain.model.BarcodeAnalyser: Something went wrong $exception"
+                    )
                 }.addOnCompleteListener {
                     imageProxy.close()
                 }
@@ -51,8 +54,11 @@ class BarcodeAnalyser(
             Verified as explained here: https://en.wikipedia.org/wiki/ISBN
          */
         fun checkISBNCode(barcode: String): Boolean {
-            if(barcode.length != 13) {
-                Log.i("BarcodeError", "com.github.domain.model.BarcodeAnalyser: The barcode doesn't have the proper length.")
+            if (barcode.length != 13) {
+                Log.i(
+                    "BarcodeError",
+                    "com.github.domain.model.BarcodeAnalyser: The barcode doesn't have the proper length."
+                )
                 return false
             }
 
@@ -63,7 +69,10 @@ class BarcodeAnalyser(
                         res += Integer.parseInt(c.toString()) * (if (index % 2 == 0) 1 else 3)
                     } catch (e: Exception) {
                         if (e is java.lang.NumberFormatException) {
-                            Log.i("BarcodeError", "com.github.domain.model.BarcodeAnalyser: The barcode is not a number.")
+                            Log.i(
+                                "BarcodeError",
+                                "com.github.domain.model.BarcodeAnalyser: The barcode is not a number."
+                            )
                             return false
                         }
                         throw e

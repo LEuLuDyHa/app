@@ -5,7 +5,7 @@ data class Work(
     val id: String,
     private val fetchAuthors: suspend () -> List<Author>?,
     val coverUrls: List<(CoverSize) -> String>?,
-    val subjects: List<String>?,
+    val subjects: List<String>,
 ) {
     private var cachedAuthors: List<Author>? = null
     suspend fun authors(): List<Author>? {

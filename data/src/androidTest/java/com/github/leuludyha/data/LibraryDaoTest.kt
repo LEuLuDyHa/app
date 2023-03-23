@@ -12,7 +12,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.IOException
-import kotlin.math.exp
 
 @RunWith(AndroidJUnit4::class)
 class LibraryDaoTest {
@@ -97,12 +96,20 @@ class LibraryDaoTest {
 
     @Test
     fun getEditionGivesExpectedResult() {
-        runBlocking { assertThat(libraryDao.getEdition(edition1.editionId).first()).isEqualTo(edition1) }
+        runBlocking {
+            assertThat(libraryDao.getEdition(edition1.editionId).first()).isEqualTo(
+                edition1
+            )
+        }
     }
 
     @Test
     fun getAuthorGivesExpectedResult() {
-        runBlocking { assertThat(libraryDao.getAuthor(author1.authorId).first()).isEqualTo(author1) }
+        runBlocking {
+            assertThat(
+                libraryDao.getAuthor(author1.authorId).first()
+            ).isEqualTo(author1)
+        }
     }
 
     @Test

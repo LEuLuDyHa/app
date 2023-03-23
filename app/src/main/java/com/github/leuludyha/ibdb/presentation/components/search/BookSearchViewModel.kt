@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.screen.booksearch
+package com.github.leuludyha.ibdb.presentation.components.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BookSearchScreenViewModel @Inject constructor(
+class BookSearchViewModel @Inject constructor(
     private var useCase: SearchUseCase
 ) : ViewModel() {
 

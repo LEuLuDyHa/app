@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "authors")
-data class Author (
+data class Author(
     @PrimaryKey
     val authorId: String,
     val wikipedia: String?,

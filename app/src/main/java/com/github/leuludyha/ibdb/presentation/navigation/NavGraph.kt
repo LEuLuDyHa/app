@@ -8,9 +8,9 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
-import com.github.leuludyha.ibdb.presentation.screen.booksearch.BookSearchScreen
-import com.github.leuludyha.ibdb.presentation.screen.home.HomeScreen
+import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
 import com.github.leuludyha.ibdb.util.Constant
 

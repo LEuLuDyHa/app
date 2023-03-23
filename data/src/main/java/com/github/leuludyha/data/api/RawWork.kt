@@ -34,7 +34,10 @@ data class RawWork(
             id = extractIdFrom(this.key, "/works/").orEmpty(), //TODO CORRECT
             fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
             coverUrls = coverIdsToCoverUrls(coverIds),
-            subjects = this.subjects,
+            subjects = when (this.subjects == null) {
+                true -> listOf()
+                false -> this.subjects
+            },
         )
     }
     data class RawWorkAuthor(
