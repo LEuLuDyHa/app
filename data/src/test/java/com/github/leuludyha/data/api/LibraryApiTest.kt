@@ -45,8 +45,8 @@ class LibraryApiTest {
             authorNames = listOf("Author0", "Author1"),
             firstPublishYear = 2023,
             key = "key0",
-            authorKeys = listOf("author0", "author1"),
-            editionKeys = listOf("edition0", "edition1", "edition2")
+            authorIds = listOf("author0", "author1"),
+            editionIds = listOf("edition0", "edition1", "edition2")
         )
 
         val expectedDoc1 = Document(
@@ -55,8 +55,8 @@ class LibraryApiTest {
             authorNames = listOf("Author2"),
             firstPublishYear = 2023,
             key = "key1",
-            authorKeys = listOf("author2"),
-            editionKeys = listOf("edition3", "edition4")
+            authorIds = listOf("author2"),
+            editionIds = listOf("edition3", "edition4")
         )
 
         val actualResponse = api.search("test")

@@ -1,13 +1,15 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
-import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
-import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
+import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
+import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
+import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
 /**
+ * //TODO Try fetching editions somehow
  * Raw response of the Work API. Not user friendly. Used only in the `data` layer,
  * to be transformed to `Work` before going into the `domain`.
  */
@@ -28,17 +30,35 @@ data class RawWork(
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<Work> {
 
-    override fun toModel(libraryApi: LibraryApi) = TODO()/*: Work {
-        val authorKeys = rawAuthors
-            ?.mapNotNull { it.rawKey?.key }
+    override fun toModel(libraryApi: LibraryApi): Work? {
+        if (extractIdFromKey(key, "/works/") == null)
+            return null
+
+        val authors = flow {
+            emit(rawAuthors
+                .orEmpty()
+                .mapNotNull { extractIdFromKey(it.rawKey?.key, "/authors/") }
+                .map { libraryApi.getAuthor(it) }
+                .mapNotNull { rawResponseToModel(it, libraryApi) }
+            )
+        }
+
+        val covers = flow {
+            emit(coverIds
+                .orEmpty()
+                .map { Cover(it) }
+            )
+        }
+
         return Work(
-            title = this.title,
-            id = extractIdFrom(this.key, "/works/").orEmpty(), //TODO CORRECT
-            fetchAuthors = { authorKeysToAuthors(authorKeys, libraryApi) },
-            coverUrls = coverIdsToCoverUrls(coverIds),
-            subjects = this.subjects,
+            id = extractIdFromKey(key, "/works/")!!,
+            title = title,
+            authors = authors,
+            editions = flow { emit(listOf()) },
+            covers = covers,
+            subjects = flow { emit(listOf()) }
         )
-    }*/
+    }
     data class RawWorkAuthor(
         @SerializedName("author")
         val rawKey: RawKey?,

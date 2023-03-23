@@ -15,6 +15,6 @@ data class RawSearch(
     override val error: String?
 ): Serializable, ErrorProne, Raw<List<Work>> {
     override fun toModel(libraryApi: LibraryApi): List<Work> = documents
-        ?.map { it.toModel(libraryApi) }
+        ?.mapNotNull { it.toModel(libraryApi) }
         ?: listOf()
 }

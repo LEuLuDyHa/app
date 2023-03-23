@@ -18,8 +18,9 @@ object ApiHelper {
             // If an error occured => Result.Error
             response.body()?.error?.let { return Result.Error(response.body()!!.error!!) }
 
-            response.body()?.let {result->
-                return Result.Success(result.toModel(libraryApi))
+            response.body()?.let { result->
+                result.toModel(libraryApi)?.let { return Result.Success(it) }
+                return Result.Error(response.message())
             }
         }
         return Result.Error(response.message())
@@ -39,18 +40,18 @@ object ApiHelper {
     }
 
     suspend fun authorKeysToAuthors(authorKeys: List<String>?, libraryApi: LibraryApi) = authorKeys
-        ?.mapNotNull { extractIdFrom(it, "/authors/") }
+        ?.mapNotNull { extractIdFromKey(it, "/authors/") }
         ?.map { libraryApi.getAuthor(it) }
         ?.ifEmpty { null }
         ?.mapNotNull { rawResponseToModel(it, libraryApi) }
 
     suspend fun workKeysToWorks(workKeys: List<String>?, libraryApi: LibraryApi) = workKeys
-        ?.mapNotNull { extractIdFrom(it, "/works/") }
+        ?.mapNotNull { extractIdFromKey(it, "/works/") }
         ?.map { libraryApi.getWork(it) }
         ?.ifEmpty { null }
         ?.mapNotNull { rawResponseToModel(it, libraryApi) }
 
-    fun extractIdFrom(key: String?, delimiter: String) =
+    fun extractIdFromKey(key: String?, delimiter: String) =
         if (key?.substringAfter(delimiter) == key)
             null
         else

@@ -18,6 +18,7 @@ data class RawWorkEditions(
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<List<Edition>> {
     override fun toModel(libraryApi: LibraryApi): List<Edition> =
-        editions?.map {rawEdition -> rawEdition.toModel(libraryApi) } ?: listOf()
+        editions?.mapNotNull {rawEdition -> rawEdition.toModel(libraryApi) } ?: listOf()
+
 
 }

@@ -1,11 +1,12 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
-import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
-import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.data.api.ApiHelper.workKeysToWorks
+import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
+import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
+import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
+import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
 /**
@@ -30,6 +31,41 @@ data class RawEdition(
     @SerializedName("error")
     override val error: String?,
 ): Serializable, ErrorProne, Raw<Edition> {
+    override fun toModel(libraryApi: LibraryApi): Edition? {
+        if (extractIdFromKey(key, "/books/") == null)
+            return null
 
-    override fun toModel(libraryApi: LibraryApi): Edition = TODO()
+        val authors = flow {
+            emit(authorRawKeys
+                .orEmpty()
+                .mapNotNull { extractIdFromKey(it.key, "/authors/") }
+                .map { libraryApi.getAuthor(it) }
+                .mapNotNull { rawResponseToModel(it, libraryApi) }
+            )
+        }
+
+        val works = flow {
+            emit(workRawKeys
+                .orEmpty()
+                .mapNotNull { extractIdFromKey(it.key, "/works/") }
+                .map { libraryApi.getWork(it) }
+                .mapNotNull { rawResponseToModel(it, libraryApi) }
+            )
+        }
+
+        val covers = flow {
+            emit(coverIds
+                .orEmpty()
+                .map { Cover(it) }
+            )
+        }
+
+        return Edition(
+            id = extractIdFromKey(key, "/books/")!!,
+            title = title,
+            authors = authors,
+            works = works,
+            covers = covers,
+        )
+    }
 }
