@@ -42,9 +42,20 @@ check_android_task:
   check_script:
     ./gradlew check connectedCheck
   report_codeclimate_script: |
+    ls ./app/build/reports/jacoco/jacocoTestReport
+    ls ./data/build/
+    ls ./data/build/reports/jacoco/jacocoTestReport
+    ls ./domain/build/
+    ls ./domain/build/reports/jacoco/jacocoTestReport
     export JACOCO_SOURCE_PATH=app/src/main/java/
-    ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco
-    ./cc-test-reporter upload-coverage
+    ./cc-test-reporter format-coverage ./app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco -o coverage.app.json
+    export JACOCO_SOURCE_PATH=data/src/main/java/
+    ./cc-test-reporter format-coverage ./data/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco -o coverage.data.json
+    export JACOCO_SOURCE_PATH=domain/src/main/java/
+    ./cc-test-reporter format-coverage ./domain/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml --input-type jacoco -o coverage.domain.json
+    
+    ./cc-test-reporter sum-coverage coverage.*.json -p 3 -o codeclimate.total.json
+    ./cc-test-reporter upload-coverage -i codeclimate.total.json
   lint_script:
     ./gradlew lintDebug
   always:
@@ -54,11 +65,11 @@ check_android_task:
     screenrecord_artifacts:
       path: "*.h264"
     android_lint_artifacts:
-      path: ./app/build/reports/lint-results-debug.xml
+      path: "./**/build/reports/lint-results-debug.xml"
       format: android-lint
     test_artifacts:
-      path: "./app/build/test-results/**/*.xml"
+      path: "./**/build/test-results/**/*.xml"
       format: junit
     androidtest_artifacts:
-      path: "./app/build/outputs/**/*.xml"
+      path: "./**/build/outputs/**/*.xml"
       format: junit
