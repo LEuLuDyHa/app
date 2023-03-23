@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
+        WorkRemoteKeys::class,
         WorkEntity::class,
         AuthorEntity::class,
         CoverEntity::class,
@@ -25,6 +26,7 @@ import androidx.room.RoomDatabase
 )
 abstract class LibraryDatabase : RoomDatabase() {
     abstract fun libraryDao(): LibraryDao
+    abstract fun workRemoteKeysDao(): WorkRemoteKeysDao
 
     companion object {
         // Singleton prevents multiple instances of database opening at the

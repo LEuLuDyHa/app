@@ -3,7 +3,7 @@ package com.github.leuludyha.domain.model
 import kotlinx.coroutines.flow.Flow
 
 data class Edition(
-    val id: String?,
+    val id: String,
     val title: String?,
     val authors: Flow<List<Author>>,
     val works: Flow<List<Work>>,

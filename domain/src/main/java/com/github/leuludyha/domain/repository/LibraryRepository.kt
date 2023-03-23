@@ -1,10 +1,11 @@
 package com.github.leuludyha.domain.repository
 
+import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.*
 import kotlinx.coroutines.flow.Flow
 
 interface LibraryRepository {
-    suspend fun search(query: String): Result<List<Work>>
+    fun search(query: String): Flow<PagingData<Work>>
     fun workById(workId: String): Flow<Result<Work>>
     fun worksByAuthorId(authorId: String): Flow<Result<List<Work>>>
     fun editionsByWorkId(workId: String): Flow<Result<List<Edition>>>

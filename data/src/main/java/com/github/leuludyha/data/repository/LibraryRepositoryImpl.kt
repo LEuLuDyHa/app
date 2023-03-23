@@ -11,7 +11,7 @@ class LibraryRepositoryImpl(
     private val libraryLocalDataSource: LibraryLocalDataSource
     ) : LibraryRepository
 {
-    override suspend fun search(query: String) =
+    override fun search(query: String) =
         libraryRemoteDataSource.search(query)
     override fun workById(workId: String): Flow<Result<Work>> =
         libraryRemoteDataSource.getWork(workId)

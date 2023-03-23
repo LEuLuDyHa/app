@@ -10,7 +10,9 @@ import java.io.Serializable
  */
 data class RawSearch(
     @SerializedName("docs")
-    val documents: List<Document>?,
+    val documents: List<Document> = listOf(),
+    @SerializedName("start")
+    val start: Int = 0,
     @SerializedName("error")
     override val error: String?
 ): Serializable, ErrorProne, Raw<List<Work>> {

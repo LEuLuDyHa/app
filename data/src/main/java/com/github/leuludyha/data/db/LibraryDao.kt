@@ -1,6 +1,8 @@
 package com.github.leuludyha.data.db
 
+import androidx.paging.PagingSource
 import androidx.room.*
+import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -56,6 +58,9 @@ interface LibraryDao {
 
     @Query("DELETE FROM subjects")
     suspend fun deleteAllSubjects()
+
+    @Query("SELECT * FROM works")
+    fun getAllWorks(): Flow<List<WorkEntity>>
 
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
     fun getWork(workId: String): Flow<WorkEntity>
