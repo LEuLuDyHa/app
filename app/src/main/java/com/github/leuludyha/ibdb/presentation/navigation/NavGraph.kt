@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
+import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
 import com.github.leuludyha.ibdb.util.Constant
@@ -41,6 +42,9 @@ fun NavGraph(navController: NavHostController) {
             ) { backStackEntry ->
                 backStackEntry.arguments?.getString(Constant.BOOK_DETAILS_ARGUMENT_KEY)
                     ?.let { /* TODO Add book details screen composable here, take argument "it" too */ }
+            }
+            composable(route = Screen.UserProfile.route) {
+                UserProfile(navController, padding)
             }
         }
     }

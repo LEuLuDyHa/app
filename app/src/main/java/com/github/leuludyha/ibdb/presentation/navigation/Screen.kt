@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     object BookDetails : Screen("book_details_screen/{bookId}") {
         fun passBookId(bookId: String) = "book_details_screen/$bookId"
     }
+    object UserProfile : Screen("user_profile")
 }
