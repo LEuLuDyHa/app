@@ -11,6 +11,7 @@ data class Author(
     val entityType: String?,
     val photos: Flow<List<Cover>>,
 ) {
+    override fun toString(): String = name?: "Unknown author"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Author) return false
@@ -19,26 +20,4 @@ data class Author(
     }
 
     override fun hashCode(): Int = id.hashCode()
-
-    fun formatListToText(authors: List<Author>): String {
-        if (authors.size == 0) {
-            return ""; }
-        if (authors.size == 1) {
-            return authors[0].name.orEmpty(); }
-        if (authors.size == 2) {
-            return "${authors[0].name.orEmpty()} and ${authors[1].name.orEmpty()}"
-        }
-
-        val sb = StringBuilder()
-        authors.forEachIndexed { i, author ->
-            sb.append(author.name.orEmpty())
-
-            if (i < authors.size - 2) {
-                sb.append(", ")
-            } else if (i == authors.size - 2) {
-                sb.append(" and ")
-            }
-        }
-        return sb.toString()
-    }
 }

@@ -6,16 +6,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.github.leuludyha.domain.model.Work
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -26,9 +24,9 @@ fun BookSearch(
     viewModel: BookSearchViewModel = hiltViewModel(),
     onBooksFoundContent: @Composable (List<Work>) -> Unit,
 ) {
-    val (query, setQuery) = remember { mutableStateOf("") }
-    val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }
-    val (queryLoading, setQueryLoading) = remember { mutableStateOf(false) }
+    val searchQuery by viewModel.searchQuery
+    val queryLoading by viewModel.queryLoading
+    val searchedWorks = viewModel.searchedWorks.collectAsLazyPagingItems()
 
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
@@ -44,8 +42,8 @@ fun BookSearch(
             verticalAlignment = Alignment.CenterVertically
         ) {
             OutlinedTextField(
-                value = query,
-                onValueChange = { setQuery(it) },
+                value = searchQuery,
+                onValueChange = { viewModel.updateSearchQuery(it) },
                 singleLine = true,
                 modifier = Modifier
                     .testTag("book_search::search_field")
@@ -55,12 +53,8 @@ fun BookSearch(
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     // Set query loading animation on query begin
-                    setQueryLoading(true)
-                    viewModel.getAllBooks(query) { works ->
-                        setWorks(works)
-                        // Cancel query loading animation on query resolution
-                        setQueryLoading(false)
-                    }
+                    viewModel.updateQueryLoading(true)
+                    viewModel.searchWorks(searchQuery)
                 })
             )
         }
