@@ -32,16 +32,19 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
     private lateinit var authorJson: String
     private lateinit var editionJson: String
     private lateinit var workEditionsJson: String
+    private lateinit var authorWorksJson: String
 
     private lateinit var workResponse: MockResponse
     private lateinit var authorResponse: MockResponse
     private lateinit var editionResponse: MockResponse
     private lateinit var workEditionsResponse: MockResponse
+    private lateinit var authorWorksResponse: MockResponse
 
     private lateinit var mockWork: Work
     private lateinit var mockAuthor: Author
     private lateinit var mockEdition: Edition
     private lateinit var mockWorkEditions: List<Edition>
+    private lateinit var mockAuthorWorks: List<Work>
 
     @Before
     fun initializeMockResponses() {
@@ -73,6 +76,13 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
                 .assets
                 .open("getWorkEditions.json")
             )
+        authorWorksJson = FileReader
+            .readResourceFromFile(InstrumentationRegistry
+                .getInstrumentation()
+                .context
+                .assets
+                .open("getAuthorWorks.json")
+            )
 
         editionResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -86,6 +96,9 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         workEditionsResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(workEditionsJson)
+        authorWorksResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(authorWorksJson)
 
         mockAuthor = Author(
             wikipedia = null,
@@ -126,6 +139,8 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         )
 
         mockWorkEditions = listOf(mockEdition)
+
+        mockAuthorWorks = listOf(mockWork)
     }
     @Test
     fun searchRemotelyUseCaseGivesExpectedResult() = runBlocking {
@@ -167,7 +182,7 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
     }
 
     @Test
-    fun getWorkRemotelyGivesCorrectResult() = runBlocking {
+    fun getWorkRemotelyUseCaseGivesCorrectResult() = runBlocking {
 
         mockWebServer.enqueue(workResponse)
         mockWebServer.enqueue(workEditionsResponse)
@@ -185,7 +200,7 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
     }
 
     @Test
-    fun getAuthorRemotelyGivesCorrectResult() = runBlocking {
+    fun getAuthorRemotelyUseCaseGivesCorrectResult() = runBlocking {
         mockWebServer.enqueue(authorResponse)
 
         val result = GetAuthorRemotelyUseCase(libraryRepository)("query").first().data!!
@@ -201,7 +216,7 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
     }
 
     @Test
-    fun getEditionRemotelyGivesCorrectResult() = runBlocking {
+    fun getEditionRemotelyUseCaseGivesCorrectResult() = runBlocking {
 
         mockWebServer.enqueue(editionResponse)
         mockWebServer.enqueue(authorResponse)
@@ -222,8 +237,7 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
     }
 
     @Test
-    fun getEditionByISBNRemotelyGivesCorrectResult() = runBlocking {
-
+    fun getEditionByISBNRemotelyUseCaseGivesCorrectResult() = runBlocking {
         mockWebServer.enqueue(editionResponse)
         mockWebServer.enqueue(authorResponse)
         mockWebServer.enqueue(workResponse)
@@ -241,6 +255,49 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         assertThat(result.authors.first()).isEqualTo(mockEdition.authors.first())
         assertThat(result.works.first()).isEqualTo(mockEdition.works.first())
     }
+
+    @Test
+    fun getEditionsByWorkRemotelyUseCaseGivesCorrectResult() = runBlocking {
+        mockWebServer.enqueue(workEditionsResponse)
+        mockWebServer.enqueue(authorResponse)
+        mockWebServer.enqueue(authorResponse)
+        mockWebServer.enqueue(workResponse)
+
+        val results = GetEditionsByWorkRemotelyUseCase(libraryRepository)(mockWork.id).first().data!!
+        assertThat(results).isNotNull()
+        assertThat(results).isNotEmpty()
+        assertThat(results.count()).isEqualTo(1)
+        val result = results[0]
+        assertThat(result).isEqualTo(mockEdition)
+        assertThat(result.id).isEqualTo(mockEdition.id)
+        assertThat(result.title).isEqualTo(mockEdition.title)
+        assertThat(result.isbn10).isEqualTo(mockEdition.isbn10)
+        assertThat(result.isbn13).isEqualTo(mockEdition.isbn13)
+        assertThat(result.covers.first()).isEqualTo(mockEdition.covers.first())
+        assertThat(result.authors.first()).isEqualTo(mockEdition.authors.first())
+        assertThat(result.works.first()).isEqualTo(mockEdition.works.first())
+    }
+
+    @Test
+    fun getWorksByAuthorRemotelyUseCaseGivesCorrectResult() = runBlocking {
+        mockWebServer.enqueue(authorWorksResponse)
+        mockWebServer.enqueue(authorResponse)
+        mockWebServer.enqueue(authorResponse)
+        mockWebServer.enqueue(workResponse)
+
+        val results = GetWorksByAuthorRemotelyUseCase(libraryRepository)(mockAuthor.id).first().data!!
+        assertThat(results).isNotNull()
+        assertThat(results).isNotEmpty()
+        assertThat(results.count()).isEqualTo(1)
+        val result = results[0]
+        assertThat(result).isEqualTo(mockWork)
+        assertThat(result.id).isEqualTo(mockWork.id)
+        assertThat(result.title).isEqualTo(mockWork.title)
+        assertThat(result.covers.first()).isEqualTo(mockWork.covers.first())
+        assertThat(result.authors.first()).isEqualTo(mockWork.authors.first())
+        assertThat(result.subjects.first()).isEqualTo(mockWork.subjects.first())
+    }
+
 
 //    @Test
 //    fun real() = runBlocking {

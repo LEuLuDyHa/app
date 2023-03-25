@@ -36,6 +36,7 @@ data class RawEdition(
                 .mapNotNull { extractIdFromKey(it.key, "/authors/") }
                 .map { libraryApi.getAuthor(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
             )
         }
 
@@ -45,6 +46,7 @@ data class RawEdition(
                 .mapNotNull { extractIdFromKey(it.key, "/works/") }
                 .map { libraryApi.getWork(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
             )
         }
 
@@ -53,6 +55,7 @@ data class RawEdition(
                 .orEmpty()
                 .filter{ it > 0 }
                 .map { Cover(it) }
+                .distinct()
             )
         }
 

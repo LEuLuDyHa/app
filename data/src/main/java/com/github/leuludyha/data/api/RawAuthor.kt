@@ -41,6 +41,7 @@ data class RawAuthor(
                 .orEmpty()
                 .filter { it > 0 }
                 .map { Cover(it) }
+                .distinct()
             )
         }
 

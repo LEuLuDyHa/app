@@ -38,6 +38,7 @@ data class RawDocument(
                 .orEmpty()
                 .map { libraryApi.getEdition(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
             )
         }
 
@@ -46,6 +47,7 @@ data class RawDocument(
                 .orEmpty()
                 .map { libraryApi.getAuthor(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
             )
         }
 
