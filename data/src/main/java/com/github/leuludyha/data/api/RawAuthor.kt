@@ -39,6 +39,7 @@ data class RawAuthor(
         val photos = flow {
             emit(photoIds
                 .orEmpty()
+                .filterNot { it > 0 }
                 .map { Cover(it) }
             )
         }
@@ -46,6 +47,7 @@ data class RawAuthor(
         return Author(
             id = extractIdFromKey(key, "/authors/")!!,
             name = name,
+            birthDate = birthDate,
             //bio = bio,
             wikipedia = wikipedia,
             entityType = entityType,

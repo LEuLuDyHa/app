@@ -1,9 +1,14 @@
+package com.github.leuludyha.data.paging
+
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.domain.model.Work
 import retrofit2.HttpException
 
+/**
+ * [PagingSource] using a [LibraryApi] as a data source
+ */
 class SearchPagingSource(
     private val libraryApi: LibraryApi,
     private val query: String

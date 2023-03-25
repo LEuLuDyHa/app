@@ -18,6 +18,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 
+/**
+ * Simple search bar Composable executing the given actions.
+ *
+ * @param value the value the text field should take
+ * @param onValueChange a callback that is called whenever the text is modified
+ * @param onDone a callback that is called whenever the text is confirmed
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(

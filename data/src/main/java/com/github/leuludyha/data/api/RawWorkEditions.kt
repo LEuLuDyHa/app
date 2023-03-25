@@ -4,9 +4,6 @@ import com.github.leuludyha.domain.model.Edition
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-/**
- * Editions of a given work.
- */
 data class RawWorkEditions(
     @SerializedName("links")
     val links: RawWorkLinks?,

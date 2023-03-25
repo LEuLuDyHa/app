@@ -2,19 +2,18 @@ package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
 import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
-import com.github.leuludyha.data.api.ApiHelper.rawResponseToModelResult
 import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
+// TODO we can potentially fetch the subjects but it is not trivial
+
 /**
- * TODO we can potentially fetch the subjects but it is not trivial
- * Document returned by the SearchApi
- * @param key document's key to fetch it in other APIs
+ * Raw document among those returned by a search call to the [LibraryApi].
  */
-data class Document(
+data class RawDocument(
     @SerializedName("key")
     val key: String,
     @SerializedName("cover_i")

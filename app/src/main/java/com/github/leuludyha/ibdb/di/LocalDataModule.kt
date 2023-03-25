@@ -8,6 +8,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+/**
+ * Provides all the dependency injection related to local data sources.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object LocalDataModule {

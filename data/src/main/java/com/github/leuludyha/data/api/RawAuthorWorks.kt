@@ -6,9 +6,7 @@ import java.io.Serializable
 
 // Unfortunately not possible to inherit a data class, so I couldn't define a superclass `RawLinked`
 
-/**
- * Works of a given author
- */
+// TODO it might not suit our needs like that, we have to invest using paging
 data class RawAuthorWorks (
     @SerializedName("links")
     val links: RawAuthorLinks?,

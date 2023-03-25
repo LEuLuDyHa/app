@@ -4,19 +4,12 @@ import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-/**
- * Raw response of the Search API. Not user friendly, needs to be converted to a `List<Document>`
- * before going to the `domain` layer.
- */
 data class RawSearch(
     @SerializedName("docs")
-    val documents: List<Document> = listOf(),
-    @SerializedName("start")
-    val start: Int = 0,
+    val documents: List<RawDocument> = listOf(),
     @SerializedName("error")
     override val error: String?
 ): Serializable, ErrorProne, Raw<List<Work>> {
     override fun toModel(libraryApi: LibraryApi): List<Work> = documents
-        ?.mapNotNull { it.toModel(libraryApi) }
-        ?: listOf()
+        .mapNotNull { it.toModel(libraryApi) }
 }

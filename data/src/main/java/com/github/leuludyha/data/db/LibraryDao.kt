@@ -1,8 +1,6 @@
 package com.github.leuludyha.data.db
 
-import androidx.paging.PagingSource
 import androidx.room.*
-import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -58,6 +56,27 @@ interface LibraryDao {
 
     @Query("DELETE FROM subjects")
     suspend fun deleteAllSubjects()
+
+    @Query("DELETE FROM AuthorCoverCrossRef")
+    suspend fun deleteAllAuthorCoverCrossRefs()
+
+    @Query("DELETE FROM EditionAuthorCrossRef")
+    suspend fun deleteAllEditionAuthorCrossRefs()
+
+    @Query("DELETE FROM EditionCoverCrossRef")
+    suspend fun deleteAllEditionCoverCrossRefs()
+
+    @Query("DELETE FROM WorkAuthorCrossRef")
+    suspend fun deleteAllWorkAuthorCrossRefs()
+
+    @Query("DELETE FROM WorkCoverCrossRef")
+    suspend fun deleteAllWorkCoverCrossRefs()
+
+    @Query("DELETE FROM WorkEditionCrossRef")
+    suspend fun deleteAllWorkEditionCrossRefs()
+
+    @Query("DELETE FROM WorkSubjectCrossRef")
+    suspend fun deleteAllWorkSubjectCrossRefs()
 
     @Query("SELECT * FROM works")
     fun getAllWorks(): Flow<List<WorkEntity>>

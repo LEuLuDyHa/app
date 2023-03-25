@@ -12,6 +12,7 @@ data class AuthorEntity (
     val authorId: String,
     val wikipedia: String?,
     val name: String?,
+    val birthDate: String?,
     //val bio: String?,
     val entityType: String?,
 ): Raw<Author> {
@@ -19,6 +20,7 @@ data class AuthorEntity (
         Author(
             id = authorId,
             name = name,
+            birthDate = birthDate,
             //bio = bio,
             photos = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers

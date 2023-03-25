@@ -1,0 +1,42 @@
+{
+  "numFound": 2,
+  "start": 0,
+  "numFoundExact": true,
+  "docs": [
+    {
+      "title": "work0",
+      "cover_i": 0,
+      "author_name": [
+        "Author0",
+        "Author1"
+      ],
+      "first_publish_year": 2023,
+      "key": "key0",
+      "author_key": [
+        "author0",
+        "author1"
+      ],
+      "edition_key": [
+        "edition0",
+        "edition1",
+        "edition2"
+      ]
+    },
+    {
+      "title": "work1",
+      "cover_i": 1,
+      "author_name": [
+        "Author2"
+      ],
+      "first_publish_year": 2023,
+      "key": "key1",
+      "author_key": [
+        "author2"
+      ],
+      "edition_key": [
+        "edition3",
+        "edition4"
+      ]
+    }
+  ]
+}

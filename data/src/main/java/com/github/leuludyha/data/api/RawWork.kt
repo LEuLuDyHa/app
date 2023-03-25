@@ -8,16 +8,12 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
-/**
- * //TODO Try fetching editions somehow
- * Raw response of the Work API. Not user friendly. Used only in the `data` layer,
- * to be transformed to `Work` before going into the `domain`.
- */
+// TODO fetch editions somehow
 data class RawWork(
-    @SerializedName("title")
-    val title: String?,
     @SerializedName("key")
     val key: String?,
+    @SerializedName("title")
+    val title: String?,
     @SerializedName("authors")
     val rawAuthors: List<RawWorkAuthor>?,
     @SerializedName("covers")

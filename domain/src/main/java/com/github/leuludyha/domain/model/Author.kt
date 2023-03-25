@@ -1,11 +1,11 @@
 package com.github.leuludyha.domain.model
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.count
 
 data class Author(
     val id: String,
     val name: String?,
+    val birthDate: String?,
     //val bio: String?,
     val wikipedia: String?,
     val entityType: String?,

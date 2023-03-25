@@ -30,7 +30,7 @@ class LibraryApiTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun searchTwoDocsTest() = runTest {
+    fun searchGivesCorrectResultWithTwoDocuments() = runTest {
 
         val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "search_2docs.json")
 
@@ -39,7 +39,7 @@ class LibraryApiTest {
             .setBody(json)
         mockWebServer.enqueue(expectedResponse)
 
-        val expectedDoc0 = Document(
+        val expectedDoc0 = RawDocument(
             title = "work0",
             coverId = 0,
             authorNames = listOf("Author0", "Author1"),
@@ -49,7 +49,7 @@ class LibraryApiTest {
             editionIds = listOf("edition0", "edition1", "edition2")
         )
 
-        val expectedDoc1 = Document(
+        val expectedDoc1 = RawDocument(
             title = "work1",
             coverId = 1,
             authorNames = listOf("Author2"),
@@ -142,21 +142,6 @@ class LibraryApiTest {
         val result = api.getAuthor("OL23919A")
         assertThat(result).isNotNull()
         assertThat(result.body()).isEqualTo(expected)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun `real test`() = runTest {
-        /*val realApi = Retrofit.Builder()
-            .baseUrl("https://openlibrary.org")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(LibraryApi::class.java)
-        val realRemoteDataSource = LibraryRemoteDataSourceImpl(realApi)
-        val realRepository = LibraryRepositoryImpl(realRemoteDataSource)
-
-        val res = realRepository.editionById("OL7353617M")
-        println("## ${res.data}")*/
     }
 
     @After

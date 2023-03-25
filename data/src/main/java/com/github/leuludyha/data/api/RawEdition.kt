@@ -9,10 +9,6 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
-/**
- * Raw response of the Editions API. Not user friendly. Used only in the `data` layer,
- * to be transformed to `Edition` before going into the `domain`.
- */
 data class RawEdition(
     @SerializedName("title")
     val title: String?,

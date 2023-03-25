@@ -5,9 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.github.leuludyha.domain.model.Work
-import com.github.leuludyha.domain.useCase.SearchUseCase
+import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookSearchViewModel @Inject constructor(
-    private var useCase: SearchUseCase
+    private var useCase: SearchRemotelyUseCase
 ) : ViewModel() {
 
     private val _searchQuery = mutableStateOf("")

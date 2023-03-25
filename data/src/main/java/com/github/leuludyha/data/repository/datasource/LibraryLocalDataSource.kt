@@ -6,7 +6,6 @@ import com.github.leuludyha.domain.model.Edition
 import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.Flow
 
-
 interface LibraryLocalDataSource {
     fun getWork(workId: String): Flow<Work>
     fun getEdition(editionId: String): Flow<Edition>

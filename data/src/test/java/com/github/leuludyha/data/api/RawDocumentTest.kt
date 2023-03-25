@@ -3,11 +3,11 @@ package com.github.leuludyha.data.api
 import org.junit.Test
 import com.google.common.truth.Truth.assertThat
 
-class DocumentTest {
+class RawDocumentTest {
 
     @Test
     fun `Properties of a document are properly gotten`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = listOf("Awesome guy"),
@@ -29,7 +29,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with 1 author is '{title}, by {author}'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = listOf("Awesome guy"),
@@ -44,7 +44,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with 2 authors is '{title}, by {author1 and author2}'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = listOf("Awesome guy", "Less awesome guy"),
@@ -59,7 +59,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with 3 authors is '{title}, by {author1, author2 and author3}'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = listOf("1", "2", "3"),
@@ -74,7 +74,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with null authors list is '{title}, by an unknown author'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = null,
@@ -89,7 +89,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with 0 author is '{title}, by an unknown author'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
             authorNames = listOf(),
@@ -104,7 +104,7 @@ class DocumentTest {
 
     @Test
     fun `String representation of a document with null title is 'Unknown title, by {authors}'`() {
-        val doc = Document(
+        val doc = RawDocument(
             coverId = 0,
             title = null,
             authorNames = listOf(),

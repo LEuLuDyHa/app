@@ -1,6 +1,5 @@
 package com.github.leuludyha.data.repository
 
-import androidx.paging.PagingData
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.*
@@ -12,21 +11,34 @@ class LibraryRepositoryImpl(
     private val libraryLocalDataSource: LibraryLocalDataSource
     ) : LibraryRepository
 {
-    override fun search(query: String) =
-        libraryRemoteDataSource.search(query)
 
-    override fun workById(workId: String): Flow<Result<Work>> =
+    override fun searchRemotely(query: String) =
+        libraryRemoteDataSource.search(query)
+    override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
         libraryRemoteDataSource.getWork(workId)
-    override fun worksByAuthorId(authorId: String): Flow<Result<List<Work>>> =
+    override fun getWorksByAuthorRemotely(authorId: String): Flow<Result<List<Work>>> =
         libraryRemoteDataSource.getWorksByAuthor(authorId)
-    override fun editionsByWorkId(workId: String): Flow<Result<List<Edition>>> =
+    override fun getEditionsByWorkRemotely(workId: String): Flow<Result<List<Edition>>> =
         libraryRemoteDataSource.getEditionsByWork(workId)
-    override fun editionById(editionId: String): Flow<Result<Edition>> =
+    override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEdition(editionId)
-    override fun editionByISBN(isbn: Long): Flow<Result<Edition>> =
+    override fun getEditionByISBNRemotely(isbn: Long): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEditionByISBN(isbn)
-    override fun authorById(authorId: String): Flow<Result<Author>> =
+    override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
         libraryRemoteDataSource.getAuthor(authorId)
+
+    override suspend fun saveWorkLocally(work: Work) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveAuthorLocally(author: Author) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun saveEditionLocally(edition: Edition) {
+        TODO("Not yet implemented")
+    }
+
     override fun getWorkLocally(workId: String): Flow<Work> =
         libraryLocalDataSource.getWork(workId)
     override fun getAuthorLocally(authorId: String): Flow<Author> =

@@ -9,7 +9,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-
+/**
+ * Provides all the dependency injection related to the repository.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
