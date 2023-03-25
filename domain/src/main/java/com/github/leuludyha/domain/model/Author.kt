@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.count
 data class Author(
     val id: String,
     val name: String?,
-    val bio: String?,
+    //val bio: String?,
     val wikipedia: String?,
     val entityType: String?,
     val photos: Flow<List<Cover>>,

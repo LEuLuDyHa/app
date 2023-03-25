@@ -12,14 +12,14 @@ data class AuthorEntity (
     val authorId: String,
     val wikipedia: String?,
     val name: String?,
-    val bio: String?,
+    //val bio: String?,
     val entityType: String?,
 ): Raw<Author> {
     override fun toModel(libraryDao: LibraryDao): Author =
         Author(
             id = authorId,
             name = name,
-            bio = bio,
+            //bio = bio,
             photos = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers
                     .map { it.toModel(libraryDao)}

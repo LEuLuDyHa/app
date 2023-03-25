@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.repository
 
+import androidx.paging.PagingData
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.*
@@ -13,6 +14,7 @@ class LibraryRepositoryImpl(
 {
     override fun search(query: String) =
         libraryRemoteDataSource.search(query)
+
     override fun workById(workId: String): Flow<Result<Work>> =
         libraryRemoteDataSource.getWork(workId)
     override fun worksByAuthorId(authorId: String): Flow<Result<List<Work>>> =

@@ -1,10 +1,11 @@
-package com.github.leuludyha.ibdb.presentation.components.search
+package com.github.leuludyha.ibdb.presentation.screen.search
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.map
 import com.github.leuludyha.domain.model.Work
 import com.github.leuludyha.domain.useCase.SearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,15 +30,13 @@ class BookSearchViewModel @Inject constructor(
         _searchQuery.value = query
     }
 
-    fun updateQueryLoading(loading: Boolean) {
-        _queryLoading.value = loading
-    }
-
     fun searchWorks(query: String) {
+        _queryLoading.value = true
+
         viewModelScope.launch {
             useCase(query = query).cachedIn(viewModelScope).collect {
                 _searchedWorks.value = it
-                updateQueryLoading(false)
+                _queryLoading.value = false
             }
         }
     }

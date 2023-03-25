@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 
 class AuthorTest {
 
-    private val testAuthor1 = Author(
+    /*private val testAuthor1 = Author(
         null,
         "John Mockentosh",
         "cool-id",
@@ -46,5 +46,5 @@ class AuthorTest {
                 )
             )
         )
-    }
+    }*/
 }

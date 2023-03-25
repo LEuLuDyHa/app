@@ -7,6 +7,12 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import java.io.Serializable
 
+/*
+ * TODO try to understand the bio case:
+ *  OL23919A (J.K. Rowling) has the bio json like that: "bio": "..."
+ *  OL2674415A (Sara Woods) has the bio json like that: "bio": {"type": "...", "value": "..."}
+ *  This causes a crash because bio is expecting a string but get instead an object
+*/
 data class RawAuthor(
     @SerializedName("key")
     val key: String?,
@@ -18,8 +24,8 @@ data class RawAuthor(
     val birthDate: String?,
     @SerializedName("photos")
     val photoIds: List<Long>?,
-    @SerializedName("bio")
-    val bio: String?,
+    //@SerializedName("bio")
+    //val bio: String?,
     @SerializedName("entity_type")
     val entityType: String?,
     @SerializedName("error")
@@ -40,7 +46,7 @@ data class RawAuthor(
         return Author(
             id = extractIdFromKey(key, "/authors/")!!,
             name = name,
-            bio = bio,
+            //bio = bio,
             wikipedia = wikipedia,
             entityType = entityType,
             photos = photos

@@ -1,28 +1,30 @@
 package com.github.leuludyha.ibdb.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.items
 import coil.compose.rememberImagePainter
 import coil.size.Scale
-import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.CoverSize
 import com.github.leuludyha.domain.model.Work
-import com.github.leuludyha.domain.model.formatListToText
-import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
 enum class Orientation { Vertical, Horizontal }
@@ -30,27 +32,24 @@ enum class Orientation { Vertical, Horizontal }
 @Composable
 fun WorkList(
     orientation: Orientation,
-    works: List<Work>,
+    works: LazyPagingItems<Work>,
     navController: NavHostController,
-    paddingValues: PaddingValues,
-    viewModel: WorkListViewModel = hiltViewModel()
 ) {
     val content: LazyListScope.() -> Unit = {
         items(items = works, key = { it.id }) { work ->
-            WorkListItem(
-                work = work,
-                navController = navController,
-                viewModel = viewModel
-            )
+            work?.let {
+                WorkListItem(
+                    work = work,
+                    navController = navController,
+                )
+            }
         }
     }
 
-    Surface(modifier = Modifier.padding(paddingValues)) {
-        if (orientation == Orientation.Vertical) {
-            WorksColumn(content)
-        } else if (orientation == Orientation.Horizontal) {
-            WorksRow(content)
-        }
+    if (orientation == Orientation.Vertical) {
+        WorksColumn(content)
+    } else if (orientation == Orientation.Horizontal) {
+        WorksRow(content)
     }
 }
 
@@ -84,13 +83,10 @@ private fun WorksRow(content: LazyListScope.() -> Unit) {
 private fun WorkListItem(
     work: Work,
     navController: NavHostController,
-    viewModel: WorkListViewModel
 ) {
-    val (authors, setAuthors) = remember { mutableStateOf<List<Author>?>(null); }
-
-    SideEffect {
-        viewModel.getAuthorsOf(work) { setAuthors(it) }
-    }
+    val covers = work.covers.collectAsStateWithLifecycle(initialValue = emptyList())
+    val authors = work.authors.collectAsStateWithLifecycle(initialValue = emptyList())
+    val subjects = work.subjects.collectAsStateWithLifecycle(initialValue = emptyList())
 
     ElevatedCard(
         modifier = Modifier
@@ -106,27 +102,28 @@ private fun WorkListItem(
     ) {
         Row(
             modifier = Modifier
-                .height(IntrinsicSize.Max)
                 .fillMaxWidth()
+                .clickable {
+                    navController.navigate(route = Screen.BookDetails.passBookId(work.id))
+                },
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // Display the book's thumbnail
-            work.coverUrls?.let {
+            if (covers.value.isNotEmpty()) {
                 Image(
                     painter = rememberImagePainter(
-                        data = it[0].invoke(CoverSize.Large),
+                        data = covers.value[0].urlForSize(CoverSize.Large),
                         builder = {
                             crossfade(true)
                             scale(Scale.FILL)
                         }),
                     contentScale = ContentScale.Fit,
-                    contentDescription = stringResource(id = R.string.ui_bookCover_altText)
+                    contentDescription = "Book Cover"
                 )
             }
-            // Display the book's summary info
+
             Column(
                 modifier = Modifier
                     .padding(start = 5.dp, end = 8.dp, bottom = 4.dp, top = 4.dp)
-                    .height(IntrinsicSize.Max)
             ) {
                 // Display the title of the book
                 work.title?.let {
@@ -136,21 +133,20 @@ private fun WorkListItem(
                 }
                 Spacer(modifier = Modifier.height(1.dp))
                 // Display the name of the authors
-                authors?.let {
-                    Text(
-                        text = formatListToText(it),
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.testTag("worklist::author_name")
-                    )
-                }
+                Text(
+                    text = authors.value.toText(),
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.testTag("worklist::author_name")
+                )
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
-                SubjectList(subjectNames = work.subjects)
+                SubjectList(subjectNames = subjects.value)
                 // Other stuff if needed
             }
         }
     }
 }
+
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
@@ -158,7 +154,6 @@ private fun SubjectList(
     subjectNames: List<String>
 ) {
     Row(
-        modifier = Modifier.width(IntrinsicSize.Max),
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         subjectNames.map {

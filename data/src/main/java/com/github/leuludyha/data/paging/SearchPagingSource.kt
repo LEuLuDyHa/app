@@ -10,7 +10,7 @@ class SearchPagingSource(
 ) : PagingSource<Int, Work>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Work> {
-        val currentPage = params.key ?: 0
+        val currentPage = params.key ?: 1
         return try {
             val response = libraryApi.search(query = query, page = currentPage, resultsPerPage = 20) // TODO CONSTANT
             if(!response.isSuccessful)
