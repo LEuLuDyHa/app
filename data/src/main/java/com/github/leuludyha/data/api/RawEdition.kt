@@ -4,7 +4,6 @@ import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
 import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
 import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import java.io.Serializable
@@ -52,6 +51,7 @@ data class RawEdition(
         val covers = flow {
             emit(coverIds
                 .orEmpty()
+                .filter{ it > 0 }
                 .map { Cover(it) }
             )
         }
@@ -59,6 +59,8 @@ data class RawEdition(
         return Edition(
             id = extractIdFromKey(key, "/books/")!!,
             title = title,
+            isbn10 = isbn10?.firstOrNull(),
+            isbn13 = isbn13?.firstOrNull(),
             authors = authors,
             works = works,
             covers = covers,

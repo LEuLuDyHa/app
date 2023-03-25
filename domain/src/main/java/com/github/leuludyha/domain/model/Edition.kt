@@ -5,6 +5,8 @@ import kotlinx.coroutines.flow.Flow
 data class Edition(
     val id: String,
     val title: String?,
+    val isbn13: String?,
+    val isbn10: String?,
     val authors: Flow<List<Author>>,
     val works: Flow<List<Work>>,
     val covers: Flow<List<Cover>>,

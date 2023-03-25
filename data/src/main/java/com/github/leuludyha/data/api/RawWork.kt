@@ -6,6 +6,7 @@ import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapNotNull
 import java.io.Serializable
 
 // TODO fetch editions somehow
@@ -39,9 +40,20 @@ data class RawWork(
             )
         }
 
+        val editions = flow {
+            emit(
+                rawResponseToModel(
+                    libraryApi
+                        .getEditionsByWorkId(extractIdFromKey(key, "/works/")!!),
+                    libraryApi
+                )
+            )
+        }.mapNotNull { it?: listOf() }
+
         val covers = flow {
             emit(coverIds
                 .orEmpty()
+                .filter { it > 0 }
                 .map { Cover(it) }
             )
         }
@@ -50,9 +62,9 @@ data class RawWork(
             id = extractIdFromKey(key, "/works/")!!,
             title = title,
             authors = authors,
-            editions = flow { emit(listOf()) },
+            editions = editions,
             covers = covers,
-            subjects = flow { emit(listOf()) }
+            subjects = flow { emit(subjects.orEmpty()) }
         )
     }
     data class RawWorkAuthor(

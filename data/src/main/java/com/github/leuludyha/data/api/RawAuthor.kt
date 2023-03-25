@@ -22,12 +22,12 @@ data class RawAuthor(
     val name: String?,
     @SerializedName("birth_date")
     val birthDate: String?,
+    @SerializedName("death_date")
+    val deathDate: String?,
     @SerializedName("photos")
     val photoIds: List<Long>?,
     //@SerializedName("bio")
     //val bio: String?,
-    @SerializedName("entity_type")
-    val entityType: String?,
     @SerializedName("error")
     override val error: String?
 ): Serializable, ErrorProne, Raw<Author> {
@@ -39,7 +39,7 @@ data class RawAuthor(
         val photos = flow {
             emit(photoIds
                 .orEmpty()
-                .filterNot { it > 0 }
+                .filter { it > 0 }
                 .map { Cover(it) }
             )
         }
@@ -48,9 +48,9 @@ data class RawAuthor(
             id = extractIdFromKey(key, "/authors/")!!,
             name = name,
             birthDate = birthDate,
+            deathDate = deathDate,
             //bio = bio,
             wikipedia = wikipedia,
-            entityType = entityType,
             photos = photos
         )
     }

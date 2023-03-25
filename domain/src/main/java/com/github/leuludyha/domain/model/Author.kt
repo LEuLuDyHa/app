@@ -6,9 +6,9 @@ data class Author(
     val id: String,
     val name: String?,
     val birthDate: String?,
+    val deathDate: String?,
     //val bio: String?,
     val wikipedia: String?,
-    val entityType: String?,
     val photos: Flow<List<Cover>>,
 ) {
     override fun toString(): String = name?: "Unknown author"

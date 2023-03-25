@@ -13,6 +13,7 @@ data class AuthorEntity (
     val wikipedia: String?,
     val name: String?,
     val birthDate: String?,
+    val deathDate: String?,
     //val bio: String?,
     val entityType: String?,
 ): Raw<Author> {
@@ -21,12 +22,12 @@ data class AuthorEntity (
             id = authorId,
             name = name,
             birthDate = birthDate,
+            deathDate = deathDate,
             //bio = bio,
             photos = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers
                     .map { it.toModel(libraryDao)}
                 },
             wikipedia = wikipedia,
-            entityType = entityType
         )
 }
