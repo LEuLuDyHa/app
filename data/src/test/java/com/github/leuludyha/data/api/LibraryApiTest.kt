@@ -132,7 +132,7 @@ class LibraryApiTest {
             wikipedia = "http://en.wikipedia.org/wiki/J._K._Rowling",
             name = "J. K. Rowling",
             birthDate = "31 July 1965",
-            bio = "Joanne \"Jo\" Murray, OBE (née Rowling), better known under the pen name J. K. Rowling, is a British author best known as the creator of the Harry Potter fantasy series, the idea for which was conceived whilst on a train trip from Manchester to London in 1990. The Potter books have gained worldwide attention, won multiple awards, sold more than 400 million copies, and been the basis for a popular series of films.",
+            //bio = "Joanne \"Jo\" Murray, OBE (née Rowling), better known under the pen name J. K. Rowling, is a British author best known as the creator of the Harry Potter fantasy series, the idea for which was conceived whilst on a train trip from Manchester to London in 1990. The Potter books have gained worldwide attention, won multiple awards, sold more than 400 million copies, and been the basis for a popular series of films.",
             key = "/authors/OL23919A",
             entityType = "person",
             photoIds = listOf(5543033, -1),
