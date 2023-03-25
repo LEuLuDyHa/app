@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.CoverSize
+import com.github.leuludyha.domain.model.library.CoverSize
 import okhttp3.ResponseBody
 import retrofit2.Response
 import retrofit2.http.GET

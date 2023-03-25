@@ -1,6 +1,6 @@
 package com.github.leuludyha.domain
 
-import com.github.leuludyha.domain.model.BarcodeAnalyser
+import com.github.leuludyha.domain.model.library.BarcodeAnalyser
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 

@@ -21,7 +21,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.github.leuludyha.domain.model.BarcodeAnalyser
+import com.github.leuludyha.domain.model.library.BarcodeAnalyser
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -30,7 +30,7 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
 // TODO REMOVE
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BarcodeScreen(
     navController: NavHostController,
@@ -50,8 +50,7 @@ fun BarcodeScreen(
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        val cameraPermissionState =
-            rememberPermissionState(permission = Manifest.permission.CAMERA)
+        val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
         Button(
             onClick = {
