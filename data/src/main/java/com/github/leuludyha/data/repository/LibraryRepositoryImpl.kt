@@ -22,7 +22,7 @@ class LibraryRepositoryImpl(
         libraryRemoteDataSource.getEditionsByWork(workId)
     override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEdition(editionId)
-    override fun getEditionByISBNRemotely(isbn: Long): Flow<Result<Edition>> =
+    override fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEditionByISBN(isbn)
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
         libraryRemoteDataSource.getAuthor(authorId)

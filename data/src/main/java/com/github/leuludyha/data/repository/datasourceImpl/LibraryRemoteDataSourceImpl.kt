@@ -50,7 +50,7 @@ class LibraryRemoteDataSourceImpl(
         emit(rawResponseToModelResult(libraryApi.getEditionsByWorkId(workId), libraryApi))
     }
 
-    override fun getEditionByISBN(isbn: Long): Flow<Result<Edition>> = flow {
+    override fun getEditionByISBN(isbn: String): Flow<Result<Edition>> = flow {
         emit(rawResponseToModelResult(libraryApi.getEditionByISBN(isbn), libraryApi))
     }
 }

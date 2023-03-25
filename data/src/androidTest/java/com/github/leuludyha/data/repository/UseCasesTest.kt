@@ -3,29 +3,20 @@ package com.github.leuludyha.data.repository
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.FileReader
 import com.github.leuludyha.data.RequiringLibraryRepositoryTest
-import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.data.api.RawDocument
-import com.github.leuludyha.data.repository.datasourceImpl.LibraryRemoteDataSourceImpl
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
 import com.github.leuludyha.domain.model.Work
-import com.github.leuludyha.domain.useCase.GetAuthorRemotelyUseCase
-import com.github.leuludyha.domain.useCase.GetEditionRemotelyUseCase
-import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
-import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
+import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
-import okhttp3.OkHttpClient
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
-import java.util.concurrent.TimeUnit
 
 /*
  * I couldn't write those tests at the domain layer because I need to instantiate an API and
@@ -223,25 +214,15 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         assertThat(result).isEqualTo(mockEdition)
         assertThat(result.id).isEqualTo(mockEdition.id)
         assertThat(result.title).isEqualTo(mockEdition.title)
+        assertThat(result.isbn10).isEqualTo(mockEdition.isbn10)
+        assertThat(result.isbn13).isEqualTo(mockEdition.isbn13)
         assertThat(result.covers.first()).isEqualTo(mockEdition.covers.first())
         assertThat(result.authors.first()).isEqualTo(mockEdition.authors.first())
         assertThat(result.works.first()).isEqualTo(mockEdition.works.first())
     }
 
     @Test
-    fun real() = runBlocking {
-
-        val client = OkHttpClient.Builder()
-            .readTimeout(20, TimeUnit.SECONDS)
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .build()
-
-        val retrofit = Retrofit.Builder()
-                .baseUrl("https://openlibrary.org")
-                .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        val api =retrofit.create(LibraryApi::class.java)
+    fun getEditionByISBNRemotelyGivesCorrectResult() = runBlocking {
 
         mockWebServer.enqueue(editionResponse)
         mockWebServer.enqueue(authorResponse)
@@ -249,11 +230,44 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         // Author for work
         mockWebServer.enqueue(authorResponse)
 
-        println("loL")
-
-        val remote = LibraryRemoteDataSourceImpl(api)
-        val repo = LibraryRepositoryImpl(remote, localDataSource)
-        val result = GetWorkRemotelyUseCase(repo)("OL45804W").first().data!!
-        println("## " + result.editions.first())
+        val result = GetEditionByISBNRemotelyUseCase(libraryRepository)(mockEdition.isbn13!!).first().data!!
+        assertThat(result).isNotNull()
+        assertThat(result).isEqualTo(mockEdition)
+        assertThat(result.id).isEqualTo(mockEdition.id)
+        assertThat(result.title).isEqualTo(mockEdition.title)
+        assertThat(result.isbn10).isEqualTo(mockEdition.isbn10)
+        assertThat(result.isbn13).isEqualTo(mockEdition.isbn13)
+        assertThat(result.covers.first()).isEqualTo(mockEdition.covers.first())
+        assertThat(result.authors.first()).isEqualTo(mockEdition.authors.first())
+        assertThat(result.works.first()).isEqualTo(mockEdition.works.first())
     }
+
+//    @Test
+//    fun real() = runBlocking {
+//
+//        val client = OkHttpClient.Builder()
+//            .readTimeout(20, TimeUnit.SECONDS)
+//            .connectTimeout(20, TimeUnit.SECONDS)
+//            .build()
+//
+//        val retrofit = Retrofit.Builder()
+//                .baseUrl("https://openlibrary.org")
+//                .client(client)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//        val api =retrofit.create(LibraryApi::class.java)
+//
+//        mockWebServer.enqueue(editionResponse)
+//        mockWebServer.enqueue(authorResponse)
+//        mockWebServer.enqueue(workResponse)
+//        // Author for work
+//        mockWebServer.enqueue(authorResponse)
+//
+//        println("loL")
+//
+//        val remote = LibraryRemoteDataSourceImpl(api)
+//        val repo = LibraryRepositoryImpl(remote, localDataSource)
+//        val result = GetWorkRemotelyUseCase(repo)("OL45804W").first().data!!
+//        println("## " + result.editions.first())
+//    }
 }

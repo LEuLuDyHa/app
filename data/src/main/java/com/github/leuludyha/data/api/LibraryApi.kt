@@ -39,7 +39,7 @@ interface LibraryApi {
 
     @GET("/isbn/{isbn}.json")
     suspend fun getEditionByISBN(
-        @Path("isbn") isbn: Long
+        @Path("isbn") isbn: String
     ): Response<RawEdition>
 
     @GET("/authors/{author_id}.json")
