@@ -9,6 +9,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapNotNull
 import java.io.Serializable
 
+/*
+ * TODO try to understand the description case exact same problem as the bio for the authors:
+ *  OL23919A (J.K. Rowling) has the bio json like that: "bio": "..."
+ *  OL2674415A (Sara Woods) has the bio json like that: "bio": {"type": "...", "value": "..."}
+ *  This causes a crash because bio is expecting a string but get instead an object
+*/
 // TODO fetch editions somehow
 data class RawWork(
     @SerializedName("key")
@@ -21,8 +27,8 @@ data class RawWork(
     val coverIds: List<Long>?,
     @SerializedName("subjects")
     val subjects: List<String>?,
-    @SerializedName("description")
-    val description: String?,
+    //@SerializedName("description")
+    //val description: String?,
     @SerializedName("error")
     override val error: String?,
 ) : Serializable, ErrorProne, Raw<Work> {

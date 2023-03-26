@@ -2,6 +2,7 @@ package com.github.leuludyha.domain.model
 
 import kotlinx.coroutines.flow.Flow
 
+// TODO add description, if possible
 data class Work(
     val id: String,
     val title: String?,
