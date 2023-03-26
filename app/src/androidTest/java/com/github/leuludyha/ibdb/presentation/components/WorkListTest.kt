@@ -30,12 +30,23 @@ class WorkListTest {
 
     @Test
     fun oneWorkHasAllItsInfoDisplayed() {
+        // To avoid infinite loop
+        val dumbWork = Work (
+            id = "My Little Rotweiler ate a Lamb",
+            title ="cool-id",
+            editions = flowOf(listOf()),
+            authors = flowOf(listOf()),
+            covers = flowOf(listOf(Cover(-1))),
+            subjects = flowOf(listOf("Dog", "Murder Mystery"))
+        )
+
         val testAuthor = Author(
             id = "cool-id",
             name ="John Mockentosh",
             birthDate = "01.01.01",
             deathDate = "02.02.02",
             wikipedia = "wikipedia.test",
+            works = flowOf(listOf(dumbWork)),
             photos = flowOf(listOf())
         )
 
