@@ -7,8 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface LibraryRepository {
     fun searchRemotely(query: String): Flow<PagingData<Work>>
     fun getWorkRemotely(workId: String): Flow<Result<Work>>
-    fun getWorksByAuthorRemotely(authorId: String): Flow<Result<List<Work>>>
-    fun getEditionsByWorkRemotely(workId: String): Flow<Result<List<Edition>>>
     fun getEditionRemotely(editionId: String): Flow<Result<Edition>>
     fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>>
     fun getAuthorRemotely(authorId: String): Flow<Result<Author>>

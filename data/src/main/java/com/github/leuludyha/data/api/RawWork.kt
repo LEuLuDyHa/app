@@ -15,7 +15,6 @@ import java.io.Serializable
  *  OL2674415A (Sara Woods) has the bio json like that: "bio": {"type": "...", "value": "..."}
  *  This causes a crash because bio is expecting a string but get instead an object
 */
-// TODO fetch editions somehow
 data class RawWork(
     @SerializedName("key")
     val key: String?,

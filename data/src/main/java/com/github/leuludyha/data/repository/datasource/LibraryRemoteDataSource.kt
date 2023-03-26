@@ -12,7 +12,5 @@ interface LibraryRemoteDataSource {
     fun getWork(workId: String): Flow<Result<Work>>
     fun getEdition(editionId: String): Flow<Result<Edition>>
     fun getAuthor(authorId: String): Flow<Result<Author>>
-    fun getWorksByAuthor(authorId: String): Flow<Result<List<Work>>>
-    fun getEditionsByWork(workId: String): Flow<Result<List<Edition>>>
     fun getEditionByISBN(isbn: String): Flow<Result<Edition>>
 }

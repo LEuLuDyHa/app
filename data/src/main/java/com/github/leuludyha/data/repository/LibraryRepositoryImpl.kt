@@ -16,10 +16,6 @@ class LibraryRepositoryImpl(
         libraryRemoteDataSource.search(query)
     override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
         libraryRemoteDataSource.getWork(workId)
-    override fun getWorksByAuthorRemotely(authorId: String): Flow<Result<List<Work>>> =
-        libraryRemoteDataSource.getWorksByAuthor(authorId)
-    override fun getEditionsByWorkRemotely(workId: String): Flow<Result<List<Edition>>> =
-        libraryRemoteDataSource.getEditionsByWork(workId)
     override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEdition(editionId)
     override fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>> =
