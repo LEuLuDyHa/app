@@ -1,9 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.screen.barcode
 
-import android.Manifest
 import android.util.Log
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -23,14 +21,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.BarcodeAnalyser
 import com.github.leuludyha.ibdb.util.Constant
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun BarcodeScreen(
     navController: NavHostController,
@@ -47,19 +42,6 @@ fun BarcodeScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
-        Spacer(modifier = Modifier.height(10.dp))
-
-        val cameraPermissionState =
-            rememberPermissionState(permission = Manifest.permission.CAMERA)
-
-        Button(
-            onClick = {
-                cameraPermissionState.launchPermissionRequest()
-            }
-        ) {
-            Text(text = "Camera Permission")
-        }
-
         Spacer(modifier = Modifier.height(10.dp))
 
         CameraPreview {isbn ->
@@ -115,7 +97,6 @@ fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
                             if (BarcodeAnalyser.checkISBNCode(barcodeValue)) {
-                                Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
                                 barcodeFoundCallback(barcodeValue)
                             }
                         }

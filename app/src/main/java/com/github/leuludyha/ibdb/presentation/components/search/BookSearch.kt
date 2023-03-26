@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -17,7 +18,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.ibdb.util.Constant
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -25,6 +29,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun BookSearch(
+    navController: NavHostController,
     outerPadding: PaddingValues,
     viewModel: BookSearchViewModel = hiltViewModel(),
     onBooksFoundContent: @Composable (List<Work>) -> Unit,
@@ -35,6 +40,31 @@ fun BookSearch(
 
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
+
+    val barcodeReadingResultState = navController.currentBackStackEntry
+        ?.savedStateHandle
+        ?.getLiveData<String>(Constant.BARCODE_RESULT_KEY)?.observeAsState()
+
+    fun getBooks() {
+        // Set query loading animation on query begin
+        setQueryLoading(true)
+        viewModel.getAllBooks(query) { works ->
+            setWorks(works)
+            // Cancel query loading animation on query resolution
+            setQueryLoading(false)
+        }
+    }
+
+    barcodeReadingResultState?.value?.let {
+        navController.currentBackStackEntry
+            ?.savedStateHandle
+            ?.remove<String>(Constant.BARCODE_RESULT_KEY)
+        if(!queryLoading) {
+            setQuery(it)
+            getBooks()
+        }
+
+    }
 
     SideEffect { systemUiController.setStatusBarColor(color = systemBarColor) }
 
@@ -57,22 +87,16 @@ fun BookSearch(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    // Set query loading animation on query begin
-                    setQueryLoading(true)
-                    viewModel.getAllBooks(query) { works ->
-                        setWorks(works)
-                        // Cancel query loading animation on query resolution
-                        setQueryLoading(false)
-                    }
+                    getBooks()
                 })
             )
 
-            val cameraPermissionState =
-                rememberPermissionState(permission = Manifest.permission.CAMERA)
+            val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
 
             Button(
                 onClick = {
                     cameraPermissionState.launchPermissionRequest()
+                    navController.navigate(Screen.BarcodeScan.route)
                 }
             ) {
                 Text(text = "Scanner")

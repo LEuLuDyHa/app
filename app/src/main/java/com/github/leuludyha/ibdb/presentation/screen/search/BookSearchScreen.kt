@@ -12,7 +12,7 @@ fun BookSearchScreen(
     navController: NavHostController,
     padding: PaddingValues
 ) {
-    BookSearch(outerPadding = padding) { queryResult ->
+    BookSearch(navController = navController, outerPadding = padding) { queryResult ->
         WorkList(
             orientation = Orientation.Vertical,
             works = queryResult,

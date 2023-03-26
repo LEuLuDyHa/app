@@ -13,7 +13,6 @@ import com.github.leuludyha.ibdb.presentation.components.WorkList
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-// TODO REMOVE
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -36,7 +35,7 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BookSearch(outerPadding = outerPadding) { queryResult ->
+            BookSearch(navController = navController, outerPadding = outerPadding) { queryResult ->
                 WorkList(
                     orientation = Orientation.Vertical,
                     works = queryResult,
