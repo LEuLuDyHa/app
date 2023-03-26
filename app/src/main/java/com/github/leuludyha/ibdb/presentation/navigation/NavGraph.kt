@@ -28,7 +28,7 @@ fun NavGraph(navController: NavHostController) {
                 HomeScreen(navController = navController, outerPadding = padding)
             }
             composable(route = Screen.BarcodeScan.route) {
-                BarcodeScreen(navController, padding)
+                BarcodeScreen(navController)
             }
             composable(route = Screen.BookSearch.route) {
                 BookSearchScreen(navController, padding)
