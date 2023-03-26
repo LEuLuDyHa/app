@@ -113,13 +113,12 @@ fun BookSearch(
             ) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
-        } else {
-            // If a list of books is found by the query,
-            // display the component given as arg while providing it
-            // with the result of the query
-            AnimatedVisibility(visible = works != null) {
-                works?.let { onBooksFoundContent(works) }
-            }
+        }
+        // If a list of books is found by the query,
+        // display the component given as arg while providing it
+        // with the result of the query
+        AnimatedVisibility(visible = works != null) {
+            works?.let { onBooksFoundContent(works) }
         }
     }
 }

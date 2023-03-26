@@ -1,7 +1,9 @@
 package com.github.leuludyha.data.repository.datasource
 
-import com.github.leuludyha.data.api.Document
-import com.github.leuludyha.domain.model.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.domain.model.library.Work
 
 interface LibraryRemoteDataSource {
     suspend fun search(query: String): Result<List<Work>>

@@ -1,6 +1,5 @@
 package com.github.leuludyha.domain
 
-import com.github.leuludyha.domain.model.ret
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -15,8 +14,4 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 
-    @Test
-    fun ret_isCorrect() {
-        assertEquals(ret(4), 4)
-    }
 }

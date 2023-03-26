@@ -1,7 +1,7 @@
 package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.domain.model.Author
+import com.github.leuludyha.domain.model.library.Author
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
