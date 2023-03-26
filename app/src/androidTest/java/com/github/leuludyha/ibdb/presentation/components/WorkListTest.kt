@@ -1,15 +1,13 @@
 package com.github.leuludyha.ibdb.presentation.components
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.ibdb.presentation.Orientation
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -46,21 +44,12 @@ class WorkListTest {
         )
 
         composeTestRule.setContent {
-            WorkList(
+            ItemList(
                 orientation = Orientation.Vertical,
-                works = listOf(testWork),
-                navController = navController,
-                paddingValues = PaddingValues(0.dp)
-            )
+                values = listOf(testWork),
+            ) { assert(it.title == testWork.title) }
         }
 
         composeTestRule.waitForIdle()
-
-        testWork.title?.let { composeTestRule.onNodeWithText(it, substring = true).assertExists() }
-
-        testWork.subjects.forEach {
-            composeTestRule.onNodeWithText(it, substring = false).assertExists()
-        }
-
     }
 }

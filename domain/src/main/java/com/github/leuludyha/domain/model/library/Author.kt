@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
 // We might want to improve this in the future but I figured this is the minimum we need
 data class Author(

@@ -1,6 +1,9 @@
 package com.github.leuludyha.domain.repository
 
-import com.github.leuludyha.domain.model.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.domain.model.library.Work
 
 interface LibraryRepository {
     suspend fun search(query: String): Result<List<Work>>

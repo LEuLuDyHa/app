@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
 import android.annotation.SuppressLint
 import android.util.Log
@@ -39,7 +39,7 @@ class BarcodeAnalyser(
                 .addOnFailureListener { exception ->
                     Log.d(
                         "BarcodeError",
-                        "com.github.leuludyha.domain.model.BarcodeAnalyser: Something went wrong $exception"
+                        "com.github.leuludyha.domain.model.library.BarcodeAnalyser: Something went wrong $exception"
                     )
                 }.addOnCompleteListener {
                     imageProxy.close()
