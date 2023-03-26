@@ -26,7 +26,7 @@ import java.net.HttpURLConnection
  * covered by UseCases.
  */
 
-class UseCasesTest: RequiringLibraryRepositoryTest() {
+class RemoteUseCasesTest: RequiringLibraryRepositoryTest() {
 
     private lateinit var workJson: String
     private lateinit var authorJson: String
@@ -257,5 +257,4 @@ class UseCasesTest: RequiringLibraryRepositoryTest() {
         assertThat(result.authors.first()).isEqualTo(mockEdition.authors.first())
         assertThat(result.works.first()).isEqualTo(mockEdition.works.first())
     }
-
 }

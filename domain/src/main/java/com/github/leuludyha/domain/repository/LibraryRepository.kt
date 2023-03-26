@@ -1,7 +1,10 @@
 package com.github.leuludyha.domain.repository
 
 import androidx.paging.PagingData
-import com.github.leuludyha.domain.model.*
+import com.github.leuludyha.domain.model.Author
+import com.github.leuludyha.domain.model.Edition
+import com.github.leuludyha.domain.model.Result
+import com.github.leuludyha.domain.model.Work
 import kotlinx.coroutines.flow.Flow
 
 interface LibraryRepository {
@@ -17,6 +20,4 @@ interface LibraryRepository {
     fun getWorkLocally(workId: String): Flow<Work>
     fun getAuthorLocally(authorId: String): Flow<Author>
     fun getEditionLocally(editionId: String): Flow<Edition>
-    fun getCoverLocally(coverId: Long): Flow<Cover>
-
 }

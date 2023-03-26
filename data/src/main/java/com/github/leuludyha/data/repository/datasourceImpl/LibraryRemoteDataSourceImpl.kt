@@ -23,7 +23,7 @@ class LibraryRemoteDataSourceImpl(
         query: String,
     ): Flow<PagingData<Work>> {
         return Pager(
-            config = PagingConfig(pageSize = 20), // TODO CONSTANT
+            config = PagingConfig(pageSize = 20), // TODO ADD CONSTANT
             pagingSourceFactory = {
                 SearchPagingSource(libraryApi = libraryApi, query = query)
             }
