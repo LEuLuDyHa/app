@@ -24,6 +24,10 @@ data class AuthorEntity (
             birthDate = birthDate,
             deathDate = deathDate,
             //bio = bio,
+            works = libraryDao.getAuthorWithWorks(authorId)
+                .map { authorWWorks -> authorWWorks.works
+                    .map { it.toModel(libraryDao) }
+                 },
             photos = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers
                     .map { it.toModel(libraryDao)}

@@ -78,6 +78,7 @@ class LibraryLocalDataSourceTest: RequiringLibraryDatabaseTest() {
                 deathDate = author1.deathDate,
                 //bio = author1.bio,
                 wikipedia = author1.wikipedia,
+                works = flowOf(listOf(work1, work3).map{it.toModel(libraryDao)}),
                 photos = flowOf(listOf(cover1, cover2, cover3).map { it.toModel(libraryDao) }),
             )
             val result = localDataSource.getAuthor(author1.authorId).first()

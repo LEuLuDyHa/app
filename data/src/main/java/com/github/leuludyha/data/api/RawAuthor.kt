@@ -1,6 +1,7 @@
 package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
+import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Cover
 import com.google.gson.annotations.SerializedName
@@ -45,6 +46,11 @@ data class RawAuthor(
             )
         }
 
+        val works = flow {
+            val rawWorks = libraryApi.getWorksByAuthorId(extractIdFromKey(key, "/authors/")!!)
+            emit (rawResponseToModel(rawWorks, libraryApi).orEmpty())
+        }
+
         return Author(
             id = extractIdFromKey(key, "/authors/")!!,
             name = name,
@@ -52,6 +58,7 @@ data class RawAuthor(
             deathDate = deathDate,
             //bio = bio,
             wikipedia = wikipedia,
+            works = works,
             photos = photos
         )
     }
