@@ -8,7 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import com.github.leuludyha.ibdb.presentation.components.Orientation
+import com.github.leuludyha.ibdb.presentation.components.WorkList
+import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 // TODO REMOVE
@@ -34,11 +36,13 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            ElevatedButton(onClick = { navController.navigate(Screen.BookSearch.route) }) {
-                Text("Search")
-            }
-            ElevatedButton(onClick = { navController.navigate(Screen.BarcodeScan.route) }) {
-                Text("Barcode")
+            BookSearch(outerPadding = outerPadding) { queryResult ->
+                WorkList(
+                    orientation = Orientation.Vertical,
+                    works = queryResult,
+                    navController = navController,
+                    paddingValues = outerPadding
+                )
             }
         }
     }

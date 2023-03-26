@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.search
 
+import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,9 +18,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.Work
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
 @Composable
 fun BookSearch(
     outerPadding: PaddingValues,
@@ -63,6 +66,17 @@ fun BookSearch(
                     }
                 })
             )
+
+            val cameraPermissionState =
+                rememberPermissionState(permission = Manifest.permission.CAMERA)
+
+            Button(
+                onClick = {
+                    cameraPermissionState.launchPermissionRequest()
+                }
+            ) {
+                Text(text = "Scanner")
+            }
         }
         if (queryLoading) {
             Column(
