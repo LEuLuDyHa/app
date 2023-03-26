@@ -1,13 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.screen.maps
 
-import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -19,31 +13,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreenViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
-class GoogleMapsActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            IBDBTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    GoogleMaps()
-                }
-            }
-        }
-    }
-}
-
+/**
+ * TODO: add explanation for strings
+ */
 @Composable
-fun GoogleMaps() {
+fun GoogleMapsScreen(
+    navController: NavHostController,
+    initialLatitude: String?, //These are treated as strings because they are Double, but navController only accepts floats
+    initialLongitude: String?,
+    interestPoints: Array<String>?,
+    viewModel: BarcodeScreenViewModel = hiltViewModel()
+) {
     val epfl = LatLng(46.520536, 6.568318)
     val epflLimits = listOf(
         LatLng(46.522259, 6.563326),
@@ -54,6 +42,7 @@ fun GoogleMaps() {
     )
     val showEpflLimits = remember { mutableStateOf(false) }
     val satellite = LatLng(46.520544, 6.567825)
+
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(epfl, 15f)
     }
@@ -80,7 +69,7 @@ fun GoogleMaps() {
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(text = "EPFL", fontWeight = FontWeight.Bold)
-                    Text(text = stringResource(id = com.github.leuludyha.ibdb.R.string.title_activity_google_maps))
+                    Text(text = stringResource(id = R.string.title_activity_google_maps))
                     Text(text = "Click to see its limits!")
                 }
             }
@@ -101,14 +90,5 @@ fun GoogleMaps() {
             fillColor = Color.Green.copy(0.3f)
         )
 
-    }
-
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview3() {
-    IBDBTheme {
-        GoogleMaps()
     }
 }

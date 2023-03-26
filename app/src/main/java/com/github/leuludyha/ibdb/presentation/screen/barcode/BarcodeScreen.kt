@@ -19,7 +19,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import com.github.leuludyha.domain.model.BarcodeAnalyser
+import com.github.leuludyha.domain.model.library.BarcodeAnalyser
 import com.github.leuludyha.ibdb.util.Constant
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.common.util.concurrent.ListenableFuture

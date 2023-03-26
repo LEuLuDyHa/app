@@ -29,15 +29,6 @@
             android:value="${MAPS_API_KEY}" />
 
         <activity
-            android:name=".maps.GoogleMapsActivity"
-            android:exported="true"
-            android:label="@string/title_activity_google_maps"
-            android:theme="@style/Theme.IBDB" />
-
-        <activity
-            android:name=".presentation.screen.search.barcode.BarcodeScanningActivity"
-            android:exported="true" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.IBDB">

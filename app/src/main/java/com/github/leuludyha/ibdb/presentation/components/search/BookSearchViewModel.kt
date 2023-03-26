@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.components.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.useCase.SearchUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,4 +22,12 @@ class BookSearchViewModel @Inject constructor(
         }
     }
 
+    fun getAllBooksByISBN(query: String, callback: (List<Work>?) -> Unit) {
+        viewModelScope.launch {
+            //TODO: Implement this properly once the database is functional
+            val result = listOf(Mocks.work)
+
+            callback(result)
+        }
+    }
 }

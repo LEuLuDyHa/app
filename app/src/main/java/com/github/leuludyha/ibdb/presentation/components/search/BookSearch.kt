@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import androidx.navigation.NavHostController
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.ibdb.util.Constant
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
@@ -37,6 +37,7 @@ fun BookSearch(
     val (query, setQuery) = remember { mutableStateOf("") }
     val (works, setWorks) = remember { mutableStateOf<List<Work>?>(null) }
     val (queryLoading, setQueryLoading) = remember { mutableStateOf(false) }
+    val (readISBN, setReadISBN) = remember { mutableStateOf(false) }
 
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
@@ -45,25 +46,19 @@ fun BookSearch(
         ?.savedStateHandle
         ?.getLiveData<String>(Constant.BARCODE_RESULT_KEY)?.observeAsState()
 
-    fun getBooks() {
-        // Set query loading animation on query begin
-        setQueryLoading(true)
-        viewModel.getAllBooks(query) { works ->
-            setWorks(works)
-            // Cancel query loading animation on query resolution
-            setQueryLoading(false)
-        }
-    }
-
     barcodeReadingResultState?.value?.let {
-        navController.currentBackStackEntry
-            ?.savedStateHandle
-            ?.remove<String>(Constant.BARCODE_RESULT_KEY)
-        if(!queryLoading) {
+        if(!readISBN) {
             setQuery(it)
-            getBooks()
+            setReadISBN(true)
+            setQueryLoading(true)
+            viewModel.getAllBooksByISBN(query) { works ->
+                setWorks(works)
+                setQueryLoading(false)
+            }
+            navController.currentBackStackEntry
+                ?.savedStateHandle
+                ?.remove<String>(Constant.BARCODE_RESULT_KEY)
         }
-
     }
 
     SideEffect { systemUiController.setStatusBarColor(color = systemBarColor) }
@@ -87,7 +82,13 @@ fun BookSearch(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    getBooks()
+                    // Set query loading animation on query begin
+                    setQueryLoading(true)
+                    viewModel.getAllBooks(query) { works ->
+                        setWorks(works)
+                        // Cancel query loading animation on query resolution
+                        setQueryLoading(false)
+                    }
                 })
             )
 
