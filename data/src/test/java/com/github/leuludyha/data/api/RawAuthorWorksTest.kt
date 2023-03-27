@@ -3,7 +3,7 @@ package com.github.leuludyha.data.api
 import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class RawAuthorWorksTest: RequiringLibraryApiTest() {
@@ -19,7 +19,7 @@ class RawAuthorWorksTest: RequiringLibraryApiTest() {
     )
 
     @Test
-    fun fieldsAreProperlyGotten() {
+    fun `Fields are properly gotten`() {
         val authorWorks = RawAuthorWorks(
             links = RawAuthorLinks("/authors/OL34184A", "x", "x"),
             worksCount = 1,
@@ -35,7 +35,7 @@ class RawAuthorWorksTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun toModelReturnsExpectedAuthor() { runBlocking {
+    fun `toModel returns expected author`() { runTest {
         mockWebServer.enqueue(authorWorksResponse)
 
         val authorWorks = RawAuthorWorks(
@@ -52,7 +52,7 @@ class RawAuthorWorksTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun toModelFailsOnError() { runBlocking {
+    fun `toModel fails on error`() { runTest {
         mockWebServer.enqueue(authorWorksResponse)
 
         val authorWorks = RawAuthorWorks(

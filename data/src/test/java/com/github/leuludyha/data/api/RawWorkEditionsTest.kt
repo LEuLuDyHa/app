@@ -4,13 +4,13 @@ import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class RawWorkEditionsTest: RequiringLibraryApiTest() {
 
     @Test
-    fun fieldsAreProperlyGotten() {
+    fun `Fields are properly gotten`() {
         val workEditions = RawWorkEditions(
             links = RawWorkLinks("/works/OL45804W", "x", "x"),
             editionsCount = 1,
@@ -26,7 +26,7 @@ class RawWorkEditionsTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun toModelReturnsExpectedWorks() { runBlocking {
+    fun `toModel returns expected author`() { runTest {
         mockWebServer.enqueue(workResponse)
 
         val workEditions = RawWorkEditions(
@@ -43,7 +43,7 @@ class RawWorkEditionsTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun toModelFailsOnError() { runBlocking {
+    fun `toModel fails on error`() { runTest {
         mockWebServer.enqueue(workResponse)
 
         val workEditions = RawWorkEditions(

@@ -1,6 +1,5 @@
 package com.github.leuludyha.data
 
-import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.data.api.RawDocument
 import com.github.leuludyha.data.api.RawEdition
@@ -47,41 +46,20 @@ open class RequiringLibraryApiTest {
     fun initializeMockResponses() {
 
         editionJson = FileReader
-            .readResourceFromFile(
-                InstrumentationRegistry
-                .getInstrumentation()
-                .context
-                .assets
-                .open("getEdition.json")
-            )
+            .readResourceFromFile(this.javaClass.classLoader!!, "getEdition.json")
+
         authorJson = FileReader
-            .readResourceFromFile(InstrumentationRegistry
-                .getInstrumentation()
-                .context
-                .assets
-                .open("getAuthor.json")
-            )
+            .readResourceFromFile(this.javaClass.classLoader!!, "getAuthor.json")
+
         workJson = FileReader
-            .readResourceFromFile(InstrumentationRegistry
-                .getInstrumentation()
-                .context
-                .assets
-                .open("getWork.json")
-            )
+            .readResourceFromFile(this.javaClass.classLoader!!, "getWork.json")
+
         workEditionsJson = FileReader
-            .readResourceFromFile(InstrumentationRegistry
-                .getInstrumentation()
-                .context
-                .assets
-                .open("getWorkEditions.json")
-            )
+            .readResourceFromFile(this.javaClass.classLoader!!, "getWorkEditions.json")
+
         authorWorksJson = FileReader
-            .readResourceFromFile(InstrumentationRegistry
-                .getInstrumentation()
-                .context
-                .assets
-                .open("getAuthorWorks.json")
-            )
+            .readResourceFromFile(this.javaClass.classLoader!!, "getAuthorWorks.json")
+
 
         editionResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
