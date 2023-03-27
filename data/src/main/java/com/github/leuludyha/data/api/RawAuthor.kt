@@ -34,7 +34,7 @@ data class RawAuthor(
 ): Serializable, ErrorProne, Raw<Author> {
 
     override fun toModel(libraryApi: LibraryApi): Author? {
-        if (extractIdFromKey(key, "/authors/") == null)
+        if (extractIdFromKey(key, "/authors/") == null || error != null)
             return null
 
         val photos = flow {

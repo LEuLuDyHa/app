@@ -33,7 +33,7 @@ data class RawWork(
 ) : Serializable, ErrorProne, Raw<Work> {
 
     override fun toModel(libraryApi: LibraryApi): Work? {
-        if (extractIdFromKey(key, "/works/") == null)
+        if (extractIdFromKey(key, "/works/") == null || error != null)
             return null
 
         val authors = flow {

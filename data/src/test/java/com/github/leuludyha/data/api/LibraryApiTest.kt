@@ -1,32 +1,15 @@
 package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.FileReader
+import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
-import org.junit.Before
 import org.junit.Test
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
 
-class LibraryApiTest {
-    private lateinit var api: LibraryApi
-    private lateinit var mockWebServer: MockWebServer
-
-    @Before
-    fun setUp() {
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
-        api = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/").toString())
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-            .create(LibraryApi::class.java)
-    }
+class LibraryApiTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -59,7 +42,7 @@ class LibraryApiTest {
             editionIds = listOf("edition3", "edition4")
         )
 
-        val actualResponse = api.search("test")
+        val actualResponse = libraryApi.search("test")
         assertThat(actualResponse).isNotNull()
         assertThat(actualResponse.body()?.documents).isEqualTo(listOf(expectedDoc0, expectedDoc1))
     }
@@ -85,7 +68,7 @@ class LibraryApiTest {
             error = null
         )
 
-        val result = api.getWork("OL45804W")
+        val result = libraryApi.getWork("OL45804W")
         assertThat(result).isNotNull()
         assertThat(result.body()).isEqualTo(expected)
     }
@@ -103,16 +86,16 @@ class LibraryApiTest {
 
         val expected = RawEdition(
             title = "Fantastic Mr. Fox",
-            key = "/books/OL7353617M",
+            key = "/books/OL44247403M",
             authorRawKeys = listOf(RawKey("/authors/OL34184A")),
-            isbn10 = listOf("0140328726"),
-            isbn13 = listOf("9780140328721"),
-            coverIds = listOf(8739161),
+            isbn10 = null,
+            isbn13 = listOf("9780142418222"),
+            coverIds = listOf(13269612),
             workRawKeys = listOf(RawKey("/works/OL45804W")),
             error = null
         )
 
-        val result = api.getEdition("OL7353617M")
+        val result = libraryApi.getEdition("OL7353617M")
         assertThat(result).isNotNull()
         assertThat(result.body()).isEqualTo(expected)
     }
@@ -129,23 +112,18 @@ class LibraryApiTest {
         mockWebServer.enqueue(expectedResponse)
 
         val expected = RawAuthor(
-            wikipedia = "http://en.wikipedia.org/wiki/J._K._Rowling",
-            name = "J. K. Rowling",
-            birthDate = "31 July 1965",
-            deathDate = null,
-            //bio = "Joanne \"Jo\" Murray, OBE (née Rowling), better known under the pen name J. K. Rowling, is a British author best known as the creator of the Harry Potter fantasy series, the idea for which was conceived whilst on a train trip from Manchester to London in 1990. The Potter books have gained worldwide attention, won multiple awards, sold more than 400 million copies, and been the basis for a popular series of films.",
-            key = "/authors/OL23919A",
-            photoIds = listOf(5543033, -1),
+            wikipedia = null,
+            name = "Roald Dahl",
+            birthDate = "13 September 1916",
+            deathDate = "23 November 1990",
+            //bio = "Roald Dahl was a British novelist, short story writer, and screenwriter.",
+            key = "/authors/OL34184A",
+            photoIds = listOf(9395323, 9395316, 9395314, 9395313, 6287214),
             error = null
         )
 
-        val result = api.getAuthor("OL23919A")
+        val result = libraryApi.getAuthor("OL23919A")
         assertThat(result).isNotNull()
         assertThat(result.body()).isEqualTo(expected)
-    }
-
-    @After
-    fun tearDown() {
-        mockWebServer.shutdown()
     }
 }
