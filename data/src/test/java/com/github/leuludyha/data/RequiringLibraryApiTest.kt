@@ -2,6 +2,8 @@ package com.github.leuludyha.data
 
 import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.data.api.RawDocument
+import com.github.leuludyha.data.api.RawEdition
+import com.github.leuludyha.data.api.RawKey
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
@@ -35,6 +37,8 @@ open class RequiringLibraryApiTest {
     protected lateinit var mockAuthor: Author
     protected lateinit var mockEdition: Edition
     protected lateinit var mockRawDocument: RawDocument
+    protected lateinit var mockRawEdition: RawEdition
+
     protected lateinit var mockWorkEditions: List<Edition>
     protected lateinit var mockAuthorWorks: List<Work>
 
@@ -121,6 +125,17 @@ open class RequiringLibraryApiTest {
             key = "/works/OL45804W",
             authorIds = listOf("OL45804W"),
             editionIds = listOf("OL44247403M")
+        )
+
+        mockRawEdition = RawEdition(
+            key = "/books/OL44247403M",
+            title = "Fantastic Mr. Fox",
+            isbn10 = null,
+            isbn13 = listOf("9780142418222"),
+            authorRawKeys = listOf(RawKey("/authors/OL34184A")),
+            workRawKeys = listOf(RawKey("/works/OL45804W")),
+            coverIds = listOf(-1, 1, 2),
+            error = null,
         )
 
         mockWorkEditions = listOf(mockEdition)
