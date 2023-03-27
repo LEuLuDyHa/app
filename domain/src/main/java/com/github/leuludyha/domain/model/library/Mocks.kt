@@ -20,14 +20,6 @@ object Mocks {
         subjects = listOf("Censorship", "Futurology", "Surveillance")
     )
 
-    val work2: Work = Work(
-        title = "La Ferme des Animaux",
-        id = "13147152",
-        fetchAuthors = suspend { listOf(author) },
-        coverUrls = listOf { "https://covers.openlibrary.org/b/id/13147152-L.jpg" },
-        subjects = listOf("Fiction", "Historical", "Political Science")
-    )
-
     val userPreferences: UserPreferences = UserPreferences(
         mutableMapOf(
             Pair(
