@@ -4,17 +4,17 @@ import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
-class RawAuthorLinksTest: RequiringLibraryApiTest() {
+class RawWorkLinksTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
-        val authorLinks = RawAuthorLinks(
-            authorKey = "/authors/OL34184A",
+    fun fieldsAreProperlyGotten() {
+        val authorLinks = RawWorkLinks(
+            workKey = "/works/OL34184A",
             prevKey = "x",
             nextKey = "x"
         )
 
-        assertThat(authorLinks.authorKey).isEqualTo( "/authors/OL34184A")
+        assertThat(authorLinks.workKey).isEqualTo( "/works/OL34184A")
         assertThat(authorLinks.prevKey).isEqualTo( "x")
         assertThat(authorLinks.nextKey).isEqualTo( "x")
     }

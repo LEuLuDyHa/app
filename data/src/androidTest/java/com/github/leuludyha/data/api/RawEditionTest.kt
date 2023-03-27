@@ -5,13 +5,13 @@ import com.github.leuludyha.domain.model.Cover
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class RawEditionTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun fieldsAreProperlyGotten() {
         val edition = RawEdition(
             key = "/works/x",
             title = "x",
@@ -35,7 +35,7 @@ class RawEditionTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns expected edition`() { runTest {
+    fun toModelReturnsExpectedEdition() { runBlocking {
         mockWebServer.enqueue(workResponse)
         mockWebServer.enqueue(authorResponse)
         mockWebServer.enqueue(authorResponse)
@@ -66,7 +66,7 @@ class RawEditionTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on invalid key`() { runTest {
+    fun toModelFailsOnInvalidKey() { runBlocking {
         mockWebServer.enqueue(workEditionsResponse)
         mockWebServer.enqueue(authorResponse)
         mockWebServer.enqueue(authorResponse)
@@ -86,7 +86,7 @@ class RawEditionTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on error`() { runTest {
+    fun toModelFailsOnError() { runBlocking {
         mockWebServer.enqueue(workEditionsResponse)
         mockWebServer.enqueue(authorResponse)
         mockWebServer.enqueue(authorResponse)

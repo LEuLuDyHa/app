@@ -3,13 +3,13 @@ package com.github.leuludyha.data.api
 import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class RawSearchTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun fieldsAreProperlyGotten() {
         val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",
@@ -30,7 +30,7 @@ class RawSearchTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns expected works`() { runTest {
+    fun toModelReturnsExpectedWorks() { runBlocking {
         mockWebServer.enqueue(workResponse)
 
         val search = RawSearch(
@@ -45,7 +45,7 @@ class RawSearchTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on invalid key`() { runTest {
+    fun toModelFailsOnInvalidKey() { runBlocking {
         mockWebServer.enqueue(workResponse)
 
         val search = RawSearch(
@@ -60,7 +60,7 @@ class RawSearchTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on error`() { runTest {
+    fun toModelFailsOnError() { runBlocking {
         mockWebServer.enqueue(workResponse)
 
         val search = RawSearch(

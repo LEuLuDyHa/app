@@ -1,10 +1,11 @@
 package com.github.leuludyha.data.api
 
+import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.FileReader
 import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
 import java.net.HttpURLConnection
@@ -13,9 +14,15 @@ class LibraryApiTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun searchGivesCorrectResultWithTwoDocuments() = runTest {
+    fun searchGivesCorrectResultWithTwoDocuments() = runBlocking {
 
-        val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "search_2docs.json")
+        val json = FileReader.readResourceFromFile(
+            InstrumentationRegistry
+            .getInstrumentation()
+            .context
+            .assets
+            .open("search_2docs.json")
+        )
 
         val expectedResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -49,9 +56,15 @@ class LibraryApiTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkGivesCorrectResult() = runTest {
+    fun getWorkGivesCorrectResult() = runBlocking {
 
-        val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "getWork.json")
+        val json = FileReader.readResourceFromFile(
+            InstrumentationRegistry
+                .getInstrumentation()
+                .context
+                .assets
+                .open("getWork.json")
+        )
 
         val expectedResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -75,9 +88,16 @@ class LibraryApiTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionGivesCorrectResult() = runTest {
+    fun getEditionGivesCorrectResult() = runBlocking {
 
-        val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "getEdition.json")
+        val json = FileReader
+            .readResourceFromFile(
+                InstrumentationRegistry
+                    .getInstrumentation()
+                    .context
+                    .assets
+                    .open("getEdition.json")
+            )
 
         val expectedResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -102,9 +122,15 @@ class LibraryApiTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorGivesCorrectResult() = runTest {
+    fun getAuthorGivesCorrectResult() = runBlocking {
 
-        val json = FileReader.readResourceFromFile(this.javaClass.classLoader!!, "getAuthor.json")
+        val json = FileReader.readResourceFromFile(
+            InstrumentationRegistry
+                .getInstrumentation()
+                .context
+                .assets
+                .open("getAuthor.json")
+        )
 
         val expectedResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)

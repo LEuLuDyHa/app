@@ -5,13 +5,13 @@ import com.github.leuludyha.domain.model.Cover
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class RawAuthorTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun fieldAreProperlyGotten() {
         val author = RawAuthor(
             key = "x",
             wikipedia = "x",
@@ -33,7 +33,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns expected author`() { runTest {
+    fun toModelReturnsExpectedAuthor() { runBlocking {
         mockWebServer.enqueue(authorWorksResponse)
 
         val author = RawAuthor(
@@ -60,7 +60,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on invalid key`() { runTest {
+    fun toModelFailsOnInvalidKey() { runBlocking {
         mockWebServer.enqueue(authorWorksResponse)
 
         val author = RawAuthor(
@@ -78,7 +78,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on error`() { runTest {
+    fun toModelFailsOnError() { runBlocking {
         mockWebServer.enqueue(authorWorksResponse)
 
         val author = RawAuthor(
