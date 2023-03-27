@@ -47,6 +47,8 @@ fun BookSearch(
         ?.getLiveData<String>(Constant.BARCODE_RESULT_KEY)?.observeAsState()
 
     barcodeReadingResultState?.value?.let {
+        //This condition is meant to avoid this being called multiple times. It is a workaround and not
+        //a fix of the main problem, since I couldn't find a fix. Moreover it looks like this behavior is not even deterministic.
         if(!readISBN) {
             setQuery(it)
             setReadISBN(true)
@@ -92,11 +94,8 @@ fun BookSearch(
                 })
             )
 
-            val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
-
             Button(
                 onClick = {
-                    cameraPermissionState.launchPermissionRequest()
                     navController.navigate(Screen.BarcodeScan.route)
                 }
             ) {
