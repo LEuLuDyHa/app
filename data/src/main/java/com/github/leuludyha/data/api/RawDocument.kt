@@ -6,7 +6,6 @@ import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
-import java.io.Serializable
 
 // TODO we can potentially fetch the subjects but it is not trivial
 
@@ -28,7 +27,7 @@ data class RawDocument(
     val authorIds: List<String>?,
     @SerializedName("edition_key")
     val editionIds: List<String>?,
-): Serializable, Raw<Work> {
+): Raw<Work> {
     override fun toModel(libraryApi: LibraryApi): Work? {
         if (extractIdFromKey(key, "/works/") == null)
             return null

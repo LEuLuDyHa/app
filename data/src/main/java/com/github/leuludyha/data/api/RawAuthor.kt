@@ -6,7 +6,6 @@ import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Cover
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
-import java.io.Serializable
 
 /*
  * TODO try to understand the bio case:
@@ -31,7 +30,7 @@ data class RawAuthor(
     //val bio: String?,
     @SerializedName("error")
     override val error: String?
-): Serializable, ErrorProne, Raw<Author> {
+): ErrorProne, Raw<Author> {
 
     override fun toModel(libraryApi: LibraryApi): Author? {
         if (extractIdFromKey(key, "/authors/") == null || error != null)

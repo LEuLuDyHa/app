@@ -22,16 +22,6 @@ class RawAuthorTest: RequiringLibraryApiTest() {
             error = "x"
         )
 
-        val nullAuthor = RawAuthor(
-            key = "x",
-            wikipedia = null,
-            name = null,
-            birthDate = null,
-            deathDate = null,
-            photoIds =  null,
-            error = null
-        )
-
         assertThat(author.key).isEqualTo("x")
         assertThat(author.wikipedia).isEqualTo("x")
         assertThat(author.name).isEqualTo("x")

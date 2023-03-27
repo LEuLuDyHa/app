@@ -6,7 +6,6 @@ import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
-import java.io.Serializable
 
 data class RawEdition(
     @SerializedName("title")
@@ -25,7 +24,7 @@ data class RawEdition(
     val coverIds: List<Long>?,
     @SerializedName("error")
     override val error: String?,
-): Serializable, ErrorProne, Raw<Edition> {
+): ErrorProne, Raw<Edition> {
     override fun toModel(libraryApi: LibraryApi): Edition? {
         if (extractIdFromKey(key, "/books/") == null || error != null)
             return null

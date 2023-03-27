@@ -7,7 +7,6 @@ import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapNotNull
-import java.io.Serializable
 
 /*
  * TODO try to understand the description case exact same problem as the bio for the authors:
@@ -30,7 +29,7 @@ data class RawWork(
     //val description: String?,
     @SerializedName("error")
     override val error: String?,
-) : Serializable, ErrorProne, Raw<Work> {
+): ErrorProne, Raw<Work> {
 
     override fun toModel(libraryApi: LibraryApi): Work? {
         if (extractIdFromKey(key, "/works/") == null || error != null)

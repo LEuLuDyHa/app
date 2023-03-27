@@ -2,7 +2,6 @@ package com.github.leuludyha.data.api
 
 import com.github.leuludyha.domain.model.Work
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 // Unfortunately not possible to inherit a data class, so I couldn't define a superclass `RawLinked`
 
@@ -16,7 +15,7 @@ data class RawAuthorWorks (
     val works: List<RawWork>?,
     @SerializedName("error")
     override val error: String?,
-): Serializable, ErrorProne, Raw<List<Work>> {
+): ErrorProne, Raw<List<Work>> {
     override fun toModel(libraryApi: LibraryApi): List<Work>? =
         if (error != null)
             null
