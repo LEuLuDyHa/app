@@ -1,9 +1,13 @@
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import com.github.leuludyha.domain.util.TestTag
 import com.github.leuludyha.ibdb.presentation.navigation.TabDescriptor
 
 /**
@@ -30,4 +34,12 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
 
 fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
     return "bottomtoolbar::tab_item::${descriptor.displayName}"
+}
+
+fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
+    this.onNodeWithTag(getBottomToolbarTestTagFrom(descriptor)).performClick()
+}
+
+fun ComposeTestRule.onNodeByTag(testTag: TestTag): SemanticsNodeInteraction {
+    return this.onNodeWithTag(testTag.tag)
 }

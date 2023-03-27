@@ -13,23 +13,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
+import com.github.leuludyha.domain.util.TestTag
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
+object TestTags {
+    val readingStateController = TestTag("reading-state-dropdown")
+    val likeButton = TestTag("like-button")
+}
+
 @Composable
-private fun ReadingStateControl(
+fun ReadingStateControl(
     work: Work,
     userPreferences: UserPreferences,
 ) {
     val (liked, setLiked) = remember {
         mutableStateOf(
-            userPreferences.workPreferences.containsKey(work.getId())
+            userPreferences.preferencesByWorkId.containsKey(work.getId())
         )
     }
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
@@ -38,16 +46,16 @@ private fun ReadingStateControl(
         setLiked(like)
 
         if (!like) {
-            userPreferences.workPreferences.remove(work.getId())
+            userPreferences.preferencesByWorkId.remove(work.getId())
         } else {
-            userPreferences.workPreferences[work.getId()] = WorkPreference(
+            userPreferences.preferencesByWorkId[work.getId()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
         }
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
-        userPreferences.workPreferences[work.getId()]?.let {
+        userPreferences.preferencesByWorkId[work.getId()]?.let {
             it.readingState = readingState
         }
         setExpanded(false)
@@ -59,9 +67,11 @@ private fun ReadingStateControl(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { onLikeButtonClicked(!liked) }, colors = IconButtonDefaults.iconButtonColors(
+            onClick = { onLikeButtonClicked(!liked) },
+            colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
-            )
+            ),
+            modifier = Modifier.testTag(TestTags.likeButton),
         ) {
             if (!liked) {
                 Icon(Icons.Filled.FavoriteBorder, stringResource(id = R.string.book_like))
@@ -76,9 +86,10 @@ private fun ReadingStateControl(
                     onClick = { setExpanded(!expanded) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    )
+                    ),
+                    modifier = Modifier.testTag(TestTags.readingStateController.tag)
                 ) {
-                    userPreferences.workPreferences[work.getId()]?.let {
+                    userPreferences.preferencesByWorkId[work.getId()]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -108,7 +119,7 @@ private fun ReadingStateControl(
 fun DefaultPreview() {
     IBDBTheme {
         ReadingStateControl(
-            Mocks.work,
+            Mocks.work1,
             Mocks.userPreferences
         )
     }

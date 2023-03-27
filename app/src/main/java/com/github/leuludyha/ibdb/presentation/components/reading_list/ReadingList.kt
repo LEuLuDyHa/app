@@ -22,7 +22,7 @@ fun ReadingList(
 ) {
     ItemList(
         // TODO Maybe change this to be sorted using user rating/ other factors
-        values = preferences.workPreferences.values.toList(),
+        values = preferences.preferencesByWorkId.values.toList(),
         modifier = Modifier.wrapContentHeight()
     ) { preference ->
         Column(modifier = Modifier.wrapContentHeight()) {
