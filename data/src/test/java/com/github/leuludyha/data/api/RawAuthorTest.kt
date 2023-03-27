@@ -27,7 +27,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
         assertThat(author.name).isEqualTo("x")
         assertThat(author.birthDate).isEqualTo("x")
         assertThat(author.deathDate).isEqualTo("x")
-        assertThat(author.photoIds).isEqualTo(listOf(0, 1))
+        assertThat(author.photoIds).isEqualTo(listOf(0L, 1L))
         assertThat(author.error).isEqualTo("x")
     }
 
@@ -43,7 +43,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
             birthDate = "x",
             deathDate = "x",
             photoIds = listOf(-1, 1),
-            error = "x"
+            error = null
         )
 
         val res = author.toModel(libraryApi)!!

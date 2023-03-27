@@ -27,7 +27,7 @@ data class RawEdition(
     override val error: String?,
 ): Serializable, ErrorProne, Raw<Edition> {
     override fun toModel(libraryApi: LibraryApi): Edition? {
-        if (extractIdFromKey(key, "/books/") == null)
+        if (extractIdFromKey(key, "/books/") == null || error != null)
             return null
 
         val authors = flow {

@@ -17,6 +17,9 @@ data class RawAuthorWorks (
     @SerializedName("error")
     override val error: String?,
 ): Serializable, ErrorProne, Raw<List<Work>> {
-    override fun toModel(libraryApi: LibraryApi): List<Work> =
-        works?.mapNotNull {rawWork -> rawWork.toModel(libraryApi) } ?: listOf()
+    override fun toModel(libraryApi: LibraryApi): List<Work>? =
+        if (error != null)
+            null
+        else
+            works?.mapNotNull {rawWork -> rawWork.toModel(libraryApi) } ?: listOf()
 }
