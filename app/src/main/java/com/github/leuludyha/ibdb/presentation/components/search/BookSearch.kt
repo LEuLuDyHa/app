@@ -1,6 +1,5 @@
 package com.github.leuludyha.ibdb.presentation.components.search
 
-import android.Manifest
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,11 +21,9 @@ import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.ibdb.util.Constant
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookSearch(
     navController: NavHostController,
@@ -95,6 +92,8 @@ fun BookSearch(
             )
 
             Button(
+                modifier = Modifier
+                    .testTag("book_search::barcode_scan_button"),
                 onClick = {
                     navController.navigate(Screen.BarcodeScan.route)
                 }

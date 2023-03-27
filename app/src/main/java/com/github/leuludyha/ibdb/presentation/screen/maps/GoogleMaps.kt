@@ -13,24 +13,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreenViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 
 /**
- * TODO: add explanation for strings
+ * For now, this screen only starts google maps and displays a few hardcoded markers at EPFL.
  */
 @Composable
 fun GoogleMapsScreen(
     navController: NavHostController,
     initialLatitude: String?, //These are treated as strings because they are Double, but navController only accepts floats
     initialLongitude: String?,
-    interestPoints: Array<String>?,
-    viewModel: BarcodeScreenViewModel = hiltViewModel()
+    interestPoints: Array<String>?
 ) {
     val epfl = LatLng(46.520536, 6.568318)
     val epflLimits = listOf(
@@ -51,7 +48,7 @@ fun GoogleMapsScreen(
     GoogleMap(
         modifier = Modifier
             .fillMaxSize()
-            .testTag("GoogleMap"),
+            .testTag("GoogleMaps::main"),
         cameraPositionState = cameraPositionState
     ) {
         MarkerInfoWindowContent(
