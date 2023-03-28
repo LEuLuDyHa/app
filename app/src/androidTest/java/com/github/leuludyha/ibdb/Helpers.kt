@@ -4,7 +4,7 @@ import android.content.Intent
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
-import com.github.leuludyha.ibdb.ui.navigation.TabDescriptor
+import com.github.leuludyha.ibdb.presentation.navigation.TabDescriptor
 
 /**
  * Uses a [ComposeTestRule] created via [createEmptyComposeRule] that allows setup before the activity

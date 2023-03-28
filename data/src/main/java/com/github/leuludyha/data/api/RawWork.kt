@@ -3,7 +3,7 @@ package com.github.leuludyha.data.api
 import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
 import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
 import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Work
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

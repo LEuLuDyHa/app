@@ -1,23 +1,23 @@
-package com.github.leuludyha.ibdb.presentation.components
+package com.github.leuludyha.ibdb.presentation.components.book_views
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.library.Work
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class WorkListViewModel @Inject constructor(
+class MiniBookViewModel @Inject constructor(
 
 ) : ViewModel() {
 
     fun getAuthorsOf(work: Work, callback: (List<Author>?) -> Unit) {
         viewModelScope.launch {
-            val result = work.authors()
-
-            result?.let { callback(it) }
+            // TODO CHANGE
+            callback(listOf(Mocks.author))
         }
     }
 
