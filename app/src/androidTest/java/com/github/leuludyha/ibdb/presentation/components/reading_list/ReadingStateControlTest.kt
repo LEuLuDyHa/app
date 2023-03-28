@@ -24,19 +24,17 @@ class ReadingStateControlTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val work: Work = Mocks.work1
+    private val work: Work = Mocks.work1984
     private lateinit var preferences: UserPreferences
     private lateinit var state: WorkPreference
 
     @Before
     fun initContent() {
-        preferences = UserPreferences(
-            mutableMapOf(
-                Pair(
-                    work.getId(), WorkPreference(work, WorkPreference.ReadingState.READING, true)
-                )
-            )
+        preferences = UserPreferences()
+        preferences.addPreference(
+            WorkPreference(work, WorkPreference.ReadingState.READING, true)
         )
+
         state = preferences.preferencesByWorkId[work.getId()]!!
 
         composeTestRule.setContent {

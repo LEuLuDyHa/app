@@ -10,8 +10,10 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthenticationModule {
-
-    // TODO Change : Link this in some way to the google authentication process
+    /**
+     * Provides an [AuthenticationContext] to the view models which need it
+     */
+// TODO Change : Link this in some way to the google authentication process
     @Provides
     fun provideAuthenticationContext(): AuthenticationContext = AuthenticationContext(Mocks.user)
 }

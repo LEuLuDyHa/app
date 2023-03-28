@@ -32,14 +32,28 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
     onAfterLaunched()
 }
 
+/**
+ * From a [TabDescriptor], return the test tag this [TabDescriptor] will have to
+ * find it with the [onNodeWithTag]
+ */
 fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
     return "bottomtoolbar::tab_item::${descriptor.displayName}"
 }
 
+/**
+ * Click on the bottom tab specified by [TabDescriptor]
+ * This method can be used on a [ComposeTestRule] instance like such
+ * [composeTestRule.clickOnBottomTab(tab)]
+ */
 fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
     this.onNodeWithTag(getBottomToolbarTestTagFrom(descriptor)).performClick()
 }
 
+/**
+ * Return the [SemanticsNodeInteraction] which has the specified [TestTag]
+ * This method can be used on a [ComposeTestRule] instance like such
+ * [composeTestRule.clickOnBottomTab(tab)]
+ */
 fun ComposeTestRule.onNodeByTag(testTag: TestTag): SemanticsNodeInteraction {
     return this.onNodeWithTag(testTag.tag)
 }

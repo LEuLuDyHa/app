@@ -12,7 +12,7 @@ object Mocks {
         null, null, null
     )
 
-    val work1: Work = Work(
+    val work1984: Work = Work(
         title = "1984",
         id = "12919044",
         fetchAuthors = suspend { listOf(author) },
@@ -20,12 +20,23 @@ object Mocks {
         subjects = listOf("Censorship", "Futurology", "Surveillance")
     )
 
+    val workLaFermeDesAnimaux: Work = Work(
+        title = "La Ferme des Animaux",
+        id = "13147152",
+        fetchAuthors = suspend { listOf(author) },
+        coverUrls = listOf { "https://covers.openlibrary.org/b/id/13147152-L.jpg" },
+        subjects = listOf("Fiction", "Historical", "Political Science")
+    )
+
     val userPreferences: UserPreferences = UserPreferences(
         mutableMapOf(
             Pair(
-                work1.getId(), WorkPreference(
-                    work1, WorkPreference.ReadingState.READING, false
-                )
+                work1984.getId(),
+                WorkPreference(work1984, WorkPreference.ReadingState.READING, false)
+            ),
+            Pair(
+                workLaFermeDesAnimaux.getId(),
+                WorkPreference(workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true)
             )
         )
     )

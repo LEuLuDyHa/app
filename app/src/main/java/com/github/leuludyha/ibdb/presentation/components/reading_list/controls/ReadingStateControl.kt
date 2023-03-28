@@ -119,7 +119,7 @@ fun ReadingStateControl(
 fun DefaultPreview() {
     IBDBTheme {
         ReadingStateControl(
-            Mocks.work1,
+            Mocks.work1984,
             Mocks.userPreferences
         )
     }

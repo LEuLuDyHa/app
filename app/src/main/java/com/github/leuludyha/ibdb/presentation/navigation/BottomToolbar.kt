@@ -13,9 +13,10 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
+import com.github.leuludyha.ibdb.util.EmptyNavHostController
 
 @Composable
-fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) {
+fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
     var selectedItem by remember { mutableStateOf(defaultSelection) }
 
     val tabs = listOf(
@@ -34,7 +35,7 @@ fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) 
                     selected = selectedItem == index,
                     onClick = {
                         selectedItem = index
-                        navController?.let { tab.onClick(it) }
+                        tab.onClick(navController)
                     },
                     modifier = Modifier.testTag("bottomtoolbar::tab_item::${tab.displayName}")
                 )
@@ -79,5 +80,5 @@ sealed class TabDescriptor(
 @Preview
 @Composable
 fun DefaultPreview() {
-    IBDBTheme { BottomToolbar(null) }
+    IBDBTheme { BottomToolbar(EmptyNavHostController()) }
 }
