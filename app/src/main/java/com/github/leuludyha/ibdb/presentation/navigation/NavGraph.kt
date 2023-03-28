@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
-import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
@@ -30,9 +29,6 @@ fun NavGraph(navController: NavHostController) {
         ) {
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
-            }
-            composable(route = Screen.BarcodeScan.route) {
-                BarcodeScreen(navController, padding)
             }
             composable(route = Screen.BookSearch.route) {
                 BookSearchScreen(navController, padding)

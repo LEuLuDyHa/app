@@ -11,4 +11,5 @@ sealed class Screen(val route: String) {
 
     object FindBook : Screen("find_book")
     object UserProfile : Screen("user_profile")
+    object UserProfileSettings : Screen("user_profile_settings")
 }
