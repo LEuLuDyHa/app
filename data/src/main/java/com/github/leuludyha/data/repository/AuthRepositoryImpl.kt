@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.repository
 
+import android.util.Log
 import com.github.leuludyha.domain.model.Result
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.OneTapSignInResponse
@@ -28,14 +29,19 @@ class AuthRepositoryImpl(
 
     override suspend fun oneTapSignInWithGoogle(): OneTapSignInResponse {
         return try {
+            Log.i("Auth", "Begin sign in...")
             val signInResult = oneTapClient.beginSignIn(signInRequest).await()
+            Log.i("Auth", "Finished sign in...")
             Result.Success(signInResult)
         } catch (e: Exception) {
             try {
+                Log.i("Auth", "Failed sign in, begin sign up")
                 val signUpResult = oneTapClient.beginSignIn(signUpRequest).await()
+                Log.i("Auth", "Finished sign up")
                 Result.Success(signUpResult)
-            } catch (e: Exception) {
-                Result.Error(e.message.toString())
+            } catch (e2: Exception) {
+                Log.i("Auth", "Failed sign up")
+                Result.Error(e2.message.toString())
             }
         }
     }
