@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
 enum class CoverSize {
     Small,

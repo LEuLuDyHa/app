@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Edition
+import com.github.leuludyha.domain.model.library.Edition
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 

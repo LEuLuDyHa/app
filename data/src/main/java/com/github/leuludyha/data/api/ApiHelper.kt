@@ -1,24 +1,27 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.CoverSize
-import com.github.leuludyha.domain.model.Result
+import com.github.leuludyha.domain.model.library.CoverSize
+import com.github.leuludyha.domain.model.library.Result
 import retrofit2.Response
 
 object ApiHelper {
-    fun coverIdsToCoverUrls(coverIds: List<Long>?): List<(CoverSize) -> String>? =
-        coverIds?.map(::coverIdToCoverUrl)?.ifEmpty { null }
+    fun coverIdsToCoverUrls(coverIds: List<Long>?): List<(CoverSize) -> String> =
+        coverIds?.map(::coverIdToCoverUrl) ?: listOf()
+
     private fun coverIdToCoverUrl(coverId: Long) = { coverSize: CoverSize ->
         "https://covers.openlibrary.org/b/id/${coverId}-${coverSize}.jpg"
     }
 
-    fun <TRaw, TModel> rawResponseToModelResult(response: Response<TRaw>, libraryApi: LibraryApi): Result<TModel>
-            where TRaw : Raw<TModel>, TRaw: ErrorProne
-    {
-        if(response.isSuccessful){
+    fun <TRaw, TModel> rawResponseToModelResult(
+        response: Response<TRaw>,
+        libraryApi: LibraryApi
+    ): Result<TModel>
+            where TRaw : Raw<TModel>, TRaw : ErrorProne {
+        if (response.isSuccessful) {
             // If an error occured => Result.Error
             response.body()?.error?.let { return Result.Error(response.body()!!.error!!) }
 
-            response.body()?.let {result->
+            response.body()?.let { result ->
                 return Result.Success(result.toModel(libraryApi))
             }
         }
