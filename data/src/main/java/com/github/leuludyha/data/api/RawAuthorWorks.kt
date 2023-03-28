@@ -6,6 +6,11 @@ import com.google.gson.annotations.SerializedName
 // Unfortunately not possible to inherit a data class, so I couldn't define a superclass `RawLinked`
 
 // TODO it might not suit our needs like that, we have to invest using paging
+
+/**
+ * Raw author works' response of the API. Not user friendly, used internally and then converted into
+ * the `List<`[Work]`>` model class.
+ */
 data class RawAuthorWorks (
     @SerializedName("links")
     val links: RawAuthorLinks?,

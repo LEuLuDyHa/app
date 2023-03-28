@@ -13,6 +13,11 @@ import kotlinx.coroutines.flow.flow
  *  OL2674415A (Sara Woods) has the bio json like that: "bio": {"type": "...", "value": "..."}
  *  This causes a crash because bio is expecting a string but get instead an object
 */
+
+/**
+ * Raw author's response of the API. Not user friendly, used internally and then converted into
+ * the [Author] model class.
+ */
 data class RawAuthor(
     @SerializedName("key")
     val key: String?,

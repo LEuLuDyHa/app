@@ -5,6 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * Web Library API. Provides methods to fetch works, editions, authors and to search by a prompt.
+ */
 interface LibraryApi {
 
     /**

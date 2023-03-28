@@ -6,7 +6,7 @@ import retrofit2.Response
 /**
  * Provides helper methods that are repeatedly used by the api code.
  */
-object ApiHelper {
+internal object ApiHelper {
 
     /**
      * Converts a raw response from the api to a model result.

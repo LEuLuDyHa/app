@@ -7,6 +7,10 @@ import com.github.leuludyha.domain.model.Edition
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 
+/**
+ * Raw editions's response of the API. Not user friendly, used internally and then converted into
+ * the [Edition] model class.
+ */
 data class RawEdition(
     @SerializedName("title")
     val title: String?,

@@ -14,6 +14,11 @@ import kotlinx.coroutines.flow.mapNotNull
  *  OL2674415A (Sara Woods) has the bio json like that: "bio": {"type": "...", "value": "..."}
  *  This causes a crash because bio is expecting a string but get instead an object
 */
+
+/**
+ * Raw work's response of the API. Not user friendly, used internally and then converted into
+ * the [Work] model class.
+ */
 data class RawWork(
     @SerializedName("key")
     val key: String?,
