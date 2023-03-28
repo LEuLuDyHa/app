@@ -23,6 +23,11 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.ibdb.util.Constant
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+/**
+ * This composable will instantiate a search bar and a scanning button next to it. Whenever a new search
+ * is received either from the search bar or the barcode scanning it will call the database, and
+ * afterwards the lambda onBooksFoundContent with the results of the search.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookSearch(
@@ -104,6 +109,7 @@ fun BookSearch(
         if (queryLoading) {
             Column(
                 modifier = Modifier
+                    .testTag("book_search::query_loading_indicator")
                     .padding(outerPadding)
                     .fillMaxWidth()
                     .fillMaxHeight(),

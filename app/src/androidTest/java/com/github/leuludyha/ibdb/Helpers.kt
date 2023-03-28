@@ -30,10 +30,17 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
     onAfterLaunched()
 }
 
-fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
+/**
+ * Returns a formatted string in accordance to the one used as a test tag on the BottomToolBar class.
+ */
+internal fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
     return "bottomtoolbar::tab_item::${descriptor.displayName}"
 }
 
-fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
+/**
+ * This method will perform a click on the BottomTab's corresponding tab, avoiding the need to take care of the formatting
+ * used by the BottomTab class.
+ */
+internal fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
     this.onNodeWithTag(getBottomToolbarTestTagFrom(descriptor)).performClick()
 }

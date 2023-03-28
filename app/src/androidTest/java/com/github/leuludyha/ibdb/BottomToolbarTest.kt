@@ -2,7 +2,6 @@ package com.github.leuludyha.ibdb
 
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.performClick
 import androidx.navigation.NavHostController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
@@ -63,28 +62,6 @@ class BottomToolbarTest {
 
         composeTestRule
             .onNodeWithTag("book_search::barcode_scan_button")
-            .assertExists()
-    }
-
-    //TODO: This function below does not make any sense here at all
-    // It is here because I couldn't find a way to make hilt work on tests yet without launching the whole app
-    // as it is done here at createAndroidComposeRule<MainActivity>()
-    // I need to not forget to ask the assistants about how to properly use hilt on tests, because I can't figure it out.
-    @Test
-    fun scanButtonFromSearchScreenOpensScanScreen() {
-        composeTestRule
-            .clickOnBottomTab(Search)
-
-        composeTestRule
-            .onNodeWithTag("barcode_screen::camera_layout")
-            .assertDoesNotExist()
-
-        composeTestRule
-            .onNodeWithTag("book_search::barcode_scan_button")
-            .performClick()
-
-        composeTestRule
-            .onNodeWithTag("barcode_screen::camera_layout")
             .assertExists()
     }
 }
