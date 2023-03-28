@@ -9,5 +9,5 @@ sealed class Screen(val route: String) {
         fun passBookId(bookId: String) = "book_details_screen/$bookId"
     }
     object FindBook : Screen("find_book")
-    object GoogleMaps: Screen("maps")
+    object GoogleMaps : Screen("maps")
 }
