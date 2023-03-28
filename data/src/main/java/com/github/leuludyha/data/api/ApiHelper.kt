@@ -20,7 +20,8 @@ internal object ApiHelper {
 
             response.body()?.let { result->
                 result.toModel(libraryApi)?.let { return Result.Success(it) }
-                return Result.Error(response.message())
+                return result.toModel(libraryApi)?.let { Result.Success(it) }
+                    ?: Result.Error(response.message())
             }
         }
         return Result.Error(response.message())
