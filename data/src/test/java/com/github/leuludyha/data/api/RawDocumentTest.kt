@@ -11,7 +11,7 @@ import org.junit.Test
 class RawDocumentTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val doc = RawDocument(
             coverId = 0,
             title = "Awesome book",

@@ -7,7 +7,7 @@ import org.junit.Test
 class RawWorkLinksTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val authorLinks = RawWorkLinks(
             workKey = "/works/OL34184A",
             prevKey = "x",

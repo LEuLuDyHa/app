@@ -11,7 +11,7 @@ import org.junit.Test
 class RawWorkTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val work = RawWork(
             key = "/works/x",
             title = "x",

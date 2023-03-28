@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.FileReader
+import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.data.RequiringLibraryApiTest
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi

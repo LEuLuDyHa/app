@@ -10,7 +10,7 @@ import org.junit.Test
 class RawWorkEditionsTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val workEditions = RawWorkEditions(
             links = RawWorkLinks("/works/OL45804W", "x", "x"),
             editionsCount = 1,

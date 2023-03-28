@@ -33,7 +33,7 @@ class BookSearchViewModel @Inject constructor(
         _queryLoading.value = true
 
         viewModelScope.launch {
-            useCase(query = query).cachedIn(viewModelScope).collect {
+            useCase(query).cachedIn(viewModelScope).collect {
                 _searchedWorks.value = it
                 _queryLoading.value = false
             }

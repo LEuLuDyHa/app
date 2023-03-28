@@ -19,7 +19,7 @@ class RawAuthorWorksTest: RequiringLibraryApiTest() {
     )
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val authorWorks = RawAuthorWorks(
             links = RawAuthorLinks("/authors/OL34184A", "x", "x"),
             worksCount = 1,

@@ -69,7 +69,7 @@ class WorkListTest {
             subjects = flowOf(listOf("Dog", "Murder Mystery"))
         )
 
-        // TODO how to passe lazyPagingItems?
+        // TODO how to test lazyPagingItems?
         /*composeTestRule.setContent {
             WorkList(
                 orientation = Orientation.Vertical,

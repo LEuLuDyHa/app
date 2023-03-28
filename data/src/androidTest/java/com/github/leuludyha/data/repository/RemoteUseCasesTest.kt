@@ -1,7 +1,7 @@
 package com.github.leuludyha.data.repository
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.leuludyha.data.FileReader
+import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.data.RequiringLibraryRepositoryTest
 import com.github.leuludyha.data.api.RawDocument
 import com.github.leuludyha.domain.model.Author

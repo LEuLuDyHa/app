@@ -11,7 +11,7 @@ import org.junit.Test
 class RawEditionTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val edition = RawEdition(
             key = "/works/x",
             title = "x",

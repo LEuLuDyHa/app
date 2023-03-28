@@ -7,7 +7,7 @@ import org.junit.Test
 class RawAuthorLinksTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val authorLinks = RawAuthorLinks(
             authorKey = "/authors/OL34184A",
             prevKey = "x",

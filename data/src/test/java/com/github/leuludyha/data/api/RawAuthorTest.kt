@@ -11,7 +11,7 @@ import org.junit.Test
 class RawAuthorTest: RequiringLibraryApiTest() {
 
     @Test
-    fun `Fields are properly gotten`() {
+    fun `Fields are properly accessed`() {
         val author = RawAuthor(
             key = "x",
             wikipedia = "x",

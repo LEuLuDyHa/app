@@ -1,4 +1,4 @@
-package com.github.leuludyha.data
+package com.github.leuludyha.data.io
 
 import java.io.IOException
 import java.io.InputStreamReader

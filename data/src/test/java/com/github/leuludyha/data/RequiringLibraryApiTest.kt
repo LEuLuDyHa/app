@@ -4,6 +4,7 @@ import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.data.api.RawDocument
 import com.github.leuludyha.data.api.RawEdition
 import com.github.leuludyha.data.api.RawKey
+import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.domain.model.Author
 import com.github.leuludyha.domain.model.Cover
 import com.github.leuludyha.domain.model.Edition
