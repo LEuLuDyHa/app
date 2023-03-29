@@ -6,7 +6,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.rule.GrantPermissionRule
 import clickOnBottomTab
 import com.github.leuludyha.ibdb.presentation.navigation.Maps
 import com.github.leuludyha.ibdb.presentation.navigation.Search
@@ -20,9 +19,6 @@ class BottomToolbarTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<MainActivity>()
-
-    @get:Rule
-    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     private lateinit var navController: NavHostController
 

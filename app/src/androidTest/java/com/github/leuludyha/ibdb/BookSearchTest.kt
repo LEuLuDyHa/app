@@ -9,6 +9,7 @@ import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.SearchUseCase
@@ -25,6 +26,9 @@ class BookSearchTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    @get:Rule
+    val permissionRule: GrantPermissionRule = GrantPermissionRule.grant(android.Manifest.permission.CAMERA)
 
     @Test
     fun barcodeScanningButtonOpensCorrespondingScreen() {
@@ -53,6 +57,8 @@ class BookSearchTest {
                 }
             }
         }
+
+        composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithTag("barcode_screen::camera_layout")
@@ -85,6 +91,8 @@ class BookSearchTest {
                 result = it
             }
         }
+
+        composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithTag("book_search::search_field")
@@ -121,6 +129,8 @@ class BookSearchTest {
                 //Does nothing for this test
             }
         }
+
+        composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithTag("book_search::query_loading_indicator")
