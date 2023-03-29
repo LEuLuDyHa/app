@@ -26,8 +26,11 @@ fun NavGraph(navController: NavHostController) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Home.route
+            startDestination = Screen.SignIn.route
         ) {
+            composable(route = Screen.SignIn.route) {
+                SignInScreen(navController)
+            }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
             }
