@@ -5,10 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,40 +17,63 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.github.leuludyha.ibdb.presentation.components.authentication.DisplayIfAuthenticated
 
 @Composable
 fun UserProfile(
-    navController: NavHostController, //useless?
+    navController: NavHostController,
     outerPadding: PaddingValues,
     viewModel: UserProfileViewModel = hiltViewModel()
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .padding(outerPadding),
-        verticalArrangement = Arrangement.Top,
+        verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Surface(
-            modifier = Modifier
-                .size(154.dp)
-                .padding(5.dp),
-            shape = CircleShape,
-            border = BorderStroke(0.5.dp, Color.LightGray)
-        ) {
-            Image(
-                painter = rememberImagePainter( //user's how?
-                    "https://static.vecteezy.com/system/resources/previews/005/544/718/original/profile-icon-design-free-vector.jpg"),
-                contentDescription = "Profile Picture",
-                contentScale = ContentScale.Crop,
+        DisplayIfAuthenticated(authContext = viewModel.authContext) {
+            Surface(
+                modifier = Modifier
+                    .size(154.dp)
+                    .padding(5.dp),
+                shape = CircleShape,
+                border = BorderStroke(0.5.dp, Color.Black)
+            ) {
+                Image(
+                    painter = rememberImagePainter( //integrate with user later
+                        "https://images.freeimages.com/images/large-previews/023/geek-avatar-1632962.jpg"),
+                    contentDescription = "Profile Picture",
+                    contentScale = ContentScale.Crop,
+                )
+            }
+            Text(
+                text = (viewModel.authContext.principal?.username ?: "username"),
+                fontSize = 22.sp,
+                style = MaterialTheme.typography.headlineMedium,
+                color = Color.Black
             )
+            Divider(Modifier, 50.dp, Color.Transparent)
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Button("My Friends")
+                Button("Something")
+                Button("Settings")
+            }
         }
-        Text(
-            text = "username", //user's how?
-            fontSize = 22.sp,
-            style = MaterialTheme.typography.headlineMedium,
-            color = Color.Black
-        )
+    }
+}
+
+@Composable
+private fun Button(text: String){
+    Button(
+        onClick = { /* Do something */ },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp)
+    ) {
+        Text(text)
     }
 }
 
