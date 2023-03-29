@@ -7,10 +7,10 @@ import com.github.leuludyha.data.api.ApiHelper.rawResponseToModelResult
 import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.data.paging.SearchPagingSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Result
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.library.Result
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 

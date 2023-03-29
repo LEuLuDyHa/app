@@ -31,7 +31,7 @@ fun ReadingList(
                 work = preference.work,
                 displaySubjects = false,
                 onClick = { clickedWork ->
-                    navController.navigate(Screen.BookDetails.passBookId(clickedWork.getId()))
+                    navController.navigate(Screen.BookDetails.passBookId(clickedWork.Id()))
                 }, footer = {
                     Row(
                         modifier = Modifier.fillMaxWidth(),

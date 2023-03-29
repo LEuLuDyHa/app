@@ -2,7 +2,7 @@ package com.github.leuludyha.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.leuludyha.domain.model.Edition
+import com.github.leuludyha.domain.model.library.Edition
 import kotlinx.coroutines.flow.map
 
 @Entity(tableName = "editions")

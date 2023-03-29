@@ -2,8 +2,8 @@ package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
 import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Cover
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.flow.flow
 

@@ -12,7 +12,9 @@ data class Work(
     val authors: Flow<List<Author>>,
     val covers: Flow<List<Cover>>,
     val subjects: Flow<List<String>>,
-) {
+): Keyed {
+    override fun Id() = id
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Work) return false

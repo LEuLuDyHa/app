@@ -2,7 +2,7 @@ package com.github.leuludyha.data.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 

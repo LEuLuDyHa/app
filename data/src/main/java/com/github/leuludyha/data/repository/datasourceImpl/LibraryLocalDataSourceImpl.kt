@@ -1,10 +1,10 @@
 package com.github.leuludyha.data.repository.datasourceImpl
 import com.github.leuludyha.data.db.*
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Cover
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

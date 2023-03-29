@@ -1,10 +1,10 @@
 package com.github.leuludyha.data.repository.datasource
 
 import androidx.paging.PagingData
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Result
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.library.Result
 import kotlinx.coroutines.flow.Flow
 
 interface LibraryRemoteDataSource {

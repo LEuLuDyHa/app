@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Result
+import com.github.leuludyha.domain.model.library.Result
 import retrofit2.Response
 
 /**

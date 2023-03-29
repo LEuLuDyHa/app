@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import coil.size.Scale
-import com.github.leuludyha.domain.model.CoverSize
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 

@@ -16,10 +16,10 @@ import com.github.leuludyha.data.TestUtils.subject3
 import com.github.leuludyha.data.TestUtils.work1
 import com.github.leuludyha.data.TestUtils.work2
 import com.github.leuludyha.data.TestUtils.work3
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Cover
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf

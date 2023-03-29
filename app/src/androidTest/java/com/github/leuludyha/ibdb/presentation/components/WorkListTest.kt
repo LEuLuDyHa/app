@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Cover
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule

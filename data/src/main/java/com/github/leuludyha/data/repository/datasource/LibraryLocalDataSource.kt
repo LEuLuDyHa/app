@@ -1,9 +1,9 @@
 package com.github.leuludyha.data.repository.datasource
 
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Cover
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.Flow
 
 interface LibraryLocalDataSource {
