@@ -58,6 +58,8 @@ class BookSearchTest {
             }
         }
 
+        //This call here looks super weird, and it is. For some reason, without it Cirrus' tests fail for some reason I don't understand,
+        //for I am unable to replicate it in my computer and the screen recording looks just fine.
         composeTestRule.waitForIdle()
 
         composeTestRule
