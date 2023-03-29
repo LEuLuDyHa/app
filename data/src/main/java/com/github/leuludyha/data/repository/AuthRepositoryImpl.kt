@@ -50,12 +50,20 @@ class AuthRepositoryImpl(
         googleCredential: AuthCredential
     ): SignInWithGoogleResponse {
         return try {
+            Log.i("AuthRepositoryImpl", "firebaseSignInWithGoogle: $googleCredential")
             val authResult = auth.signInWithCredential(googleCredential).await()
+
+            auth.currentUser?.apply {
+                Log.i("current user name", displayName.toString())
+                Log.i("current user photourl", photoUrl.toString())
+            }
+
             if (authResult.additionalUserInfo?.isNewUser == true) {
                 auth.currentUser?.apply {
                     // TODO("add user to firestore db")
                 }
             }
+
             Result.Success(true)
         } catch (e: Exception) {
             Result.Error(e.message.toString())
