@@ -9,4 +9,4 @@ in the code for more informationU
 
 #### `TextIconButton.kt`
 
-![textButtonIconComponentImage.png](textButtonIconComponentImage.png)
+![textButtonIconComponentImage.png](doc/res/textButtonIconComponentImage.png)
