@@ -10,13 +10,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
+import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
+import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
-import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
 import com.github.leuludyha.ibdb.util.Constant
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavGraph(navController: NavHostController) {
+
+
     Scaffold(
         bottomBar = { BottomToolbar(navController) }
     ) { padding ->
@@ -25,7 +28,7 @@ fun NavGraph(navController: NavHostController) {
             startDestination = Screen.Home.route
         ) {
             composable(route = Screen.Home.route) {
-                HomeScreen(navController = navController, outerPadding = padding)
+                HomeScreen(navController, padding)
             }
             composable(route = Screen.BarcodeScan.route) {
                 BarcodeScreen(navController, padding)
@@ -39,8 +42,19 @@ fun NavGraph(navController: NavHostController) {
                     type = NavType.StringType
                 })
             ) { backStackEntry ->
-                backStackEntry.arguments?.getString(Constant.BOOK_DETAILS_ARGUMENT_KEY)
-                    ?.let { /* TODO Add book details screen composable here, take argument "it" too */ }
+                backStackEntry.arguments
+                    ?.getString(Constant.BOOK_DETAILS_ARGUMENT_KEY)
+                    ?.let { workId ->
+                        BookDetailsScreen(
+                            navController, padding, workId
+                        )
+                    }
+            }
+            composable(route = Screen.Collection.route) {
+                CollectionScreen(navController, padding)
+            }
+            composable(route = Screen.FindBook.route) {
+                // TODO Add find book screen here
             }
         }
     }

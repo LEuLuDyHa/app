@@ -1,19 +1,19 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
 import kotlinx.coroutines.flow.Flow
 
-// TODO add description, if possible
-data class Work(
+data class Edition(
     val id: String,
     val title: String?,
-    val editions: Flow<List<Edition>>,
+    val isbn13: String?,
+    val isbn10: String?,
     val authors: Flow<List<Author>>,
+    val works: Flow<List<Work>>,
     val covers: Flow<List<Cover>>,
-    val subjects: Flow<List<String>>,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is Work) return false
+        if (other !is Edition) return false
 
         return id == other.id
     }

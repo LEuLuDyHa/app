@@ -73,10 +73,8 @@ class WorkListTest {
         /*composeTestRule.setContent {
             WorkList(
                 orientation = Orientation.Vertical,
-                works = listOf(testWork),
-                navController = navController,
-                paddingValues = PaddingValues(0.dp)
-            )
+                values = listOf(testWork),
+            ) { assert(it.title == testWork.title) }
         }
 
         composeTestRule.waitForIdle()

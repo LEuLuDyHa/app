@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
 import kotlinx.coroutines.flow.Flow
 

@@ -2,10 +2,10 @@ package com.github.leuludyha.data.repository
 
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
-import com.github.leuludyha.domain.model.Author
-import com.github.leuludyha.domain.model.Edition
-import com.github.leuludyha.domain.model.Result
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.repository.LibraryRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -1,6 +1,6 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.domain.model.Work
+import com.github.leuludyha.domain.model.library.Work
 import com.google.gson.annotations.SerializedName
 
 /**

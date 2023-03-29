@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.ui.navigation
+package com.github.leuludyha.ibdb.presentation.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 // List of all bottom tabs
@@ -30,7 +29,9 @@ val Search = TabDescriptor(
 
 val Collection = TabDescriptor(
     "Collection", Icons.Filled.LibraryBooks
-)
+) { navHost ->
+    navHost.navigate(route = Screen.Collection.route)
+}
 
 val Profile = TabDescriptor(
     "Profile", Icons.Filled.AccountCircle
@@ -71,7 +72,5 @@ data class TabDescriptor(
 @Preview
 @Composable
 fun DefaultPreview() {
-    IBDBTheme {
-        BottomToolbar(null)
-    }
+    IBDBTheme { BottomToolbar(null) }
 }

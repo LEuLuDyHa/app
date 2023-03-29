@@ -10,11 +10,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.paging.compose.collectAsLazyPagingItems
-import com.github.leuludyha.ibdb.presentation.components.Orientation
-import com.github.leuludyha.ibdb.presentation.components.WorkList
-import com.github.leuludyha.ibdb.presentation.components.search.SearchBar
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.github.leuludyha.ibdb.presentation.Orientation
+import com.github.leuludyha.ibdb.presentation.components.ItemList
+import com.github.leuludyha.ibdb.presentation.components.book_views.MiniBookView
+import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
 @Composable
 fun BookSearchScreen(
@@ -22,38 +22,20 @@ fun BookSearchScreen(
     padding: PaddingValues,
     viewModel: BookSearchViewModel = hiltViewModel()
 ) {
-    val searchQuery by viewModel.searchQuery
-    val queryLoading by viewModel.queryLoading
-    val searchedWorks = viewModel.searchedWorks.collectAsLazyPagingItems()
-
-    val systemUiController = rememberSystemUiController()
-    val systemBarColor = MaterialTheme.colorScheme.primary
-
-    SideEffect { systemUiController.setStatusBarColor(color = systemBarColor) }
-
-    Column(
-        modifier = Modifier.padding(padding)
-    ) {
-        SearchBar(
-            value = searchQuery,
-            onValueChange = { viewModel.updateSearchQuery(it) },
-            onDone = { viewModel.searchWorks(searchQuery) }
-        )
-        if (queryLoading) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-            }
-        } else {
-            WorkList(
-                orientation = Orientation.Vertical,
-                works = searchedWorks,
-                navController = navController,
+    BookSearch(outerPadding = padding) { queryResult ->
+        ItemList(
+            orientation = Orientation.Vertical,
+            values = queryResult,
+        ) { work ->
+            MiniBookView(
+                work = work,
+                onClick = { clickedWork ->
+                    navController.navigate(
+                        route = Screen.BookDetails.passBookId(clickedWork.getId())
+                    )
+                },
+                orientation = Orientation.Horizontal,
+                displaySubjects = true
             )
         }
     }

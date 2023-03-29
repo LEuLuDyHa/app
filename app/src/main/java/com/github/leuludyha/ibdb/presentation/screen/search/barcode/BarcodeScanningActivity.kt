@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.screen
+package com.github.leuludyha.ibdb.presentation.screen.search.barcode
 
 import androidx.activity.ComponentActivity
 
