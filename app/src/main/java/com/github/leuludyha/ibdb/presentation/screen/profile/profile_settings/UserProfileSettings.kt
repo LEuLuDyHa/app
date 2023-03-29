@@ -9,12 +9,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.github.leuludyha.domain.util.TestTag
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.components.utils.TextIconButton
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 import com.github.leuludyha.ibdb.util.EmptyNavHostController
 
-object TestTags
+object TestTags {
+    val logoutBtn = TestTag("user-settings-logout-btn")
+}
 
 /**
  * Features :
@@ -55,17 +60,19 @@ private fun SettingsTopBar(
 ) {
     // Logout
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(5.dp),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        IconButton(
-            onClick = { /*TODO*/ }, colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.error
-            )
-        ) {
-            Icon(Icons.Filled.Logout, stringResource(id = R.string.icon_logout))
-        }
+        TextIconButton(
+            icon = Icons.Filled.Logout,
+            text = stringResource(id = R.string.icon_logout),
+            onClick = { /*TODO*/ },
+            containerColor = MaterialTheme.colorScheme.errorContainer,
+            contentColor = MaterialTheme.colorScheme.onErrorContainer
+        )
     }
 }
 
