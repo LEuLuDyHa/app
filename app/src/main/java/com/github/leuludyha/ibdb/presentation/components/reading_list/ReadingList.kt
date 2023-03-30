@@ -42,7 +42,7 @@ fun ReadingList(
                 displaySubjects = false,
                 // On click, redirect to the BookDetails screen on this book
                 onClick = { clickedWork ->
-                    navController.navigate(Screen.BookDetails.passBookId(clickedWork.getId()))
+                    navController.navigate(Screen.BookDetails.passBookId(clickedWork.Id()))
                 }, footer = {
                     // As a footer, pass a pair of icons informing the user about its
                     // progress on the reading of this book and whether

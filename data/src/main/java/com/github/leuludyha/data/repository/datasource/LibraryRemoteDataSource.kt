@@ -1,16 +1,16 @@
 package com.github.leuludyha.data.repository.datasource
 
+import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Edition
-import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.library.Result
+import kotlinx.coroutines.flow.Flow
 
 interface LibraryRemoteDataSource {
-    suspend fun search(query: String): Result<List<Work>>
-    suspend fun workById(workId: String): Result<Work>
-    suspend fun worksByAuthorId(authorId: String): Result<List<Work>>
-    suspend fun editionsByWorkId(workId: String): Result<List<Edition>>
-    suspend fun editionById(editionId: String): Result<Edition>
-    suspend fun editionByISBN(isbn: Long): Result<Edition>
-    suspend fun authorById(authorId: String): Result<Author>
+    fun search(query: String): Flow<PagingData<Work>>
+    fun getWork(workId: String): Flow<Result<Work>>
+    fun getEdition(editionId: String): Flow<Result<Edition>>
+    fun getAuthor(authorId: String): Flow<Result<Author>>
+    fun getEditionByISBN(isbn: String): Flow<Result<Edition>>
 }

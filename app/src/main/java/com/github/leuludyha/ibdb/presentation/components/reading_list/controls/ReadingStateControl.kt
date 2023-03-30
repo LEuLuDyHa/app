@@ -37,15 +37,15 @@ object TestTags {
  * - have finished reading the book
  */
 @Composable
-fun ReadingStateControl(
+private fun ReadingStateControl(
     work: Work,
     userPreferences: UserPreferences,
 ) {
     // Whether this work is liked by the user (added to its reading list)
     val (liked, setLiked) = remember {
         mutableStateOf(
-            // Initiate it to the
-            userPreferences.preferencesByWorkId.containsKey(work.getId())
+            // Initiate it to the userPreferences
+            userPreferences.workPreferences.containsKey(work.Id())
         )
     }
     // Whether the menu button is expanded (visible) or not
@@ -55,10 +55,11 @@ fun ReadingStateControl(
         setLiked(like)
 
         // If the user dislikes the work, remove it from its preferences
-        if (!like) { userPreferences.preferencesByWorkId.remove(work.getId()) }
+        if (!like) {
+            userPreferences.workPreferences.remove(work.Id())
         // Otherwise, add it in its preferences, annotating it as interested and not possessed
-        else {
-            userPreferences.preferencesByWorkId[work.getId()] = WorkPreference(
+        } else {
+            userPreferences.workPreferences[work.Id()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
         }
@@ -66,7 +67,7 @@ fun ReadingStateControl(
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
         // Set the reading state to the one set by the user using the menu button
-        userPreferences.preferencesByWorkId[work.getId()]?.let {
+        userPreferences.workPreferences[work.Id()]?.let {
             it.readingState = readingState
         }
         setExpanded(false)
@@ -103,7 +104,7 @@ fun ReadingStateControl(
                 ) {
                     // Display the current reading state in a button,
                     // Once it is clicked, a menu will appear with all states
-                    userPreferences.preferencesByWorkId[work.getId()]?.let {
+                    userPreferences.workPreferences[work.Id()]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer

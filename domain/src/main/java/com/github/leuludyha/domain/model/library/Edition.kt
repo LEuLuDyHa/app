@@ -1,20 +1,22 @@
 package com.github.leuludyha.domain.model.library
 
+import kotlinx.coroutines.flow.Flow
+
 data class Edition(
-    val id: String?,
+    val id: String,
     val title: String?,
-    private val fetchAuthors: suspend () -> List<Author>?,
-    private val fetchWorks: suspend () -> List<Work>?,
-    val coverUrls: List<(CoverSize) -> String>?,
+    val isbn13: String?,
+    val isbn10: String?,
+    val authors: Flow<List<Author>>,
+    val works: Flow<List<Work>>,
+    val covers: Flow<List<Cover>>,
 ) {
-    private var cachedAuthors: List<Author>? = null
-    private var cachedWorks: List<Work>? = null
-    suspend fun authors(): List<Author>? {
-        cachedAuthors?.let { cachedAuthors = fetchAuthors() }
-        return cachedAuthors
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Edition) return false
+
+        return id == other.id
     }
-    suspend fun works(): List<Work>? {
-        cachedWorks?.let { cachedWorks = fetchWorks() }
-        return cachedWorks
-    }
+
+    override fun hashCode(): Int = id.hashCode()
 }
