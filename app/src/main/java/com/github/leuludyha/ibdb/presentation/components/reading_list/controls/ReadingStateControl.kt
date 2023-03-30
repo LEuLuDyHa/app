@@ -45,7 +45,7 @@ private fun ReadingStateControl(
     val (liked, setLiked) = remember {
         mutableStateOf(
             // Initiate it to the userPreferences
-            userPreferences.workPreferences.containsKey(work.Id())
+            userPreferences.preferencesByWorkId.containsKey(work.Id())
         )
     }
     // Whether the menu button is expanded (visible) or not
@@ -56,10 +56,10 @@ private fun ReadingStateControl(
 
         // If the user dislikes the work, remove it from its preferences
         if (!like) {
-            userPreferences.workPreferences.remove(work.Id())
+            userPreferences.preferencesByWorkId.remove(work.Id())
         // Otherwise, add it in its preferences, annotating it as interested and not possessed
         } else {
-            userPreferences.workPreferences[work.Id()] = WorkPreference(
+            userPreferences.preferencesByWorkId[work.Id()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
         }
@@ -67,7 +67,7 @@ private fun ReadingStateControl(
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
         // Set the reading state to the one set by the user using the menu button
-        userPreferences.workPreferences[work.Id()]?.let {
+        userPreferences.preferencesByWorkId[work.Id()]?.let {
             it.readingState = readingState
         }
         setExpanded(false)
@@ -104,7 +104,7 @@ private fun ReadingStateControl(
                 ) {
                     // Display the current reading state in a button,
                     // Once it is clicked, a menu will appear with all states
-                    userPreferences.workPreferences[work.Id()]?.let {
+                    userPreferences.preferencesByWorkId[work.Id()]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer

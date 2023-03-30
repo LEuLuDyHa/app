@@ -10,6 +10,6 @@ class UserPreferences(
      * in the user's preferences
      */
     fun addPreference(preference: WorkPreference) {
-        this.preferencesByWorkId[preference.work.getId()] = preference
+        this.preferencesByWorkId[preference.work.id] = preference
     }
 }
