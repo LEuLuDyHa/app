@@ -30,24 +30,34 @@ object TestTags {
     val likeButton = TestTag("like-button")
 }
 
+/**
+ * On the book details page of a work, allow a user to set if they :
+ * - are interested in reading the book
+ * - are currently reading the book
+ * - have finished reading the book
+ */
 @Composable
 fun ReadingStateControl(
     work: Work,
     userPreferences: UserPreferences,
 ) {
+    // Whether this work is liked by the user (added to its reading list)
     val (liked, setLiked) = remember {
         mutableStateOf(
+            // Initiate it to the
             userPreferences.preferencesByWorkId.containsKey(work.getId())
         )
     }
+    // Whether the menu button is expanded (visible) or not
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
 
     fun onLikeButtonClicked(like: Boolean) {
         setLiked(like)
 
-        if (!like) {
-            userPreferences.preferencesByWorkId.remove(work.getId())
-        } else {
+        // If the user dislikes the work, remove it from its preferences
+        if (!like) { userPreferences.preferencesByWorkId.remove(work.getId()) }
+        // Otherwise, add it in its preferences, annotating it as interested and not possessed
+        else {
             userPreferences.preferencesByWorkId[work.getId()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
@@ -55,6 +65,7 @@ fun ReadingStateControl(
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
+        // Set the reading state to the one set by the user using the menu button
         userPreferences.preferencesByWorkId[work.getId()]?.let {
             it.readingState = readingState
         }
@@ -80,6 +91,7 @@ fun ReadingStateControl(
             }
         }
 
+        // Only display reading state controls if the work is "liked"
         if (liked) {
             Column {
                 Button(
@@ -89,6 +101,8 @@ fun ReadingStateControl(
                     ),
                     modifier = Modifier.testTag(TestTags.readingStateController.tag)
                 ) {
+                    // Display the current reading state in a button,
+                    // Once it is clicked, a menu will appear with all states
                     userPreferences.preferencesByWorkId[work.getId()]?.let {
                         Text(
                             text = it.readingState.toString(),
@@ -97,6 +111,7 @@ fun ReadingStateControl(
                     }
                 }
 
+                // Menu of all possible reading state
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { setExpanded(false) }
