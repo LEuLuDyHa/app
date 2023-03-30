@@ -7,4 +7,6 @@
     <string name="book_dislike">Remove from Reading List</string>
     <string name="reading_list_title">Reading List</string>
     <string name="icon_logout">Logout</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode" />
 </resources>

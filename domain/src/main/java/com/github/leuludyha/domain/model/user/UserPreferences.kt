@@ -2,7 +2,9 @@ package com.github.leuludyha.domain.model.user
 
 class UserPreferences(
     /** Map WorkId -> WorkPreference */
-    var preferencesByWorkId: MutableMap<String, WorkPreference> = mutableMapOf()
+    var preferencesByWorkId: MutableMap<String, WorkPreference> = mutableMapOf(),
+    /** Whether the user has dark mode enabled for the app */
+    var darkMode: Boolean = false
 ) {
 
     /**

@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
@@ -16,7 +17,6 @@ import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
-import com.github.leuludyha.ibdb.util.EmptyNavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -121,7 +121,7 @@ fun DefaultPreview() {
 
     IBDBTheme {
         ReadingList(
-            navController = EmptyNavHostController(),
+            navController = rememberNavController(),
             preferences = preferences
         )
     }
