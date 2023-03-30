@@ -60,6 +60,7 @@ dependencies {
 
     // Mock web server
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
+    androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
 
     // Google truth for assertions
     testImplementation "com.google.truth:truth:1.1.3"

@@ -7,6 +7,7 @@ package android.util
 
 fun e(tag: String, msg: String, t: Throwable): Int {
     println("ERROR: $tag: $msg")
+    println("THROWABLE: $t.toString()")
     return 0
 }
 

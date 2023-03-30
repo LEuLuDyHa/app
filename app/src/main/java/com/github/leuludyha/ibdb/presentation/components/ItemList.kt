@@ -23,7 +23,7 @@ fun <T : Keyed> ItemList(
     val content: LazyListScope.() -> Unit = {
         items(
             items = values,
-            key = { it.getId() }
+            key = { it.Id() }
         ) { itemMapper(it) }
     }
 
