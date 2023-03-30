@@ -98,7 +98,7 @@ fun SignInScreen(
             LaunchedEffect(signedIn) {
                 if (signedIn) {
                     navController.navigate(
-                        route = Screen.Home.route
+                        route = Screen.Profile.route
                     )
                 }
             }

@@ -37,6 +37,9 @@ fun NavGraph(navController: NavHostController) {
             composable(route = Screen.Profile.route) {
                 ProfileScreen(navController, padding)
             }
+            composable(route = Screen.Profile.route) {
+                ProfileScreen(navController, padding)
+            }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
             }
