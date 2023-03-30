@@ -33,8 +33,6 @@ object RepositoryModule {
         libraryLocalDataSource: LibraryLocalDataSource
     ) : LibraryRepository =
         LibraryRepositoryImpl(libraryRemoteDataSource, libraryLocalDataSource)
-    fun provideOpenLibraryRepository(libraryRemoteDataSource: LibraryRemoteDataSource) : LibraryRepository =
-        LibraryRepositoryImpl(libraryRemoteDataSource)
 
     @Provides
     fun oneTapClient(

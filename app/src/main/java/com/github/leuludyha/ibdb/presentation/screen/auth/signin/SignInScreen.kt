@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.CircularProgressIndicator
@@ -16,15 +17,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.github.leuludyha.domain.model.Result
+import androidx.navigation.NavHostController
+import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.ui.navigation.BottomToolbar
+import com.github.leuludyha.ibdb.presentation.navigation.BottomToolbar
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
+    navController: NavHostController,
+    padding: PaddingValues,
     viewModel: SignInViewModel = hiltViewModel()
 ) {
 
@@ -42,7 +46,7 @@ fun SignInScreen(
                 }
             }
         },
-        bottomBar = { BottomToolbar() }
+        bottomBar = { BottomToolbar(navController) }
     )
 
     val launcher = rememberLauncherForActivityResult(

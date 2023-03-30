@@ -9,7 +9,7 @@ import com.github.leuludyha.domain.repository.OneTapSignInResponse
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import com.github.leuludyha.domain.model.Result
+import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.SignInWithGoogleResponse
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential

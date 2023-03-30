@@ -1,7 +1,7 @@
 package com.github.leuludyha.data.repository
 
 import android.util.Log
-import com.github.leuludyha.domain.model.Result
+import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.OneTapSignInResponse
 import com.github.leuludyha.domain.repository.SignInWithGoogleResponse
