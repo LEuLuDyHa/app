@@ -33,6 +33,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
+/**
+ * SignInScreen allows user to sign in with a button for Google One Tap
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
@@ -61,6 +64,8 @@ fun SignInScreen(
         },
     )
 
+    // will invoke firebaseSignIn() when oneTapSignInResponse
+    // once we have a response from OneTapSignIn
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
@@ -93,7 +98,7 @@ fun SignInScreen(
 
     // FirebaseSignIn
     when(val signInWithGoogleResponse = viewModel.firebaseSignInResponse) {
-        is Result.Loading -> CircularProgressIndicator()
+        is Result.Loading -> {} // TODO CircularProgressIndicator()
         is Result.Success -> signInWithGoogleResponse.data?.let { signedIn ->
             LaunchedEffect(signedIn) {
                 if (signedIn) {

@@ -15,12 +15,17 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
 import kotlinx.coroutines.launch
 
+/**
+ * ViewModel for the SignIn screen,
+ * gives the UI access to the responses current values
+ */
 @HiltViewModel
 class SignInViewModel @Inject constructor(
     val oneTapClient: SignInClient, // TODO AR
     private val signInUseCases: SignInUseCases
 ) : ViewModel() {
 
+    // variables keep track of the state of the request and can be observed by the UI
     var oneTapSignInResponse by mutableStateOf<OneTapSignInResponse>(Result.Loading())
         private set
     var firebaseSignInResponse by mutableStateOf<SignInWithGoogleResponse>(Result.Loading())
