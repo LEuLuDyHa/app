@@ -40,7 +40,11 @@ fun BookSearchScreen(
             horizontalArrangement = Arrangement.Center
         ) {
             SearchBar(
-                outerPadding = PaddingValues(top = padding.calculateTopPadding(), start = padding.calculateStartPadding(LayoutDirection.Ltr), end = padding.calculateEndPadding(LayoutDirection.Ltr)),
+                outerPadding = PaddingValues(
+                    top = padding.calculateTopPadding(),
+                    start = padding.calculateStartPadding(LayoutDirection.Ltr),
+                    end = padding.calculateEndPadding(LayoutDirection.Ltr)
+                ),
                 onDone = viewModel::searchWorks
             )
         }
@@ -67,7 +71,7 @@ fun BookSearchScreen(
                                 route = Screen.BookDetails.passBookId(clickedWork.Id())
                             )
                         },
-                        orientation = Orientation.Vertical,
+                        orientation = Orientation.Horizontal,
                         displaySubjects = true
                     )
                 },
