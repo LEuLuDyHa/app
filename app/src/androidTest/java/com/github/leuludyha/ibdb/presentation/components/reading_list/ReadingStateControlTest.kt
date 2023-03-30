@@ -35,7 +35,7 @@ class ReadingStateControlTest {
             WorkPreference(work, WorkPreference.ReadingState.READING, true)
         )
 
-        state = preferences.preferencesByWorkId[work.getId()]!!
+        state = preferences.preferencesByWorkId[work.id]!!
 
         composeTestRule.setContent {
             ReadingStateControl(work = work, userPreferences = preferences)
@@ -68,12 +68,12 @@ class ReadingStateControlTest {
         likeButton.performClick()
         assertThat(
             "Work is no longer in preferences",
-            !preferences.preferencesByWorkId.containsKey(work.getId())
+            !preferences.preferencesByWorkId.containsKey(work.id)
         )
         likeButton.performClick()
         assertThat(
             "Work is back in preferences",
-            preferences.preferencesByWorkId.containsKey(work.getId())
+            preferences.preferencesByWorkId.containsKey(work.id)
         )
     }
 

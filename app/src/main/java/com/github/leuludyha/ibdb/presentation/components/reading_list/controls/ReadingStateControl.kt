@@ -37,7 +37,7 @@ object TestTags {
  * - have finished reading the book
  */
 @Composable
-private fun ReadingStateControl(
+fun ReadingStateControl(
     work: Work,
     userPreferences: UserPreferences,
 ) {
