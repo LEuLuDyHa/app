@@ -29,7 +29,7 @@ private fun ReadingStateControl(
 ) {
     val (liked, setLiked) = remember {
         mutableStateOf(
-            userPreferences.workPreferences.containsKey(work.getId())
+            userPreferences.workPreferences.containsKey(work.Id())
         )
     }
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
@@ -38,16 +38,16 @@ private fun ReadingStateControl(
         setLiked(like)
 
         if (!like) {
-            userPreferences.workPreferences.remove(work.getId())
+            userPreferences.workPreferences.remove(work.Id())
         } else {
-            userPreferences.workPreferences[work.getId()] = WorkPreference(
+            userPreferences.workPreferences[work.Id()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
         }
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
-        userPreferences.workPreferences[work.getId()]?.let {
+        userPreferences.workPreferences[work.Id()]?.let {
             it.readingState = readingState
         }
         setExpanded(false)
@@ -78,7 +78,7 @@ private fun ReadingStateControl(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )
                 ) {
-                    userPreferences.workPreferences[work.getId()]?.let {
+                    userPreferences.workPreferences[work.Id()]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer

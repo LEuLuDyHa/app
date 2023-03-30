@@ -28,8 +28,8 @@ class WorkPreference(
         }
     }
 
-    override fun getId(): String {
-        return this.work.getId(); }
+    override fun Id(): String {
+        return this.work.id; }
 
     /**
      * @return A string displaying a text depending on whether or not

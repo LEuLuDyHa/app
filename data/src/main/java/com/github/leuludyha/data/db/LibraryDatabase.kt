@@ -7,13 +7,16 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [
-        Work::class,
-        Author::class,
-        Cover::class,
-        Edition::class,
+        WorkEntity::class,
+        AuthorEntity::class,
+        CoverEntity::class,
+        SubjectEntity::class,
+        EditionEntity::class,
+        AuthorCoverCrossRef::class,
         WorkAuthorCrossRef::class,
         WorkEditionCrossRef::class,
         WorkCoverCrossRef::class,
+        WorkSubjectCrossRef::class,
         EditionAuthorCrossRef::class,
         EditionCoverCrossRef::class,
     ],
@@ -22,7 +25,6 @@ import androidx.room.RoomDatabase
 )
 abstract class LibraryDatabase : RoomDatabase() {
     abstract fun libraryDao(): LibraryDao
-
     companion object {
         // Singleton prevents multiple instances of database opening at the
         // same time.

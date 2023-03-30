@@ -1,16 +1,23 @@
 package com.github.leuludyha.domain.repository
 
+import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
+import kotlinx.coroutines.flow.Flow
 
 interface LibraryRepository {
-    suspend fun search(query: String): Result<List<Work>>
-    suspend fun workById(workId: String): Result<Work>
-    suspend fun worksByAuthorId(authorId: String): Result<List<Work>>
-    suspend fun editionsByWorkId(workId: String): Result<List<Edition>>
-    suspend fun editionById(editionId: String): Result<Edition>
-    suspend fun editionByISBN(isbn: Long): Result<Edition>
-    suspend fun authorById(authorId: String): Result<Author>
+    fun searchRemotely(query: String): Flow<PagingData<Work>>
+    fun getWorkRemotely(workId: String): Flow<Result<Work>>
+    fun getEditionRemotely(editionId: String): Flow<Result<Edition>>
+    fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>>
+    fun getAuthorRemotely(authorId: String): Flow<Result<Author>>
+    suspend fun saveWorkLocally(work: Work): Unit
+    suspend fun saveAuthorLocally(author: Author): Unit
+    suspend fun saveEditionLocally(edition: Edition): Unit
+    // TODO SAVE COVERS
+    fun getWorkLocally(workId: String): Flow<Work>
+    fun getAuthorLocally(authorId: String): Flow<Author>
+    fun getEditionLocally(editionId: String): Flow<Edition>
 }
