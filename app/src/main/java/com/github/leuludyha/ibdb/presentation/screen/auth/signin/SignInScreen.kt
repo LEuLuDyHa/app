@@ -38,7 +38,8 @@ fun SignInScreen(
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ) {
                 Button(
@@ -67,7 +68,7 @@ fun SignInScreen(
 
     // OneTapSignIn
     when(val oneTapSignInResponse = viewModel.oneTapSignInResponse) {
-        is Result.Loading -> CircularProgressIndicator()
+        is Result.Loading -> {} // TODO CircularProgressIndicator()
         is Result.Success -> oneTapSignInResponse.data?.let {
             Log.i("one tap sign in response success", oneTapSignInResponse.data.toString())
             LaunchedEffect(it) {
@@ -82,16 +83,13 @@ fun SignInScreen(
 
     // FirebaseSignIn
     when(val signInWithGoogleResponse = viewModel.firebaseSignInResponse) {
-        is Result.Loading ->  CircularProgressIndicator()
+        is Result.Loading -> {} // TODO CircularProgressIndicator()
         is Result.Success -> signInWithGoogleResponse.data?.let { signedIn ->
             Log.i("firebase sign in response success", signedIn.toString())
             LaunchedEffect(signedIn) {
                 if (signedIn) {
                     navController.navigate(
-
-
-
-                        route = Screen.Home.route
+                        route = Screen.Profile.route
                     )
                 }
             }
