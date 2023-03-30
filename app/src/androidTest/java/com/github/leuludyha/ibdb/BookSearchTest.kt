@@ -9,15 +9,19 @@ import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.repository.LibraryRepository
-import com.github.leuludyha.domain.useCase.SearchUseCase
+import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearchViewModel
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreenViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -46,7 +50,7 @@ class BookSearchTest {
                 composable(route = Screen.BookSearch.route) {
                     BookSearch(
                         navController, PaddingValues(), BookSearchViewModel(
-                            SearchUseCase(LibraryRepositoryMock())
+                            SearchRemotelyUseCase(LibraryRepositoryMock())
                         )
                     ) {
                         //Does nothing for this test
@@ -77,7 +81,7 @@ class BookSearchTest {
 
     @Test
     fun searchEffectivelyRetrievesOneWorkAfterSearching() {
-        var result: List<Work>? = null
+        var result: LazyPagingItems<Work>? = null
 
         composeTestRule.setContent {
             //No need for a (working) navigator in this test
@@ -87,7 +91,7 @@ class BookSearchTest {
                 navController = navController,
                 outerPadding = PaddingValues(),
                 viewModel = BookSearchViewModel(
-                    SearchUseCase(LibraryRepositoryMock())
+                    SearchRemotelyUseCase(LibraryRepositoryMock())
                 )
             ) {
                 result = it
@@ -108,7 +112,7 @@ class BookSearchTest {
             result != null
         }
 
-        assertEquals(listOf(Mocks.work), result)
+        assertEquals(listOf(Mocks.work), result?.itemSnapshotList?.items)
     }
 
     //I am not sure that this is a good test returning that Result.Loading doesn't look ideal to me
@@ -122,9 +126,7 @@ class BookSearchTest {
                 navController = navController,
                 outerPadding = PaddingValues(),
                 viewModel = BookSearchViewModel(
-                    SearchUseCase(LibraryRepositoryMock {
-                        return@LibraryRepositoryMock Result.Loading()
-                    })
+                    SearchRemotelyUseCase(LibraryRepositoryMock {null})
 
                 )
             ) {
@@ -157,32 +159,43 @@ class BookSearchTest {
 /**
  * This mock class is created to control the kind of requests the view model will make.
  */
-private class LibraryRepositoryMock(val searchReturn: () -> Result<List<Work>> = { Result.Success(listOf(Mocks.work)) }) : LibraryRepository {
-    override suspend fun search(query: String): Result<List<Work>> {
-        return searchReturn.invoke()
+private class LibraryRepositoryMock(
+    val searchReturn: () -> PagingData<Work>? = { PagingData.from(listOf(Mocks.work)) }
+) : LibraryRepository {
+
+    override fun searchRemotely(query: String): Flow<PagingData<Work>> =
+        searchReturn()?.let { flowOf(it) } ?: flowOf()
+
+    override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
+        flowOf(Result.Success(Mocks.work))
+
+    override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
+        flowOf(Result.Error("Couldn't retrieve any edition"))
+
+    override fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>> =
+        flowOf(Result.Error("Couldn't retrieve any edition"))
+
+    override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
+        flowOf(Result.Success(Mocks.author))
+
+    override suspend fun saveWorkLocally(work: Work) {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun workById(workId: String): Result<Work> {
-        return Result.Success(Mocks.work)
+    override suspend fun saveAuthorLocally(author: Author) {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun worksByAuthorId(authorId: String): Result<List<Work>> {
-        return Result.Success(listOf(Mocks.work))
+    override suspend fun saveEditionLocally(edition: Edition) {
+        TODO("Not yet implemented")
     }
 
-    override suspend fun editionsByWorkId(workId: String): Result<List<Edition>> {
-        return Result.Error("Couldn't retrieve any edition")
-    }
+    override fun getWorkLocally(workId: String): Flow<Work> =
+        flowOf(Mocks.work)
 
-    override suspend fun editionById(editionId: String): Result<Edition> {
-        return Result.Error("Couldn't retrieve any edition")
-    }
+    override fun getAuthorLocally(authorId: String): Flow<Author> =
+        flowOf(Mocks.author)
 
-    override suspend fun editionByISBN(isbn: Long): Result<Edition> {
-        return Result.Error("Couldn't retrieve any edition")
-    }
-
-    override suspend fun authorById(authorId: String): Result<Author> {
-        return Result.Success(Mocks.author)
-    }
+    override fun getEditionLocally(editionId: String): Flow<Edition> =
+        flowOf()
 }
