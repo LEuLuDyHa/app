@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.screen.auth.signin
 
 import android.app.Activity
 import android.util.Log
+import androidx.compose.ui.res.stringResource
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -24,6 +25,7 @@ import com.github.leuludyha.ibdb.presentation.navigation.BottomToolbar
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,7 +49,7 @@ fun SignInScreen(
                         viewModel.oneTapSignIn()
                     }
                 ) {
-                    Text(text = "Sign In") // TODO some string resource constant ?
+                    Text(text = stringResource(R.string.Sign_In_button))
                 }
             }
         },
@@ -85,7 +87,6 @@ fun SignInScreen(
     when(val signInWithGoogleResponse = viewModel.firebaseSignInResponse) {
         is Result.Loading -> {} // TODO CircularProgressIndicator()
         is Result.Success -> signInWithGoogleResponse.data?.let { signedIn ->
-            Log.i("firebase sign in response success", signedIn.toString())
             LaunchedEffect(signedIn) {
                 if (signedIn) {
                     navController.navigate(
