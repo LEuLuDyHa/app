@@ -12,8 +12,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
-import com.github.leuludyha.ibdb.util.EmptyNavHostController
 
 @Composable
 fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
@@ -80,5 +80,5 @@ sealed class TabDescriptor(
 @Preview
 @Composable
 fun DefaultPreview() {
-    IBDBTheme { BottomToolbar(EmptyNavHostController()) }
+    IBDBTheme { BottomToolbar(rememberNavController()) }
 }
