@@ -2,7 +2,6 @@ package com.github.leuludyha.ibdb.presentation.screen.auth.signin
 
 import android.app.Activity
 import android.util.Log
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.navigation.BottomToolbar
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
@@ -45,10 +45,14 @@ fun SignInScreen(
             Box(
                 modifier = Modifier
                     .padding(paddingValues)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
                 contentAlignment = Alignment.Center
             ) {
-                Button(onClick = { viewModel.oneTapSignIn() }
+                Button(
+                    onClick = {
+                        viewModel.oneTapSignIn()
+                    }
                 ) {
                     Text(text = stringResource(id = R.string.sign_in_label))
                 }
@@ -73,7 +77,7 @@ fun SignInScreen(
 
     // OneTapSignIn
     when(val oneTapSignInResponse = viewModel.oneTapSignInResponse) {
-        is Result.Loading -> CircularProgressIndicator()
+        is Result.Loading -> {} // TODO CircularProgressIndicator()
         is Result.Success -> oneTapSignInResponse.data?.let {
             Log.i("one tap sign in response success", oneTapSignInResponse.data.toString())
             LaunchedEffect(it) {
