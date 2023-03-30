@@ -13,6 +13,7 @@ import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
+import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.util.Constant
 
@@ -30,6 +31,9 @@ fun NavGraph(navController: NavHostController) {
         ) {
             composable(route = Screen.SignIn.route) {
                 SignInScreen(navController)
+            }
+            composable(route = Screen.Profile.route) {
+                ProfileScreen(navController, padding)
             }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
