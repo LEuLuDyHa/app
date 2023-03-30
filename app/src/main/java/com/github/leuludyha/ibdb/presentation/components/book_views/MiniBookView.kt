@@ -3,22 +3,17 @@ package com.github.leuludyha.ibdb.presentation.components.book_views
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import coil.size.Scale
-import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.library.formatListToText
+import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
 
@@ -26,22 +21,19 @@ import com.github.leuludyha.ibdb.presentation.Orientation
 fun MiniBookView(
     work: Work,
     onClick: (work: Work) -> Unit,
-    viewModel: MiniBookViewModel = hiltViewModel(),
     orientation: Orientation = Orientation.Vertical,
     footer: (@Composable (work: Work) -> Unit)? = null,
     displaySubjects: Boolean = true,
 ) {
-    val (authors, setAuthors) = remember { mutableStateOf<List<Author>?>(null); }
-
-    SideEffect {
-        viewModel.getAuthorsOf(work) { setAuthors(it) }
-    }
 
     when (orientation) {
-        Orientation.Vertical -> VerticalBookView(work, authors, onClick, footer, displaySubjects)
+        Orientation.Vertical -> VerticalBookView(
+            work,
+            onClick,
+            footer,
+            displaySubjects)
         Orientation.Horizontal -> HorizontalBookView(
             work,
-            authors,
             onClick,
             footer,
             displaySubjects
@@ -53,11 +45,14 @@ fun MiniBookView(
 @Composable
 private fun VerticalBookView(
     work: Work,
-    authors: List<Author>?,
     onClick: (work: Work) -> Unit,
     footer: (@Composable (work: Work) -> Unit)? = null,
     displaySubjects: Boolean,
 ) {
+    val covers = work.covers.collectAsState(initial = listOf())
+    val authors = work.authors.collectAsState(initial = listOf())
+    val subjects = work.subjects.collectAsState(initial = listOf())
+
     ElevatedCard(
         modifier = Modifier
             .wrapContentHeight()
@@ -77,7 +72,7 @@ private fun VerticalBookView(
                     .height(300.dp)
                     .fillMaxWidth(),
                 painter = rememberImagePainter(
-                    data = work.coverUrls[0].invoke(CoverSize.Large),
+                    data =  covers.value.firstOrNull()?.urlForSize(CoverSize.Large),
                     builder = {
                         crossfade(true)
                         scale(Scale.FILL)
@@ -100,18 +95,17 @@ private fun VerticalBookView(
                 }
                 Spacer(modifier = Modifier.height(1.dp))
                 // Display the name of the authors
-                authors?.let {
-                    Text(
-                        text = formatListToText(it),
-                        color = MaterialTheme.colorScheme.secondary,
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.testTag("worklist::author_name")
-                    )
-                }
+                Text(
+                    text = authors.value.toText(),
+                    color = MaterialTheme.colorScheme.secondary,
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.testTag("worklist::author_name")
+                )
+
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
                 if (displaySubjects) {
-                    SubjectList(subjectNames = work.subjects)
+                    SubjectList(subjectNames = subjects.value)
                 }
 
                 Spacer(modifier = Modifier.height(3.dp))
@@ -127,11 +121,14 @@ private fun VerticalBookView(
 @Composable
 private fun HorizontalBookView(
     work: Work,
-    authors: List<Author>?,
     onClick: (work: Work) -> Unit,
     footer: (@Composable (work: Work) -> Unit)? = null,
     displaySubjects: Boolean
 ) {
+    val covers = work.covers.collectAsState(initial = listOf())
+    val authors = work.authors.collectAsState(initial = listOf())
+    val subjects = work.subjects.collectAsState(initial = listOf())
+
     ElevatedCard(
         modifier = Modifier
             .height(100.dp)
@@ -143,10 +140,10 @@ private fun HorizontalBookView(
             modifier = Modifier.fillMaxSize()
         ) {
             // Display the book's thumbnail
-            if (work.coverUrls.isNotEmpty()) {
+            if (covers.value.isNotEmpty()) {
                 Image(
                     painter = rememberImagePainter(
-                        data = work.coverUrls[0].invoke(CoverSize.Medium),
+                        data = covers.value.firstOrNull()?.urlForSize(CoverSize.Medium),
                         builder = {
                             crossfade(true)
                             scale(Scale.FILL)
@@ -170,18 +167,17 @@ private fun HorizontalBookView(
 
                 Spacer(modifier = Modifier.height(1.dp))
                 // Display the name of the authors
-                authors?.let {
-                    Text(
-                        text = formatListToText(it),
-                        style = MaterialTheme.typography.titleSmall,
-                        modifier = Modifier.testTag("worklist::author_name")
-                    )
-                }
+                Text(
+                    text = authors.value.toText(),
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.testTag("worklist::author_name")
+                )
+
 
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
                 if (displaySubjects) {
-                    SubjectList(subjectNames = work.subjects)
+                    SubjectList(subjectNames = subjects.value)
                 }
 
                 Spacer(modifier = Modifier.height(3.dp))

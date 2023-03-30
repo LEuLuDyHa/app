@@ -5,11 +5,11 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 data class WorkWithCovers(
-    @Embedded val work: Work,
+    @Embedded val work: WorkEntity,
     @Relation(
         parentColumn = "workId",
         entityColumn = "coverId",
         associateBy = Junction(WorkCoverCrossRef::class)
     )
-    val covers: List<Cover>
+    val covers: List<CoverEntity>
 )

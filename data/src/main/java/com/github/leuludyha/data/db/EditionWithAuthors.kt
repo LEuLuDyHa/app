@@ -5,11 +5,11 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 data class EditionWithAuthors(
-    @Embedded val edition: Edition,
+    @Embedded val edition: EditionEntity,
     @Relation(
         parentColumn = "editionId",
         entityColumn = "authorId",
         associateBy = Junction(EditionAuthorCrossRef::class)
     )
-    val authors: List<Author>
+    val authors: List<AuthorEntity>
 )
