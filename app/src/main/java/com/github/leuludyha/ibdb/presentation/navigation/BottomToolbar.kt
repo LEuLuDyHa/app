@@ -1,10 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LibraryBooks
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,7 +20,8 @@ fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
         TabDescriptor.Home,
         TabDescriptor.Search,
         TabDescriptor.Collection,
-        TabDescriptor.Profile
+        TabDescriptor.Maps,
+        TabDescriptor.Profile,
     )
 
     BottomAppBar {
@@ -74,6 +72,13 @@ sealed class TabDescriptor(
     object Profile : TabDescriptor(
         "Profile", Icons.Filled.AccountCircle,
         onClick = { }
+    )
+
+    object Maps : TabDescriptor(
+        "Maps", Icons.Filled.MapsUgc,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.GoogleMaps.route)
+        }
     )
 }
 

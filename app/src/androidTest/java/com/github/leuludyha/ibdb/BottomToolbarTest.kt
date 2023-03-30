@@ -7,8 +7,7 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import clickOnBottomTab
-import com.github.leuludyha.ibdb.presentation.navigation.Maps
-import com.github.leuludyha.ibdb.presentation.navigation.Search
+import com.github.leuludyha.ibdb.presentation.navigation.TabDescriptor
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -34,7 +33,7 @@ class BottomToolbarTest {
             .assertDoesNotExist()
 
         composeTestRule
-            .clickOnBottomTab(Maps)
+            .clickOnBottomTab(TabDescriptor.Maps)
 
         composeTestRule
             .onNodeWithTag("GoogleMaps::main")
@@ -44,7 +43,7 @@ class BottomToolbarTest {
     @Test
     fun searchToolbarSlotOpensSearchComposableWithSearchField() {
         composeTestRule
-            .clickOnBottomTab(Search)
+            .clickOnBottomTab(TabDescriptor.Search)
 
         composeTestRule
             .onNodeWithTag("book_search::search_field")
@@ -54,7 +53,7 @@ class BottomToolbarTest {
     @Test
     fun searchToolbarSlotOpensSearchComposableWithScanButton() {
         composeTestRule
-            .clickOnBottomTab(Search)
+            .clickOnBottomTab(TabDescriptor.Search)
 
         composeTestRule
             .onNodeWithTag("book_search::barcode_scan_button")
