@@ -2,6 +2,7 @@
     <string name="app_name">IBDB</string>
     <string name="title_activity_greeting">GreetingActivity</string>
     <string name="ui_bookCover_altText">Book cover</string>
+    <string name="title_activity_google_maps">GoogleMaps</string>
     <string name="ui_authentication_notauthenticated">Please authenticate in order to see this content !</string>
     <string name="book_like">Add to Reading List</string>
     <string name="book_dislike">Remove from Reading List</string>
