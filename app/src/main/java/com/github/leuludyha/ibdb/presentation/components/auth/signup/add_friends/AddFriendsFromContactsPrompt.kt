@@ -17,13 +17,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.interfaces.Keyed
-import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPromptBase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletionException
 import javax.inject.Inject
 
 
@@ -85,7 +87,7 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
 
     @HiltViewModel
     class AddFriendsFromContactsViewModel @Inject constructor(
-        // TODO Import user datasource and find users from contacts
+        private val getUserFromPhoneNumberUseCase: GetUserFromPhoneNumberUseCase
     ) : ViewModel() {
 
         /**
@@ -155,8 +157,23 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
          * Return the list of existing users in the database which this user make know
          */
         fun getPossibleAcquaintances(contacts: List<Contact>): List<User> {
-            return List(contacts.size) { Mocks.mainUser }
-            // TODO("Not yet implemented")
+            // Map phone numbers to users
+            val userFutures = contacts
+                .filter { it.isPhoneNumberValid() }
+                .map { getUserFromPhoneNumberUseCase(it.phoneNumber!!) }
+
+            return CompletableFuture.allOf(*userFutures.toTypedArray())
+                .thenApply {
+                    userFutures.mapNotNull {
+                        try {
+                            it.join()
+                        }
+                        // Just ignore users if not found
+                        catch (e: CompletionException) {
+                            null
+                        }
+                    }.toList()
+                }.join()
         }
     }
 

@@ -2,13 +2,16 @@ package com.github.leuludyha.ibdb.di
 
 import android.app.Application
 import android.content.Context
-import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.data.repository.AuthRepositoryImpl
 import com.github.leuludyha.data.repository.LibraryRepositoryImpl
+import com.github.leuludyha.data.repository.UserRepositoryImpl
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
+import com.github.leuludyha.data.users.UserDatabase
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
+import com.github.leuludyha.domain.repository.UserRepository
+import com.github.leuludyha.ibdb.R
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.ktx.auth
@@ -51,6 +54,11 @@ object RepositoryModule {
         db = Firebase.firestore
     )
 
+    @Provides
+    fun provideUserRepository(
+        userDatabase: UserDatabase
+    ): UserRepository = UserRepositoryImpl(userDatabase)
+
     private fun signInRequest(app: Application, filterAccounts: Boolean) =
         BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -58,7 +66,8 @@ object RepositoryModule {
                     .setSupported(true)
                     .setServerClientId(app.getString(R.string.web_client_id))
                     .setFilterByAuthorizedAccounts(filterAccounts)
-                    .build())
+                    .build()
+            )
             .setAutoSelectEnabled(true)
             .build()
 

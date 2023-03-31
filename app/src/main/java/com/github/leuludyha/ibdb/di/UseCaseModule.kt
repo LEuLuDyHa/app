@@ -2,11 +2,13 @@ package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
+import com.github.leuludyha.domain.repository.UserRepository
 import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.FirebaseSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.OneTapSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases
+import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,4 +35,8 @@ object UseCaseModule {
     @Provides
     fun getWorkByIdUseCase(libraryRepository: LibraryRepository) =
         GetWorkRemotelyUseCase(libraryRepository)
+
+    @Provides
+    fun getUserFromPhoneNumberUseCase(userRepository: UserRepository) =
+        GetUserFromPhoneNumberUseCase(userRepository)
 }
