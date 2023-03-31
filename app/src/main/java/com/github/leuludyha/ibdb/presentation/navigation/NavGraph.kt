@@ -19,8 +19,6 @@ import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.util.Constant
 
-// TODO some kind of linking between NavGraph and BottomToolbar
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavGraph(navController: NavHostController) {
@@ -33,6 +31,9 @@ fun NavGraph(navController: NavHostController) {
         ) {
             composable(route = Screen.SignIn.route) {
                 SignInScreen(navController, padding)
+            }
+            composable(route = Screen.Profile.route) {
+                ProfileScreen(navController, padding)
             }
             composable(route = Screen.Profile.route) {
                 ProfileScreen(navController, padding)

@@ -16,9 +16,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.traceEventEnd
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,6 +31,9 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
+/**
+ * SignInScreen allows user to sign in with a button for Google One Tap
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignInScreen(
@@ -61,6 +62,8 @@ fun SignInScreen(
         },
     )
 
+    // will invoke firebaseSignIn() when oneTapSignInResponse
+    // once we have a response from OneTapSignIn
     val launcher = rememberLauncherForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
@@ -78,7 +81,8 @@ fun SignInScreen(
 
     // OneTapSignIn
     when(val oneTapSignInResponse = viewModel.oneTapSignInResponse) {
-        is Result.Loading -> {} // TODO CircularProgressIndicator()
+        null -> {} // not started yet
+        is Result.Loading -> {} // Google pane already has an indicator // CircularProgressIndicator()
         is Result.Success -> oneTapSignInResponse.data?.let {
             Log.i("one tap sign in response success", oneTapSignInResponse.data.toString())
             LaunchedEffect(it) {
@@ -93,7 +97,17 @@ fun SignInScreen(
 
     // FirebaseSignIn
     when(val signInWithGoogleResponse = viewModel.firebaseSignInResponse) {
-        is Result.Loading -> CircularProgressIndicator()
+        null -> {} // not started yet
+        is Result.Loading ->
+            Column(
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(50.dp)
+                    .fillMaxWidth().fillMaxHeight()
+            ) {
+                CircularProgressIndicator()
+            }
         is Result.Success -> signInWithGoogleResponse.data?.let { signedIn ->
             LaunchedEffect(signedIn) {
                 if (signedIn) {

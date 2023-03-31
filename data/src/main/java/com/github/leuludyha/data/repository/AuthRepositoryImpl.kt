@@ -12,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 
+/**
+ * Implementation of [AuthRepository] interface,
+ * using googles BeginSignInRequest and Firebase Auth
+ */
 class AuthRepositoryImpl(
     private var oneTapClient: SignInClient,
     private var signInRequest: BeginSignInRequest,
