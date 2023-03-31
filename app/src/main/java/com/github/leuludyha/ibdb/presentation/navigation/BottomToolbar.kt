@@ -39,6 +39,10 @@ val Maps = TabDescriptor(
 val Profile = TabDescriptor(
     "Profile", Icons.Filled.AccountCircle
 )
+    { navHost ->
+        navHost.navigate(route = Screen.UserProfile.route)
+    }
+
 
 @Composable
 fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) {
