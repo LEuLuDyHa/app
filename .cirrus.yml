@@ -5,6 +5,7 @@ container:
   kvm: true
 env:
   CC_TEST_REPORTER_ID: ENCRYPTED[6f94a7691e8d78e5ac1036722528fbf5e723b334ce612ae73d3a7b4933319182635e77870e01f6b1b04db9ec58be671d]
+  MAPS_API_KEY: ENCRYPTED[b187a2e09f6dbd94b420653932920bc150569d8712d2475af92db2dbc4fb65bb88757d6db32706b5211c21b9e300a28f]
 check_android_task:
   name: Run Android tests
   install_emulator_script:
@@ -24,6 +25,7 @@ check_android_task:
     -camera-back none
   assemble_instrumented_tests_script: |
     chmod +x gradlew
+    echo MAPS_API_KEY=$MAPS_API_KEY >> local.properties
     ./gradlew assembleDebugAndroidTest
   wait_for_avd_script:
     adb wait-for-device shell 'while [[ -z $(getprop sys.boot_completed) ]]; do sleep 3; done; input keyevent 82'

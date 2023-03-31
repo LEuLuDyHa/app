@@ -1,9 +1,8 @@
-package com.github.leuludyha.ibdb.presentation.screen.barcode
+package com.github.leuludyha.ibdb.presentation.screen.search.barcode
 
 import android.Manifest
 import android.util.Log
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
@@ -16,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.BarcodeAnalyser
+import com.github.leuludyha.ibdb.util.Constant
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -29,16 +30,30 @@ import com.google.common.util.concurrent.ListenableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-// TODO REMOVE
+/**
+ * This composable will launch the camera and start an analyzer on what is being recorded looking
+ * for barcodes.
+ *
+ * It will make sure that scanned barcodes are valid and return to the calling view once it founds one.
+ * To recover the first found barcode as a string, access the calling savedStateHandle with
+ * key Constant.BARCODE_RESULT_KEY.
+ * Note that when called, it will automatically check that the camera permissions are enabled, no need to do it
+ * from the caller.
+ */
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun BarcodeScreen(
     navController: NavHostController,
-    outerPadding: PaddingValues,
     viewModel: BarcodeScreenViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
+
+    val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
+
+    LaunchedEffect(cameraPermissionState) {
+        cameraPermissionState.launchPermissionRequest()
+    }
 
     SideEffect {
         systemUiController.setStatusBarColor(color = systemBarColor)
@@ -50,19 +65,12 @@ fun BarcodeScreen(
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        val cameraPermissionState = rememberPermissionState(permission = Manifest.permission.CAMERA)
-
-        Button(
-            onClick = {
-                cameraPermissionState.launchPermissionRequest()
-            }
-        ) {
-            Text(text = "Camera Permission")
+        CameraPreview {isbn ->
+            navController.previousBackStackEntry
+                ?.savedStateHandle
+                ?.set(Constant.BARCODE_RESULT_KEY, isbn)
+            navController.popBackStack()
         }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        CameraPreview { }
     }
 }
 
@@ -85,6 +93,7 @@ fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
         },
         modifier = Modifier
             .fillMaxSize()
+            .testTag("barcode_screen::camera_layout")
             .padding(50.dp),
         update = { previewView ->
 
@@ -110,7 +119,6 @@ fun CameraPreview(barcodeFoundCallback: (String) -> Unit) {
                     barcodes.forEach { barcode ->
                         barcode.rawValue?.let { barcodeValue ->
                             if (BarcodeAnalyser.checkISBNCode(barcodeValue)) {
-                                Toast.makeText(context, barcodeValue, Toast.LENGTH_LONG).show()
                                 barcodeFoundCallback(barcodeValue)
                             }
                         }

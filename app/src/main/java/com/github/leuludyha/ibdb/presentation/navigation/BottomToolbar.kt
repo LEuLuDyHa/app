@@ -1,10 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.navigation
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.LibraryBooks
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -33,6 +30,12 @@ val Collection = TabDescriptor(
     navHost.navigate(route = Screen.Collection.route)
 }
 
+val Maps = TabDescriptor(
+    "Maps", Icons.Filled.Map
+) { navHost ->
+    navHost.navigate(route = Screen.GoogleMaps.route)
+}
+
 val Profile = TabDescriptor(
     "Profile", Icons.Filled.AccountCircle
 )
@@ -42,7 +45,7 @@ fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) 
     var selectedItem by remember { mutableStateOf(defaultSelection) }
 
     val tabs = listOf(
-        Home, Search, Collection, Profile
+        Home, Search, Collection, Maps, Profile
     )
 
     BottomAppBar {
