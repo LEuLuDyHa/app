@@ -1,12 +1,15 @@
-package com.github.leuludyha.domain.model.user
+package com.github.leuludyha.domain.model.user.preferences
 
 import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.domain.model.library.Work
+import java.util.*
 
-class WorkPreference(
+open class WorkPreference(
     val work: Work,
     var readingState: ReadingState,
     val possessed: Boolean,
+    /** If present : From 0 to 1. If absent, means the work was not rated */
+    val rating: Optional<Float>,
 ) : Keyed {
 
     enum class ReadingState {

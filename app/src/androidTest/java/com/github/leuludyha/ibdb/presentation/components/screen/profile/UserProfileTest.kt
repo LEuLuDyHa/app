@@ -12,7 +12,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.User
-import com.github.leuludyha.domain.model.user.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfileViewModel
 import org.junit.Before
