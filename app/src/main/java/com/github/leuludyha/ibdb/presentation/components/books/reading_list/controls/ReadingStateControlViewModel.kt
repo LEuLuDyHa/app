@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.reading_list.controls
+package com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls
 
 import androidx.lifecycle.ViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext

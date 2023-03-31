@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.book_views
+package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
