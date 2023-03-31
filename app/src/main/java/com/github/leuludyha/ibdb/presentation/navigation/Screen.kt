@@ -4,7 +4,10 @@ sealed class Screen(val route: String) {
     object SignIn : Screen("sign_in_screen")
     object Profile : Screen("profile_screen")
     object Home : Screen("home_screen")
-    object BookSearch : Screen("book_search_screen")
+    object BookSearch : Screen("book_search_screen/{searchQuery}") {
+        fun passQuery(query: String) = "book_search_screen/$query"
+    }
+
     object Collection : Screen("collection")
     object BarcodeScan : Screen("barcode_scan")
     object BookDetails : Screen("book_details_screen/{bookId}") {

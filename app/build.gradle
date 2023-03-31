@@ -84,11 +84,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
 
-    // For instrumented tests.
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
-    // ...with Kotlin.
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
-
     // Coil
     implementation("io.coil-kt:coil-compose:1.4.0")
     // System UI Controller - Accompanist
@@ -107,6 +102,7 @@ dependencies {
     implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation "com.google.firebase:firebase-auth-ktx"
     implementation "com.google.firebase:firebase-firestore-ktx"
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.1.2'
 
     //Play Services
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
@@ -154,6 +150,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

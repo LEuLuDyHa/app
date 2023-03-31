@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.BarcodeAnalyser
-import com.github.leuludyha.ibdb.util.Constant
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -67,11 +67,10 @@ fun BarcodeScreen(
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        CameraPreview {isbn ->
-            navController.previousBackStackEntry
-                ?.savedStateHandle
-                ?.set(Constant.BARCODE_RESULT_KEY, isbn)
-            navController.popBackStack()
+        CameraPreview { isbn ->
+            navController.navigate(
+                route = Screen.BookSearch.passQuery(isbn)
+            )
         }
     }
 }

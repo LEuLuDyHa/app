@@ -37,8 +37,23 @@ fun NavGraph(navController: NavHostController) {
             composable(route = Screen.BarcodeScan.route) {
                 BarcodeScreen(navController, padding)
             }
-            composable(route = Screen.BookSearch.route) {
-                BookSearchScreen(navController, padding)
+            composable(
+                route = Screen.BookSearch.route,
+                arguments = listOf(navArgument(Constant.SEARCH_QUERY_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                })
+            ) { backStackEntry ->
+                backStackEntry.arguments
+                    ?.getString(Constant.SEARCH_QUERY_ARGUMENT_KEY)
+                    .let { arg ->
+                        var query: String? = null
+                        if (arg != "{${Constant.SEARCH_QUERY_ARGUMENT_KEY}}" && arg != null) {
+                            query = arg
+                        }
+                        BookSearchScreen(
+                            navController, padding, query = query
+                        )
+                    }
             }
             composable(
                 route = Screen.BookDetails.route,
