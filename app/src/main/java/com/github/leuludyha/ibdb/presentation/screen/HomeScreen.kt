@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.components.reading_list.ReadingList
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

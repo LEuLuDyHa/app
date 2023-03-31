@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.reading_list.controls
+package com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
