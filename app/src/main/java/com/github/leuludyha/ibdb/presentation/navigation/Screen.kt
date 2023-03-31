@@ -8,6 +8,8 @@ sealed class Screen(val route: String) {
     object BookDetails : Screen("book_details_screen/{bookId}") {
         fun passBookId(bookId: String) = "book_details_screen/$bookId"
     }
+
     object FindBook : Screen("find_book")
+    object UserProfile : Screen("user_profile")
     object GoogleMaps : Screen("maps")
 }
