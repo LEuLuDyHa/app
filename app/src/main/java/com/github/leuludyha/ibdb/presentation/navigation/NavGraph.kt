@@ -8,15 +8,14 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.github.leuludyha.ibdb.presentation.screen.auth.signin.SignInScreen
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
-import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
-import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
+import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
+import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.util.Constant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,14 +26,8 @@ fun NavGraph(navController: NavHostController) {
     ) { padding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.SignIn.route
+            startDestination = Screen.Home.route
         ) {
-            composable(route = Screen.SignIn.route) {
-                SignInScreen(navController, padding)
-            }
-            composable(route = Screen.Profile.route) {
-                ProfileScreen(navController, padding)
-            }
             composable(route = Screen.Profile.route) {
                 ProfileScreen(navController, padding)
             }

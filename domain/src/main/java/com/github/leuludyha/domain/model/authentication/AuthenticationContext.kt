@@ -8,8 +8,5 @@ import com.github.leuludyha.domain.model.user.User
  * including the principal : The identity of the user currently logged in
  */
 open class AuthenticationContext(
-    val principal: User?,
-) {
-
-    object Empty : AuthenticationContext(null)
-}
+    val principal: User,
+)

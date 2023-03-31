@@ -106,6 +106,7 @@ fun BookSearch(
         // display the component given as arg while providing it
         // with the result of the query
         AnimatedVisibility(visible = foundWorks.itemCount != 0) {
+            viewModel.queryLoading.value = false
             onBooksFoundContent(foundWorks)
         }
     }

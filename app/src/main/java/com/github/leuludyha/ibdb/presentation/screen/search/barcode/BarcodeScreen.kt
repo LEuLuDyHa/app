@@ -44,6 +44,7 @@ import java.util.concurrent.Executors
 @Composable
 fun BarcodeScreen(
     navController: NavHostController,
+    padding: PaddingValues,
     viewModel: BarcodeScreenViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
@@ -60,6 +61,7 @@ fun BarcodeScreen(
     }
 
     Column(
+        modifier = Modifier.padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {

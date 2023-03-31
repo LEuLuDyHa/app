@@ -15,18 +15,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 @Composable
-private fun ReadingStateControl(
+fun ReadingStateControl(
     work: Work,
-    userPreferences: UserPreferences,
+    viewModel: ReadingStateControlViewModel = hiltViewModel()
 ) {
+    val userPreferences = viewModel.userPreferences
+
     val (liked, setLiked) = remember {
         mutableStateOf(
             userPreferences.workPreferences.containsKey(work.Id())
@@ -107,9 +109,6 @@ private fun ReadingStateControl(
 @Composable
 fun DefaultPreview() {
     IBDBTheme {
-        ReadingStateControl(
-            Mocks.work,
-            Mocks.userPreferences
-        )
+        ReadingStateControl(Mocks.work1984)
     }
 }

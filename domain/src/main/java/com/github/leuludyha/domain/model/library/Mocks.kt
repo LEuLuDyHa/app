@@ -17,27 +17,37 @@ object Mocks {
         photos = flowOf(listOf(Cover(12919044L)))
     )
 
-    val work: Work = Work(
+    val work1984: Work = Work(
         title = "1984",
-        id = "12919044",
+        id = "OL1168083W",
         editions = flowOf(listOf()),
         authors = flowOf(listOf(author)),
-        covers = flowOf(listOf (Cover(12919044L))),
+        covers = flowOf(listOf(Cover(12725451L))),
         subjects = flowOf(listOf("Censorship", "Futurology", "Surveillance"))
+    )
+
+    val workLaFermeDesAnimaux: Work = Work(
+        title = "La Ferme des Animaux",
+        id = "OL26038920W",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf(author)),
+        covers = flowOf(listOf(Cover(13147152L))),
+        subjects = flowOf(listOf("Fiction", "Historical", "Political Science"))
     )
 
     val userPreferences: UserPreferences = UserPreferences(
         mutableMapOf(
+            Pair(work1984.id, WorkPreference(work1984, WorkPreference.ReadingState.READING, false)),
             Pair(
-                work.id, WorkPreference(
-                    work, WorkPreference.ReadingState.READING, false
-                )
+                workLaFermeDesAnimaux.id,
+                WorkPreference(workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true)
             )
         )
     )
 
     val user: User = User(
         username = "Mockentosh",
-        preferences = userPreferences
+        preferences = userPreferences,
+        profilePictureUrl = null
     )
 }

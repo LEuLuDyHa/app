@@ -8,6 +8,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.ibdb.presentation.navigation.NavGraph
+import com.github.leuludyha.ibdb.presentation.screen.auth.signin.AuthenticationProvider
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,6 +31,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     fun MainContent() {
         navController = rememberNavController()
-        NavGraph(navController = navController)
+
+        AuthenticationProvider {
+            NavGraph(navController = navController)
+        }
     }
 }
