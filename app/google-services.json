@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "342548490143",
+    "project_id": "ibdb-df1ac",
+    "storage_bucket": "ibdb-df1ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342548490143:android:c7a771410287b4d79d3faa",
+        "android_client_info": {
+          "package_name": "com.github.leuludyha.ibdb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342548490143-mbgdpsc27vnm4hvi0mues464kj3nk4gb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG6KLNEYtYC5DFJ-M5b5Ek-vSVCTNKqVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342548490143-mbgdpsc27vnm4hvi0mues464kj3nk4gb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

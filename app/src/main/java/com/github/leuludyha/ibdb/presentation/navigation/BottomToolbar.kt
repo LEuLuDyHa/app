@@ -9,19 +9,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 @Composable
-fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
+fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) {
     var selectedItem by remember { mutableStateOf(defaultSelection) }
 
     val tabs = listOf(
         TabDescriptor.Home,
         TabDescriptor.Search,
-        TabDescriptor.Collection,
         TabDescriptor.Maps,
-        TabDescriptor.Profile,
+        TabDescriptor.Profile
     )
 
     BottomAppBar {
@@ -33,7 +31,7 @@ fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
                     selected = selectedItem == index,
                     onClick = {
                         selectedItem = index
-                        tab.onClick(navController)
+                        navController?.let { tab.onClick(it) }
                     },
                     modifier = Modifier.testTag("bottomtoolbar::tab_item::${tab.displayName}")
                 )
@@ -41,6 +39,7 @@ fun BottomToolbar(navController: NavHostController, defaultSelection: Int = 0) {
         }
     }
 }
+
 
 sealed class TabDescriptor(
     val displayName: String,
@@ -69,21 +68,24 @@ sealed class TabDescriptor(
         }
     )
 
-    object Profile : TabDescriptor(
-        "Profile", Icons.Filled.AccountCircle,
-        onClick = { }
-    )
-
     object Maps : TabDescriptor(
-        "Maps", Icons.Filled.MapsUgc,
+        "Maps", Icons.Filled.Map,
         onClick = { navHost ->
             navHost.navigate(route = Screen.GoogleMaps.route)
         }
     )
+
+    object Profile : TabDescriptor(
+        "Profile", Icons.Filled.AccountCircle,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.UserProfile.route)
+        }
+    )
+
 }
 
 @Preview
 @Composable
 fun DefaultPreview() {
-    IBDBTheme { BottomToolbar(rememberNavController()) }
+    IBDBTheme { BottomToolbar(null) }
 }

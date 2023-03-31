@@ -13,61 +13,43 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
-import com.github.leuludyha.domain.util.TestTag
-import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
-object TestTags {
-    val readingStateController = TestTag("reading-state-dropdown")
-    val likeButton = TestTag("like-button")
-}
-
-/**
- * On the book details page of a work, allow a user to set if they :
- * - are interested in reading the book
- * - are currently reading the book
- * - have finished reading the book
- */
 @Composable
 fun ReadingStateControl(
     work: Work,
-    userPreferences: UserPreferences,
+    viewModel: ReadingStateControlViewModel = hiltViewModel()
 ) {
-    // Whether this work is liked by the user (added to its reading list)
+    val userPreferences = viewModel.userPreferences
+
     val (liked, setLiked) = remember {
         mutableStateOf(
-            // Initiate it to the userPreferences
-            userPreferences.preferencesByWorkId.containsKey(work.Id())
+            userPreferences.workPreferences.containsKey(work.Id())
         )
     }
-    // Whether the menu button is expanded (visible) or not
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
 
     fun onLikeButtonClicked(like: Boolean) {
         setLiked(like)
 
-        // If the user dislikes the work, remove it from its preferences
         if (!like) {
-            userPreferences.preferencesByWorkId.remove(work.Id())
-        // Otherwise, add it in its preferences, annotating it as interested and not possessed
+            userPreferences.workPreferences.remove(work.Id())
         } else {
-            userPreferences.preferencesByWorkId[work.Id()] = WorkPreference(
+            userPreferences.workPreferences[work.Id()] = WorkPreference(
                 work, WorkPreference.ReadingState.INTERESTED, false
             )
         }
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
-        // Set the reading state to the one set by the user using the menu button
-        userPreferences.preferencesByWorkId[work.Id()]?.let {
+        userPreferences.workPreferences[work.Id()]?.let {
             it.readingState = readingState
         }
         setExpanded(false)
@@ -79,11 +61,9 @@ fun ReadingStateControl(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { onLikeButtonClicked(!liked) },
-            colors = IconButtonDefaults.iconButtonColors(
+            onClick = { onLikeButtonClicked(!liked) }, colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
-            ),
-            modifier = Modifier.testTag(TestTags.likeButton),
+            )
         ) {
             if (!liked) {
                 Icon(Icons.Filled.FavoriteBorder, stringResource(id = R.string.book_like))
@@ -92,19 +72,15 @@ fun ReadingStateControl(
             }
         }
 
-        // Only display reading state controls if the work is "liked"
         if (liked) {
             Column {
                 Button(
                     onClick = { setExpanded(!expanded) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
-                    ),
-                    modifier = Modifier.testTag(TestTags.readingStateController.tag)
+                    )
                 ) {
-                    // Display the current reading state in a button,
-                    // Once it is clicked, a menu will appear with all states
-                    userPreferences.preferencesByWorkId[work.Id()]?.let {
+                    userPreferences.workPreferences[work.Id()]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer
@@ -112,7 +88,6 @@ fun ReadingStateControl(
                     }
                 }
 
-                // Menu of all possible reading state
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { setExpanded(false) }
@@ -134,9 +109,6 @@ fun ReadingStateControl(
 @Composable
 fun DefaultPreview() {
     IBDBTheme {
-        ReadingStateControl(
-            Mocks.work1984,
-            Mocks.userPreferences
-        )
+        ReadingStateControl(Mocks.work1984)
     }
 }

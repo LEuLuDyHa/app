@@ -57,7 +57,11 @@ class BookSearchTest {
                     }
                 }
                 composable(route = Screen.BarcodeScan.route) {
-                    BarcodeScreen(navController, BarcodeScreenViewModel())
+                    BarcodeScreen(
+                        navController,
+                        padding = PaddingValues(),
+                        BarcodeScreenViewModel()
+                    )
                 }
             }
         }

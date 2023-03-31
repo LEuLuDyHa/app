@@ -17,7 +17,6 @@ class BookSearchScreenViewModel @Inject constructor(
     private var useCase: SearchRemotelyUseCase
 ) : ViewModel() {
 
-
     private val _searchedWorks = MutableStateFlow<PagingData<Work>>(PagingData.empty())
     val searchedWorks = _searchedWorks
 
