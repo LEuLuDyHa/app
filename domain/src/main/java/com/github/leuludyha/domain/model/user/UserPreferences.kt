@@ -2,7 +2,7 @@ package com.github.leuludyha.domain.model.user
 
 class UserPreferences(
     /** Map WorkId -> WorkPreference */
-    var preferencesByWorkId: MutableMap<String, WorkPreference> = mutableMapOf()
+    var workPreferences: MutableMap<String, WorkPreference> = mutableMapOf()
 ) {
 
     /**
@@ -10,6 +10,6 @@ class UserPreferences(
      * in the user's preferences
      */
     fun addPreference(preference: WorkPreference) {
-        this.preferencesByWorkId[preference.work.id] = preference
+        this.workPreferences[preference.work.id] = preference
     }
 }

@@ -35,7 +35,7 @@ class ReadingListTest {
             WorkPreference(work1, WorkPreference.ReadingState.READING, true)
         )
 
-        state = preferences.preferencesByWorkId[work1.id]!!
+        state = preferences.workPreferences[work1.id]!!
 
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 

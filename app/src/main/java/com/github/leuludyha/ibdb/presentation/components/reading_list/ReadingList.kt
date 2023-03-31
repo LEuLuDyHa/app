@@ -31,7 +31,7 @@ fun ReadingList(
     // Use the ItemList component to display a list of works horizontally
     ItemList(
         // TODO Maybe change this to be sorted using user rating/ other factors
-        values = preferences.preferencesByWorkId.values.toList(),
+        values = preferences.workPreferences.values.toList(),
         modifier = Modifier.wrapContentSize()
     ) { preference ->
         Column(modifier = Modifier.wrapContentHeight()) {
