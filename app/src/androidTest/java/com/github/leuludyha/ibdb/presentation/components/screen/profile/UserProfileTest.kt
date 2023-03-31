@@ -33,7 +33,7 @@ class UserProfileTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val user = User("TestUser", UserPreferences())
+    private val user = User("TestUser", null, UserPreferences())
     private val authContext = AuthenticationContext(user)
     private val viewModel = UserProfileViewModel(authContext)
 

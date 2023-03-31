@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id "com.google.gms.google-services"
 }
 
 android {
@@ -74,6 +75,15 @@ dependencies {
 
     // Paging 3.0
     implementation "androidx.paging:paging-compose:$paging_version"
+
+    //Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+
+    //Play Services
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
+    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
 
     // Submodules
     implementation project(path: ':domain')

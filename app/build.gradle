@@ -5,6 +5,7 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'kotlin-kapt'
     id "dagger.hilt.android.plugin"
+    id "com.google.gms.google-services"
 }
 
 android {
@@ -18,13 +19,15 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-        buildConfigField("String","OPENLIBRARY_BASE_URL",OPENLIBRARY_BASE_URL)
-        buildConfigField("String","OPENLIBRARY_COVERS_URL",OPENLIBRARY_COVERS_URL)
+        buildConfigField("String", "OPENLIBRARY_BASE_URL", OPENLIBRARY_BASE_URL)
+        buildConfigField("String", "OPENLIBRARY_COVERS_URL", OPENLIBRARY_COVERS_URL)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
         }
+
+        testInstrumentationRunner = "com.github.leuludyha.ibdb.HiltTestRunner"
     }
 
     buildTypes {
@@ -69,6 +72,7 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
     implementation 'androidx.navigation:navigation-testing:2.5.3'
+    implementation 'androidx.compose.material:material:1.2.0'
 
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
@@ -79,6 +83,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0'
+
     // Coil
     implementation("io.coil-kt:coil-compose:1.4.0")
     // System UI Controller - Accompanist
@@ -92,6 +97,16 @@ dependencies {
 
     // Paging 3.0
     implementation "androidx.paging:paging-compose:$paging_version"
+
+    //Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+    implementation 'com.google.firebase:firebase-appcheck-debug:16.1.2'
+
+    //Play Services
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
+    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
 
     // Submodules
     implementation project(path: ':data')
@@ -135,6 +150,8 @@ dependencies {
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     implementation 'androidx.hilt:hilt-navigation-compose:1.1.0-alpha01'
+    androidTestImplementation("com.google.dagger:hilt-android-testing:2.44")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.44")
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

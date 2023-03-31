@@ -32,6 +32,7 @@ fun BookSearch(
     navController: NavHostController,
     outerPadding: PaddingValues,
     viewModel: BookSearchViewModel = hiltViewModel(),
+    query: String? = null,
     onBooksFoundContent: @Composable (LazyPagingItems<Work>) -> Unit,
 ) {
 
@@ -40,6 +41,13 @@ fun BookSearch(
     val searchQuery by viewModel.searchQuery
     val foundWorks = viewModel.searchedWorks.collectAsLazyPagingItems()
 
+    LaunchedEffect(Unit) {
+        if (query != null) {
+            viewModel.searchQuery.value = query
+            viewModel.searchWorks(query)
+        }
+    }
+
     val barcodeReadingResultState = navController.currentBackStackEntry
         ?.savedStateHandle
         ?.getLiveData<String>(Constant.BARCODE_RESULT_KEY)?.observeAsState()
@@ -47,7 +55,7 @@ fun BookSearch(
     barcodeReadingResultState?.value?.let {
         //This condition is meant to avoid this being called multiple times. It is a workaround and not
         //a fix of the main problem, since I couldn't find a fix. Moreover it looks like this behavior is not even deterministic.
-        if(!isReadingISBN) {
+        if (!isReadingISBN) {
             viewModel.updateIsReadingISBN(true)
             viewModel.searchWorks(it)
             navController.currentBackStackEntry
@@ -106,6 +114,7 @@ fun BookSearch(
         // display the component given as arg while providing it
         // with the result of the query
         AnimatedVisibility(visible = foundWorks.itemCount != 0) {
+            viewModel.queryLoading.value = false
             onBooksFoundContent(foundWorks)
         }
     }

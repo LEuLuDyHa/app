@@ -15,14 +15,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun BookSearchScreen(
     navController: NavHostController,
-    padding: PaddingValues
+    padding: PaddingValues,
+    query: String? = null
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
 
     SideEffect { systemUiController.setStatusBarColor(color = systemBarColor) }
 
-    BookSearch(navController = navController, outerPadding = padding) { queryResult ->
+    BookSearch(
+        navController = navController,
+        outerPadding = padding,
+        query = query
+    ) { queryResult ->
         PagingItemList(
             orientation = Orientation.Vertical,
             values = queryResult,

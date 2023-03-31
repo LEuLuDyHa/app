@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "342548490143",
+    "project_id": "ibdb-df1ac",
+    "storage_bucket": "ibdb-df1ac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342548490143:android:c7a771410287b4d79d3faa",
+        "android_client_info": {
+          "package_name": "com.github.leuludyha.data"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "342548490143-sut45k458aoqotoebjggkbqi6561rg3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "047a100a408e0f765e84bb0c4d4543126622bbc5"
+          }
+        },
+        {
+          "client_id": "342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDG6KLNEYtYC5DFJ-M5b5Ek-vSVCTNKqVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
