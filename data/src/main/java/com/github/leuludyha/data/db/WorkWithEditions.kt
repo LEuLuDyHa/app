@@ -5,11 +5,11 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 data class WorkWithEditions(
-    @Embedded val work: Work,
+    @Embedded val work: WorkEntity,
     @Relation(
         parentColumn = "workId",
         entityColumn = "editionId",
         associateBy = Junction(WorkEditionCrossRef::class)
     )
-    val editions: List<Edition>
+    val editions: List<EditionEntity>
 )

@@ -2,10 +2,10 @@ package com.github.leuludyha.data.api
 
 import com.github.leuludyha.domain.model.library.Edition
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
 
 /**
- * Editions of a given work.
+ * Raw work editions' response of the API. Not user friendly, used internally and then converted into
+ * the `List<`[Edition]`>` model class.
  */
 data class RawWorkEditions(
     @SerializedName("links")
@@ -16,8 +16,10 @@ data class RawWorkEditions(
     val editions: List<RawEdition>?,
     @SerializedName("error")
     override val error: String?,
-) : Serializable, ErrorProne, Raw<List<Edition>> {
-    override fun toModel(libraryApi: LibraryApi): List<Edition> =
-        editions?.map {rawEdition -> rawEdition.toModel(libraryApi) } ?: listOf()
-
+): ErrorProne, Raw<List<Edition>> {
+    override fun toModel(libraryApi: LibraryApi): List<Edition>? =
+        if (error != null)
+            null
+        else
+            editions?.mapNotNull {rawEdition -> rawEdition.toModel(libraryApi) } ?: listOf()
 }

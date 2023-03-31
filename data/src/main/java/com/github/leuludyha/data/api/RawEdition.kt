@@ -1,16 +1,15 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.api.ApiHelper.authorKeysToAuthors
-import com.github.leuludyha.data.api.ApiHelper.coverIdsToCoverUrls
-import com.github.leuludyha.data.api.ApiHelper.extractIdFrom
-import com.github.leuludyha.data.api.ApiHelper.workKeysToWorks
+import com.github.leuludyha.data.api.ApiHelper.extractIdFromKey
+import com.github.leuludyha.data.api.ApiHelper.rawResponseToModel
+import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
 import com.google.gson.annotations.SerializedName
-import java.io.Serializable
+import kotlinx.coroutines.flow.flow
 
 /**
- * Raw response of the Editions API. Not user friendly. Used only in the `data` layer,
- * to be transformed to `Edition` before going into the `domain`.
+ * Raw editions's response of the API. Not user friendly, used internally and then converted into
+ * the [Edition] model class.
  */
 data class RawEdition(
     @SerializedName("title")
@@ -29,14 +28,48 @@ data class RawEdition(
     val coverIds: List<Long>?,
     @SerializedName("error")
     override val error: String?,
-): Serializable, ErrorProne, Raw<Edition> {
+): ErrorProne, Raw<Edition> {
+    override fun toModel(libraryApi: LibraryApi): Edition? {
+        if (extractIdFromKey(key, "/books/") == null || error != null)
+            return null
 
-    override fun toModel(libraryApi: LibraryApi): Edition =
-        Edition(
-            title = this.title,
-            id = extractIdFrom(this.key, "/books/"),
-            fetchAuthors =  { authorKeysToAuthors(authorRawKeys?.mapNotNull { it.key }, libraryApi) },
-            fetchWorks = { workKeysToWorks(workRawKeys?.mapNotNull { it.key }, libraryApi) },
-            coverUrls = coverIdsToCoverUrls(coverIds),
+        val authors = flow {
+            emit(authorRawKeys
+                .orEmpty()
+                .mapNotNull { extractIdFromKey(it.key, "/authors/") }
+                .map { libraryApi.getAuthor(it) }
+                .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
+            )
+        }
+
+        val works = flow {
+            emit(workRawKeys
+                .orEmpty()
+                .mapNotNull { extractIdFromKey(it.key, "/works/") }
+                .map { libraryApi.getWork(it) }
+                .mapNotNull { rawResponseToModel(it, libraryApi) }
+                .distinct()
+            )
+        }
+
+        val covers = flow {
+            emit(coverIds
+                .orEmpty()
+                .filter{ it > 0 }
+                .map { Cover(it) }
+                .distinct()
+            )
+        }
+
+        return Edition(
+            id = extractIdFromKey(key, "/books/")!!,
+            title = title,
+            isbn10 = isbn10?.firstOrNull(),
+            isbn13 = isbn13?.firstOrNull(),
+            authors = authors,
+            works = works,
+            covers = covers,
         )
+    }
 }
