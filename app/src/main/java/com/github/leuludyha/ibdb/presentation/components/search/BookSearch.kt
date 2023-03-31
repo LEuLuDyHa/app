@@ -80,14 +80,11 @@ fun BookSearch(
             )
 
             Button(
-                modifier = Modifier
-                    .testTag("book_search::barcode_scan_button"),
+                modifier = Modifier.testTag("book_search::barcode_scan_button"),
                 onClick = {
                     navController.navigate(Screen.BarcodeScan.route)
                 }
-            ) {
-                Text(text = "Scanner")
-            }
+            ) { Text(text = "Scanner") }
         }
         if (queryLoading) {
             Column(
@@ -106,6 +103,7 @@ fun BookSearch(
         // display the component given as arg while providing it
         // with the result of the query
         AnimatedVisibility(visible = foundWorks.itemCount != 0) {
+            viewModel.queryLoading.value = false
             onBooksFoundContent(foundWorks)
         }
     }
