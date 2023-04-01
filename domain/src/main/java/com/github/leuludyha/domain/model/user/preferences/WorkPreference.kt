@@ -7,9 +7,9 @@ import java.util.*
 open class WorkPreference(
     val work: Work,
     var readingState: ReadingState,
-    val possessed: Boolean,
+    val possessed: Boolean = false,
     /** If present : From 0 to 1. If absent, means the work was not rated */
-    val rating: Optional<Float>,
+    val rating: Optional<Float> = Optional.empty(),
 ) : Keyed {
 
     enum class ReadingState {

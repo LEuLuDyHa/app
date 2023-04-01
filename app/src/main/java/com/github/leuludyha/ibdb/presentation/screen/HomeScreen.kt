@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
+import com.github.leuludyha.ibdb.presentation.components.books.recommendations.RecommendationList
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -46,5 +48,12 @@ fun HomeScreen(
             navController = navController,
             preferences = userPreferences
         )
+        Divider()
+        Text(
+            modifier = Modifier.padding(start = 10.dp, top = 10.dp),
+            text = stringResource(id = R.string.recommendation_list_title),
+            style = MaterialTheme.typography.headlineMedium
+        )
+        RecommendationList(navController)
     }
 }

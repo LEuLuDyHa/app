@@ -39,3 +39,15 @@ fun <L1, R1, R2> Pair<L1, R1>.mapSecond(mapper: (R1) -> R2): Pair<L1, R2> {
 
 /** @return Return a map from a string */
 fun <L, R> Stream<Pair<L, R>>.toMap() = this.toList().toMap()
+
+/** @return Return a map from a string */
+fun Stream<Float>.sum(): Float = this.toList().sum()
+
+/**
+ * If [this] is a map of key -> Weight, where weight is a float from 0 to +oo,
+ * return the map of normalized weights : key -> weight' where weight' is a float from 0 to 1
+ */
+fun <K> Map<K, Float>.normalizedWeights(): Map<K, Float> {
+    val sum: Float = this.values.sum()
+    return this.mapValues { it.value / sum }
+}

@@ -13,6 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfileViewModel
 import org.junit.Before
@@ -33,7 +34,14 @@ class UserProfileTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val user = User("TestUser", null, UserPreferences())
+    private val user = User(
+        "TestUser", null, UserPreferences(), UserStatistics(
+            preferredWorks = listOf(),
+            preferredSubjects = listOf(),
+            preferredAuthors = listOf(),
+            averageNumberOfPages = 0
+        ), friends = listOf()
+    )
     private val authContext = AuthenticationContext(user)
     private val viewModel = UserProfileViewModel(authContext)
 
