@@ -21,7 +21,6 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
     override suspend fun saveWork(work: Work) =
         libraryDao.insert(work)
 
-
     override suspend fun saveEdition(edition: Edition) =
         libraryDao.insert(edition)
 

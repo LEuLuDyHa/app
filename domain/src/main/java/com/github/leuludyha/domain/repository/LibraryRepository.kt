@@ -13,9 +13,10 @@ interface LibraryRepository {
     fun getEditionRemotely(editionId: String): Flow<Result<Edition>>
     fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>>
     fun getAuthorRemotely(authorId: String): Flow<Result<Author>>
-    suspend fun saveWorkLocally(work: Work): Unit
-    suspend fun saveAuthorLocally(author: Author): Unit
-    suspend fun saveEditionLocally(edition: Edition): Unit
+    suspend fun saveWorkLocally(work: Work)
+    suspend fun saveAuthorLocally(author: Author)
+    suspend fun saveEditionLocally(edition: Edition)
+
     // TODO SAVE COVERS
     fun getWorkLocally(workId: String): Flow<Work>
     fun getAuthorLocally(authorId: String): Flow<Author>
