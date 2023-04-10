@@ -1,7 +1,11 @@
 package com.github.leuludyha.data.db
 
 import androidx.room.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 
 @Dao
 interface LibraryDao {
@@ -128,4 +132,76 @@ interface LibraryDao {
     @Transaction
     @Query("SELECT * FROM editions WHERE editionId LIKE :editionId")
     fun getEditionWithCovers(editionId: String): Flow<EditionWithCovers>
+
+    suspend fun insert(work: Work) {
+        val workEntity = WorkEntity.from(work)
+
+        val authors = work.authors.firstOrNull()
+        val authorEntities = authors?.map{ AuthorEntity.from(it) }
+        val workAuthorCrossRefs = authors?.map { WorkAuthorCrossRef.from(work, it) }
+
+        val editions = work.editions.firstOrNull()
+        val editionEntities = editions?.map{ EditionEntity.from(it) }
+        val workEditionCrossRefs = editions?.map { WorkEditionCrossRef.from(work, it) }
+
+        val subjects = work.subjects.firstOrNull()
+        val subjectEntities = subjects?.map{ SubjectEntity.from(it) }
+        val workSubjectCrossRefs = subjects?.map { WorkSubjectCrossRef.from(work, it) }
+
+        val covers = work.covers.firstOrNull()
+        val coverEntities = covers?.map{ CoverEntity.from(it) }
+        val workCoverCrossRefs = covers?.map { WorkCoverCrossRef.from(work, it) }
+
+        insert(workEntity)
+        authorEntities?.forEach { insert(it) }
+        workAuthorCrossRefs?.forEach { insert(it) }
+        editionEntities?.forEach { insert(it) }
+        workEditionCrossRefs?.forEach { insert(it) }
+        subjectEntities?.forEach { insert(it) }
+        workSubjectCrossRefs?.forEach { insert(it) }
+        coverEntities?.forEach { insert(it) }
+        workCoverCrossRefs?.forEach { insert(it) }
+    }
+
+    suspend fun insert(edition: Edition) {
+        val editionEntity = EditionEntity.from(edition)
+
+        val authors = edition.authors.firstOrNull()
+        val authorEntities = authors?.map{ AuthorEntity.from(it) }
+        val editionAuthorCrossRefs = authors?.map { EditionAuthorCrossRef.from(edition, it) }
+
+        val works = edition.works.firstOrNull()
+        val workEntities = works?.map{ WorkEntity.from(it) }
+        val editionWorkCrossRefs = works?.map { WorkEditionCrossRef.from(it, edition) }
+
+        val covers = edition.covers.firstOrNull()
+        val coverEntities = covers?.map{ CoverEntity.from(it) }
+        val editionCoverCrossRefs = covers?.map { EditionCoverCrossRef.from(edition, it) }
+        
+        insert(editionEntity)
+        authorEntities?.forEach { insert(it) }
+        editionAuthorCrossRefs?.forEach { insert(it) }
+        workEntities?.forEach { insert(it) }
+        editionWorkCrossRefs?.forEach { insert(it) }
+        coverEntities?.forEach { insert(it) }
+        editionCoverCrossRefs?.forEach { insert(it) }
+    }
+
+    suspend fun insert(author: Author) {
+        val authorEntity = AuthorEntity.from(author)
+
+        val works = author.works.firstOrNull()
+        val workEntities = works?.map{ WorkEntity.from(it) }
+        val authorWorkCrossRefs = works?.map { WorkAuthorCrossRef.from(it, author) }
+
+        val covers = author.photos.firstOrNull()
+        val coverEntities = covers?.map{ CoverEntity.from(it) }
+        val authorCoverCrossRefs = covers?.map { AuthorCoverCrossRef.from(author, it) }
+
+        insert(authorEntity)
+        workEntities?.forEach { insert(it) }
+        authorWorkCrossRefs?.forEach { insert(it) }
+        coverEntities?.forEach { insert(it) }
+        authorCoverCrossRefs?.forEach { insert(it) }
+    }
 }
