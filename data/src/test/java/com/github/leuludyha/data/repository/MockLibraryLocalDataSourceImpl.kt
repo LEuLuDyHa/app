@@ -1,4 +1,4 @@
-package com.github.leuludyha.data
+package com.github.leuludyha.data.repository
 
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.domain.model.library.Author

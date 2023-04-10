@@ -1,7 +1,8 @@
 package com.github.leuludyha.data.db
 
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.leuludyha.data.RequiringLibraryDatabaseTest
 import com.github.leuludyha.data.TestUtils.author1
 import com.github.leuludyha.data.TestUtils.author2
 import com.github.leuludyha.data.TestUtils.author3
@@ -24,11 +25,23 @@ import com.github.leuludyha.data.db.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class LibraryDaoTest: RequiringLibraryDatabaseTest() {
+class LibraryDaoTest {
+
+    lateinit var libraryDao: LibraryDao
+
+    @Before
+    fun setup() {
+        val libraryDatabase = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            LibraryDatabase::class.java
+        ).allowMainThreadQueries().build()
+        libraryDao = libraryDatabase.libraryDao()
+    }
 
     @Test
     fun getWorkGivesExpectedResult() {

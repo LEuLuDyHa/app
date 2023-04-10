@@ -1,6 +1,5 @@
-package com.github.leuludyha.data
+package com.github.leuludyha.data.repository
 
-import com.github.leuludyha.data.repository.LibraryRepositoryImpl
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.library.Mocks.authorGeorgeOrwell

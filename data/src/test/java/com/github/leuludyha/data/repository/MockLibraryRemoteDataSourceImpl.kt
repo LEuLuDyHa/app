@@ -1,4 +1,4 @@
-package com.github.leuludyha.data
+package com.github.leuludyha.data.repository
 
 import androidx.paging.PagingData
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
