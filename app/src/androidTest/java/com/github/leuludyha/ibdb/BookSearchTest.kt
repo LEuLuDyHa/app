@@ -202,4 +202,8 @@ private class LibraryRepositoryMock(
 
     override fun getEditionLocally(editionId: String): Flow<Edition> =
         flowOf()
+
+    override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
+        flowOf()
+
 }
