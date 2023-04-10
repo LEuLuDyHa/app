@@ -41,6 +41,7 @@ class MockDomainLibraryRepository: LibraryRepository {
 
     override suspend fun saveWorkLocally(work: Work) {
         savedWorks[work.id] = work
+        println("### " + savedWorks[work.id])
     }
 
     override suspend fun saveAuthorLocally(author: Author) {
@@ -52,19 +53,19 @@ class MockDomainLibraryRepository: LibraryRepository {
     }
 
     override fun getWorkLocally(workId: String): Flow<Work> =
-        if (savedWorks[workId] == null)
+        if (savedWorks[workId] != null)
             flowOf(savedWorks[workId]!!)
         else
             flowOf()
 
     override fun getAuthorLocally(authorId: String): Flow<Author> =
-        if (savedAuthors[authorId] == null)
+        if (savedAuthors[authorId] != null)
             flowOf(savedAuthors[authorId]!!)
         else
             flowOf()
 
     override fun getEditionLocally(editionId: String): Flow<Edition> =
-        if (savedEditions[editionId] == null)
+        if (savedEditions[editionId] != null)
             flowOf(savedEditions[editionId]!!)
         else
             flowOf()
