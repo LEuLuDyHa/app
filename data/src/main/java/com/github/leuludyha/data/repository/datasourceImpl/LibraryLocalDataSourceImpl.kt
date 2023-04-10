@@ -13,6 +13,8 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
         libraryDao.getWork(workId).map { it.toModel(libraryDao) }
     override fun getEdition(editionId: String): Flow<Edition> =
         libraryDao.getEdition(editionId).map { it.toModel(libraryDao) }
+    override fun getEditionByISBN(isbn: String): Flow<Edition> =
+        libraryDao.getEditionByISBN(isbn).map { it.toModel(libraryDao) }
     override fun getAuthor(authorId: String): Flow<Author> =
         libraryDao.getAuthor(authorId).map { it.toModel(libraryDao) }
     override fun getCover(coverId: Long): Flow<Cover> =

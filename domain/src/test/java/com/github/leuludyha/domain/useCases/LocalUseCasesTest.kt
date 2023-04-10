@@ -1,12 +1,12 @@
 package com.github.leuludyha.domain.useCases
 
-import com.github.leuludyha.domain.MockDomainLibraryRepository
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockAuthor
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockEdition
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockWork
+import com.github.leuludyha.domain.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
+import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.*
@@ -22,29 +22,29 @@ class LocalUseCasesTest {
 
     @Before
     fun setup() = runBlocking {
-        libraryRepository = MockDomainLibraryRepository()
+        libraryRepository = MockLibraryRepositoryImpl()
 
-        libraryRepository.saveWorkLocally(mockWork)
-        libraryRepository.saveEditionLocally(mockEdition)
-        libraryRepository.saveAuthorLocally(mockAuthor)
+        libraryRepository.saveWorkLocally(workMrFox)
+        libraryRepository.saveEditionLocally(editionMrFox)
+        libraryRepository.saveAuthorLocally(authorRoaldDahl)
     }
 
     @Test
     fun getWorkLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetWorkLocallyUseCase(libraryRepository)(mockWork.id).first())
-            .isEqualTo(mockWork)
+        assertThat(GetWorkLocallyUseCase(libraryRepository)(workMrFox.id).first())
+            .isEqualTo(workMrFox)
     }
 
     @Test
     fun getEditionLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetEditionLocallyUseCase(libraryRepository)(mockEdition.id).first())
-            .isEqualTo(mockEdition)
+        assertThat(GetEditionLocallyUseCase(libraryRepository)(editionMrFox.id).first())
+            .isEqualTo(editionMrFox)
     }
 
     @Test
     fun getAuthorLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetAuthorLocallyUseCase(libraryRepository)(mockAuthor.id).first())
-            .isEqualTo(mockAuthor)
+        assertThat(GetAuthorLocallyUseCase(libraryRepository)(authorRoaldDahl.id).first())
+            .isEqualTo(authorRoaldDahl)
     }
 
     @Test

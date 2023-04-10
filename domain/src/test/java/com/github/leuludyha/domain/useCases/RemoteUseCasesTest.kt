@@ -1,9 +1,9 @@
 package com.github.leuludyha.domain.useCases
 
-import com.github.leuludyha.domain.MockDomainLibraryRepository
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockAuthor
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockEdition
-import com.github.leuludyha.domain.MockDomainLibraryRepository.Companion.mockWork
+import com.github.leuludyha.domain.MockLibraryRepositoryImpl
+import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
+import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.GetAuthorRemotelyUseCase
@@ -21,7 +21,7 @@ class RemoteUseCasesTest {
 
     @Before
     fun setup() = runBlocking {
-        libraryRepository = MockDomainLibraryRepository()
+        libraryRepository = MockLibraryRepositoryImpl()
     }
 
     @Test
@@ -31,8 +31,8 @@ class RemoteUseCasesTest {
 
     @Test
     fun getWorkRemotelyUseCaseGivesCorrectResultOnSuccess() = runBlocking {
-        val data = GetWorkRemotelyUseCase(libraryRepository)(mockWork.id).first().data
-        assertThat(data).isEqualTo(mockWork)
+        val data = GetWorkRemotelyUseCase(libraryRepository)(workMrFox.id).first().data
+        assertThat(data).isEqualTo(workMrFox)
     }
 
     @Test
@@ -44,8 +44,8 @@ class RemoteUseCasesTest {
 
     @Test
     fun getEditionRemotelyUseCaseGivesCorrectResultOnSuccess() = runBlocking {
-        val data = GetEditionRemotelyUseCase(libraryRepository)(mockEdition.id).first().data
-        assertThat(data).isEqualTo(mockEdition)
+        val data = GetEditionRemotelyUseCase(libraryRepository)(editionMrFox.id).first().data
+        assertThat(data).isEqualTo(editionMrFox)
     }
 
     @Test
@@ -57,8 +57,8 @@ class RemoteUseCasesTest {
 
     @Test
     fun getAuthorRemotelyUseCaseGivesCorrectResultOnSuccess() = runBlocking {
-        val data = GetAuthorRemotelyUseCase(libraryRepository)(mockAuthor.id).first().data
-        assertThat(data).isEqualTo(mockAuthor)
+        val data = GetAuthorRemotelyUseCase(libraryRepository)(authorRoaldDahl.id).first().data
+        assertThat(data).isEqualTo(authorRoaldDahl)
     }
 
     @Test
@@ -70,8 +70,8 @@ class RemoteUseCasesTest {
 
     @Test
     fun getEditionByISBNRemotelyUseCaseGivesCorrectResultOnSuccess() = runBlocking {
-        val data = GetEditionByISBNRemotelyUseCase(libraryRepository)(mockEdition.isbn13!!).first().data
-        assertThat(data).isEqualTo(mockEdition)
+        val data = GetEditionByISBNRemotelyUseCase(libraryRepository)(editionMrFox.isbn13!!).first().data
+        assertThat(data).isEqualTo(editionMrFox)
     }
 
     @Test

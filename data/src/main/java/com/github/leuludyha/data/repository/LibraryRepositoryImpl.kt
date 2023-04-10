@@ -70,4 +70,12 @@ class LibraryRepositoryImpl(
      */
     override fun getEditionLocally(editionId: String): Flow<Edition> =
         libraryLocalDataSource.getEdition(editionId)
+
+    /**
+     * @return the result of a local [Edition] work query for the given edition isbn.
+     * It can be either an ISBN10 or ISBN13.
+     */
+    override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
+        libraryLocalDataSource.getEditionByISBN(isbn)
+
 }
