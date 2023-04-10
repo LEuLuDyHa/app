@@ -27,7 +27,7 @@ data class AuthorEntity (
                 .map { authorWWorks -> authorWWorks.works
                     .map { it.toModel(libraryDao) }
                  },
-            photos = libraryDao.getAuthorWithCovers(authorId)
+            covers = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers
                     .map { it.toModel(libraryDao)}
                 },

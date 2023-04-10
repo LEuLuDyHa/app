@@ -14,7 +14,7 @@ object Mocks {
         deathDate = null,
         wikipedia = null,
         works = flowOf(listOf()),
-        photos = flowOf(listOf(Cover(12919044L)))
+        covers = flowOf(listOf(Cover(12919044L)))
     )
 
     val work1984: Work = Work(
