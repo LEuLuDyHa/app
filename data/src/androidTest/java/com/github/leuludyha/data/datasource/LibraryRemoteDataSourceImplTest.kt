@@ -27,6 +27,7 @@ class LibraryRemoteDataSourceImplTest {
     private lateinit var remoteDataSource: LibraryRemoteDataSource
     private lateinit var mockWebServer: MockWebServer
 
+    private lateinit var searchResponse: MockResponse
     private lateinit var workResponse: MockResponse
     private lateinit var authorResponse: MockResponse
     private lateinit var editionResponse: MockResponse
@@ -54,6 +55,7 @@ class LibraryRemoteDataSourceImplTest {
         val editionJson = readFromJsonFile("getEdition.json")
         val authorJson = readFromJsonFile("getAuthor.json")
         val workJson = readFromJsonFile("getWork.json")
+        val searchJson = readFromJsonFile("search_2docs.json")
 
         editionResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -64,6 +66,9 @@ class LibraryRemoteDataSourceImplTest {
         workResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(workJson)
+        searchResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(searchJson)
         errorResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_NOT_FOUND)
             .setBody("error")
@@ -72,8 +77,13 @@ class LibraryRemoteDataSourceImplTest {
     }
 
     @Test
-    fun searchGivesCorrectResult() {
-        // TODO How to deal with PagingData?
+    fun searchGivesCorrectResult() = runBlocking {
+        mockWebServer.enqueue(searchResponse)
+
+        val result = remoteDataSource.search("query").first()
+        assertThat(result).isNotNull()
+
+        // TODO how to test PagingData content ?
     }
 
     @Test

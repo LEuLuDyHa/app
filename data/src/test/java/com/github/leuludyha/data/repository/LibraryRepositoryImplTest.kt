@@ -38,7 +38,7 @@ class LibraryRepositoryImplTest {
     fun searchRemotelyGivesCorrectResultOnSuccess() = runBlocking {
         val data = libraryRepository.searchRemotely("query").first()
         assertThat(data).isNotNull()
-        // TODO how to test PagingData ?
+        // TODO how to test PagingData content ?
     }
 
     @Test
