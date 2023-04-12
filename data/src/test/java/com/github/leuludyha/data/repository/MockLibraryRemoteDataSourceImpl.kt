@@ -3,17 +3,17 @@ package com.github.leuludyha.data.repository
 import androidx.paging.PagingData
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.library.*
+import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class MockLibraryRemoteDataSourceImpl: LibraryRemoteDataSource {
-    override fun search(query: String): Flow<PagingData<Work>> {
-        TODO("How to create PagingData ?")
-    }
+    override fun search(query: String): Flow<PagingData<Work>> =
+        flowOf(PagingData.from(listOf(workMrFox)))
 
     override fun getWork(workId: String): Flow<Result<Work>> =
-        if (workId == Mocks.workMrFox.id)
-            flowOf(Result.Success(Mocks.workMrFox))
+        if (workId == workMrFox.id)
+            flowOf(Result.Success(workMrFox))
         else
             flowOf(Result.Error("id not found"))
 

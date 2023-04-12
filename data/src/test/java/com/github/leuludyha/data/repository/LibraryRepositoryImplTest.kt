@@ -35,6 +35,13 @@ class LibraryRepositoryImplTest {
     }
 
     @Test
+    fun searchRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+        val data = libraryRepository.searchRemotely("query").first()
+        assertThat(data).isNotNull()
+        // TODO how to test PagingData ?
+    }
+
+    @Test
     fun getWorkRemotelyGivesCorrectResultOnSuccess() = runBlocking {
         val data = libraryRepository.getWorkRemotely(workMrFox.id).first().data
         assertThat(data).isEqualTo(workMrFox)
