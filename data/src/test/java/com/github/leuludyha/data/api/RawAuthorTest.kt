@@ -6,7 +6,9 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
+import java.net.HttpURLConnection
 
 class RawAuthorTest: RequiringLibraryApiTest() {
 
@@ -61,8 +63,6 @@ class RawAuthorTest: RequiringLibraryApiTest() {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `toModel fails on invalid key`() { runTest {
-        mockWebServer.enqueue(authorWorksResponse)
-
         val author = RawAuthor(
             key = "/author/x",
             wikipedia = "x",
@@ -79,8 +79,6 @@ class RawAuthorTest: RequiringLibraryApiTest() {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `toModel fails on error`() { runTest {
-        mockWebServer.enqueue(authorWorksResponse)
-
         val author = RawAuthor(
             key = "/authors/x",
             wikipedia = "x",
@@ -92,5 +90,82 @@ class RawAuthorTest: RequiringLibraryApiTest() {
         )
 
         assertThat(author.toModel(libraryApi)).isNull()
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `covers empty on null photoIds`() { runTest {
+        val author = RawAuthor(
+            key = "/authors/x",
+            wikipedia = "x",
+            name = "x",
+            birthDate = "x",
+            deathDate = "x",
+            photoIds = null,
+            error = null
+        )
+
+        val model = author.toModel(libraryApi)
+        assertThat(model?.covers?.first()).isEmpty()
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `covers empty on negative photoIds`() { runTest {
+        val author = RawAuthor(
+            key = "/authors/x",
+            wikipedia = "x",
+            name = "x",
+            birthDate = "x",
+            deathDate = "x",
+            photoIds = listOf(-1, -2),
+            error = null
+        )
+
+        val model = author.toModel(libraryApi)
+        assertThat(model?.covers?.first()).isEmpty()
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `covers uniquely defined on duplicate photoIds`() { runTest {
+        val author = RawAuthor(
+            key = "/authors/x",
+            wikipedia = "x",
+            name = "x",
+            birthDate = "x",
+            deathDate = "x",
+            photoIds = listOf(2, 2),
+            error = null
+        )
+
+        val model = author.toModel(libraryApi)
+        assertThat(model?.covers?.first()).isEqualTo(listOf( Cover(2L)))
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `works empty on invalid work key`() { runTest {
+        val wrongWorkJson =
+            """
+                { "key": "/work/OL45804W" }
+            """.trimIndent()
+        val wrongResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(wrongWorkJson)
+        mockWebServer.enqueue(wrongResponse)
+
+        val author = RawAuthor(
+            key = "/authors/x",
+            wikipedia = "x",
+            name = "x",
+            birthDate = "x",
+            deathDate = "x",
+            photoIds = listOf(2, 2),
+            error = null
+        )
+
+        val model = author.toModel(libraryApi)
+        assertThat(model?.works?.first()).isEmpty()
     }}
 }
