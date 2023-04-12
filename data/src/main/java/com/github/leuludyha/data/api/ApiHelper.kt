@@ -14,14 +14,16 @@ internal object ApiHelper {
     fun <TRaw, TModel> rawResponseToModelResult(response: Response<TRaw>, libraryApi: LibraryApi): Result<TModel>
             where TRaw : Raw<TModel>, TRaw: ErrorProne
     {
-        if(response.isSuccessful){
+        val body = response.body()
+        if(response.isSuccessful && body != null){
             // If an error occured => Result.Error
-            response.body()?.error?.let { return Result.Error(response.body()!!.error!!) }
+            body.error?.let { return Result.Error(response.body()!!.error!!) }
 
-            response.body()?.let { result->
-                result.toModel(libraryApi)?.let { return Result.Success(it) }
-                return result.toModel(libraryApi)?.let { Result.Success(it) }
-                    ?: Result.Error(response.message())
+            val toModel = body.toModel(libraryApi)
+            return if(toModel != null) {
+                Result.Success(toModel)
+            } else {
+                Result.Error(response.message())
             }
         }
         return Result.Error(response.message())
@@ -33,12 +35,10 @@ internal object ApiHelper {
     fun <TRaw, TModel> rawResponseToModel(response: Response<TRaw>, libraryApi: LibraryApi): TModel?
             where TRaw : Raw<TModel>, TRaw: ErrorProne
     {
-        if(response.isSuccessful){
-            response.body()?.error?.let { return null }
-
-            response.body()?.let {result->
-                return result.toModel(libraryApi)
-            }
+        val body = response.body()
+        if(response.isSuccessful && body != null) {
+            body.error?.let { return null }
+            return body.toModel(libraryApi)
         }
         return null
     }
@@ -56,8 +56,10 @@ internal object ApiHelper {
      * @return null if the extraction failed (wrong delimiter for example)
      */
     fun extractIdFromKey(key: String?, delimiter: String) =
-        if (key?.substringAfter(delimiter) == key)
-            null
-        else
-            key?.substringAfter(delimiter)
+        when (key) {
+            null -> null
+            key.substringAfter(delimiter) -> null
+            else ->
+                key.substringAfter(delimiter).ifEmpty { null }
+        }
 }
