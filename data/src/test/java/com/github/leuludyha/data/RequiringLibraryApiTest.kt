@@ -5,7 +5,10 @@ import com.github.leuludyha.data.api.RawDocument
 import com.github.leuludyha.data.api.RawEdition
 import com.github.leuludyha.data.api.RawKey
 import com.github.leuludyha.data.io.FileReader
-import com.github.leuludyha.domain.model.library.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.flowOf
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -18,12 +21,6 @@ import java.net.HttpURLConnection
 open class RequiringLibraryApiTest {
     protected lateinit var libraryApi: LibraryApi
     protected lateinit var mockWebServer: MockWebServer
-
-    protected lateinit var workJson: String
-    protected lateinit var authorJson: String
-    protected lateinit var editionJson: String
-    protected lateinit var workEditionsJson: String
-    protected lateinit var authorWorksJson: String
 
     protected lateinit var workResponse: MockResponse
     protected lateinit var authorResponse: MockResponse
@@ -43,19 +40,19 @@ open class RequiringLibraryApiTest {
     @Before
     fun initializeMockResponses() {
 
-        editionJson = FileReader
+        val editionJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getEdition.json")
 
-        authorJson = FileReader
+        val authorJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getAuthor.json")
 
-        workJson = FileReader
+        val workJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getWork.json")
 
-        workEditionsJson = FileReader
+        val workEditionsJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getWorkEditions.json")
 
-        authorWorksJson = FileReader
+        val authorWorksJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getAuthorWorks.json")
 
 
