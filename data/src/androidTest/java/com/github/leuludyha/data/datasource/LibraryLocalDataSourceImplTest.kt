@@ -60,7 +60,7 @@ class LibraryLocalDataSourceImplTest {
     @Test
     fun getCoverGivesCorrectResultAfterSavingAuthor() = runBlocking {
         localDataSource.saveAuthor(authorRoaldDahl)
-        val data = localDataSource.getAuthor(authorRoaldDahl.id).first().covers.first()
-        assertThat(data.toSet()).isEqualTo(authorRoaldDahl.covers.first().toSet())
+        val data = localDataSource.getCover(authorRoaldDahl.covers.first()[0].id).first()
+        assertThat(data).isEqualTo(authorRoaldDahl.covers.first()[0])
     }
 }
