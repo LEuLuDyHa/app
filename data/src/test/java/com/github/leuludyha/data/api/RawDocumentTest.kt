@@ -130,7 +130,7 @@ class RawDocumentTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns work with empty covers on null coverId`() { runTest { mockWebServer.enqueue(authorResponse)
+    fun `toModel returns work with empty covers on null coverId`() { runTest {
         val rawDoc = testRawDoc.copy(coverId = null)
         val model = rawDoc.toModel(libraryApi)!!
 
@@ -139,7 +139,7 @@ class RawDocumentTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns work with empty covers on negative coverId`() { runTest { mockWebServer.enqueue(authorResponse)
+    fun `toModel returns work with empty covers on negative coverId`() { runTest {
         val rawDoc = testRawDoc.copy(coverId = -1)
         val model = rawDoc.toModel(libraryApi)!!
 
@@ -148,7 +148,7 @@ class RawDocumentTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns work with empty subjects`() { runTest { mockWebServer.enqueue(authorResponse)
+    fun `toModel returns work with empty subjects`() { runTest {
         val model = testRawDoc.toModel(libraryApi)!!
 
         model.subjects.collect { assertThat(it).isEmpty() }
