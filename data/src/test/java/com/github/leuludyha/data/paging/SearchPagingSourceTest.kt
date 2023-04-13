@@ -41,7 +41,53 @@ class SearchPagingSourceTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `load returns correct Page on multiple docs`() = runTest {
+    fun `load returns an error on json error`() = runTest {
+        val errorResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+        mockWebServer.enqueue(errorResponse)
+
+        assertThat(searchPagingSource.load(
+            PagingSource.LoadParams.Refresh(
+                key = 0,
+                loadSize = 1,
+                placeholdersEnabled = false
+            )
+        )
+        ).isInstanceOf(PagingSource.LoadResult.Error::class.java)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `load returns correct Page on multiple docs, page 2`() = runTest {
+        val work0 = Work(
+            id = "id0", null, flowOf(), flowOf(), flowOf(), flowOf()
+        )
+        val work1 = Work(
+            id = "id1", null, flowOf(), flowOf(), flowOf(), flowOf()
+        )
+        val expected = listOf(work0, work1)
+
+        val expectedResult = PagingSource.LoadResult.Page(
+            data = expected,
+            prevKey = 1,
+            nextKey = 3
+        )
+
+        mockWebServer.enqueue(searchResponse)
+        assertThat(
+            searchPagingSource.load(
+                PagingSource.LoadParams.Refresh(
+                    key = 2,
+                    loadSize = 1,
+                    placeholdersEnabled = false
+                )
+            )
+        ).isEqualTo(expectedResult)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `load returns correct Page on multiple docs, page 1`() = runTest {
         val work0 = Work(
             id = "id0", null, flowOf(), flowOf(), flowOf(), flowOf()
         )
@@ -60,7 +106,7 @@ class SearchPagingSourceTest: RequiringLibraryApiTest() {
         assertThat(
             searchPagingSource.load(
                 PagingSource.LoadParams.Refresh(
-                    key = null,
+                    key = 1,
                     loadSize = 1,
                     placeholdersEnabled = false
                 )
@@ -102,6 +148,7 @@ class SearchPagingSourceTest: RequiringLibraryApiTest() {
             )
         ).isEqualTo(expectedResult)
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `getRefreshKey returns anchorPosition`() = runTest {

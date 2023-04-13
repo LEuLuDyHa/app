@@ -18,15 +18,16 @@ class SearchPagingSource(
         val currentPage = params.key ?: 1
         return try {
             val response = libraryApi.search(query = query, page = currentPage, resultsPerPage = 20) // TODO CONSTANT
-            if(!response.isSuccessful)
+            val body = response.body()
+            if(!response.isSuccessful || body == null)
                 return LoadResult.Error(HttpException(response))
 
-            val endOfPaginationReached = response.body()?.documents.isNullOrEmpty()
-            if (!response.body()?.documents.isNullOrEmpty()) {
+            val endOfPaginationReached = body.documents.isEmpty()
+            if (!endOfPaginationReached) {
                 LoadResult.Page(
                     data = response.body()!!.documents.mapNotNull {it.toModel(libraryApi) },
                     prevKey = if (currentPage == 1) null else currentPage - 1,
-                    nextKey = if (endOfPaginationReached) null else currentPage + 1
+                    nextKey = currentPage + 1
                 )
             } else {
                 LoadResult.Page(
