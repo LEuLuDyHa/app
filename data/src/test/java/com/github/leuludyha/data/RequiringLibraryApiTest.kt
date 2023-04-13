@@ -22,6 +22,7 @@ open class RequiringLibraryApiTest {
     protected lateinit var libraryApi: LibraryApi
     protected lateinit var mockWebServer: MockWebServer
 
+    protected lateinit var searchResponse: MockResponse
     protected lateinit var workResponse: MockResponse
     protected lateinit var authorResponse: MockResponse
     protected lateinit var editionResponse: MockResponse
@@ -55,6 +56,8 @@ open class RequiringLibraryApiTest {
         val authorWorksJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getAuthorWorks.json")
 
+        val searchJson = FileReader
+            .readResourceFromFile(this.javaClass.classLoader!!, "search_2docs.json")
 
         editionResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -71,6 +74,9 @@ open class RequiringLibraryApiTest {
         authorWorksResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(authorWorksJson)
+        searchResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(searchJson)
 
         // To avoid infinite loop
         val dumbWork = Work(
