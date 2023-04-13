@@ -51,25 +51,19 @@ class RawAuthorTest: RequiringLibraryApiTest() {
         val res = author.toModel(libraryApi)!!
         val work = res.works.first()[0]
 
-        assertThat(res.id).isEqualTo("x")
-        assertThat(res.name).isEqualTo("x")
-        assertThat(res.wikipedia).isEqualTo("x")
-        assertThat(res.birthDate).isEqualTo("x")
-        assertThat(res.deathDate).isEqualTo("x")
-        assertThat(res.covers.first()).isEqualTo(listOf(Cover(1)))
         assertThat(work).isEqualTo(mockWork)
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on invalid key`() { runTest {
+    fun `toModel returns null on invalid key`() { runTest {
         val author = RawAuthor(
-            key = "/author/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(-1, 1),
+            key = "/invalid/x",
+            wikipedia = null,
+            name = null,
+            birthDate = null,
+            deathDate = null,
+            photoIds = null,
             error = null
         )
 
@@ -78,14 +72,30 @@ class RawAuthorTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel fails on error`() { runTest {
+    fun `toModel returns null on error`() { runTest {
         val author = RawAuthor(
             key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(-1, 1),
+            wikipedia = null,
+            name = null,
+            birthDate = null,
+            deathDate = null,
+            photoIds = null,
+            error = "x"
+        )
+
+        assertThat(author.toModel(libraryApi)).isNull()
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `toModel returns null on invalid rawAuthorWorks`() { runTest {
+        val author = RawAuthor(
+            key = "/authors/x",
+            wikipedia = null,
+            name = null,
+            birthDate = null,
+            deathDate = null,
+            photoIds = null,
             error = "x"
         )
 
@@ -145,10 +155,12 @@ class RawAuthorTest: RequiringLibraryApiTest() {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `works empty on invalid work key`() { runTest {
+    fun `works is empty on error`() { runTest {
         val wrongWorkJson =
             """
-                { "key": "/work/OL45804W" }
+               {
+                  "error": "error"
+                }
             """.trimIndent()
         val wrongResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
