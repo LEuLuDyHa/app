@@ -18,7 +18,8 @@ class MockLibraryRepositoryImpl: LibraryRepository {
     private val savedAuthors: HashMap<String, Author> = hashMapOf()
 
     override fun searchRemotely(query: String): Flow<PagingData<Work>> {
-        TODO("How to test PagingData???")
+        return flowOf(PagingData.from(listOf(workMrFox)))
+        // TODO("How to test PagingData???")
     }
 
     override fun getWorkRemotely(workId: String): Flow<Result<Work>> =

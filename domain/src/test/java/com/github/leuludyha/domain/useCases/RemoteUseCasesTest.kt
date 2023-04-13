@@ -24,6 +24,7 @@ class RemoteUseCasesTest {
     @Test
     fun searchRemotelyUseCaseGivesExpectedResult() = runBlocking {
         val res = SearchRemotelyUseCase(libraryRepository)("query").first()
+        assertThat(res).isNotNull()
         // TODO How to test PagingData?
     }
 
