@@ -1,10 +1,11 @@
 package com.github.leuludyha.data.api
 
 import com.github.leuludyha.data.RequiringLibraryApiTest
+import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import org.junit.Test
@@ -12,150 +13,96 @@ import java.net.HttpURLConnection
 
 class RawAuthorTest: RequiringLibraryApiTest() {
 
+    val testRawAuthor = RawAuthor(
+        key = "/authors/id",
+        wikipedia = "x",
+        name = "x",
+        birthDate = "x",
+        deathDate = "x",
+        photoIds = listOf(1),
+        error = null
+    )
+
+    val testAuthor = Author(
+        id = "id",
+        "x",
+        "x",
+        "x",
+        "x",
+        flowOf(),
+        flowOf()
+    )
+
     @Test
     fun `Fields are properly accessed`() {
-        val author = RawAuthor(
-            key = "x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(0, 1),
-            error = "x"
-        )
-
-        assertThat(author.key).isEqualTo("x")
-        assertThat(author.wikipedia).isEqualTo("x")
-        assertThat(author.name).isEqualTo("x")
-        assertThat(author.birthDate).isEqualTo("x")
-        assertThat(author.deathDate).isEqualTo("x")
-        assertThat(author.photoIds).isEqualTo(listOf(0L, 1L))
-        assertThat(author.error).isEqualTo("x")
+        assertThat(testRawAuthor.key).isEqualTo("/authors/id")
+        assertThat(testRawAuthor.wikipedia).isEqualTo("x")
+        assertThat(testRawAuthor.name).isEqualTo("x")
+        assertThat(testRawAuthor.birthDate).isEqualTo("x")
+        assertThat(testRawAuthor.deathDate).isEqualTo("x")
+        assertThat(testRawAuthor.photoIds).isEqualTo(listOf(1L))
+        assertThat(testRawAuthor.error).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `toModel returns expected author`() { runTest {
-        mockWebServer.enqueue(authorWorksResponse)
-
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(-1, 1),
-            error = null
-        )
-
-        val res = author.toModel(libraryApi)!!
-        val work = res.works.first()[0]
-
-        assertThat(work).isEqualTo(mockWork)
+        val res = testRawAuthor.toModel(libraryApi)!!
+        assertThat(res).isEqualTo(testAuthor)
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `toModel returns null on invalid key`() { runTest {
-        val author = RawAuthor(
-            key = "/invalid/x",
-            wikipedia = null,
-            name = null,
-            birthDate = null,
-            deathDate = null,
-            photoIds = null,
-            error = null
-        )
-
-        assertThat(author.toModel(libraryApi)).isNull()
+        val rawAuthor = testRawAuthor.copy(key = "/invalid/x")
+        assertThat(rawAuthor.toModel(libraryApi)).isNull()
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns null on error`() { runTest {
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = null,
-            name = null,
-            birthDate = null,
-            deathDate = null,
-            photoIds = null,
-            error = "x"
-        )
-
-        assertThat(author.toModel(libraryApi)).isNull()
+    fun `toModel returns null on error non null`() { runTest {
+        val rawAuthor = testRawAuthor.copy(error = "error")
+        assertThat(rawAuthor.toModel(libraryApi)).isNull()
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `toModel returns null on invalid rawAuthorWorks`() { runTest {
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = null,
-            name = null,
-            birthDate = null,
-            deathDate = null,
-            photoIds = null,
-            error = "x"
-        )
+    fun `toModel returns author with expected covers`() { runTest {
+        val model = testRawAuthor.toModel(libraryApi)!!
 
-        assertThat(author.toModel(libraryApi)).isNull()
+        model.covers.collect { assertThat(it).isEqualTo(listOf(Cover(1))) }
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `covers empty on null photoIds`() { runTest {
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = null,
-            error = null
-        )
+    fun `toModel returns author with empty covers on null photoIds`() { runTest {
+        val author = testRawAuthor.copy(photoIds = null)
+        val model = author.toModel(libraryApi)!!
 
-        val model = author.toModel(libraryApi)
-        assertThat(model?.covers?.first()).isEmpty()
+        model.covers.collect { assertThat(it).isEmpty() }
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `covers empty on negative photoIds`() { runTest {
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(-1, -2),
-            error = null
-        )
+    fun `toModel returns author with empty covers on only negative photoIds`() { runTest {
+        val author = testRawAuthor.copy(photoIds = listOf(-1, -2))
+        val model = author.toModel(libraryApi)!!
 
-        val model = author.toModel(libraryApi)
-        assertThat(model?.covers?.first()).isEmpty()
+        model.covers.collect { assertThat(it).isEmpty() }
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `covers uniquely defined on duplicate photoIds`() { runTest {
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(2, 2),
-            error = null
-        )
+    fun `toModel returns author with uniquely defined covers on duplicate photoIds`() { runTest {
+        val author = testRawAuthor.copy(photoIds = listOf(2, 2, 2))
+        val model = author.toModel(libraryApi)!!
 
-        val model = author.toModel(libraryApi)
-        assertThat(model?.covers?.first()).isEqualTo(listOf( Cover(2L)))
+        model.covers.collect { assertThat(it).isEqualTo(listOf(Cover(2))) }
     }}
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `works is empty on error`() { runTest {
+    fun `toModel returns author with correct works on error in response`() { runTest {
         val wrongWorkJson =
             """
                {
@@ -167,17 +114,34 @@ class RawAuthorTest: RequiringLibraryApiTest() {
             .setBody(wrongWorkJson)
         mockWebServer.enqueue(wrongResponse)
 
-        val author = RawAuthor(
-            key = "/authors/x",
-            wikipedia = "x",
-            name = "x",
-            birthDate = "x",
-            deathDate = "x",
-            photoIds = listOf(2, 2),
-            error = null
-        )
+        val model = testRawAuthor.toModel(libraryApi)!!
+        model.works.collect { assertThat(it).isEmpty() }
+    }}
 
-        val model = author.toModel(libraryApi)
-        assertThat(model?.works?.first()).isEmpty()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `toModel returns author with expected works`() { runTest {
+        mockWebServer.enqueue(authorWorksResponse)
+
+        val res = testRawAuthor.toModel(libraryApi)!!
+        res.works.collect { works -> assertThat(works).isEqualTo(listOf(mockWork)) }
+    }}
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `toModel returns author with empty works on error in response`() { runTest {
+        val wrongWorkJson =
+            """
+               {
+                  "error": "error"
+                }
+            """.trimIndent()
+        val wrongResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(wrongWorkJson)
+        mockWebServer.enqueue(wrongResponse)
+
+        val model = testRawAuthor.toModel(libraryApi)!!
+        model.works.collect { assertThat(it).isEmpty() }
     }}
 }
