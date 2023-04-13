@@ -6,10 +6,7 @@ import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
-import com.github.leuludyha.domain.useCase.GetAuthorRemotelyUseCase
-import com.github.leuludyha.domain.useCase.GetEditionByISBNRemotelyUseCase
-import com.github.leuludyha.domain.useCase.GetEditionRemotelyUseCase
-import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
+import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -26,7 +23,8 @@ class RemoteUseCasesTest {
 
     @Test
     fun searchRemotelyUseCaseGivesExpectedResult() = runBlocking {
-        //TODO
+        val res = SearchRemotelyUseCase(libraryRepository)("query").first()
+        // TODO How to test PagingData?
     }
 
     @Test
