@@ -15,4 +15,10 @@ data class User(
     fun getWorksInReadingList(): Iterable<Work> {
         return this.preferences.workPreferences.values.map { it.work }
     }
+
+    override fun toString(): String {
+        return "User('$username')"
+    }
+
+
 }

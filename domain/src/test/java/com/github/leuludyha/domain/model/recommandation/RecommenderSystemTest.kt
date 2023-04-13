@@ -1,11 +1,14 @@
 package com.github.leuludyha.domain.model.recommandation
 
+
 import com.github.leuludyha.domain.TestMocks
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.library.recommendation.RecommenderSystem
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.repository.UserRepository
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
@@ -49,7 +52,10 @@ class RecommenderSystemTest {
 
     @Test
     fun recommenderReturnsNoDuplicate() {
-        // TODO
+        initRecommender { _, _, _ -> listOf(TestMocks.user1, TestMocks.user3) }
+        val recommendations: List<Work> = recommender(TestMocks.user2)
+
+        assertThat(recommendations, containsInAnyOrder(Mocks.workLaFermeDesAnimaux))
     }
 
     @Test

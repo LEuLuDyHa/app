@@ -19,4 +19,12 @@ class TasteDistancesTest {
         val dist = UserTasteDistance()
         assert(!dist(TestMocks.user1, TestMocks.user2).isNaN())
     }
+
+    @Test
+    fun userTasteDistanceIsLessForMoreSimilarUsers() {
+        val dist = UserTasteDistance()
+        assert(
+            dist(TestMocks.user1, TestMocks.user3) < dist(TestMocks.user1, TestMocks.user2)
+        )
+    }
 }

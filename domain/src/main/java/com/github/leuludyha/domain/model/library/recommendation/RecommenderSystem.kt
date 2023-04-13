@@ -12,6 +12,8 @@ import kotlin.math.min
 import kotlin.math.round
 import kotlin.streams.toList
 
+private const val DebugTag = "RecommenderSystem"
+
 class RecommenderSystem(
     private val userRepository: UserRepository,
     private val lr: Float = 5e-5f,
@@ -95,6 +97,8 @@ class RecommenderSystem(
             userTasteDistance(u1, u2)
         }, Constants.RECOMMENDATIONS_NB_OF_NEIGHBOURS)
 
+        println("$DebugTag :: Neighbours found : $neighbours")
+
         if (neighbours.contains(user)) {
             throw IllegalStateException(
                 "The user ${user.username} should not be in its own neighbours list."
@@ -104,9 +108,11 @@ class RecommenderSystem(
         // Map<Neighbour, Distance>
         // Weights in [0, +oo]
         val neighbourDistances = neighbours.associateWith { userTasteDistance(it, user) }
+        println("$DebugTag :: Neighbour distances : $neighbourDistances")
         // Map<Neighbour, Weight>
         // Weights in [0, 1] where the sum of all weights is 1
         val neighbourWeightFor = neighbourDistances.normalizedWeights()
+        println("$DebugTag :: Neighbour weights : $neighbourWeightFor")
 
         var nbOfWorks = 0
         // All works read linked to their reader among the neighbours
@@ -133,6 +139,7 @@ class RecommenderSystem(
 
             readWorks
         }
+        println("$DebugTag :: Works read : $worksReadBy")
 
         // The number of works to select
         val initialAvailableWorks = max(worksReadBy.size, maxNumberOfConsideredSuggestions)
@@ -140,16 +147,23 @@ class RecommenderSystem(
         val selectedWorks: MutableList<Work> = mutableListOf()
         val selectedWorkNeighbourWeight: MutableMap<Work, Float> = mutableMapOf()
 
+        println("$DebugTag :: Initial Available Works : $initialAvailableWorks")
+
         // Select a pool of book determined by the weight of the neighbour
         for (neighbour in neighbours) {
             // We can safely assume each user has a weight
             val neighbourWeight = neighbourWeightFor[neighbour]!!
 
+            println("$DebugTag :: ${neighbour.username}, w=$neighbourWeight :")
+
             var nbWorksTaken = round(initialAvailableWorks * neighbourWeight).toInt()
+            println("$DebugTag :: \t -> 0 / Taken : $nbWorksTaken")
             // Only take if remains available books to select
             nbWorksTaken = min(nbWorksTaken, worksToTake)
+            println("$DebugTag :: \t -> 1 / Taken : $nbWorksTaken")
             // Only take the available books in the neighbour's finished list
             nbWorksTaken = min(nbWorksTaken, worksReadBy[neighbour]!!.size)
+            println("$DebugTag :: \t -> 1 / Taken : $nbWorksTaken")
 
             // Add the work to the list (We know index < size because of the above line)
             (0 until nbWorksTaken).map { index ->
@@ -172,6 +186,8 @@ class RecommenderSystem(
             .mapValues { 1 - it.value }
             .normalizedWeights()
 
+        println("$DebugTag :: Norm Neighbour Weight : $normNeighbourDistFor")
+
         /*
          TODO Now, across the selected works, find the closest in taste, based on
             - Number of times it appears in the list (It may come multiple times from different neighbours
@@ -184,6 +200,8 @@ class RecommenderSystem(
             .associateWith { workTasteDistance(user, it) }
             .normalizedWeights()
 
+        println("$DebugTag :: Norm Work Dist : $normWorkDistFor")
+
         // Combine metrics
         val finalDistFor = selectedWorks.associateWith {
             actFunction(
@@ -191,6 +209,8 @@ class RecommenderSystem(
                         + normNeighbourDistFor[it]!! * workTasteWeight.weight
             )
         }
+
+        println("$DebugTag :: Final Dist : $finalDistFor")
 
 //        // We have our output, let's save it
 //        records[user] = finalDistFor
