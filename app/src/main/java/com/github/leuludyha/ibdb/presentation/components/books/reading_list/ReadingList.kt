@@ -20,6 +20,7 @@ fun ReadingList(
     navController: NavHostController,
     preferences: UserPreferences,
 ) {
+    // Create an horizontal list of items
     ItemList(
         // TODO Maybe change this to be sorted using user rating/ other factors
         values = preferences.workPreferences.values.toList(),
@@ -27,12 +28,15 @@ fun ReadingList(
     ) { preference ->
         Column(modifier = Modifier.wrapContentHeight()) {
 
+            // Each item is a MiniBookView
             MiniBookView(
                 work = preference.work,
                 displaySubjects = false,
                 onClick = { clickedWork ->
                     navController.navigate(Screen.BookDetails.passBookId(clickedWork.Id()))
                 }, footer = {
+                    // Under each item (MiniBookView), display a <PossessionIcon> and
+                    // a <ReadingStateIcon> (See doc below)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start
@@ -46,6 +50,9 @@ fun ReadingList(
     }
 }
 
+/**
+ * Display whether this work is possessed by the user or not
+ */
 @Composable
 private fun PossessionIcon(
     possessed: Boolean,
@@ -64,6 +71,13 @@ private fun PossessionIcon(
     }
 }
 
+/**
+ * Display whether the user is either
+ * - Interested
+ * - Currently Reading
+ * - Has finished
+ * This work
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReadingStateIcon(

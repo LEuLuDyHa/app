@@ -8,7 +8,8 @@ import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBo
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
 /**
- * An infinite list of recommendations for the user
+ * A list of recommendations for the user
+ * TODO Make it infinite and lazy
  */
 @Composable
 fun RecommendationList(
