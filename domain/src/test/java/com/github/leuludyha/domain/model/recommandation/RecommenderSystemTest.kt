@@ -73,9 +73,4 @@ class RecommenderSystemTest {
         }
     }
 
-    @Test
-    fun recommenderReturnsUser() {
-
-    }
-
 }
