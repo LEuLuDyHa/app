@@ -161,18 +161,18 @@ class LibraryDaoTest {
     }
 
     @Test
-    fun tryingToAccessAWorkAfterDeleteAllWorksReturnsNull() = runBlocking {
+    fun tryingToAccessAWorkAfterDeletingItReturnsNull() = runBlocking {
         libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorks()
+        libraryDao.delete(workMrFox)
         val result = libraryDao.getWork(workMrFox.id).first()
         assertThat(result).isNull()
     }
 
 
     @Test
-    fun tryingToAccessAnAuthorAfterDeleteAllAuthorsReturnsNull() = runBlocking {
+    fun tryingToAccessAnAuthorAfterDeletingItReturnsNull() = runBlocking {
         libraryDao.insert(authorRoaldDahl)
-        libraryDao.deleteAllAuthors()
+        libraryDao.delete(authorRoaldDahl)
         val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
         assertThat(result).isNull()
     }
@@ -180,15 +180,16 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessCoversAfterDeleteAllCoversReturnsEmpty() = runBlocking {
         libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllCovers()
-        val result = libraryDao.getCover(editionMrFox.covers.first()[0].id).first()
+        val cover = editionMrFox.covers.first()[0]
+        libraryDao.delete(cover)
+        val result = libraryDao.getCover(cover.id).first()
         assertThat(result).isNull()
     }
 
     @Test
-    fun tryingToAccessAnEditionAfterDeleteAllEditionsReturnsNull() = runBlocking {
+    fun tryingToAccessAnEditionAfterDeletingItReturnsNull() = runBlocking {
         libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditions()
+        libraryDao.delete(editionMrFox)
         val result = libraryDao.getEdition(editionMrFox.id).first()
         assertThat(result).isNull()
     }
@@ -196,63 +197,8 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() = runBlocking {
         libraryDao.insert(workMrFox)
-        libraryDao.deleteAllSubjects()
-        val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
-        assertThat(result.subjects).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessAuthorCoverCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(authorRoaldDahl)
-        libraryDao.deleteAllAuthorCoverCrossRefs()
-        val result = libraryDao.getAuthorWithCovers(authorRoaldDahl.id).first()
-        assertThat(result.covers).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessEditionAuthorCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditionAuthorCrossRefs()
-        val result = libraryDao.getEditionWithAuthors(editionMrFox.id).first()
-        assertThat(result.authors).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessEditionCoverCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditionCoverCrossRefs()
-        val result = libraryDao.getEditionWithCovers(editionMrFox.id).first()
-        assertThat(result.covers).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessWorkAuthorCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkAuthorCrossRefs()
-        val result = libraryDao.getWorkWithAuthors(workMrFox.id).first()
-        assertThat(result.authors).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessWorkCoverCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkCoverCrossRefs()
-        val result = libraryDao.getWorkWithCovers(workMrFox.id).first()
-        assertThat(result.covers).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessWorkEditionCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkEditionCrossRefs()
-        val result = libraryDao.getWorkWithEditions(workMrFox.id).first()
-        assertThat(result.editions).isEmpty()
-    }
-
-    @Test
-    fun tryingToAccessWorkSubjectCrossRefAfterDeleteAllReturnsEmpty() = runBlocking {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkSubjectCrossRefs()
+        val subjects = workMrFox.subjects.first()
+        subjects.forEach { libraryDao.deleteSubject(it) }
         val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
         assertThat(result.subjects).isEmpty()
     }

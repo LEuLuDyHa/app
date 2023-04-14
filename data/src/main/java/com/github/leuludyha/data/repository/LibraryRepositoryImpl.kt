@@ -47,20 +47,38 @@ class LibraryRepositoryImpl(
     /**
      * Saves the given [Work] locally.
      */
-    override suspend fun saveWorkLocally(work: Work) =
-        libraryLocalDataSource.saveWork(work)
+    override suspend fun saveLocally(work: Work) =
+        libraryLocalDataSource.save(work)
 
     /**
      * Saves the given [Author] locally.
      */
-    override suspend fun saveAuthorLocally(author: Author) =
-        libraryLocalDataSource.saveAuthor(author)
+    override suspend fun saveLocally(author: Author) =
+        libraryLocalDataSource.save(author)
 
     /**
      * Saves the given [Edition] locally.
      */
-    override suspend fun saveEditionLocally(edition: Edition) =
-        libraryLocalDataSource.saveEdition(edition)
+    override suspend fun saveLocally(edition: Edition) =
+        libraryLocalDataSource.save(edition)
+
+    /**
+     * Deletes the given [Work] locally.
+     */
+    override suspend fun deleteLocally(work: Work) =
+        libraryLocalDataSource.delete(work)
+
+    /**
+     * Deletes the given [Author] locally.
+     */
+    override suspend fun deleteLocally(author: Author) =
+        libraryLocalDataSource.delete(author)
+
+    /**
+     * Deletes the given [Edition] locally.
+     */
+    override suspend fun deleteLocally(edition: Edition) =
+        libraryLocalDataSource.delete(edition)
 
     /**
      * @return the result of a local [Work] work query for the given work id.

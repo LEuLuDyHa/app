@@ -20,12 +20,17 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
     override fun getCover(coverId: Long): Flow<Cover> =
         libraryDao.getCover(coverId).map { it.toModel(libraryDao) }
 
-    override suspend fun saveWork(work: Work) =
+    override suspend fun save(work: Work) =
         libraryDao.insert(work)
-
-    override suspend fun saveEdition(edition: Edition) =
+    override suspend fun save(edition: Edition) =
         libraryDao.insert(edition)
-
-    override suspend fun saveAuthor(author: Author) =
+    override suspend fun save(author: Author) =
         libraryDao.insert(author)
+
+    override suspend fun delete(work: Work) =
+        libraryDao.delete(work)
+    override suspend fun delete(edition: Edition) =
+        libraryDao.delete(edition)
+    override suspend fun delete(author: Author) =
+        libraryDao.delete(author)
 }

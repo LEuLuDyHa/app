@@ -14,6 +14,7 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -24,9 +25,9 @@ class LocalUseCasesTest {
     fun setup() = runBlocking {
         libraryRepository = MockLibraryRepositoryImpl()
 
-        libraryRepository.saveWorkLocally(workMrFox)
-        libraryRepository.saveEditionLocally(editionMrFox)
-        libraryRepository.saveAuthorLocally(authorRoaldDahl)
+        libraryRepository.saveLocally(workMrFox)
+        libraryRepository.saveLocally(editionMrFox)
+        libraryRepository.saveLocally(authorRoaldDahl)
     }
 
     @Test
@@ -92,6 +93,59 @@ class LocalUseCasesTest {
         SaveEditionLocallyUseCase(libraryRepository)(testEdition)
         assertThat(GetEditionLocallyUseCase(libraryRepository)(testEdition.id).first())
             .isEqualTo(testEdition)
+    }
+
+    @Test
+    fun accessingADeletedWorkThrowsAnException(): Unit = runBlocking {
+        val testWork = Work(
+            id = "TestWork",
+            title = "title",
+            editions = flowOf(),
+            authors = flowOf(),
+            covers = flowOf(),
+            subjects = flowOf()
+        )
+        SaveWorkLocallyUseCase(libraryRepository)(testWork)
+        DeleteWorkLocallyUseCase(libraryRepository)(testWork)
+        assertThrows(Exception::class.java) { runBlocking {
+            GetWorkLocallyUseCase(libraryRepository)(testWork.id).first()
+        }}
+    }
+
+    @Test
+    fun accessingADeletedAuthorThrowsAnException(): Unit = runBlocking {
+        val testAuthor = Author(
+            id = "TestAuthor",
+            name = "Michael Jackson",
+            birthDate = "23 janvier 2024",
+            deathDate = "10 septembre 2024",
+            wikipedia = "wikipedia.com",
+            works = flowOf(),
+            covers = flowOf()
+        )
+        SaveAuthorLocallyUseCase(libraryRepository)(testAuthor)
+        DeleteAuthorLocallyUseCase(libraryRepository)(testAuthor)
+        assertThrows(Exception::class.java) { runBlocking {
+            GetAuthorLocallyUseCase(libraryRepository)(testAuthor.id).first()
+        }}
+    }
+
+    @Test
+    fun accessingADeletedEditionThrowsAnException(): Unit = runBlocking {
+        val testEdition = Edition(
+            id = "testEdition",
+            title = "title",
+            isbn13 = "isbn13",
+            isbn10 = "isbn10",
+            works = flowOf(),
+            authors = flowOf(),
+            covers = flowOf(),
+        )
+        SaveEditionLocallyUseCase(libraryRepository)(testEdition)
+        DeleteEditionLocallyUseCase(libraryRepository)(testEdition)
+        assertThrows(Exception::class.java) { runBlocking {
+            GetEditionLocallyUseCase(libraryRepository)(testEdition.id).first()
+        }}
     }
 
     @Test
