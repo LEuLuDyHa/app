@@ -44,17 +44,14 @@ class LibraryRepositoryImpl(
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
         libraryRemoteDataSource.getAuthor(authorId)
 
-    override suspend fun saveWorkLocally(work: Work) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun saveWorkLocally(work: Work) =
+        libraryLocalDataSource.saveWork(work)
 
-    override suspend fun saveAuthorLocally(author: Author) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun saveAuthorLocally(author: Author) =
+        libraryLocalDataSource.saveAuthor(author)
 
-    override suspend fun saveEditionLocally(edition: Edition) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun saveEditionLocally(edition: Edition) =
+        libraryLocalDataSource.saveEdition(edition)
 
     /**
      * @return the result of a local [Work] work query for the given work id.

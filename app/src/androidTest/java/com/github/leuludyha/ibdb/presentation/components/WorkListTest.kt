@@ -47,7 +47,7 @@ class WorkListTest {
             deathDate = "02.02.02",
             wikipedia = "wikipedia.test",
             works = flowOf(listOf(dumbWork)),
-            photos = flowOf(listOf())
+            covers = flowOf(listOf())
         )
 
         val testEdition = Edition(
