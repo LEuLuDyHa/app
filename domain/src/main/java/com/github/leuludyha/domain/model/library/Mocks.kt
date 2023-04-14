@@ -1,9 +1,10 @@
 package com.github.leuludyha.domain.model.library
 
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
 import kotlinx.coroutines.flow.flowOf
+import java.util.*
 
 /** A mock work we can use to preview stuff or test */
 object Mocks {
@@ -45,7 +46,8 @@ object Mocks {
         )
     )
 
-    val user: User = User(
+    val mainUser: MainUser = MainUser(
+        UUID.randomUUID().toString(),
         username = "Mockentosh",
         preferences = userPreferences,
         profilePictureUrl = null

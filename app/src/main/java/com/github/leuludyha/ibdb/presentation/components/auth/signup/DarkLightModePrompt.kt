@@ -13,6 +13,6 @@ object DarkLightModePrompt : SignUpPrompt {
         authContext: AuthenticationContext,
         onComplete: () -> Unit
     ) {
-
+        TODO("Not yet implemented")
     }
 }

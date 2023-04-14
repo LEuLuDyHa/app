@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.ibdb.R
 
 /**
@@ -22,7 +22,7 @@ import com.github.leuludyha.ibdb.R
 fun DisplayIfAuthenticated(
     authContext: AuthenticationContext,
     fallback: (@Composable () -> Unit)? = null,
-    content: @Composable (authenticatedPrincipal: User) -> Unit
+    content: @Composable (authenticatedPrincipal: MainUser) -> Unit
 ) {
 
     if (authContext.principal != null) {

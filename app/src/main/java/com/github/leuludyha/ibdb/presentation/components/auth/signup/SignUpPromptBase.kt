@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,6 +19,11 @@ abstract class SignUpPromptBase(
     /** Indicate whether this prompt can be skipped by the user or not */
     private val required: Boolean = false
 ) : SignUpPrompt {
+
+    @Composable
+    protected fun DefaultTitle(text: String) {
+        Text(text = text, style = MaterialTheme.typography.titleLarge)
+    }
 
     @Composable
     override fun Display(authContext: AuthenticationContext, onComplete: () -> Unit) {
