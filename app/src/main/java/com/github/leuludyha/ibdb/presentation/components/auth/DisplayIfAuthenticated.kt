@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.authentication
+package com.github.leuludyha.ibdb.presentation.components.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -26,7 +26,7 @@ fun DisplayIfAuthenticated(
 ) {
 
     if (authContext.principal != null) {
-        content(authContext.principal!!)
+        content(authContext.principal)
     } else {
         Column(
             modifier = Modifier

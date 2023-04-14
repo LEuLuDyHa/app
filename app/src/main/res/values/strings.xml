@@ -10,4 +10,7 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="web_client_id">342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com</string>
     <string name="sign_in_label">Sign In</string>
+    <string name="prompt_skip_button">Skip</string>
+    <string name="prompt_username_title_begin">Hi, your name is currently "</string>
+    <string name="prompt_username_title_end">", do you want to be called something else ?</string>
 </resources>
