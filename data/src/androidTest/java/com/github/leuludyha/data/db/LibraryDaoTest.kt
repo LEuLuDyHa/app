@@ -9,6 +9,7 @@ import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -201,5 +202,68 @@ class LibraryDaoTest {
         subjects.forEach { libraryDao.deleteSubject(it) }
         val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
         assertThat(result.subjects).isEmpty()
+    }
+
+    @Test
+    fun insertingWorkWithoutAnyAuthorsWorksAsExpected() = runBlocking {
+        libraryDao.insert(workMrFox.copy(authors = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
+    }
+
+    @Test
+    fun insertingWorkWithoutAnyEditionsWorksAsExpected() = runBlocking {
+        libraryDao.insert(workMrFox.copy(editions = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
+    }
+
+    @Test
+    fun insertingWorkWithoutAnySubjectsWorksAsExpected() = runBlocking {
+        libraryDao.insert(workMrFox.copy(subjects = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
+    }
+
+    @Test
+    fun insertingWorkWithoutAnyCoversWorksAsExpected() = runBlocking {
+        libraryDao.insert(workMrFox.copy(covers = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
+    }
+
+    @Test
+    fun insertingEditionWithoutAnyAuthorsWorksAsExpected() = runBlocking {
+        libraryDao.insert(editionMrFox.copy(authors = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
+    }
+
+    @Test
+    fun insertingEditionWithoutAnyWorksWorksAsExpected() = runBlocking {
+        libraryDao.insert(editionMrFox.copy(works = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
+    }
+
+    @Test
+    fun insertingEditionWithoutAnyCoversWorksAsExpected() = runBlocking {
+        libraryDao.insert(editionMrFox.copy(covers = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
+    }
+
+    @Test
+    fun insertingAuthorWithoutAnyWorksWorksAsExpected() = runBlocking {
+        libraryDao.insert(authorRoaldDahl.copy(works = flowOf()))
+        val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
+        assertThat(result).isEqualTo(AuthorEntity.from(authorRoaldDahl))
+    }
+
+    @Test
+    fun insertingAuthorWithoutAnyCoversWorksAsExpected() = runBlocking {
+        libraryDao.insert(authorRoaldDahl.copy(covers = flowOf()))
+        val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
+        assertThat(result).isEqualTo(AuthorEntity.from(authorRoaldDahl))
     }
 }
