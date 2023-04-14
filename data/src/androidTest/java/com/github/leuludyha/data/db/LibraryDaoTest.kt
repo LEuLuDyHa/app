@@ -179,9 +179,9 @@ class LibraryDaoTest {
     }
 
     @Test
-    fun tryingToAccessCoversAfterDeleteAllCoversReturnsEmpty() = runBlocking {
-        libraryDao.insert(editionMrFox)
+    fun tryingToAccessCoversAfterDeletingItReturnsEmpty() = runBlocking {
         val cover = editionMrFox.covers.first()[0]
+        libraryDao.insert(cover)
         libraryDao.delete(cover)
         val result = libraryDao.getCover(cover.id).first()
         assertThat(result).isNull()
