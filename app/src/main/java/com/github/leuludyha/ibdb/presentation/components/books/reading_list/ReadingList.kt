@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.reading_list
+package com.github.leuludyha.ibdb.presentation.components.books.reading_list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -14,7 +14,7 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.ItemList
-import com.github.leuludyha.ibdb.presentation.components.book_views.MiniBookView
+import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 

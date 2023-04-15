@@ -15,7 +15,6 @@ data class AuthorEntity (
     val birthDate: String?,
     val deathDate: String?,
     //val bio: String?,
-    val entityType: String?,
 ): Raw<Author> {
     override fun toModel(libraryDao: LibraryDao): Author =
         Author(
@@ -28,10 +27,20 @@ data class AuthorEntity (
                 .map { authorWWorks -> authorWWorks.works
                     .map { it.toModel(libraryDao) }
                  },
-            photos = libraryDao.getAuthorWithCovers(authorId)
+            covers = libraryDao.getAuthorWithCovers(authorId)
                 .map { authorWCover -> authorWCover.covers
                     .map { it.toModel(libraryDao)}
                 },
             wikipedia = wikipedia,
         )
+
+    companion object {
+        fun from(author: Author) = AuthorEntity(
+            authorId = author.id,
+            wikipedia = author.wikipedia,
+            name = author.name,
+            birthDate = author.birthDate,
+            deathDate = author.deathDate,
+        )
+    }
 }

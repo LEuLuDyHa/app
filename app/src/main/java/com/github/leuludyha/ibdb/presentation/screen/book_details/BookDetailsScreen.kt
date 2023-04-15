@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.ibdb.presentation.components.book_views.FullBookView
+import com.github.leuludyha.ibdb.presentation.components.books.book_views.FullBookView
 
 @Composable
 fun BookDetailsScreen(

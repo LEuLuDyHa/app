@@ -79,7 +79,7 @@ class LibraryLocalDataSourceTest: RequiringLibraryDatabaseTest() {
                 //bio = author1.bio,
                 wikipedia = author1.wikipedia,
                 works = flowOf(listOf(work1, work3).map{it.toModel(libraryDao)}),
-                photos = flowOf(listOf(cover1, cover2, cover3).map { it.toModel(libraryDao) }),
+                covers = flowOf(listOf(cover1, cover2, cover3).map { it.toModel(libraryDao) }),
             )
             val result = localDataSource.getAuthor(author1.authorId).first()
             assertThat(result).isEqualTo(expected)
@@ -88,7 +88,7 @@ class LibraryLocalDataSourceTest: RequiringLibraryDatabaseTest() {
             assertThat(result.wikipedia).isEqualTo(expected.wikipedia)
             assertThat(result.birthDate).isEqualTo(expected.birthDate)
             assertThat(result.deathDate).isEqualTo(expected.deathDate)
-            assertThat(result.photos.first()).isEqualTo(expected.photos.first())
+            assertThat(result.covers.first()).isEqualTo(expected.covers.first())
         }
     }
 

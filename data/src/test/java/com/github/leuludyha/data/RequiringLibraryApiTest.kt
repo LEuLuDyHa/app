@@ -93,7 +93,7 @@ open class RequiringLibraryApiTest {
             //bio = "Roald Dahl was a British novelist, short story writer, and screenwriter.",
             id = "OL34184A",
             works = flowOf(listOf(dumbWork)),
-            photos = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
+            covers = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
         )
 
         mockEdition = Edition(

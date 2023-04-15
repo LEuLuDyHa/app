@@ -54,7 +54,7 @@ class RawAuthorTest: RequiringLibraryApiTest() {
         assertThat(res.wikipedia).isEqualTo("x")
         assertThat(res.birthDate).isEqualTo("x")
         assertThat(res.deathDate).isEqualTo("x")
-        assertThat(res.photos.first()).isEqualTo(listOf(Cover(1)))
+        assertThat(res.covers.first()).isEqualTo(listOf(Cover(1)))
         assertThat(work).isEqualTo(mockWork)
     }}
 
