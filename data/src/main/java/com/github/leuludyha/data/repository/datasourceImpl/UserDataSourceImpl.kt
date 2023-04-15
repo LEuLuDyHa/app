@@ -12,8 +12,12 @@ class UserDataSourceImpl(
     override fun getNeighbouringUsersOf(
         user: User, distance: (User, User) -> Float, n: Int
     ): List<User> {
+        /*
+            TODO Find the least costly way to compute distance between a significant
+            portion of users in the DB with firebase (Since it is non-relational)
+        */
 //        firebase.firestore.collection("user")
-//            .orderBy("TODO")
+//            .orderBy()
 //            .limit(n.toLong())
 //            .get()
         return listOf(Mocks.user)
