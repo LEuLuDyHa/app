@@ -60,7 +60,8 @@ class RecommenderSystem(
      * works previously in this set can be recommended again
      */
     fun clearRecommendationsMemoryFor(user: User) {
-        recommendationsMadeFor[user]?.clear()
+        TODO("Not Yet Implemented")
+        // recommendationsMadeFor[user]?.clear()
     }
 
 //========== ======== ==== ==
@@ -81,7 +82,7 @@ class RecommenderSystem(
         actFunction: ActivationFunction = Sigmoid()
     ): List<Work> {
         // Find all previous recommendations for the user
-        val previousRecommendations = recommendationsMadeFor[user] ?: emptySet()
+        // val previousRecommendations = recommendationsMadeFor[user] ?: emptySet()
         /* Idea :
         - A possible way to to have efficient lookup is to only query on books already in the database
         - K-Nearest neighbours
@@ -235,10 +236,10 @@ class RecommenderSystem(
         goodRecommendation: Boolean
     ) {
         // The backpropagation must occur only on outputs of model that exist
-        assert(records.containsKey(user))
+        // assert(records.containsKey(user))
 
         // Get record
-        val outputWeights = records[user]
+        // val outputWeights = records[user]
 
         // TODO Maybe
     }
