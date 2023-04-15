@@ -32,4 +32,13 @@ data class EditionEntity (
                     .map { it.toModel(libraryDao) }
                 },
         )
+
+    companion object {
+       fun from(edition: Edition) = EditionEntity(
+           editionId = edition.id,
+           title = edition.title,
+           isbn13 = edition.isbn13,
+           isbn10 = edition.isbn10,
+       )
+    }
 }

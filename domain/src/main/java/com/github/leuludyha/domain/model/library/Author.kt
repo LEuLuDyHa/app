@@ -10,7 +10,7 @@ data class Author(
     //val bio: String?,
     val wikipedia: String?,
     val works: Flow<List<Work>>,
-    val photos: Flow<List<Cover>>,
+    val covers: Flow<List<Cover>>,
 ) {
     override fun toString(): String = name?: "Unknown author"
     override fun equals(other: Any?): Boolean {

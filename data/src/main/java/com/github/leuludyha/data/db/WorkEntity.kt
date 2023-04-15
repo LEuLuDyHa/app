@@ -3,7 +3,6 @@ package com.github.leuludyha.data.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Work
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 @Entity(tableName = "works")
@@ -46,6 +45,13 @@ data class WorkEntity (
             authors = modelAuthors,
             covers = modelCovers,
             subjects = modelSubjects
+        )
+    }
+
+    companion object {
+        fun from(work: Work) = WorkEntity(
+            workId = work.id,
+            title = work.title
         )
     }
 }

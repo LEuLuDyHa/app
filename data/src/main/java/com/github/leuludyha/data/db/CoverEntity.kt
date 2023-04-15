@@ -11,4 +11,10 @@ data class CoverEntity(
 ): Raw<Cover> {
     override fun toModel(libraryDao: LibraryDao): Cover =
         Cover(id = coverId)
+
+    companion object {
+        fun from(cover: Cover) = CoverEntity(
+            coverId = cover.id
+        )
+    }
 }
