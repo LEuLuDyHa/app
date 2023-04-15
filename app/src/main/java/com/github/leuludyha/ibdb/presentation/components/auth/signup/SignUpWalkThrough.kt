@@ -1,6 +1,7 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
@@ -20,11 +21,15 @@ fun SignUpWalkThrough(
     val (index, setIndex) = remember { mutableStateOf(0) }
 
     // If all prompts are completed, then call the "OnComplete" Function
-    if (index >= prompts.size) {
-        onComplete()
-        return
+
+    LaunchedEffect(index) {
+        if (index >= prompts.size) {
+            onComplete()
+        }
     }
 
-    // Just go to the next prompt
-    prompts[index].Display(authContext, onComplete = { setIndex(index + 1) })
+    if (index < prompts.size) {
+        // Just go to the next prompt
+        prompts[index].Display(authContext, onComplete = { setIndex(index + 1) })
+    }
 }

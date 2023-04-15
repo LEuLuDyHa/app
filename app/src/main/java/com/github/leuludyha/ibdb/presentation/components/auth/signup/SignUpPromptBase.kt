@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,12 +35,12 @@ abstract class SignUpPromptBase(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(5.dp)
+                .padding(10.dp)
         ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(10.dp)
+                    .padding(30.dp)
             ) {
                 Title(authContext = authContext)
             }
@@ -52,13 +53,21 @@ abstract class SignUpPromptBase(
 
             // If the component is not required, display a "skip" button
             if (isOptional) {
+                Spacer(modifier = Modifier.height(30.dp))
                 Row(
                     horizontalArrangement = Arrangement.End,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(5.dp)
+                    verticalAlignment = Alignment.Bottom,
+                    modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
                 ) {
-                    Button(onClick = onComplete) {
-                        Text(text = stringResource(id = R.string.prompt_skip_button))
+                    Button(
+                        onClick = onComplete, colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        Text(text = stringResource(id = R.string.prompt_next_button))
                     }
                 }
             }

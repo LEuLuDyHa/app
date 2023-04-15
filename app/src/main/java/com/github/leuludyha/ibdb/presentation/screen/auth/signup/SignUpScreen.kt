@@ -1,12 +1,15 @@
 package com.github.leuludyha.ibdb.presentation.screen.auth.signup
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeProfilePicturePrompt
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt
+import com.github.leuludyha.ibdb.presentation.components.auth.signup.DarkLightModePrompt
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpWalkThrough
-import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends.AddFriendsFromContactsPrompt
 
 
 /**
@@ -14,28 +17,34 @@ import com.github.leuludyha.ibdb.presentation.navigation.Screen
  * Prompts different info which are not given from the google account
  */
 @Composable
-fun SignUpScreen(
-    navController: NavHostController,
-    viewModel: SignUpScreenViewModel = hiltViewModel()
+fun FirstTimeLogInCheck(
+    viewModel: SignUpScreenViewModel = hiltViewModel(),
+    onCheckPassed: (@Composable () -> Unit),
 ) {
-    // If the walk through is already completed, go to home screen
     if (viewModel.isWalkThroughCompleted()) {
-        navController.navigate(Screen.Home.route)
-        return
-    }
+        onCheckPassed()
+    } else {
 
-    // Otherwise, display the walk-through
-    SignUpWalkThrough(
-        authContext = viewModel.authContext,
-        prompts = listOf(
-            ChangeUsernamePrompt,
-            ChangeProfilePicturePrompt,
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // Otherwise, display the walk-through
+            SignUpWalkThrough(
+                authContext = viewModel.authContext,
+                prompts = listOf(
+                    ChangeUsernamePrompt,
+                    ChangeProfilePicturePrompt,
+                    DarkLightModePrompt,
 
-            ),
-        // On walk through complete, navigate to home screen
-        onComplete = {
-            viewModel.rememberWalkThroughIsCompleted()
-            viewModel.persistUserState()
+                    // Lastly :
+                    AddFriendsFromContactsPrompt,
+                ),
+                // On walk through complete, navigate to home screen
+                onComplete = {
+                    viewModel.rememberWalkThroughIsCompleted()
+                    viewModel.persistUserState()
+                }
+            )
         }
-    )
+    }
 }

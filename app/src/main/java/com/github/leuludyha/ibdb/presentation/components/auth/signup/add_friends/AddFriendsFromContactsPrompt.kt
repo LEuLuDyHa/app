@@ -1,17 +1,31 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.ContentResolver
+import android.content.Context
+import android.database.Cursor
+import android.provider.ContactsContract
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.interfaces.Keyed
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.Orientation
+import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPromptBase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+
 
 /**
  * Display a component which prompts the user to
@@ -29,9 +43,33 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
 
         val context = LocalContext.current
 
+        val (acquaintances, setAcquaintances) = remember {
+            mutableStateOf(listOf<UserFromContact>())
+        }
+
         if (hasContactPermission(context)) {
             // if permission granted open intent to pick contact/
-            TODO("Not yet implemented")
+            LaunchedEffect(Unit) {
+                // Fetch contacts in the user's phone
+                val contacts = viewModel.getContacts(context)
+                setAcquaintances(
+                    // Set the acquaintances by linking phone number in database with user
+                    contacts.zip(viewModel.getPossibleAcquaintances(contacts))
+                        .map { UserFromContact(it.first, it.second) }
+                        // Remove possible duplicates if contact is present multiple times
+                        .distinctBy { it.Id() }
+                )
+            }
+            ItemList(
+                values = acquaintances,
+                orientation = Orientation.Vertical
+            ) {
+                MiniContactFoundView(
+                    contactName = it.contact.name,
+                    user = it.user
+                )
+            }
+
         } else {
             // if permission not granted requesting permission .
             requestContactPermission(context, activity = context as Activity)
@@ -47,25 +85,91 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
 
     @HiltViewModel
     class AddFriendsFromContactsViewModel @Inject constructor(
-
+        // TODO Import user datasource and find users from contacts
     ) : ViewModel() {
 
         /**
          * Find all contacts of the user, and map them to either a phone number or an email
+         * "Copy-pasted" from https://stackoverflow.com/questions/12562151/android-get-all-contacts
          */
-        fun getContacts(): List<Contact> {
-            TODO("Not yet implemented")
+        @SuppressLint("Range")
+        fun getContacts(ctx: Context): List<Contact> {
+            val result = mutableListOf<Contact>()
+            val cr: ContentResolver = ctx.contentResolver
+            val cur: Cursor? = cr.query(
+                ContactsContract.Contacts.CONTENT_URI,
+                null, null, null, null
+            )
+            if ((cur?.count ?: 0) > 0) {
+                while (cur != null && cur.moveToNext()) {
+                    val id: String = cur.getString(
+                        cur.getColumnIndex(ContactsContract.Contacts._ID)
+                    )
+                    val name: String = cur.getString(
+                        cur.getColumnIndex(
+                            ContactsContract.Contacts.DISPLAY_NAME
+                        )
+                    )
+                    if (cur.getInt(
+                            cur.getColumnIndex(
+                                ContactsContract.Contacts.HAS_PHONE_NUMBER
+                            )
+                        ) > 0
+                    ) {
+                        val pCur: Cursor? = cr.query(
+                            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                            null,
+                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                            arrayOf(id),
+                            null
+                        )
+                        if (pCur != null) {
+                            while (pCur.moveToNext()) {
+                                val phoneNo: String = pCur.getString(
+                                    pCur.getColumnIndex(
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER
+                                    )
+                                )
+
+                                result.add(
+                                    Contact(
+                                        name = name,
+                                        phoneNumber = phoneNo,
+                                        email = null
+                                    )
+                                )
+                            }
+                            pCur.close()
+                        }
+                    }
+                }
+            } else {
+                Log.e("FRIENDS", "No Contacts !")
+            }
+            cur?.close()
+
+            return result
         }
 
         /**
          * Return the list of existing users in the database which this user make know
          */
         fun getPossibleAcquaintances(contacts: List<Contact>): List<User> {
-            TODO("Not yet implemented")
+            return List(contacts.size) { Mocks.mainUser }
+            // TODO("Not yet implemented")
         }
     }
 
+    data class UserFromContact(
+        val contact: Contact,
+        val user: User,
+    ) : Keyed {
+        override fun Id() = user.Id()
+
+    }
+
     data class Contact(
+        val name: String,
         val phoneNumber: String?,
         val email: String?,
     ) {

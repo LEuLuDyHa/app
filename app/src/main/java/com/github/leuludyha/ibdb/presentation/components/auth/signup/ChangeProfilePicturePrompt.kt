@@ -14,6 +14,8 @@ object ChangeProfilePicturePrompt : SignUpPrompt {
         authContext: AuthenticationContext,
         onComplete: () -> Unit,
     ) {
+        onComplete()
+        return
         TODO("Not yet implemented")
     }
 }
