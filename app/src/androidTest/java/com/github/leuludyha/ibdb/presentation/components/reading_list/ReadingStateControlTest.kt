@@ -10,9 +10,9 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
-import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.ReadingStateControl
-import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.ReadingStateControlViewModel
-import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.TestTags
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.TestTags
 import onNodeByTag
 import org.hamcrest.MatcherAssert.*
 import org.junit.Assert.*
