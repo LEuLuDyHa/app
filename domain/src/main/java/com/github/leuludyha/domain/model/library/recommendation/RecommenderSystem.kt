@@ -196,7 +196,7 @@ class RecommenderSystem(
         logDebug("Final Dist : $finalDistFor")
 
         // Selected works sorted by minimal dist
-        return flow { selectedWorks.toList().sortedBy { finalDistFor[it] } }
+        return flow { emit(selectedWorks.toList().sortedBy { finalDistFor[it] }) }
     }
 
 }

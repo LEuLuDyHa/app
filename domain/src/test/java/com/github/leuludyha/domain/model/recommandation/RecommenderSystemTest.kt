@@ -7,6 +7,9 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.library.recommendation.RecommenderSystem
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.repository.UserRepository
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Test
@@ -34,35 +37,53 @@ class RecommenderSystemTest {
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun recommenderReturnEmptyListOnNoUserInSystem() {
-        initRecommender { _, _, _ -> listOf() }
-        assertThat("Should not crash on empty system", recommender(TestMocks.user1).isEmpty())
+        runTest {
+            initRecommender { _, _, _ -> listOf() }
+            assertThat(
+                "Should not crash on empty system",
+                recommender(TestMocks.user1).first().isEmpty()
+            )
+        }
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun recommenderReturnsUserWorksOnOneUserInSystem() {
-        initRecommender { _, _, _ -> listOf(TestMocks.user1) }
-        val recommendations = recommender(TestMocks.user2)
-        assertThat("Should not be empty", recommendations.isNotEmpty())
-        assertEquals(
-            TestMocks.user1.getWorksInReadingList().toSet(),
-            recommendations.toSet()
-        )
+        runTest {
+            initRecommender { _, _, _ -> listOf(TestMocks.user1) }
+            val recommendations = recommender(TestMocks.user2)
+            assertThat("Should not be empty", recommendations.first().isNotEmpty())
+            assertEquals(
+                TestMocks.user1.getWorksInReadingList().toSet(),
+                recommendations.first().toSet()
+            )
+        }
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun recommenderReturnsNoDuplicate() {
-        initRecommender { _, _, _ -> listOf(TestMocks.user1, TestMocks.user3) }
-        val recommendations: List<Work> = recommender(TestMocks.user2)
+        runTest {
+            initRecommender { _, _, _ -> listOf(TestMocks.user1, TestMocks.user3) }
+            val recommendations = recommender(TestMocks.user2)
 
-        assertThat(recommendations, containsInAnyOrder(Mocks.workLaFermeDesAnimaux))
+            assertThat(recommendations.first(), containsInAnyOrder(Mocks.workLaFermeDesAnimaux))
+        }
     }
 
     @Test
+    @OptIn(ExperimentalCoroutinesApi::class)
     fun recommenderRemovesInterestedWhenSpecified() {
-        initRecommender { _, _, _ -> listOf(TestMocks.user1) }
-        // User3 is interested in User1's La ferme des animaux
-        assertEquals(emptyList<Work>(), recommender(TestMocks.user3, removeInterested = true))
+        runTest {
+            initRecommender { _, _, _ -> listOf(TestMocks.user1) }
+            // User3 is interested in User1's La ferme des animaux
+            assertEquals(
+                emptyList<Work>(),
+                recommender(TestMocks.user3, removeInterested = true).first()
+            )
+        }
     }
 
     @Test
