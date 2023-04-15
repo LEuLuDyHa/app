@@ -1,15 +1,15 @@
 package com.github.leuludyha.domain.model.library.recommendation
 
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.library.recommendation.nn.LearnableWeight
+import com.github.leuludyha.domain.model.library.recommendation.nn.Weight
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.util.normalizedDifference
 
 class WorkTasteDistance(
-    private val learnableWeights: List<LearnableWeight> = listOf(
-        LearnableWeight(6f),
-        LearnableWeight(9f),
-        LearnableWeight(6f),
+    private val weights: List<Weight> = listOf(
+        Weight(6f),
+        Weight(9f),
+        Weight(6f),
     )
 ) {
 
@@ -29,7 +29,7 @@ class WorkTasteDistance(
         )
 
         var distance = 0.0f
-        values.forEachIndexed { index, value -> distance += value * learnableWeights[index].weight }
+        values.forEachIndexed { index, value -> distance += value * weights[index].value }
 
         return distance / values.size
     }

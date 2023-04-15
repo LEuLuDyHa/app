@@ -1,17 +1,17 @@
 package com.github.leuludyha.domain.model.library.recommendation
 
-import com.github.leuludyha.domain.model.library.recommendation.nn.LearnableWeight
+import com.github.leuludyha.domain.model.library.recommendation.nn.Weight
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.util.normalizedDifference
 import com.github.leuludyha.ibdb.util.similarity
 
 class UserTasteDistance(
-    private val learnableWeights: List<LearnableWeight> = listOf(
-        LearnableWeight(1f),
-        LearnableWeight(5f),
-        LearnableWeight(3f),
-        LearnableWeight(9f),
-        LearnableWeight(0.25f),
+    private val weights: List<Weight> = listOf(
+        Weight(1f),
+        Weight(5f),
+        Weight(3f),
+        Weight(9f),
+        Weight(0.25f),
     )
 ) {
 
@@ -36,7 +36,7 @@ class UserTasteDistance(
         )
 
         var distance = 0.0f
-        values.forEachIndexed { index, value -> distance += value * learnableWeights[index].weight }
+        values.forEachIndexed { index, value -> distance += value * weights[index].value }
 
         return distance / values.size
     }

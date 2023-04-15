@@ -1,7 +1,7 @@
 package com.github.leuludyha.domain.model.library.recommendation
 
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.library.recommendation.nn.LearnableWeight
+import com.github.leuludyha.domain.model.library.recommendation.nn.Weight
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.UserRepository
@@ -16,7 +16,6 @@ private const val DebugTag = "RecommenderSystem"
 
 class RecommenderSystem(
     private val userRepository: UserRepository,
-    private val lr: Float = 5e-5f,
 ) {
 
 //========== ======== ==== ==
@@ -35,34 +34,9 @@ class RecommenderSystem(
 //        NEIGHBOURS
 //========== ======== ==== ==
 
-    private val neighbourWeight = LearnableWeight(1.0f)
-    private val workTasteWeight = LearnableWeight(4.0f)
+    private val neighbourWeight = Weight(1.0f)
+    private val workTasteWeight = Weight(4.0f)
 
-//========== ======== ==== ==
-//        RECOMMENDATIONS MEMORY
-//========== ======== ==== ==
-
-    /**
-     * The set of all recommendations' id made to a given user by this model
-     * The model will not be able to output one of the works in this set for a user
-     * as it already recommended it to them. The set can be cleared using the
-     * dedicated function [clearRecommendationsMemoryFor]
-     */
-    private val recommendationsMadeFor: MutableMap<User, MutableSet<String>> = mutableMapOf()
-
-    /**
-     * Map inputs of the model to its recorded outputs
-     */
-    private val records: MutableMap<User, Map<Work, Float>> = mutableMapOf()
-
-    /**
-     * Clear the set of recommendations made for a user so that
-     * works previously in this set can be recommended again
-     */
-    fun clearRecommendationsMemoryFor(user: User) {
-        TODO("Not Yet Implemented")
-        // recommendationsMadeFor[user]?.clear()
-    }
 
 //========== ======== ==== ==
 //        FORWARD
@@ -81,8 +55,6 @@ class RecommenderSystem(
         removeInterested: Boolean = false,
         actFunction: ActivationFunction = Sigmoid()
     ): List<Work> {
-        // Find all previous recommendations for the user
-        // val previousRecommendations = recommendationsMadeFor[user] ?: emptySet()
         /* Idea :
         - A possible way to to have efficient lookup is to only query on books already in the database
         - K-Nearest neighbours
@@ -190,7 +162,7 @@ class RecommenderSystem(
         println("$DebugTag :: Norm Neighbour Weight : $normNeighbourDistFor")
 
         /*
-         TODO Now, across the selected works, find the closest in taste, based on
+         Now, across the selected works, find the closest in taste, based on
             - Number of times it appears in the list (It may come multiple times from different neighbours
             - The neighbour it comes from (A closest neighbours might have bigger weight)
             - Subject it has compared to preferred subjects
@@ -206,41 +178,15 @@ class RecommenderSystem(
         // Combine metrics
         val finalDistFor = selectedWorks.associateWith {
             actFunction(
-                normWorkDistFor[it]!! * workTasteWeight.weight
-                        + normNeighbourDistFor[it]!! * workTasteWeight.weight
+                normWorkDistFor[it]!! * workTasteWeight.value
+                        + normNeighbourDistFor[it]!! * workTasteWeight.value
             )
         }
 
         println("$DebugTag :: Final Dist : $finalDistFor")
 
-//        // We have our output, let's save it
-//        records[user] = finalDistFor
-//
-//        // Take the smallest distance of all
-//        val recommendation: Work = finalDistFor.minBy { it.value }.key;
-//        // Add the recommendation in memory
-//        if (!recommendationsMadeFor.contains(user)) { recommendationsMadeFor[user] = mutableSetOf() }
-//        recommendationsMadeFor[user]!!.add(recommendation.id)
-
         // Selected works sorted by minimal dist
         return selectedWorks.toList().sortedBy { finalDistFor[it] }
     }
 
-//========== ======== ==== ==
-//        BACKWARD
-//========== ======== ==== ==
-
-    fun backward(
-        user: User,
-        recommendedWork: Work,
-        goodRecommendation: Boolean
-    ) {
-        // The backpropagation must occur only on outputs of model that exist
-        // assert(records.containsKey(user))
-
-        // Get record
-        // val outputWeights = records[user]
-
-        // TODO Maybe
-    }
 }
