@@ -10,6 +10,7 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
