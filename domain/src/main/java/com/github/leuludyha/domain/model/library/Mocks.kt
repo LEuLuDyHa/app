@@ -1,5 +1,6 @@
 package com.github.leuludyha.domain.model.library
 
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
@@ -50,4 +51,6 @@ object Mocks {
         preferences = userPreferences,
         profilePictureUrl = null
     )
+
+    val authContext: AuthenticationContext = AuthenticationContext(user)
 }

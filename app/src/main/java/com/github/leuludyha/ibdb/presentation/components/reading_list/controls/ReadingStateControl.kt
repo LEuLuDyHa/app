@@ -20,6 +20,7 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.WorkPreference
 import com.github.leuludyha.domain.util.TestTag
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
@@ -78,7 +79,9 @@ fun ReadingStateControl(
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = { onLikeButtonClicked(!liked) }, colors = IconButtonDefaults.iconButtonColors(
+            modifier = Modifier.testTag(TestTags.likeButton),
+            onClick = { onLikeButtonClicked(!liked) },
+            colors = IconButtonDefaults.iconButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary
             )
         ) {
@@ -94,6 +97,7 @@ fun ReadingStateControl(
             Column {
                 Button(
                     onClick = { setExpanded(!expanded) },
+                    modifier = Modifier.testTag(TestTags.readingStateController),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer
                     )

@@ -4,11 +4,14 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.ReadingStateControl
+import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.ReadingStateControlViewModel
 import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.TestTags
 import onNodeByTag
 import org.hamcrest.MatcherAssert.*
@@ -38,7 +41,18 @@ class ReadingStateControlTest {
         state = preferences.workPreferences[work.id]!!
 
         composeTestRule.setContent {
-            ReadingStateControl(work = work)
+            ReadingStateControl(
+                work = work,
+                viewModel = ReadingStateControlViewModel(
+                    AuthenticationContext(
+                        User(
+                            username = "Bobby",
+                            profilePictureUrl = null,
+                            preferences = preferences
+                        )
+                    )
+                )
+            )
         }
     }
 
