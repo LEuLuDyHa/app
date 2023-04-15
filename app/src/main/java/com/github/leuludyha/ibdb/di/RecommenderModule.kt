@@ -13,8 +13,9 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 object RecommenderModule {
+
     @Provides
-    fun providerRecommender(
+    fun provideRecommender(
         userRepository: UserRepository
-    ): RecommenderSystem = RecommenderSystem(userRepository, lr = 2e-5f)
+    ): RecommenderSystem = RecommenderSystem(userRepository)
 }

@@ -9,6 +9,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -27,6 +29,8 @@ fun HomeScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
+
+    val (isEmpty, setEmpty) = remember { mutableStateOf(true) }
 
     SideEffect {
         systemUiController.setStatusBarColor(color = systemBarColor)
@@ -49,11 +53,15 @@ fun HomeScreen(
             preferences = userPreferences
         )
         Divider()
-        Text(
-            modifier = Modifier.padding(start = 10.dp, top = 10.dp),
-            text = stringResource(id = R.string.recommendation_list_title),
-            style = MaterialTheme.typography.headlineMedium
-        )
-        RecommendationList(navController)
+        // Only display the header if the recommendation list is not empty
+        if (!isEmpty) {
+            Text(
+                modifier = Modifier.padding(start = 10.dp, top = 10.dp),
+                text = stringResource(id = R.string.recommendation_list_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        // The recommendation list is not visible if empty either way
+        RecommendationList(navController, onRecommendations = { setEmpty(it) })
     }
 }

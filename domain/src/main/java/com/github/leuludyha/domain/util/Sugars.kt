@@ -20,7 +20,6 @@ fun <T> List<T>.similarity(other: List<T>): Float {
     }
     // Divide by cardinality of union
     // (Which is sum of cardinalities minus cardinality of intersection)
-    println("Similarity :: \t\t - This : ${this.size}, That : ${other.size}, Sum : $sum")
     sum /= (this.size + other.size - sum)
     return sum
 }

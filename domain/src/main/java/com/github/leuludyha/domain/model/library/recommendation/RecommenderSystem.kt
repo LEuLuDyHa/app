@@ -7,13 +7,15 @@ import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.UserRepository
 import com.github.leuludyha.domain.util.Constants
 import com.github.leuludyha.ibdb.util.normalizedWeights
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
 import kotlin.streams.toList
 
 private const val DebugTag = "RecommenderSystem"
-private const val DebugRecommender = false
+private const val DebugRecommender = true
 
 private fun logDebug(s: String) {
     if (!DebugRecommender) {
@@ -62,7 +64,7 @@ class RecommenderSystem(
         maxNumberOfConsideredSuggestions: Int = 200,
         removeInterested: Boolean = false,
         actFunction: ActivationFunction = Sigmoid()
-    ): List<Work> {
+    ): Flow<List<Work>> {
         /* Idea :
         - A possible way to to have efficient lookup is to only query on books already in the database
         - K-Nearest neighbours
@@ -194,7 +196,7 @@ class RecommenderSystem(
         logDebug("Final Dist : $finalDistFor")
 
         // Selected works sorted by minimal dist
-        return selectedWorks.toList().sortedBy { finalDistFor[it] }
+        return flow { selectedWorks.toList().sortedBy { finalDistFor[it] } }
     }
 
 }
