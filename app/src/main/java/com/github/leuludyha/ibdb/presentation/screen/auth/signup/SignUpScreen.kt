@@ -21,6 +21,7 @@ fun FirstTimeLogInCheck(
     viewModel: SignUpScreenViewModel = hiltViewModel(),
     onCheckPassed: (@Composable () -> Unit),
 ) {
+    // If check is passed, display content
     if (viewModel.isWalkThroughCompleted()) {
         onCheckPassed()
     } else {

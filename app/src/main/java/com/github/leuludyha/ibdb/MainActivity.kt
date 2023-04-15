@@ -53,20 +53,24 @@ class MainActivity : ComponentActivity() {
             key2 = authContext?.principal?.preferences?.darkTheme?.value,
         ) {
             if (isAuthContextPresent) {
-                // We can !! because authContext is present
+                // We can "!!" because authContext is present
                 setDarkTheme(authContext!!.principal.preferences.darkTheme.value)
             }
         }
 
+        // Take user preference if available or system defaults otherwise
         IBDBTheme(darkTheme = if (isAuthContextPresent) darkTheme else isSystemInDarkTheme()) {
 
             AuthenticationProvider(
+                // On signed in, pass the auth context to this activity
                 onSignedIn = {
                     authContext = it
                     setAuthContextPresent(true)
                 }
             ) {
+                // Check if the user is logged in for the first time
                 FirstTimeLogInCheck {
+                    // Once check is passed, display rest of the app
                     NavGraph(navController = navController)
                 }
             }

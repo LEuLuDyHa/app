@@ -21,7 +21,6 @@ fun SignUpWalkThrough(
     val (index, setIndex) = remember { mutableStateOf(0) }
 
     // If all prompts are completed, then call the "OnComplete" Function
-
     LaunchedEffect(index) {
         if (index >= prompts.size) {
             onComplete()

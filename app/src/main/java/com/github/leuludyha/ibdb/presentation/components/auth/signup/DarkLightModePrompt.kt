@@ -32,12 +32,17 @@ object DarkLightModePrompt : SignUpPrompt {
         onComplete: () -> Unit
     ) {
         val context = LocalContext.current
+        // Whether the theme should be dark or light
         val (darkTheme, setDarkTheme) = remember { authContext.principal.preferences.darkTheme }
 
+        // Collects the size of the background when it is mounted on the view
         val (colSize, setColSize) = remember { mutableStateOf(Pair(0f, 0f)) }
 
+        // Blending factor for background color gradient, animated on theme swap
         val blendingFactor: Float by animateFloatAsState(if (darkTheme) 2f else 0f)
 
+        // Fetch the dynamic dark and light themes
+        // TODO Check like in Theme.kt that the system is compatible with dynamics
         val darkBackground = dynamicDarkColorScheme(context)
         val lightBackground = dynamicLightColorScheme(context)
 
@@ -51,12 +56,8 @@ object DarkLightModePrompt : SignUpPrompt {
                 .fillMaxSize()
                 .padding(10.dp)
                 .onGloballyPositioned {
-                    setColSize(
-                        Pair(
-                            it.size.width.toFloat(),
-                            it.size.height.toFloat()
-                        )
-                    )
+                    // Save background size when mounted
+                    setColSize(Pair(it.size.width.toFloat(), it.size.height.toFloat()))
                 }
                 .background(
                     Brush.linearGradient(
@@ -66,6 +67,7 @@ object DarkLightModePrompt : SignUpPrompt {
                             startFactor * colSize.second
                         ),
                         end = Offset(
+                            // +1 is to remove glitches of background
                             endFactor * colSize.first + 1f,
                             endFactor * colSize.second + 1f,
                         ),
@@ -80,6 +82,7 @@ object DarkLightModePrompt : SignUpPrompt {
                     .fillMaxWidth()
                     .padding(30.dp)
             ) {
+                // Display the title
                 Text(
                     text = stringResource(id = R.string.dark_mode_prompt_title),
                     style = MaterialTheme.typography.titleLarge,
@@ -87,10 +90,12 @@ object DarkLightModePrompt : SignUpPrompt {
                 )
             }
 
+            // Button to swap between light and dark theme
             Button(onClick = { setDarkTheme(!darkTheme) }) {
                 Text(text = stringResource(id = R.string.dark_mode_prompt_button))
             }
             Spacer(modifier = Modifier.height(30.dp))
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,6 +103,7 @@ object DarkLightModePrompt : SignUpPrompt {
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // Button to skip to next
                 Button(
                     onClick = { onComplete() }, colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
