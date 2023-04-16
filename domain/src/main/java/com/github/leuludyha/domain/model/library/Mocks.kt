@@ -52,6 +52,7 @@ object Mocks {
         UUID.randomUUID().toString(),
         username = "Mockentosh",
         preferences = userPreferences,
+        phoneNumber = "",
         profilePictureUrl = null
     )
 

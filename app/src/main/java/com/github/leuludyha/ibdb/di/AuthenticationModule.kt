@@ -20,7 +20,8 @@ object AuthenticationModule {
             Firebase.auth.currentUser?.uid!!,
             Firebase.auth.currentUser?.displayName ?: "username",
             Firebase.auth.currentUser?.photoUrl.toString(),
-            Mocks.userPreferences
+            Firebase.auth.currentUser?.phoneNumber,
+            Mocks.userPreferences,
         )
     )
 

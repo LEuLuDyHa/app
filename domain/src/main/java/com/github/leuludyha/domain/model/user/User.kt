@@ -11,4 +11,6 @@ interface User : Keyed {
     val username: String
 
     val profilePictureUrl: String?
+
+    val phoneNumber: String?
 }

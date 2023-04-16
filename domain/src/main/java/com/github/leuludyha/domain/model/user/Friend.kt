@@ -6,6 +6,7 @@ package com.github.leuludyha.domain.model.user
 data class Friend(
     val userId: String,
     override val username: String,
+    override val phoneNumber: String? = null,
     override val profilePictureUrl: String?,
 ) : User {
 
