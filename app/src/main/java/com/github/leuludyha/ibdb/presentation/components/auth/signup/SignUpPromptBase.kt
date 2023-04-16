@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,7 +30,11 @@ abstract class SignUpPromptBase(
 
     @Composable
     protected fun DefaultTitle(text: String) {
-        Text(text = text, style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
     }
 
     @Composable
@@ -41,6 +46,7 @@ abstract class SignUpPromptBase(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(10.dp)
         ) {
             Box(

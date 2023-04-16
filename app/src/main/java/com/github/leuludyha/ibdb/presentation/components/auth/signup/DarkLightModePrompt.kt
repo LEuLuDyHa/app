@@ -102,7 +102,7 @@ object DarkLightModePrompt : SignUpPrompt {
                     text = stringResource(id = R.string.dark_mode_prompt_title),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Left,
-                    color = if (darkTheme) Color.White else Color.Black
+                    color = MaterialTheme.colorScheme.onBackground
                 )
             }
 
