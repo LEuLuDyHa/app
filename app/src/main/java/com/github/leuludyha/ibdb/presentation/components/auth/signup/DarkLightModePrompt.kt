@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
+import android.os.Build
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
@@ -41,10 +43,14 @@ object DarkLightModePrompt : SignUpPrompt {
         // Blending factor for background color gradient, animated on theme swap
         val blendingFactor: Float by animateFloatAsState(if (darkTheme) 2f else 0f)
 
+        // Check if dynamic theming is compatible
+        val isDynamicCompatible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
         // Fetch the dynamic dark and light themes
-        // TODO Check like in Theme.kt that the system is compatible with dynamics
-        val darkBackground = dynamicDarkColorScheme(context)
-        val lightBackground = dynamicLightColorScheme(context)
+        val darkBackground =
+            if (isDynamicCompatible) dynamicDarkColorScheme(context).background else Color.DarkGray
+        val lightBackground =
+            if (isDynamicCompatible) dynamicLightColorScheme(context).background else Color.LightGray
 
         // Stay at 0 in first half of animation, then go to 100%
         val startFactor = if (blendingFactor <= 1f) 0f else blendingFactor - 1f
@@ -61,7 +67,7 @@ object DarkLightModePrompt : SignUpPrompt {
                 }
                 .background(
                     Brush.linearGradient(
-                        colors = listOf(darkBackground.background, lightBackground.background),
+                        colors = listOf(darkBackground, lightBackground),
                         start = Offset(
                             startFactor * colSize.first,
                             startFactor * colSize.second
