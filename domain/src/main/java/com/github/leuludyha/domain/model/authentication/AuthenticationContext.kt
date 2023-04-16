@@ -1,6 +1,6 @@
 package com.github.leuludyha.domain.model.authentication
 
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.MainUser
 
 /**
  * The authentication context contains
@@ -8,5 +8,5 @@ import com.github.leuludyha.domain.model.user.User
  * including the principal : The identity of the user currently logged in
  */
 open class AuthenticationContext(
-    val principal: User,
+    val principal: MainUser,
 )

@@ -7,7 +7,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
@@ -21,6 +21,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.*
 
 @RunWith(AndroidJUnit4::class)
 class ReadingStateControlTest {
@@ -46,9 +47,11 @@ class ReadingStateControlTest {
                 work = work,
                 viewModel = ReadingStateControlViewModel(
                     AuthenticationContext(
-                        User(
+                        MainUser(
+                            userId = UUID.randomUUID().toString(),
                             username = "Bobby",
-                            profilePictureUrl = null,
+                            phoneNumber = null,
+                            profilePictureUrl = "",
                             preferences = preferences,
                             statistics = UserStatistics(
                                 preferredWorks = listOf(Mocks.work1984),

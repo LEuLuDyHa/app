@@ -32,6 +32,7 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
     onAfterLaunched()
 }
 
+
 /**
  * From a [TabDescriptor], return the test tag this [TabDescriptor] will have to
  * find it with the [onNodeWithTag]
@@ -39,6 +40,7 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
 fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
     return "bottomtoolbar::tab_item::${descriptor.displayName}"
 }
+
 
 /**
  * Click on the bottom tab specified by [TabDescriptor]

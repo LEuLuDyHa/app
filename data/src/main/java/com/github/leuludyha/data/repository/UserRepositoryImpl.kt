@@ -1,12 +1,17 @@
 package com.github.leuludyha.data.repository
 
-import com.github.leuludyha.data.repository.datasource.UserDataSource
+import com.github.leuludyha.data.users.UserDatabase
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.repository.UserRepository
+import java.util.concurrent.CompletableFuture
 
 class UserRepositoryImpl(
-    private val userDataSource: UserDataSource
+    private val userDatabase: UserDatabase
 ) : UserRepository {
+
+    override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
+        return userDatabase.getUserFromPhoneNumber(phoneNumber)
+    }
 
     /**
      * @param user User to get the neighbours of
@@ -19,6 +24,6 @@ class UserRepositoryImpl(
         distance: (User, User) -> Float,
         n: Int
     ): List<User> {
-        return userDataSource.getNeighbouringUsersOf(user, distance, n)
+        return userDatabase.getNeighbouringUsersOf(user, distance, n)
     }
 }

@@ -7,7 +7,7 @@ import com.github.leuludyha.data.repository.LibraryRepositoryImpl
 import com.github.leuludyha.data.repository.UserRepositoryImpl
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
-import com.github.leuludyha.data.repository.datasource.UserDataSource
+import com.github.leuludyha.data.users.UserDatabase
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.repository.UserRepository
@@ -38,11 +38,6 @@ object RepositoryModule {
         LibraryRepositoryImpl(libraryRemoteDataSource, libraryLocalDataSource)
 
     @Provides
-    fun provideUserRepository(
-        userDatasource: UserDataSource
-    ): UserRepository = UserRepositoryImpl(userDatasource)
-
-    @Provides
     fun oneTapClient(
         @ApplicationContext context: Context
     ) = Identity.getSignInClient(context)
@@ -59,6 +54,11 @@ object RepositoryModule {
         db = Firebase.firestore
     )
 
+    @Provides
+    fun provideUserRepository(
+        userDatabase: UserDatabase
+    ): UserRepository = UserRepositoryImpl(userDatabase)
+
     private fun signInRequest(app: Application, filterAccounts: Boolean) =
         BeginSignInRequest.builder()
             .setGoogleIdTokenRequestOptions(
@@ -66,7 +66,8 @@ object RepositoryModule {
                     .setSupported(true)
                     .setServerClientId(app.getString(R.string.web_client_id))
                     .setFilterByAuthorizedAccounts(filterAccounts)
-                    .build())
+                    .build()
+            )
             .setAutoSelectEnabled(true)
             .build()
 

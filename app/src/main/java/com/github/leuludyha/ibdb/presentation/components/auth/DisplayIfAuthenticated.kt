@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.authentication
+package com.github.leuludyha.ibdb.presentation.components.auth
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.ibdb.R
 
 /**
@@ -22,12 +22,12 @@ import com.github.leuludyha.ibdb.R
 fun DisplayIfAuthenticated(
     authContext: AuthenticationContext,
     fallback: (@Composable () -> Unit)? = null,
-    content: @Composable (authenticatedPrincipal: User) -> Unit
+    content: @Composable (authenticatedPrincipal: MainUser) -> Unit
 ) {
     // If we have an authenticated principal in the current authentication context
     if (authContext.principal != null) {
+        content(authContext.principal)
         // Then display the content while providing it with the principal
-        content(authContext.principal!!)
     } else {
         Column(modifier = Modifier
             .fillMaxWidth()

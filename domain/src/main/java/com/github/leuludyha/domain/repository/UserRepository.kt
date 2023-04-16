@@ -1,9 +1,16 @@
 package com.github.leuludyha.domain.repository
 
 import com.github.leuludyha.domain.model.user.User
+import java.util.concurrent.CompletableFuture
 
 @FunctionalInterface
 interface UserRepository {
+
+    /**
+     * Retrieves a user from a phone number
+     */
+    fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User>
+
     /**
      * @param user User to get the neighbours of
      * @param distance Distance to use to get the neighbours
