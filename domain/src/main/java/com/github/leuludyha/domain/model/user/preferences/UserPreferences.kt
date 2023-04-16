@@ -1,6 +1,6 @@
-package com.github.leuludyha.domain.model.user
+package com.github.leuludyha.domain.model.user.preferences
 
-class UserPreferences(
+open class UserPreferences(
     /** Map WorkId -> WorkPreference */
     var workPreferences: MutableMap<String, WorkPreference> = mutableMapOf()
 )
