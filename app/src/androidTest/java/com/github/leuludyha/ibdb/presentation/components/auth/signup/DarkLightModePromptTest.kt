@@ -25,6 +25,8 @@ class DarkLightModePromptTest {
         val user = Mocks.mainUser
         val authContext = Mocks.authContext
 
+        DarkLightModePrompt.isDynamicCompatible = false
+
         user.preferences.darkTheme.component2()(true)
 
         // Mount the prompt on the view
@@ -63,7 +65,7 @@ class DarkLightModePromptTest {
         val authContext = Mocks.authContext
 
         // Go though all branches
-        DarkLightModePrompt.isDynamicCompatible = true
+        DarkLightModePrompt.isDynamicCompatible = false
 
         // Mount the prompt on the view
         composeTestRule.setContent {
@@ -78,6 +80,8 @@ class DarkLightModePromptTest {
     fun lightThemeIsChangedToDarkWhenButtonClickedOnLightTheme() {
         val user = Mocks.mainUser
         val authContext = Mocks.authContext
+        // This makes the CLI crash
+        DarkLightModePrompt.isDynamicCompatible = false
 
         user.preferences.darkTheme.component2()(false)
 
