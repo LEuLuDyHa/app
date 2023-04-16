@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
+import android.annotation.TargetApi
 import android.os.Build
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
@@ -40,6 +41,7 @@ object DarkLightModePrompt : SignUpPrompt {
             && Build.VERSION.SDK_INT >= DynamicThemeApiLevel
 
     @Composable
+    @TargetApi(DynamicThemeApiLevel)
     override fun Display(
         authContext: AuthenticationContext,
         onComplete: () -> Unit
