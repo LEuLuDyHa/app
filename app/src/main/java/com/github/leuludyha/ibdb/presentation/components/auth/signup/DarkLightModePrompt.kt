@@ -25,6 +25,8 @@ import com.github.leuludyha.domain.util.TestTag
 import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 
+private const val DynamicThemeApiLevel = 31
+
 /**
  * Displays a component which prompts the user to use either light mode or dark mode
  */
@@ -35,6 +37,7 @@ object DarkLightModePrompt : SignUpPrompt {
     }
 
     var isDynamicCompatible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+            && Build.VERSION.SDK_INT >= DynamicThemeApiLevel
 
     @Composable
     override fun Display(
