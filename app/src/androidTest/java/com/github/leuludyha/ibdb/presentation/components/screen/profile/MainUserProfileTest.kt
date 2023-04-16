@@ -38,6 +38,7 @@ class MainUserProfileTest {
         UUID.randomUUID().toString(),
         "TestUser",
         null,
+        "",
         UserPreferences()
     )
     private val authContext = AuthenticationContext(mainUser)
