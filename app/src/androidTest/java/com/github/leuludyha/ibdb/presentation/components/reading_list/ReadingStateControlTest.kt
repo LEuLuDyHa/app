@@ -8,8 +8,8 @@ import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.User
-import com.github.leuludyha.domain.model.user.UserPreferences
-import com.github.leuludyha.domain.model.user.WorkPreference
+import com.github.leuludyha.domain.model.user.preferences.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.TestTags
