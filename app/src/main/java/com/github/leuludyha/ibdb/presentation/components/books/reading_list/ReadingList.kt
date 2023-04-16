@@ -11,8 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.domain.model.library.Mocks
-import com.github.leuludyha.domain.model.user.UserPreferences
-import com.github.leuludyha.domain.model.user.WorkPreference
+import com.github.leuludyha.domain.model.user.preferences.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
