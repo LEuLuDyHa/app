@@ -17,6 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.interfaces.Keyed
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
 import com.github.leuludyha.ibdb.R
@@ -157,6 +158,9 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
          * Return the list of existing users in the database which this user make know
          */
         fun getPossibleAcquaintances(contacts: List<Contact>): List<User> {
+            return List(contacts.size) { Mocks.mainUser }
+            // TODO fix the firebase bug
+            
             // Map phone numbers to users
             val userFutures = contacts
                 .filter { it.isPhoneNumberValid() }
