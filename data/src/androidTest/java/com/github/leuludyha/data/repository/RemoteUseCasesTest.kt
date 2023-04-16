@@ -1,9 +1,9 @@
 package com.github.leuludyha.data.repository
 
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.data.RequiringLibraryRepositoryTest
 import com.github.leuludyha.data.api.RawDocument
+import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
@@ -119,7 +119,7 @@ class RemoteUseCasesTest: RequiringLibraryRepositoryTest() {
             //bio = "Roald Dahl was a British novelist, short story writer, and screenwriter.",
             id = "OL34184A",
             works = flowOf(listOf(dumbWork)),
-            photos = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
+            covers = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
         )
 
         mockEdition = Edition(
@@ -215,7 +215,7 @@ class RemoteUseCasesTest: RequiringLibraryRepositoryTest() {
         assertThat(result.wikipedia).isEqualTo(mockAuthor.wikipedia)
         assertThat(result.deathDate).isEqualTo(mockAuthor.deathDate)
         assertThat(result.birthDate).isEqualTo(mockAuthor.birthDate)
-        assertThat(result.photos.first()).isEqualTo(mockAuthor.photos.first())
+        assertThat(result.covers.first()).isEqualTo(mockAuthor.covers.first())
     }
 
     @Test

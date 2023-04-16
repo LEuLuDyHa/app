@@ -63,7 +63,7 @@ data class RawAuthor(
             //bio = bio,
             wikipedia = wikipedia,
             works = works,
-            photos = photos
+            covers = photos
         )
     }
 

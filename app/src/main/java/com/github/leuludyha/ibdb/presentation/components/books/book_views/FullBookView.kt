@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.book_views
+package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -18,7 +18,7 @@ import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.components.reading_list.controls.ReadingStateControl
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 
 @Composable
 fun FullBookView(
