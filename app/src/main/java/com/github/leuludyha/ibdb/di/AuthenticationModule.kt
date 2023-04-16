@@ -29,7 +29,7 @@ object AuthenticationModule {
                 preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
                 averageNumberOfPages = 42,
             ),
-            friends = listOf(Mocks.user)
+            friends = listOf(Mocks.mainUser)
         )
     )
 

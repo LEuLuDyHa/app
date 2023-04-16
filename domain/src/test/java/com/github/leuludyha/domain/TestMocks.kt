@@ -1,15 +1,19 @@
 package com.github.leuludyha.domain
 
 import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import java.util.*
 
 object TestMocks {
 
-    val user1: User = User(
-        "Camilla", null,
+    val user1: User = MainUser(
+        UUID.randomUUID().toString(),
+        "Camilla", "",
+        null,
         UserPreferences(
             mutableMapOf(
                 Pair(
@@ -28,8 +32,10 @@ object TestMocks {
         friends = listOf()
     )
 
-    val user2: User = User(
-        "Hector", null,
+    val user2: User = MainUser(
+        UUID.randomUUID().toString(),
+        "Hector", "",
+        null,
         UserPreferences(
             mutableMapOf(
 
@@ -44,8 +50,9 @@ object TestMocks {
         friends = listOf(user1)
     )
 
-    val user3: User = User(
-        "Stella", null,
+    val user3: User = MainUser(
+        UUID.randomUUID().toString(),
+        "Stella", "", null,
         UserPreferences(
             mutableMapOf(
                 Pair(

@@ -2,8 +2,6 @@ package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.MainUser
-import com.github.leuludyha.domain.model.user.UserPreferences
-import com.github.leuludyha.domain.model.user.WorkPreference
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
@@ -56,7 +54,7 @@ object Mocks {
         username = "Mockentosh",
         preferences = userPreferences,
         phoneNumber = "",
-        profilePictureUrl = null,
+        profilePictureUrl = "",
         statistics = UserStatistics(
             preferredWorks = listOf(work1984),
             preferredSubjects = listOf("Censorship"),

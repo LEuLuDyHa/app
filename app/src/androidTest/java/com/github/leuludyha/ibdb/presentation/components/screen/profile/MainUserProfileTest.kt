@@ -12,7 +12,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.MainUser
-import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
@@ -39,7 +38,7 @@ class MainUserProfileTest {
     private val mainUser = MainUser(
         UUID.randomUUID().toString(),
         "TestUser",
-        null,
+        "",
         "",
         UserPreferences(), UserStatistics(
             preferredWorks = listOf(),
