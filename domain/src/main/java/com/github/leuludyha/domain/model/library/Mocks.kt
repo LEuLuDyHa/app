@@ -1,5 +1,6 @@
 package com.github.leuludyha.domain.model.library
 
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
@@ -58,4 +59,6 @@ object Mocks {
         ),
         friends = listOf()
     )
+
+    val authContext: AuthenticationContext = AuthenticationContext(user)
 }

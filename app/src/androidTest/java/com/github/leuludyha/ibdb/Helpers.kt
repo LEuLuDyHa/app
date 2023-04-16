@@ -1,11 +1,13 @@
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
+import com.github.leuludyha.domain.util.TestTag
 import com.github.leuludyha.ibdb.presentation.navigation.TabDescriptor
 
 /**
@@ -31,16 +33,27 @@ inline fun <reified A: Activity> ComposeTestRule.launch(
 }
 
 /**
- * Returns a formatted string in accordance to the one used as a test tag on the BottomToolBar class.
+ * From a [TabDescriptor], return the test tag this [TabDescriptor] will have to
+ * find it with the [onNodeWithTag]
  */
-internal fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
+fun getBottomToolbarTestTagFrom(descriptor: TabDescriptor): String {
     return "bottomtoolbar::tab_item::${descriptor.displayName}"
 }
 
 /**
- * This method will perform a click on the BottomTab's corresponding tab, avoiding the need to take care of the formatting
- * used by the BottomTab class.
+ * Click on the bottom tab specified by [TabDescriptor]
+ * This method can be used on a [ComposeTestRule] instance like such
+ * [composeTestRule.clickOnBottomTab(tab)]
  */
-internal fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
+fun ComposeTestRule.clickOnBottomTab(descriptor: TabDescriptor) {
     this.onNodeWithTag(getBottomToolbarTestTagFrom(descriptor)).performClick()
+}
+
+/**
+ * Return the [SemanticsNodeInteraction] which has the specified [TestTag]
+ * This method can be used on a [ComposeTestRule] instance like such
+ * [composeTestRule.clickOnBottomTab(tab)]
+ */
+fun ComposeTestRule.onNodeByTag(testTag: TestTag): SemanticsNodeInteraction {
+    return this.onNodeWithTag(testTag.tag)
 }
