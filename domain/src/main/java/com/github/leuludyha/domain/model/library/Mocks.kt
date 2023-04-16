@@ -1,8 +1,9 @@
 package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.user.User
-import com.github.leuludyha.domain.model.user.UserPreferences
-import com.github.leuludyha.domain.model.user.WorkPreference
+import com.github.leuludyha.domain.model.user.preferences.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.UserStatistics
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.flowOf
 
 /** A mock work we can use to preview stuff or test */
@@ -107,6 +108,13 @@ object Mocks {
     val user: User = User(
         username = "Mockentosh",
         preferences = userPreferences,
-        profilePictureUrl = null
+        profilePictureUrl = null,
+        statistics = UserStatistics(
+            preferredWorks = listOf(work1984),
+            preferredSubjects = listOf("Censorship"),
+            preferredAuthors = listOf(author),
+            averageNumberOfPages = 42
+        ),
+        friends = listOf()
     )
 }

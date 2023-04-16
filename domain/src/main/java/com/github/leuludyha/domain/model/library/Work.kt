@@ -12,6 +12,7 @@ data class Work(
     val authors: Flow<List<Author>>,
     val covers: Flow<List<Cover>>,
     val subjects: Flow<List<String>>,
+    val nbOfPages: Int = 0,
 ): Keyed {
     override fun Id() = id
 
@@ -20,6 +21,10 @@ data class Work(
         if (other !is Work) return false
 
         return id == other.id
+    }
+
+    override fun toString(): String {
+        return "${this.title}"
     }
 
     override fun hashCode(): Int = id.hashCode()
