@@ -97,7 +97,6 @@ class RecommenderSystem(
         val neighbourWeightFor = neighbourDistances.normalizedWeights()
         logDebug("Neighbour weights : $neighbourWeightFor")
 
-        var nbOfWorks = 0
         // All works read linked to their reader among the neighbours
         val worksReadBy = neighbours.associateWith { neighbour ->
             val readWorks = neighbour.preferences.workPreferences.values
@@ -118,7 +117,6 @@ class RecommenderSystem(
                 }.toList()
                 // Sort by distance, from smallest to largest : Get preferred books first
                 .sortedBy { workTasteDistance(user, it) }
-            nbOfWorks += readWorks.size
 
             readWorks
         }

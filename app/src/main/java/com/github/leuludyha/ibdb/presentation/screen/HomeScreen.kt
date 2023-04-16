@@ -1,9 +1,11 @@
 package com.github.leuludyha.ibdb.presentation.screen
 
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -42,6 +44,7 @@ fun HomeScreen(
         modifier = Modifier
             .padding(outerPadding)
             .fillMaxWidth()
+            .verticalScroll(state = ScrollState(0), enabled = true)
     ) {
         Text(
             modifier = Modifier.padding(start = 10.dp, top = 10.dp),
