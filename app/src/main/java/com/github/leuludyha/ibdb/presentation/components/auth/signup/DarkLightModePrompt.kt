@@ -21,12 +21,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.util.TestTag
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 
 /**
  * Displays a component which prompts the user to use either light mode or dark mode
  */
 object DarkLightModePrompt : SignUpPrompt {
+
+    object TestTags {
+        val toggleThemeBtn = TestTag("toggle-theme-btn")
+    }
+
+    var isDynamicCompatible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
     @Composable
     override fun Display(
@@ -42,9 +50,6 @@ object DarkLightModePrompt : SignUpPrompt {
 
         // Blending factor for background color gradient, animated on theme swap
         val blendingFactor: Float by animateFloatAsState(if (darkTheme) 2f else 0f)
-
-        // Check if dynamic theming is compatible
-        val isDynamicCompatible = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 
         // Fetch the dynamic dark and light themes
         val darkBackground =
@@ -97,7 +102,10 @@ object DarkLightModePrompt : SignUpPrompt {
             }
 
             // Button to swap between light and dark theme
-            Button(onClick = { setDarkTheme(!darkTheme) }) {
+            Button(
+                onClick = { setDarkTheme(!darkTheme) },
+                modifier = Modifier.testTag(TestTags.toggleThemeBtn)
+            ) {
                 Text(text = stringResource(id = R.string.dark_mode_prompt_button))
             }
             Spacer(modifier = Modifier.height(30.dp))
@@ -114,7 +122,8 @@ object DarkLightModePrompt : SignUpPrompt {
                     onClick = { onComplete() }, colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.secondaryContainer,
                         contentColor = MaterialTheme.colorScheme.secondary
-                    )
+                    ),
+                    modifier = Modifier.testTag(SignUpPromptBase.TestTags.nextButton)
                 ) {
                     Text(text = stringResource(id = R.string.prompt_next_button))
                 }

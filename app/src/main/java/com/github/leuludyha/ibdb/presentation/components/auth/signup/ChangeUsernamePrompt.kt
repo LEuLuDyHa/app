@@ -5,8 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.util.TestTag
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 
 /**
@@ -16,6 +19,10 @@ import com.github.leuludyha.ibdb.R
 object ChangeUsernamePrompt : SignUpPromptBase(
     required = false
 ) {
+
+    object TestTags {
+        val usernameField = TestTag("change-username-field")
+    }
 
     @Composable
     override fun Content(authContext: AuthenticationContext, onComplete: () -> Unit) {
@@ -30,6 +37,7 @@ object ChangeUsernamePrompt : SignUpPromptBase(
         }
 
         TextField(
+            modifier = Modifier.testTag(TestTags.usernameField),
             value = username,
             onValueChange = { setUsername(it) }
         )

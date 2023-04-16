@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.auth.DisplayIfAuthenticated
-import com.github.leuludyha.ibdb.presentation.components.reading_list.ReadingList
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 
 @Composable
 fun CollectionScreen(

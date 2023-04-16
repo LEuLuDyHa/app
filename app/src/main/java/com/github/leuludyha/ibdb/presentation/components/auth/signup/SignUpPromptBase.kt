@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.util.TestTag
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
 
 /**
@@ -20,6 +22,10 @@ abstract class SignUpPromptBase(
     /** Indicate whether this prompt can be skipped by the user or not */
     private val required: Boolean = false
 ) : SignUpPrompt {
+
+    object TestTags {
+        val nextButton = TestTag("prompt-base-next-btn")
+    }
 
     @Composable
     protected fun DefaultTitle(text: String) {
@@ -65,7 +71,8 @@ abstract class SignUpPromptBase(
                         onClick = onComplete, colors = ButtonDefaults.buttonColors(
                             containerColor = MaterialTheme.colorScheme.secondaryContainer,
                             contentColor = MaterialTheme.colorScheme.primary
-                        )
+                        ),
+                        modifier = Modifier.testTag(TestTags.nextButton)
                     ) {
                         Text(text = stringResource(id = R.string.prompt_next_button))
                     }

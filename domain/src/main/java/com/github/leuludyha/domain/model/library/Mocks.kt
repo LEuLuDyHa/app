@@ -1,5 +1,6 @@
 package com.github.leuludyha.domain.model.library
 
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.UserPreferences
 import com.github.leuludyha.domain.model.user.WorkPreference
@@ -8,6 +9,7 @@ import java.util.*
 
 /** A mock work we can use to preview stuff or test */
 object Mocks {
+
     val author: Author = Author(
         id = "9160343",
         name = "George Orwell",
@@ -52,4 +54,6 @@ object Mocks {
         preferences = userPreferences,
         profilePictureUrl = null
     )
+
+    val authContext: AuthenticationContext = AuthenticationContext(mainUser)
 }

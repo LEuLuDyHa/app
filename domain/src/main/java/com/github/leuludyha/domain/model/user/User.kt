@@ -8,7 +8,7 @@ import com.github.leuludyha.domain.model.interfaces.Keyed
  */
 interface User : Keyed {
 
-    fun username(): String
+    val username: String
 
-    fun profilePictureUrl(): String?
+    val profilePictureUrl: String?
 }

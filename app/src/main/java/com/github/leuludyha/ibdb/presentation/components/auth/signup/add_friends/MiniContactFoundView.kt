@@ -52,7 +52,7 @@ fun MiniContactFoundView(
                     modifier = Modifier.size(80.dp),
                     painter = rememberImagePainter(
                         // Take the member's google account's picture for now
-                        user.profilePictureUrl() ?: defaultProfilePicture
+                        user.profilePictureUrl ?: defaultProfilePicture
                     ),
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Fit,
@@ -65,7 +65,7 @@ fun MiniContactFoundView(
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(text = contactName, style = MaterialTheme.typography.labelLarge)
-                    Text(text = user.username(), style = MaterialTheme.typography.labelMedium)
+                    Text(text = user.username, style = MaterialTheme.typography.labelMedium)
                 }
             }
             Row(
