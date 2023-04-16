@@ -100,7 +100,7 @@ class RecommenderSystem(
         // All works read linked to their reader among the neighbours
         val worksReadBy = neighbours.associateWith { neighbour ->
             val readWorks = neighbour.preferences.workPreferences.values
-                .stream()
+                .asSequence()
                 .filter { it.readingState == WorkPreference.ReadingState.FINISHED }
                 .map { it.work }
                 .filter { work ->
