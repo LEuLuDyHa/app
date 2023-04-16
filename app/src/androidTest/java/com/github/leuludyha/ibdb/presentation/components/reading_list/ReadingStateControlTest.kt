@@ -9,6 +9,7 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
+import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
@@ -48,7 +49,14 @@ class ReadingStateControlTest {
                         User(
                             username = "Bobby",
                             profilePictureUrl = null,
-                            preferences = preferences
+                            preferences = preferences,
+                            statistics = UserStatistics(
+                                preferredWorks = listOf(Mocks.work1984),
+                                preferredSubjects = listOf("Censorship"),
+                                preferredAuthors = listOf(Mocks.author),
+                                averageNumberOfPages = 42
+                            ),
+                            friends = listOf()
                         )
                     )
                 )
