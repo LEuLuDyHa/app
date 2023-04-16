@@ -70,7 +70,6 @@ object DarkLightModePrompt : SignUpPrompt {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp)
                 .onGloballyPositioned {
                     // Save background size when mounted
                     setColSize(Pair(it.size.width.toFloat(), it.size.height.toFloat()))
@@ -103,6 +102,7 @@ object DarkLightModePrompt : SignUpPrompt {
                     text = stringResource(id = R.string.dark_mode_prompt_title),
                     style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Left,
+                    color = if (darkTheme) Color.White else Color.Black
                 )
             }
 

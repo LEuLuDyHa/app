@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.users
 
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
@@ -100,7 +101,7 @@ class UserDatabase {
      * @return a sorted list of [User], ranked from smallest distance to largest distance
      */
     fun getNeighbouringUsersOf(user: User, distance: (User, User) -> Float, n: Int): List<User> {
-        TODO("Not yet implemented")
+        return listOf(Mocks.mainUser)
     }
 
 }
