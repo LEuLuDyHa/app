@@ -37,7 +37,7 @@ object TestMocks {
         ),
         UserStatistics(
             preferredSubjects = listOf(),
-            preferredAuthors = listOf(Mocks.author),
+            preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
             preferredWorks = listOf(Mocks.work1984),
             averageNumberOfPages = 14,
         ),
@@ -57,7 +57,7 @@ object TestMocks {
         ),
         UserStatistics(
             preferredSubjects = listOf(),
-            preferredAuthors = listOf(Mocks.author),
+            preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
             preferredWorks = listOf(Mocks.work1984, Mocks.workLaFermeDesAnimaux),
             averageNumberOfPages = 1092,
         ),
