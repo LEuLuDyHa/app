@@ -3,6 +3,7 @@ package com.github.leuludyha.ibdb.di
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.Module
@@ -19,7 +20,14 @@ object AuthenticationModule {
         User(
             Firebase.auth.currentUser?.displayName ?: "username",
             Firebase.auth.currentUser?.photoUrl.toString(),
-            Mocks.userPreferences
+            Mocks.userPreferences,
+            UserStatistics(
+                preferredAuthors = listOf(Mocks.author),
+                preferredSubjects = listOf("Political Science"),
+                preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
+                averageNumberOfPages = 42,
+            ),
+            friends = listOf(Mocks.user)
         )
     )
 

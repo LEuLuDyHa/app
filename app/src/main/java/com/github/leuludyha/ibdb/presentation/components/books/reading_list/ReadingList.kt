@@ -60,6 +60,9 @@ fun ReadingList(
     }
 }
 
+/**
+ * Display whether this work is possessed by the user or not
+ */
 @Composable
 private fun PossessionIcon(
     possessed: Boolean,
@@ -78,6 +81,13 @@ private fun PossessionIcon(
     }
 }
 
+/**
+ * Display whether the user is either
+ * - Interested
+ * - Currently Reading
+ * - Has finished
+ * This work
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ReadingStateIcon(

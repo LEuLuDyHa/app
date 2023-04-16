@@ -10,4 +10,5 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="web_client_id">342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com</string>
     <string name="sign_in_label">Sign In</string>
+    <string name="recommendation_list_title">Selected for you…</string>
 </resources>
