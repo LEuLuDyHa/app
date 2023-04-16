@@ -24,16 +24,17 @@ fun DisplayIfAuthenticated(
     fallback: (@Composable () -> Unit)? = null,
     content: @Composable (authenticatedPrincipal: MainUser) -> Unit
 ) {
-
+    // If we have an authenticated principal in the current authentication context
     if (authContext.principal != null) {
         content(authContext.principal)
+        // Then display the content while providing it with the principal
     } else {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight()
-        ) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight()) {
+            // If there is a @Composable to fall back to
             fallback?.let { fallback() }
+            // Otherwise display default message
                 ?: run { Text(text = stringResource(id = R.string.ui_authentication_notauthenticated)) }
         }
     }

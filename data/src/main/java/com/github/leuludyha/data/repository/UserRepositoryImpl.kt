@@ -12,4 +12,18 @@ class UserRepositoryImpl(
     override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
         return userDatabase.getUserFromPhoneNumber(phoneNumber)
     }
+
+    /**
+     * @param user User to get the neighbours of
+     * @param distance Distance to use to get the neighbours
+     * @param n Number of nearest neighbours to return
+     * @return a sorted list of [User], ranked from smallest distance to largest distance
+     */
+    override fun getNeighbouringUsersOf(
+        user: User,
+        distance: (User, User) -> Float,
+        n: Int
+    ): List<User> {
+        return userDatabase.getNeighbouringUsersOf(user, distance, n)
+    }
 }

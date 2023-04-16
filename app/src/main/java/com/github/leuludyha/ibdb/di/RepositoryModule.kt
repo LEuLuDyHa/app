@@ -8,6 +8,7 @@ import com.github.leuludyha.data.repository.UserRepositoryImpl
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.data.users.UserDatabase
+import com.github.leuludyha.data.repository.datasource.UserDataSource
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.repository.UserRepository
@@ -31,11 +32,16 @@ import dagger.hilt.components.SingletonComponent
 object RepositoryModule {
 
     @Provides
-    fun provideRepository(
+    fun provideLibraryRepository(
         libraryRemoteDataSource: LibraryRemoteDataSource,
         libraryLocalDataSource: LibraryLocalDataSource
-    ) : LibraryRepository =
+    ): LibraryRepository =
         LibraryRepositoryImpl(libraryRemoteDataSource, libraryLocalDataSource)
+
+    @Provides
+    fun provideUserRepository(
+        userDatasource: UserDataSource
+    ): UserRepository = UserRepositoryImpl(userDatasource)
 
     @Provides
     fun oneTapClient(

@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.data.api.LibraryApi
 import com.github.leuludyha.ibdb.BuildConfig
+import com.google.firebase.ktx.Firebase
 
 import dagger.Module
 import dagger.Provides
@@ -43,6 +44,12 @@ object NetworkModule {
     @Singleton
     fun provideLibraryApi(retrofit: Retrofit): LibraryApi {
         return retrofit.create(LibraryApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDatabase(): Firebase {
+        return Firebase
     }
 
 }
