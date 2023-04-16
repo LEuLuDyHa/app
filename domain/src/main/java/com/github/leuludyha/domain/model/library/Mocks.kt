@@ -112,7 +112,7 @@ object Mocks {
         statistics = UserStatistics(
             preferredWorks = listOf(work1984),
             preferredSubjects = listOf("Censorship"),
-            preferredAuthors = listOf(author),
+            preferredAuthors = listOf(authorGeorgeOrwell),
             averageNumberOfPages = 42
         ),
         friends = listOf()
