@@ -1,15 +1,8 @@
-package com.github.leuludyha.domain.repository
+package com.github.leuludyha.data.repository.datasource
 
 import com.github.leuludyha.domain.model.user.User
-import java.util.concurrent.CompletableFuture
 
-@FunctionalInterface
-interface UserRepository {
-
-    /**
-     * Retrieves a user from a phone number
-     */
-    fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User>
+interface UserDataSource {
 
     /**
      * @param user User to get the neighbours of
@@ -18,4 +11,5 @@ interface UserRepository {
      * @return a sorted list of [User], ranked from smallest distance to largest distance
      */
     fun getNeighbouringUsersOf(user: User, distance: (User, User) -> Float, n: Int): List<User>
+
 }

@@ -31,10 +31,10 @@ import dagger.hilt.components.SingletonComponent
 object RepositoryModule {
 
     @Provides
-    fun provideRepository(
+    fun provideLibraryRepository(
         libraryRemoteDataSource: LibraryRemoteDataSource,
         libraryLocalDataSource: LibraryLocalDataSource
-    ) : LibraryRepository =
+    ): LibraryRepository =
         LibraryRepositoryImpl(libraryRemoteDataSource, libraryLocalDataSource)
 
     @Provides
