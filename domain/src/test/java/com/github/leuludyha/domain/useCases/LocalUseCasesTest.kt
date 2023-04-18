@@ -11,17 +11,19 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
 class LocalUseCasesTest {
     lateinit var libraryRepository: LibraryRepository
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
-    fun setup() = runBlocking {
+    fun setup() = runTest {
         libraryRepository = MockLibraryRepositoryImpl()
 
         libraryRepository.saveWorkLocally(workMrFox)
@@ -29,26 +31,30 @@ class LocalUseCasesTest {
         libraryRepository.saveAuthorLocally(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkLocallyUseCaseGivesCorrectResult() = runBlocking {
+    fun getWorkLocallyUseCaseGivesCorrectResult() = runTest {
         assertThat(GetWorkLocallyUseCase(libraryRepository)(workMrFox.id).first())
             .isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionLocallyUseCaseGivesCorrectResult() = runBlocking {
+    fun getEditionLocallyUseCaseGivesCorrectResult() = runTest {
         assertThat(GetEditionLocallyUseCase(libraryRepository)(editionMrFox.id).first())
             .isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorLocallyUseCaseGivesCorrectResult() = runBlocking {
+    fun getAuthorLocallyUseCaseGivesCorrectResult() = runTest {
         assertThat(GetAuthorLocallyUseCase(libraryRepository)(authorRoaldDahl.id).first())
             .isEqualTo(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveWorkLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun saveWorkLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testWork = Work(
             id = "TestWork",
             title = "title",
@@ -62,8 +68,9 @@ class LocalUseCasesTest {
             .isEqualTo(testWork)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveAuthorLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun saveAuthorLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testAuthor = Author(
             id = "TestAuthor",
             name = "Michael Jackson",
@@ -78,8 +85,9 @@ class LocalUseCasesTest {
             .isEqualTo(testAuthor)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveEditionLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun saveEditionLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testEdition = Edition(
             id = "testEdition",
             title = "title",
@@ -94,8 +102,9 @@ class LocalUseCasesTest {
             .isEqualTo(testEdition)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedEdition() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedEdition() = runTest {
         val testCover = Cover(1)
         val testAuthor = Author(
             id = "TestAuthor",
@@ -141,8 +150,9 @@ class LocalUseCasesTest {
             .isEqualTo(listOf(testCover))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedWork() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedWork() = runTest {
         val testCover = Cover(1)
         val testAuthor = Author(
             id = "TestAuthor",
@@ -175,8 +185,9 @@ class LocalUseCasesTest {
             .isEqualTo(listOf(testCover))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedAuthor() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedAuthor() = runTest {
         val testCover = Cover(1)
         val testWork = Work(
             id = "TestWork",
