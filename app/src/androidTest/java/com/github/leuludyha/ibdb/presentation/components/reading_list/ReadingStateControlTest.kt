@@ -56,7 +56,7 @@ class ReadingStateControlTest {
                             statistics = UserStatistics(
                                 preferredWorks = listOf(Mocks.work1984),
                                 preferredSubjects = listOf("Censorship"),
-                                preferredAuthors = listOf(Mocks.author),
+                                preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
                                 averageNumberOfPages = 42
                             ),
                             friends = listOf()
