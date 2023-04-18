@@ -10,8 +10,9 @@ import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Result
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -76,8 +77,9 @@ class LibraryRemoteDataSourceImplTest {
         remoteDataSource = LibraryRemoteDataSourceImpl(libraryApi)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun searchGivesCorrectResult() = runBlocking {
+    fun searchGivesCorrectResult() = runTest {
         mockWebServer.enqueue(searchResponse)
 
         val result = remoteDataSource.search("query").first()
@@ -86,8 +88,9 @@ class LibraryRemoteDataSourceImplTest {
         // TODO how to test PagingData content ?
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkGivesCorrectResultOnSuccess() = runBlocking {
+    fun getWorkGivesCorrectResultOnSuccess() = runTest {
         mockWebServer.enqueue(workResponse)
 
         val result = remoteDataSource.getWork(workMrFox.id).first().data
@@ -95,8 +98,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result).isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkGivesErrorOnError() = runBlocking {
+    fun getWorkGivesErrorOnError() = runTest {
         mockWebServer.enqueue(errorResponse)
 
         val result = remoteDataSource.getWork("wrongId").first()
@@ -104,8 +108,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorGivesCorrectResultOnSuccess() = runBlocking {
+    fun getAuthorGivesCorrectResultOnSuccess() = runTest {
         mockWebServer.enqueue(authorResponse)
 
         val result = remoteDataSource.getAuthor(authorRoaldDahl.id).first().data
@@ -113,8 +118,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result).isEqualTo(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorGivesErrorOnError() = runBlocking {
+    fun getAuthorGivesErrorOnError() = runTest {
         mockWebServer.enqueue(errorResponse)
 
         val result = remoteDataSource.getAuthor("wrongId").first()
@@ -122,8 +128,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionGivesCorrectResultOnSuccess() = runBlocking {
+    fun getEditionGivesCorrectResultOnSuccess() = runTest {
         mockWebServer.enqueue(editionResponse)
 
         val result = remoteDataSource.getEdition(editionMrFox.id).first().data
@@ -131,8 +138,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionGivesErrorOnError() = runBlocking {
+    fun getEditionGivesErrorOnError() = runTest {
         mockWebServer.enqueue(errorResponse)
 
         val result = remoteDataSource.getEdition("wrongId").first()
@@ -140,8 +148,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNGivesCorrectResultOnSuccess() = runBlocking {
+    fun getEditionByISBNGivesCorrectResultOnSuccess() = runTest {
         mockWebServer.enqueue(editionResponse)
 
         val result = remoteDataSource.getEditionByISBN(editionMrFox.isbn13!!).first().data
@@ -149,8 +158,9 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNGivesErrorOnError() = runBlocking {
+    fun getEditionByISBNGivesErrorOnError() = runTest {
         mockWebServer.enqueue(errorResponse)
 
         val result = remoteDataSource.getEditionByISBN("wrongId").first()
@@ -158,6 +168,7 @@ class LibraryRemoteDataSourceImplTest {
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     @Throws(IOException::class)
     fun shutdown() {

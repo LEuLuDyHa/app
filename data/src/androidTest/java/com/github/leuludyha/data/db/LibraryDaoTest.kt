@@ -8,9 +8,11 @@ import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -29,33 +31,38 @@ class LibraryDaoTest {
         libraryDao = libraryDatabase.libraryDao()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkGivesExpectedResultAfterInsertingIt() = runBlocking {
+    fun getWorkGivesExpectedResultAfterInsertingIt() = runTest {
         libraryDao.insert(workMrFox)
         assertThat(libraryDao.getWork(workMrFox.id).first()).isEqualTo(WorkEntity.from(workMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionGivesExpectedResultAfterInsertingIt() = runBlocking {
+    fun getEditionGivesExpectedResultAfterInsertingIt() = runTest {
         libraryDao.insert(editionMrFox)
         assertThat(libraryDao.getEdition(editionMrFox.id).first()).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorGivesExpectedResultAfterInsertingIt() = runBlocking {
+    fun getAuthorGivesExpectedResultAfterInsertingIt() = runTest {
         libraryDao.insert(authorRoaldDahl)
         assertThat(libraryDao.getAuthor(authorRoaldDahl.id).first()).isEqualTo(AuthorEntity.from(authorRoaldDahl))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getCoverGivesExpectedResultAfterInsertingIt() = runBlocking {
+    fun getCoverGivesExpectedResultAfterInsertingIt() = runTest {
         val cover = authorRoaldDahl.covers.first()[0]
         libraryDao.insert(cover)
         assertThat(libraryDao.getCover(cover.id).first()).isEqualTo(CoverEntity.from(cover))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkWithAuthorsGivesExpectedResultAfterInsertingWork() = runBlocking {
+    fun getWorkWithAuthorsGivesExpectedResultAfterInsertingWork() = runTest {
         libraryDao.insert(workMrFox)
         val result = libraryDao.getWorkWithAuthors(workMrFox.id).first()
         val expected = WorkWithAuthors(
@@ -65,8 +72,9 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkWithEditionsGivesExpectedResultAfterInsertingWork() = runBlocking {
+    fun getWorkWithEditionsGivesExpectedResultAfterInsertingWork() = runTest {
         libraryDao.insert(workMrFox)
         val result = libraryDao.getWorkWithEditions(workMrFox.id).first()
         val expected = WorkWithEditions(
@@ -76,8 +84,9 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkWithCoversGivesExpectedResultAfterInsertingWork() = runBlocking {
+    fun getWorkWithCoversGivesExpectedResultAfterInsertingWork() = runTest {
         libraryDao.insert(workMrFox)
         val result = libraryDao.getWorkWithCovers(workMrFox.id).first()
         val covers = workMrFox.covers.first()
@@ -89,8 +98,9 @@ class LibraryDaoTest {
         assertThat(result.covers.toSet()).isEqualTo(expected.covers.toSet()) // order is not preserved
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkWithSubjectsGivesExpectedResultAfterInsertingWork() = runBlocking {
+    fun getWorkWithSubjectsGivesExpectedResultAfterInsertingWork() = runTest {
         libraryDao.insert(workMrFox)
         val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
         val subjects = workMrFox.subjects.first()
@@ -102,8 +112,9 @@ class LibraryDaoTest {
         assertThat(result.subjects.toSet()).isEqualTo(expected.subjects.toSet()) // order is not preserved
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorWithWorksGivesExpectedResultAfterInsertingAuthor() = runBlocking {
+    fun getAuthorWithWorksGivesExpectedResultAfterInsertingAuthor() = runTest {
         libraryDao.insert(authorRoaldDahl)
         val result = libraryDao.getAuthorWithWorks(authorRoaldDahl.id).first()
         val expected = AuthorWithWorks(
@@ -113,8 +124,9 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorWithCoversGivesExpectedResultAfterInsertingAuthor() = runBlocking {
+    fun getAuthorWithCoversGivesExpectedResultAfterInsertingAuthor() = runTest {
         libraryDao.insert(authorRoaldDahl)
         val result = libraryDao.getAuthorWithCovers(authorRoaldDahl.id).first()
         val covers = authorRoaldDahl.covers.first()
@@ -126,8 +138,9 @@ class LibraryDaoTest {
         assertThat(result.covers.toSet()).isEqualTo(expected.covers.toSet()) // order is not preserved
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionWithWorksGivesExpectedResultAfterInsertingEdition() = runBlocking {
+    fun getEditionWithWorksGivesExpectedResultAfterInsertingEdition() = runTest {
         libraryDao.insert(editionMrFox)
         val result = libraryDao.getEditionWithWorks(editionMrFox.id).first()
         val expected = EditionWithWorks(
@@ -137,8 +150,9 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionWithAuthorsGivesExpectedResultAfterInsertingEdition() = runBlocking {
+    fun getEditionWithAuthorsGivesExpectedResultAfterInsertingEdition() = runTest {
         libraryDao.insert(editionMrFox)
         val result = libraryDao.getEditionWithAuthors(editionMrFox.id).first()
         val expected = EditionWithAuthors(
@@ -148,8 +162,9 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(expected)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionWithCoversGivesExpectedResultAfterInsertingEdition() = runBlocking {
+    fun getEditionWithCoversGivesExpectedResultAfterInsertingEdition() = runTest {
         libraryDao.insert(editionMrFox)
         val result = libraryDao.getEditionWithCovers(editionMrFox.id).first()
         val covers = editionMrFox.covers.first()
@@ -161,8 +176,9 @@ class LibraryDaoTest {
         assertThat(result.covers.toSet()).isEqualTo(expected.covers.toSet())
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAWorkAfterDeletingItReturnsNull() = runBlocking {
+    fun tryingToAccessAWorkAfterDeleteAllWorksReturnsNull() = runTest {
         libraryDao.insert(workMrFox)
         libraryDao.delete(workMrFox)
         val result = libraryDao.getWork(workMrFox.id).first()
@@ -170,14 +186,16 @@ class LibraryDaoTest {
     }
 
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAnAuthorAfterDeletingItReturnsNull() = runBlocking {
+    fun tryingToAccessAnAuthorAfterDeleteAllAuthorsReturnsNull() = runTest {
         libraryDao.insert(authorRoaldDahl)
         libraryDao.delete(authorRoaldDahl)
         val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
         assertThat(result).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun tryingToAccessCoversAfterDeletingItReturnsEmpty() = runBlocking {
         val cover = editionMrFox.covers.first()[0]
@@ -187,16 +205,18 @@ class LibraryDaoTest {
         assertThat(result).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAnEditionAfterDeletingItReturnsNull() = runBlocking {
+    fun tryingToAccessAnEditionAfterDeleteAllEditionsReturnsNull() = runTest {
         libraryDao.insert(editionMrFox)
         libraryDao.delete(editionMrFox)
         val result = libraryDao.getEdition(editionMrFox.id).first()
         assertThat(result).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() = runBlocking {
+    fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() = runTest {
         libraryDao.insert(workMrFox)
         val subjects = workMrFox.subjects.first()
         subjects.forEach { libraryDao.deleteSubject(it) }
@@ -204,6 +224,7 @@ class LibraryDaoTest {
         assertThat(result.subjects).isEmpty()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingWorkWithoutAnyAuthorsWorksAsExpected() = runBlocking {
         libraryDao.insert(workMrFox.copy(authors = flowOf()))
@@ -211,6 +232,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingWorkWithoutAnyEditionsWorksAsExpected() = runBlocking {
         libraryDao.insert(workMrFox.copy(editions = flowOf()))
@@ -218,6 +240,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingWorkWithoutAnySubjectsWorksAsExpected() = runBlocking {
         libraryDao.insert(workMrFox.copy(subjects = flowOf()))
@@ -225,6 +248,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingWorkWithoutAnyCoversWorksAsExpected() = runBlocking {
         libraryDao.insert(workMrFox.copy(covers = flowOf()))
@@ -232,6 +256,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingEditionWithoutAnyAuthorsWorksAsExpected() = runBlocking {
         libraryDao.insert(editionMrFox.copy(authors = flowOf()))
@@ -239,6 +264,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingEditionWithoutAnyWorksWorksAsExpected() = runBlocking {
         libraryDao.insert(editionMrFox.copy(works = flowOf()))
@@ -246,6 +272,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingEditionWithoutAnyCoversWorksAsExpected() = runBlocking {
         libraryDao.insert(editionMrFox.copy(covers = flowOf()))

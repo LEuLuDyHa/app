@@ -9,9 +9,11 @@ import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertThrows
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
@@ -30,37 +32,42 @@ class LibraryLocalDataSourceImplTest {
         localDataSource = LibraryLocalDataSourceImpl(libraryDao)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkGivesCorrectResultAfterSavingIt() = runBlocking {
-        localDataSource.save(workMrFox)
+    fun getWorkGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.saveWork(workMrFox)
         val data = localDataSource.getWork(workMrFox.id).first()
         assertThat(data).isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionGivesCorrectResultAfterSavingIt() = runBlocking {
-        localDataSource.save(editionMrFox)
+    fun getEditionGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.saveEdition(editionMrFox)
         val data = localDataSource.getEdition(editionMrFox.id).first()
         assertThat(data).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNGivesCorrectResultAfterSavingIt() = runBlocking {
-        localDataSource.save(editionMrFox)
+    fun getEditionByISBNGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.saveEdition(editionMrFox)
         val data = localDataSource.getEditionByISBN(editionMrFox.isbn13!!).first()
         assertThat(data).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorGivesCorrectResultAfterSavingIt() = runBlocking {
-        localDataSource.save(authorRoaldDahl)
+    fun getAuthorGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.saveAuthor(authorRoaldDahl)
         val data = localDataSource.getAuthor(authorRoaldDahl.id).first()
         assertThat(data).isEqualTo(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getCoverGivesCorrectResultAfterSavingAuthor() = runBlocking {
-        localDataSource.save(authorRoaldDahl)
+    fun getCoverGivesCorrectResultAfterSavingAuthor() = runTest {
+        localDataSource.saveAuthor(authorRoaldDahl)
         val data = localDataSource.getCover(authorRoaldDahl.covers.first()[0].id).first()
         assertThat(data).isEqualTo(authorRoaldDahl.covers.first()[0])
     }

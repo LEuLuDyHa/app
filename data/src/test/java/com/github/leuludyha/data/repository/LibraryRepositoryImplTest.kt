@@ -9,9 +9,11 @@ import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
@@ -19,8 +21,8 @@ class LibraryRepositoryImplTest {
     private lateinit var libraryRepository: LibraryRepository
 
     @Before
-    fun setup() = runBlocking {
-        val remoteDataSource = MockLibraryRemoteDataSourceImpl()
+    fun setup() = runTest {
+        remoteDataSource = MockLibraryRemoteDataSourceImpl()
 
         val localDataSource = MockLibraryLocalDataSourceImpl()
         localDataSource.save(workMrFox)
@@ -30,106 +32,123 @@ class LibraryRepositoryImplTest {
         libraryRepository = LibraryRepositoryImpl(remoteDataSource, localDataSource)
     }
 
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun searchRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+    fun searchRemotelyGivesCorrectResultOnSuccess() = runTest {
         val data = libraryRepository.searchRemotely("query").first()
         assertThat(data).isNotNull()
         // TODO how to test PagingData content ?
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+    fun getWorkRemotelyGivesCorrectResultOnSuccess() = runTest {
         val data = libraryRepository.getWorkRemotely(workMrFox.id).first().data
         assertThat(data).isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkRemotelyGivesErrorOnError() = runBlocking {
+    fun getWorkRemotelyGivesErrorOnError() = runTest {
         val result = libraryRepository.getWorkRemotely("wrongId").first()
         assertThat(result).isInstanceOf(Result.Error::class.java)
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+    fun getEditionRemotelyGivesCorrectResultOnSuccess() = runTest {
         val data = libraryRepository.getEditionRemotely(editionMrFox.id).first().data
         assertThat(data).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionRemotelyGivesErrorOnError() = runBlocking {
+    fun getEditionRemotelyGivesErrorOnError() = runTest {
         val result = libraryRepository.getEditionRemotely("wrongId").first()
         assertThat(result).isInstanceOf(Result.Error::class.java)
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+    fun getAuthorRemotelyGivesCorrectResultOnSuccess() = runTest {
         val data = libraryRepository.getAuthorRemotely(authorRoaldDahl.id).first().data
         assertThat(data).isEqualTo(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorRemotelyGivesErrorOnError() = runBlocking {
+    fun getAuthorRemotelyGivesErrorOnError() = runTest {
         val result = libraryRepository.getAuthorRemotely("wrongId").first()
         assertThat(result).isInstanceOf(Result.Error::class.java)
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNRemotelyGivesCorrectResultOnSuccess() = runBlocking {
+    fun getEditionByISBNRemotelyGivesCorrectResultOnSuccess() = runTest {
         val data = libraryRepository.getEditionByISBNRemotely(editionMrFox.isbn13!!).first().data
         assertThat(data).isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNRemotelyGivesErrorOnError() = runBlocking {
+    fun getEditionByISBNRemotelyGivesErrorOnError() = runTest {
         val result = libraryRepository.getEditionByISBNRemotely("wrongISBN").first()
         assertThat(result).isInstanceOf(Result.Error::class.java)
         assertThat(result.data).isNull()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getWorkLocallyReturnsCorrectWork() = runBlocking {
+    fun getWorkLocallyReturnsCorrectWork() = runTest {
         assertThat(libraryRepository.getWorkLocally(workMrFox.id).first())
             .isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorLocallyReturnsCorrectWork() = runBlocking {
+    fun getAuthorLocallyReturnsCorrectWork() = runTest {
         assertThat(libraryRepository.getAuthorLocally(authorRoaldDahl.id).first())
             .isEqualTo(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionLocallyReturnsCorrectWork() = runBlocking {
+    fun getEditionLocallyReturnsCorrectWork() = runTest {
         assertThat(libraryRepository.getEditionLocally(editionMrFox.id).first())
             .isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionByISBNLocallyReturnsCorrectWork() = runBlocking {
+    fun getEditionByISBNLocallyReturnsCorrectWork() = runTest {
         assertThat(libraryRepository.getEditionByISBNLocally(editionMrFox.isbn13!!).first())
             .isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveWorkLocallySavesTheCorrectWork() = runBlocking {
-        libraryRepository.saveLocally(work1984)
+    fun saveWorkLocallySavesTheCorrectWork() = runTest {
+        libraryRepository.saveWorkLocally(work1984)
         assertThat(libraryRepository.getWorkLocally(work1984.id).first())
             .isEqualTo(work1984)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveEditionLocallySavesTheCorrectEdition() = runBlocking {
-        libraryRepository.saveLocally(edition1984)
+    fun saveEditionLocallySavesTheCorrectWork() = runTest {
+        libraryRepository.saveEditionLocally(edition1984)
         assertThat(libraryRepository.getEditionLocally(edition1984.id).first())
             .isEqualTo(edition1984)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveAuthorLocallySavesTheCorrectAuthor() = runBlocking {
-        libraryRepository.saveLocally(authorGeorgeOrwell)
+    fun saveAuthorLocallySavesTheCorrectWork() = runTest {
+        libraryRepository.saveAuthorLocally(authorGeorgeOrwell)
         assertThat(libraryRepository.getAuthorLocally(authorGeorgeOrwell.id).first())
             .isEqualTo(authorGeorgeOrwell)
     }
