@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.ibdb.R
 import com.google.android.gms.common.api.ApiException
@@ -28,10 +29,18 @@ import com.google.firebase.auth.GoogleAuthProvider
 @Composable
 fun AuthenticationProvider(
     viewModel: SignInViewModel = hiltViewModel(),
-    signedInContent: (@Composable () -> Unit)
+    onSignedIn: (AuthenticationContext) -> Unit,
+    signedInContent: (@Composable () -> Unit),
 ) {
 
     val (signedIn, setSignedIn) = remember { mutableStateOf(false) }
+
+    LaunchedEffect(signedIn) {
+        // Notify parent on signed in
+        if (signedIn) {
+            onSignedIn(viewModel.authContext)
+        }
+    }
 
     if (signedIn) {
         signedInContent()

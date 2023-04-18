@@ -15,6 +15,7 @@ import org.hamcrest.Matchers.containsInAnyOrder
 import org.junit.Test
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.assertThrows
+import java.util.concurrent.CompletableFuture
 
 class RecommenderSystemTest {
 
@@ -25,6 +26,10 @@ class RecommenderSystemTest {
     ) {
         recommender = RecommenderSystem(
             object : UserRepository {
+                override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
+                    TODO("Not yet implemented")
+                }
+
                 override fun getNeighbouringUsersOf(
                     user: User,
                     distance: (User, User) -> Float,
@@ -56,7 +61,7 @@ class RecommenderSystemTest {
             val recommendations = recommender(TestMocks.user2)
             assertThat("Should not be empty", recommendations.first().isNotEmpty())
             assertEquals(
-                TestMocks.user1.getWorksInReadingList().toSet(),
+                TestMocks.user1.preferences.getWorksInReadingList().toSet(),
                 recommendations.first().toSet()
             )
         }

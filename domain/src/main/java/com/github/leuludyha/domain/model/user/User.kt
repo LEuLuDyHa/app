@@ -1,24 +1,24 @@
 package com.github.leuludyha.domain.model.user
 
-import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 
-data class User(
-    val username: String,
-    val profilePictureUrl: String?,
-    val preferences: UserPreferences,
-    val statistics: UserStatistics,
+/**
+ * A user of the application, could be either
+ * the [MainUser] or a [Friend]
+ */
+interface User : Keyed {
+
+    val username: String
+
+    val profilePictureUrl: String
+
+    val phoneNumber: String?
+
+    val preferences: UserPreferences
+
     val friends: List<User>
-) {
-    /** @return The list of works which are in the user's reading list */
-    fun getWorksInReadingList(): Iterable<Work> {
-        return this.preferences.workPreferences.values.map { it.work }
-    }
 
-    override fun toString(): String {
-        return "User('$username')"
-    }
-
-
+    val statistics: UserStatistics
 }

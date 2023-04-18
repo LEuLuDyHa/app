@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
-import com.github.leuludyha.ibdb.presentation.components.authentication.DisplayIfAuthenticated
+import com.github.leuludyha.ibdb.presentation.components.auth.DisplayIfAuthenticated
 
 const val defaultProfilePicture =
     "https://images.freeimages.com/images/large-previews/023/geek-avatar-1632962.jpg"

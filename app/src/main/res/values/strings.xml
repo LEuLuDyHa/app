@@ -10,5 +10,14 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="web_client_id">342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com</string>
     <string name="sign_in_label">Sign In</string>
+    <string name="prompt_skip_button">Skip</string>
+    <string name="prompt_username_title_begin">Hi, your name is currently </string>
+    <string name="prompt_username_title_end">, do you want to be called something else ?</string>
+    <string name="prompt_add_friends_title">Connect with people you know on the app !</string>
+    <string name="dark_mode_prompt_button">Toggle Dark/Light Theme</string>
+    <string name="dark_mode_prompt_title">Do you appreciate a beautiful light theme or do you prefer a comforting dark theme ?</string>
+    <string name="done">Done</string>
+    <string name="prompt_next_button">Next</string>
+    <string name="friends_add">Add Friend</string>
     <string name="recommendation_list_title">Selected for you…</string>
 </resources>
