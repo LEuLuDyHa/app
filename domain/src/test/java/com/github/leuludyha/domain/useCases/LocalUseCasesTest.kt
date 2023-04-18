@@ -1,50 +1,60 @@
-package com.github.leuludyha.data.repository
+package com.github.leuludyha.domain.useCases
 
-import com.github.leuludyha.data.RequiringLibraryRepositoryTest
-import com.github.leuludyha.data.TestUtils.author1
-import com.github.leuludyha.data.TestUtils.edition1
-import com.github.leuludyha.data.TestUtils.work1
+import com.github.leuludyha.domain.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
+import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
+import org.junit.Before
 import org.junit.Test
 
-/*
- * I couldn't write those tests at the domain layer because I need to instantiate an API and
- * a database etc, which are not available at that layer.
- *
- * Moreover I didn't write any RepositoryTest because every method of the repository should be
- * covered by UseCases.
- */
+class LocalUseCasesTest {
+    lateinit var libraryRepository: LibraryRepository
 
-class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Before
+    fun setup() = runTest {
+        libraryRepository = MockLibraryRepositoryImpl()
 
-    @Test
-    fun getWorkLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetWorkLocallyUseCase(libraryRepository)(work1.workId).first())
-            .isEqualTo(work1.toModel(libraryDao))
+        libraryRepository.saveWorkLocally(workMrFox)
+        libraryRepository.saveEditionLocally(editionMrFox)
+        libraryRepository.saveAuthorLocally(authorRoaldDahl)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getEditionLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetEditionLocallyUseCase(libraryRepository)(edition1.editionId).first())
-            .isEqualTo(edition1.toModel(libraryDao))
+    fun getWorkLocallyUseCaseGivesCorrectResult() = runTest {
+        assertThat(GetWorkLocallyUseCase(libraryRepository)(workMrFox.id).first())
+            .isEqualTo(workMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAuthorLocallyUseCaseGivesCorrectResult() = runBlocking {
-        assertThat(GetAuthorLocallyUseCase(libraryRepository)(author1.authorId).first())
-            .isEqualTo(author1.toModel(libraryDao))
+    fun getEditionLocallyUseCaseGivesCorrectResult() = runTest {
+        assertThat(GetEditionLocallyUseCase(libraryRepository)(editionMrFox.id).first())
+            .isEqualTo(editionMrFox)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveWorkLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun getAuthorLocallyUseCaseGivesCorrectResult() = runTest {
+        assertThat(GetAuthorLocallyUseCase(libraryRepository)(authorRoaldDahl.id).first())
+            .isEqualTo(authorRoaldDahl)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun saveWorkLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testWork = Work(
             id = "TestWork",
             title = "title",
@@ -58,8 +68,9 @@ class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
             .isEqualTo(testWork)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveAuthorLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun saveAuthorLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testAuthor = Author(
             id = "TestAuthor",
             name = "Michael Jackson",
@@ -74,8 +85,9 @@ class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
             .isEqualTo(testAuthor)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun saveEditionLocallyUseCaseCorrectlySavesNewAuthor() = runBlocking {
+    fun saveEditionLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
         val testEdition = Edition(
             id = "testEdition",
             title = "title",
@@ -90,8 +102,9 @@ class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
             .isEqualTo(testEdition)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedEdition() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedEdition() = runTest {
         val testCover = Cover(1)
         val testAuthor = Author(
             id = "TestAuthor",
@@ -137,8 +150,9 @@ class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
             .isEqualTo(listOf(testCover))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedWork() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedWork() = runTest {
         val testCover = Cover(1)
         val testAuthor = Author(
             id = "TestAuthor",
@@ -171,8 +185,9 @@ class LocalUseCasesTest: RequiringLibraryRepositoryTest() {
             .isEqualTo(listOf(testCover))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun canRecursivelyAccessFieldsOfSavedAuthor() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedAuthor() = runTest {
         val testCover = Cover(1)
         val testWork = Work(
             id = "TestWork",

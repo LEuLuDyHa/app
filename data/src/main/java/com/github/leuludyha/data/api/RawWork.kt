@@ -37,7 +37,8 @@ data class RawWork(
 ): ErrorProne, Raw<Work> {
 
     override fun toModel(libraryApi: LibraryApi): Work? {
-        if (extractIdFromKey(key, "/works/") == null || error != null)
+        val id = extractIdFromKey(key, "/works/")
+        if (id == null || error != null)
             return null
 
         val authors = flow {
@@ -53,8 +54,7 @@ data class RawWork(
         val editions = flow {
             emit(
                 rawResponseToModel(
-                    libraryApi
-                        .getEditionsByWorkId(extractIdFromKey(key, "/works/")!!),
+                    libraryApi.getEditionsByWorkId(id),
                     libraryApi
                 )?.distinct()
             )
@@ -63,9 +63,9 @@ data class RawWork(
         val covers = flow {
             emit(coverIds
                 .orEmpty()
+                .distinct()
                 .filter { it > 0 }
                 .map { Cover(it) }
-                .distinct()
             )
         }
 

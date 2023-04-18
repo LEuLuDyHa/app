@@ -38,7 +38,8 @@ data class RawAuthor(
 ): ErrorProne, Raw<Author> {
 
     override fun toModel(libraryApi: LibraryApi): Author? {
-        if (extractIdFromKey(key, "/authors/") == null || error != null)
+        val id = extractIdFromKey(key, "/authors/")
+        if (id == null || error != null)
             return null
 
         val photos = flow {
@@ -51,7 +52,7 @@ data class RawAuthor(
         }
 
         val works = flow {
-            val rawWorks = libraryApi.getWorksByAuthorId(extractIdFromKey(key, "/authors/")!!)
+            val rawWorks = libraryApi.getWorksByAuthorId(id)
             emit (rawResponseToModel(rawWorks, libraryApi).orEmpty())
         }
 
