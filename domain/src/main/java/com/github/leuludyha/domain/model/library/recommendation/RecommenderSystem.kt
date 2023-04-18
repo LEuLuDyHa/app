@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.flow
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
-import kotlin.streams.toList
 
 private const val DebugTag = "RecommenderSystem"
 private const val DebugRecommender = true
@@ -99,6 +98,7 @@ class RecommenderSystem(
 
         // All works read linked to their reader among the neighbours
         val worksReadBy = neighbours.associateWith { neighbour ->
+            // We must have user preferences for this call
             val readWorks = neighbour.preferences.workPreferences.values
                 .asSequence()
                 .filter { it.readingState == WorkPreference.ReadingState.FINISHED }
@@ -149,7 +149,7 @@ class RecommenderSystem(
             // Add the work to the list (We know index < size because of the above line)
             (0 until nbWorksTaken).map { index ->
                 // Select the work in the list of finished works of the neighbour
-                val selectedWork = worksReadBy[neighbour]!![index]!!
+                val selectedWork = worksReadBy[neighbour]!![index]
                 selectedWorks.add(selectedWork)
 
                 // Get weight if already selected

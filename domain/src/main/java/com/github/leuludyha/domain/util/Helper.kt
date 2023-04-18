@@ -1,5 +1,7 @@
 package com.github.leuludyha.domain.util
 
+import androidx.compose.ui.graphics.Color
+
 fun <T> List<T>?.toText(): String {
     val items = this
     if (items.isNullOrEmpty()) {
@@ -21,4 +23,18 @@ fun <T> List<T>?.toText(): String {
         }
     }
     return sb.toString()
+}
+
+/**
+ * Interpolate between two colors
+ * @param that Other color to use
+ * @param factor The amount of [this] color compared to [that] color
+ */
+fun Color.mix(that: Color, factor: Float): Color {
+    return Color(
+        this.red * factor + that.red * (1 - factor),
+        this.green * factor + that.green * (1 - factor),
+        this.blue * factor + that.blue * (1 - factor),
+        this.alpha * factor + that.alpha * (1 - factor),
+    )
 }

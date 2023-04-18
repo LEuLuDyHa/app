@@ -1,10 +1,12 @@
 package com.github.leuludyha.domain.model.library
 
-import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.flowOf
+import java.util.*
 
 /** A mock work we can use to preview stuff or test */
 object Mocks {
@@ -105,10 +107,12 @@ object Mocks {
         )
     )
 
-    val user: User = User(
+    val mainUser: MainUser = MainUser(
+        UUID.randomUUID().toString(),
         username = "Mockentosh",
         preferences = userPreferences,
-        profilePictureUrl = null,
+        phoneNumber = "",
+        profilePictureUrl = "",
         statistics = UserStatistics(
             preferredWorks = listOf(work1984),
             preferredSubjects = listOf("Censorship"),
@@ -117,4 +121,6 @@ object Mocks {
         ),
         friends = listOf()
     )
+
+    val authContext: AuthenticationContext = AuthenticationContext(mainUser)
 }

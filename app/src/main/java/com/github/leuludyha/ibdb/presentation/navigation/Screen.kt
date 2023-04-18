@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.navigation
 
 sealed class Screen(val route: String) {
     object SignIn : Screen("sign_in_screen")
+    object SignUp : Screen("sign_up_screen")
     object Profile : Screen("profile_screen")
     object Home : Screen("home_screen")
     object BookSearch : Screen("book_search_screen/{searchQuery}") {
