@@ -11,9 +11,8 @@ import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertThrows
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -35,7 +34,7 @@ class LibraryLocalDataSourceImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getWorkGivesCorrectResultAfterSavingIt() = runTest {
-        localDataSource.saveWork(workMrFox)
+        localDataSource.save(workMrFox)
         val data = localDataSource.getWork(workMrFox.id).first()
         assertThat(data).isEqualTo(workMrFox)
     }
@@ -43,7 +42,7 @@ class LibraryLocalDataSourceImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEditionGivesCorrectResultAfterSavingIt() = runTest {
-        localDataSource.saveEdition(editionMrFox)
+        localDataSource.save(editionMrFox)
         val data = localDataSource.getEdition(editionMrFox.id).first()
         assertThat(data).isEqualTo(editionMrFox)
     }
@@ -51,7 +50,7 @@ class LibraryLocalDataSourceImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getEditionByISBNGivesCorrectResultAfterSavingIt() = runTest {
-        localDataSource.saveEdition(editionMrFox)
+        localDataSource.save(editionMrFox)
         val data = localDataSource.getEditionByISBN(editionMrFox.isbn13!!).first()
         assertThat(data).isEqualTo(editionMrFox)
     }
@@ -59,7 +58,7 @@ class LibraryLocalDataSourceImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getAuthorGivesCorrectResultAfterSavingIt() = runTest {
-        localDataSource.saveAuthor(authorRoaldDahl)
+        localDataSource.save(authorRoaldDahl)
         val data = localDataSource.getAuthor(authorRoaldDahl.id).first()
         assertThat(data).isEqualTo(authorRoaldDahl)
     }
@@ -67,34 +66,37 @@ class LibraryLocalDataSourceImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getCoverGivesCorrectResultAfterSavingAuthor() = runTest {
-        localDataSource.saveAuthor(authorRoaldDahl)
+        localDataSource.save(authorRoaldDahl)
         val data = localDataSource.getCover(authorRoaldDahl.covers.first()[0].id).first()
         assertThat(data).isEqualTo(authorRoaldDahl.covers.first()[0])
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedWorkThrowsException(): Unit = runBlocking {
-        localDataSource.save(workMrFox)
-        localDataSource.delete(workMrFox)
-        assertThrows(java.lang.Exception::class.java) { runBlocking {
-            localDataSource.getWork(workMrFox.id).first()
+    fun gettingADeletedWorkThrowsException() {
+        assertThrows(java.lang.Exception::class.java) { runTest {
+                localDataSource.save(workMrFox)
+                localDataSource.delete(workMrFox)
+                localDataSource.getWork(workMrFox.id).first()
         }}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedEditionThrowsException(): Unit = runBlocking {
-        localDataSource.save(editionMrFox)
-        localDataSource.delete(editionMrFox)
-        assertThrows(java.lang.Exception::class.java) { runBlocking {
-            localDataSource.getEdition(editionMrFox.id).first()
+    fun gettingADeletedEditionThrowsException() {
+        assertThrows(java.lang.Exception::class.java) { runTest {
+                localDataSource.save(editionMrFox)
+                localDataSource.delete(editionMrFox)
+                localDataSource.getEdition(editionMrFox.id).first()
         }}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedAuthorThrowsException(): Unit = runBlocking {
-        localDataSource.save(authorRoaldDahl)
-        localDataSource.delete(authorRoaldDahl)
-        assertThrows(java.lang.Exception::class.java) { runBlocking {
+    fun gettingADeletedAuthorThrowsException() {
+        assertThrows(java.lang.Exception::class.java) { runTest {
+            localDataSource.save(authorRoaldDahl)
+            localDataSource.delete(authorRoaldDahl)
             localDataSource.getAuthor(authorRoaldDahl.id).first()
         }}
     }

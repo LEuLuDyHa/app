@@ -11,19 +11,18 @@ import com.github.leuludyha.domain.repository.LibraryRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class LibraryRepositoryImplTest {
     private lateinit var libraryRepository: LibraryRepository
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() = runTest {
-        remoteDataSource = MockLibraryRemoteDataSourceImpl()
-
+        val remoteDataSource = MockLibraryRemoteDataSourceImpl()
         val localDataSource = MockLibraryLocalDataSourceImpl()
         localDataSource.save(workMrFox)
         localDataSource.save(editionMrFox)
@@ -132,7 +131,7 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveWorkLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveWorkLocally(work1984)
+        libraryRepository.saveLocally(work1984)
         assertThat(libraryRepository.getWorkLocally(work1984.id).first())
             .isEqualTo(work1984)
     }
@@ -140,7 +139,7 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveEditionLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveEditionLocally(edition1984)
+        libraryRepository.saveLocally(edition1984)
         assertThat(libraryRepository.getEditionLocally(edition1984.id).first())
             .isEqualTo(edition1984)
     }
@@ -148,39 +147,39 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveAuthorLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveAuthorLocally(authorGeorgeOrwell)
+        libraryRepository.saveLocally(authorGeorgeOrwell)
         assertThat(libraryRepository.getAuthorLocally(authorGeorgeOrwell.id).first())
             .isEqualTo(authorGeorgeOrwell)
     }
 
     @Test
-    fun gettingADeletedWorkThrowsException(): Unit = runBlocking {
+    fun gettingADeletedWorkThrowsException(): Unit = runTest {
         libraryRepository.saveLocally(workMrFox)
         libraryRepository.deleteLocally(workMrFox)
         Assert.assertThrows(Exception::class.java) {
-            runBlocking {
+            runTest {
                 libraryRepository.getWorkLocally(workMrFox.id).first()
             }
         }
     }
 
     @Test
-    fun gettingADeletedEditionThrowsException(): Unit = runBlocking {
+    fun gettingADeletedEditionThrowsException(): Unit = runTest {
         libraryRepository.saveLocally(editionMrFox)
         libraryRepository.deleteLocally(editionMrFox)
         Assert.assertThrows(Exception::class.java) {
-            runBlocking {
+            runTest {
                 libraryRepository.getWorkLocally(editionMrFox.id).first()
             }
         }
     }
 
     @Test
-    fun gettingADeletedAuthorThrowsException(): Unit = runBlocking {
+    fun gettingADeletedAuthorThrowsException(): Unit = runTest {
         libraryRepository.saveLocally(authorRoaldDahl)
         libraryRepository.deleteLocally(authorRoaldDahl)
         Assert.assertThrows(Exception::class.java) {
-            runBlocking {
+            runTest {
                 libraryRepository.getAuthorLocally(authorRoaldDahl.id).first()
             }
         }

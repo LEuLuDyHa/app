@@ -14,9 +14,8 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
-import org.junit.Assert.assertThrows
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -106,7 +105,7 @@ class LocalUseCasesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun accessingADeletedWorkThrowsAnException(): Unit = runBlocking {
+    fun accessingADeletedWorkThrowsAnException(): Unit = runTest {
         val testWork = Work(
             id = "TestWork",
             title = "title",
@@ -117,13 +116,13 @@ class LocalUseCasesTest {
         )
         SaveWorkLocallyUseCase(libraryRepository)(testWork)
         DeleteWorkLocallyUseCase(libraryRepository)(testWork)
-        assertThrows(Exception::class.java) { runBlocking {
+        assertThrows(Exception::class.java) { runTest {
             GetWorkLocallyUseCase(libraryRepository)(testWork.id).first()
         }}
     }
 
     @Test
-    fun accessingADeletedAuthorThrowsAnException(): Unit = runBlocking {
+    fun accessingADeletedAuthorThrowsAnException(): Unit = runTest {
         val testAuthor = Author(
             id = "TestAuthor",
             name = "Michael Jackson",
@@ -135,13 +134,13 @@ class LocalUseCasesTest {
         )
         SaveAuthorLocallyUseCase(libraryRepository)(testAuthor)
         DeleteAuthorLocallyUseCase(libraryRepository)(testAuthor)
-        assertThrows(Exception::class.java) { runBlocking {
+        assertThrows(Exception::class.java) { runTest {
             GetAuthorLocallyUseCase(libraryRepository)(testAuthor.id).first()
         }}
     }
 
     @Test
-    fun accessingADeletedEditionThrowsAnException(): Unit = runBlocking {
+    fun accessingADeletedEditionThrowsAnException(): Unit = runTest {
         val testEdition = Edition(
             id = "testEdition",
             title = "title",
@@ -153,13 +152,13 @@ class LocalUseCasesTest {
         )
         SaveEditionLocallyUseCase(libraryRepository)(testEdition)
         DeleteEditionLocallyUseCase(libraryRepository)(testEdition)
-        assertThrows(Exception::class.java) { runBlocking {
+        assertThrows(Exception::class.java) { runTest {
             GetEditionLocallyUseCase(libraryRepository)(testEdition.id).first()
         }}
     }
 
     @Test
-    fun canRecursivelyAccessFieldsOfSavedEdition() = runBlocking {
+    fun canRecursivelyAccessFieldsOfSavedEdition() = runTest {
         val testCover = Cover(1)
         val testAuthor = Author(
             id = "TestAuthor",
