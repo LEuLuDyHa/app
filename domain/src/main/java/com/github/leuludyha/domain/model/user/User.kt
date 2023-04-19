@@ -5,6 +5,6 @@ data class User(
     val preferences: UserPreferences,
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
-    val friends: List<User> = emptyList() //or List<String> ?
+    val friends: List<String> = emptyList()
     // val profilePicUrl: String
 )
