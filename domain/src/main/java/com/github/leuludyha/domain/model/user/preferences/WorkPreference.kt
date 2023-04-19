@@ -30,6 +30,16 @@ open class WorkPreference(
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is WorkPreference) return false
+
+        return work == other.work
+                && readingState == other.readingState
+                && possessed == other.possessed
+                && rating == other.rating
+    }
+
     override fun Id(): String {
         return this.work.id; }
 

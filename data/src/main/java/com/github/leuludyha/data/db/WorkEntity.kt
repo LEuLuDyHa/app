@@ -48,6 +48,15 @@ data class WorkEntity (
         )
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is WorkEntity) return false
+
+        return workId == other.workId
+    }
+
+    override fun hashCode(): Int = workId.hashCode()
+
     companion object {
         fun from(work: Work) = WorkEntity(
             workId = work.id,

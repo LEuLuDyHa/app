@@ -4,7 +4,9 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
+@TypeConverters(WorkEntityConverter::class)
 @Database(
     entities = [
         WorkEntity::class,
@@ -12,6 +14,7 @@ import androidx.room.RoomDatabase
         CoverEntity::class,
         SubjectEntity::class,
         EditionEntity::class,
+        WorkPrefEntity::class,
         AuthorCoverCrossRef::class,
         WorkAuthorCrossRef::class,
         WorkEditionCrossRef::class,

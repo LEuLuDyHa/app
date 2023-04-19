@@ -7,6 +7,7 @@ import com.github.leuludyha.data.db.*
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFoxPref
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -57,6 +58,22 @@ class LibraryDaoTest {
         val cover = authorRoaldDahl.covers.first()[0]
         libraryDao.insert(cover)
         assertThat(libraryDao.getCover(cover.id).first()).isEqualTo(CoverEntity.from(cover))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getWorkPrefWithWorkEntityGivesExpectedResultAfterInsertingIt() = runTest {
+        libraryDao.insert(workMrFoxPref)
+        val res = libraryDao.getWorkPref(WorkEntity.from(workMrFox)).first()
+        assertThat(res).isEqualTo(WorkPrefEntity.from(workMrFoxPref))
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getWorkPrefWithWorkIdGivesExpectedResultAfterInsertingIt() = runTest {
+        libraryDao.insert(workMrFoxPref)
+        val res = libraryDao.getWorkPref(workMrFox.id).first()
+        assertThat(res).isEqualTo(WorkPrefEntity.from(workMrFoxPref))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -177,7 +194,7 @@ class LibraryDaoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAWorkAfterDeleteAllWorksReturnsNull() = runTest {
+    fun tryingToAccessAWorkAfterDeletingItReturnsNull() = runTest {
         libraryDao.insert(workMrFox)
         libraryDao.delete(workMrFox)
         val result = libraryDao.getWork(workMrFox.id).first()
@@ -187,7 +204,7 @@ class LibraryDaoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAnAuthorAfterDeleteAllAuthorsReturnsNull() = runTest {
+    fun tryingToAccessAnAuthorAfterDeletingItReturnsNull() = runTest {
         libraryDao.insert(authorRoaldDahl)
         libraryDao.delete(authorRoaldDahl)
         val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
@@ -206,7 +223,7 @@ class LibraryDaoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAnEditionAfterDeleteAllEditionsReturnsNull() = runTest {
+    fun tryingToAccessAnEditionAfterDeletingItReturnsNull() = runTest {
         libraryDao.insert(editionMrFox)
         libraryDao.delete(editionMrFox)
         val result = libraryDao.getEdition(editionMrFox.id).first()
@@ -215,12 +232,30 @@ class LibraryDaoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() = runTest {
+    fun tryingToAccessSubjectsAfterDeletingItReturnsEmpty() = runTest {
         libraryDao.insert(workMrFox)
         val subjects = workMrFox.subjects.first()
         subjects.forEach { libraryDao.deleteSubject(it) }
         val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
         assertThat(result.subjects).isEmpty()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun tryingToAccessWorkPrefAfterDeletingItReturnsNull() = runTest {
+        libraryDao.insert(workMrFoxPref)
+        libraryDao.delete(workMrFoxPref)
+        val result = libraryDao.getWorkPref(workMrFox.id).first()
+        assertThat(result).isNull()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun tryingToAccessWorkPrefAfterDeletingItUsingEntityReturnsNull() = runTest {
+        libraryDao.insert(workMrFoxPref)
+        libraryDao.deleteWorkPref(WorkEntity.from(workMrFox))
+        val result = libraryDao.getWorkPref(workMrFox.id).first()
+        assertThat(result).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -279,6 +314,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingAuthorWithoutAnyWorksWorksAsExpected() = runTest {
         libraryDao.insert(authorRoaldDahl.copy(works = flowOf()))
@@ -286,6 +322,7 @@ class LibraryDaoTest {
         assertThat(result).isEqualTo(AuthorEntity.from(authorRoaldDahl))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun insertingAuthorWithoutAnyCoversWorksAsExpected() = runTest {
         libraryDao.insert(authorRoaldDahl.copy(covers = flowOf()))

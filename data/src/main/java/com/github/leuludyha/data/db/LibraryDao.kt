@@ -5,6 +5,7 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
@@ -25,6 +26,9 @@ interface LibraryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(subject: SubjectEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(workPref: WorkPrefEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(join: WorkAuthorCrossRef)
@@ -61,6 +65,9 @@ interface LibraryDao {
 
     @Query("DELETE FROM subjects where subjectName = :subject")
     suspend fun deleteSubject(subject: String)
+
+    @Query("DELETE FROM workPrefs where work = :work")
+    suspend fun deleteWorkPref(work: WorkEntity)
 
     @Query("DELETE FROM AuthorCoverCrossRef where authorId = :authorId")
     suspend fun deleteAuthorCoversForId(authorId: String)
@@ -100,6 +107,11 @@ interface LibraryDao {
 
     @Query("SELECT * FROM covers WHERE coverId LIKE :coverId")
     fun getCover(coverId: Long): Flow<CoverEntity>
+
+    @Query("SELECT * FROM workPrefs WHERE work LIKE :work")
+    fun getWorkPref(work: WorkEntity): Flow<WorkPrefEntity>
+
+    fun getWorkPref(workId: String) = getWorkPref(WorkEntity(workId = workId, title = null))
 
     @Transaction
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
@@ -202,6 +214,11 @@ interface LibraryDao {
 
     suspend fun insert(cover: Cover) = insert(CoverEntity(cover.id))
 
+    suspend fun insert(workPref: WorkPreference) {
+        insert(workPref.work)
+        insert(WorkPrefEntity.from(workPref))
+    }
+
     suspend fun insertSubject(subject: String) = insert(SubjectEntity(subject))
 
     suspend fun delete(work: Work) {
@@ -210,6 +227,7 @@ interface LibraryDao {
         deleteWorkCovers(work.id)
         deleteWorkSubjects(work.id)
         deleteWorkEditions(work.id)
+        deleteWorkPref(WorkEntity.from(work))
     }
 
     suspend fun delete(author: Author) {
@@ -225,5 +243,9 @@ interface LibraryDao {
 
     suspend fun delete(cover: Cover) {
         deleteCover(cover.id)
+    }
+
+    suspend fun delete(workPref: WorkPreference) {
+        deleteWorkPref(WorkEntity.from(workPref.work))
     }
 }

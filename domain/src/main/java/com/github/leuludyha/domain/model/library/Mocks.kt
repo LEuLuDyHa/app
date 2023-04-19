@@ -50,6 +50,13 @@ object Mocks {
         subjects = flowOf(listOf("Animals", "Hunger", "Open Library Staff Picks", "Juvenile fiction", "Children's stories, English", "Foxes", "Fiction", "Zorros", "Ficci\u00f3n juvenil", "Tunnels", "Interviews", "Farmers", "Children's stories", "Rats", "Welsh Authors", "English Authors", "Thieves", "Tricksters", "Badgers", "Children's fiction", "Foxes, fiction", "Underground", "Renards", "Romans, nouvelles, etc. pour la jeunesse", "Children's literature", "Plays", "Children's plays", "Children's stories, Welsh", "Agriculteurs", "Large type books", "Fantasy fiction")),
     )
 
+    val workMrFoxPref = WorkPreference(
+        work = workMrFox,
+        readingState = WorkPreference.ReadingState.READING,
+        possessed = true,
+        rating = null
+    )
+
     private val dumbWork1984 = Work(
         title = "1984",
         id = "OL1168083W",

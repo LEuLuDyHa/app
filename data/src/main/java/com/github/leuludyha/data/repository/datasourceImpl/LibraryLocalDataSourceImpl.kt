@@ -5,6 +5,7 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -20,6 +21,9 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
     override fun getCover(coverId: Long): Flow<Cover> =
         libraryDao.getCover(coverId).map { it.toModel(libraryDao) }
 
+    override fun getWorkPreference(workId: String): Flow<WorkPreference> =
+        libraryDao.getWorkPref(workId = workId).map { it.toModel(libraryDao) }
+
     override suspend fun save(work: Work) =
         libraryDao.insert(work)
     override suspend fun save(edition: Edition) =
@@ -27,10 +31,16 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
     override suspend fun save(author: Author) =
         libraryDao.insert(author)
 
+    override suspend fun save(workPref: WorkPreference) =
+        libraryDao.insert(workPref)
+
     override suspend fun delete(work: Work) =
         libraryDao.delete(work)
     override suspend fun delete(edition: Edition) =
         libraryDao.delete(edition)
     override suspend fun delete(author: Author) =
         libraryDao.delete(author)
+
+    override suspend fun delete(workPref: WorkPreference) =
+        libraryDao.delete(workPref)
 }

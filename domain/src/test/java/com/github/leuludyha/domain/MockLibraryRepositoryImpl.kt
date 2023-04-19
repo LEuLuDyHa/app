@@ -8,6 +8,7 @@ import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -16,6 +17,7 @@ class MockLibraryRepositoryImpl: LibraryRepository {
     private val savedWorks: HashMap<String, Work> = hashMapOf()
     private val savedEditions: HashMap<String, Edition> = hashMapOf()
     private val savedAuthors: HashMap<String, Author> = hashMapOf()
+    private val savedWorkPrefs: HashMap<String, WorkPreference> = hashMapOf()
 
     override fun searchRemotely(query: String): Flow<PagingData<Work>> {
         return flowOf(PagingData.from(listOf(workMrFox)))
@@ -58,6 +60,10 @@ class MockLibraryRepositoryImpl: LibraryRepository {
         savedEditions[edition.id] = edition
     }
 
+    override suspend fun saveLocally(workPref: WorkPreference) {
+        savedWorkPrefs[workPref.work.id] = workPref
+    }
+
     override suspend fun deleteLocally(work: Work) {
         savedWorks.remove(work.id)
     }
@@ -68,6 +74,10 @@ class MockLibraryRepositoryImpl: LibraryRepository {
 
     override suspend fun deleteLocally(edition: Edition) {
         savedEditions.remove(edition.id)
+    }
+
+    override suspend fun deleteLocally(workPref: WorkPreference) {
+        savedWorkPrefs.remove(workPref.work.id)
     }
 
     override fun getWorkLocally(workId: String): Flow<Work> =
@@ -95,4 +105,11 @@ class MockLibraryRepositoryImpl: LibraryRepository {
         else
             flowOf(editions.first())
     }
+
+    override fun getWorkPrefLocally(workId: String): Flow<WorkPreference> =
+        if (savedWorkPrefs[workId] != null)
+            flowOf(savedWorkPrefs[workId]!!)
+        else
+            flowOf()
+
 }

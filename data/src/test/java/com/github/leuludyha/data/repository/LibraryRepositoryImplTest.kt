@@ -6,13 +6,14 @@ import com.github.leuludyha.domain.model.library.Mocks.edition1984
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.work1984
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFoxPref
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
 
@@ -27,6 +28,7 @@ class LibraryRepositoryImplTest {
         localDataSource.save(workMrFox)
         localDataSource.save(editionMrFox)
         localDataSource.save(authorRoaldDahl)
+        localDataSource.save(workMrFoxPref)
 
         libraryRepository = LibraryRepositoryImpl(remoteDataSource, localDataSource)
     }
@@ -130,6 +132,13 @@ class LibraryRepositoryImplTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun getWorkPrefLocallyReturnsCorrectWork() = runTest {
+        assertThat(libraryRepository.getWorkPrefLocally(workMrFox.id).first())
+            .isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun saveWorkLocallySavesTheCorrectWork() = runTest {
         libraryRepository.saveLocally(work1984)
         assertThat(libraryRepository.getWorkLocally(work1984.id).first())
@@ -152,35 +161,59 @@ class LibraryRepositoryImplTest {
             .isEqualTo(authorGeorgeOrwell)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedWorkThrowsException(): Unit = runTest {
-        libraryRepository.saveLocally(workMrFox)
-        libraryRepository.deleteLocally(workMrFox)
-        Assert.assertThrows(Exception::class.java) {
+    fun saveWorkPrefLocallySavesTheCorrectWorkPref() = runTest {
+        libraryRepository.saveLocally(workMrFoxPref)
+        assertThat(libraryRepository.getWorkPrefLocally(workMrFox.id).first())
+            .isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun gettingADeletedWorkThrowsException(): Unit {
+        assertThrows(Exception::class.java) {
             runTest {
+                libraryRepository.saveLocally(workMrFox)
+                libraryRepository.deleteLocally(workMrFox)
                 libraryRepository.getWorkLocally(workMrFox.id).first()
             }
         }
     }
 
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedEditionThrowsException(): Unit = runTest {
-        libraryRepository.saveLocally(editionMrFox)
-        libraryRepository.deleteLocally(editionMrFox)
-        Assert.assertThrows(Exception::class.java) {
+    fun gettingADeletedEditionThrowsException(): Unit {
+        assertThrows(Exception::class.java) {
             runTest {
+                libraryRepository.saveLocally(editionMrFox)
+                libraryRepository.deleteLocally(editionMrFox)
                 libraryRepository.getWorkLocally(editionMrFox.id).first()
             }
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun gettingADeletedAuthorThrowsException(): Unit = runTest {
-        libraryRepository.saveLocally(authorRoaldDahl)
-        libraryRepository.deleteLocally(authorRoaldDahl)
-        Assert.assertThrows(Exception::class.java) {
+    fun gettingADeletedAuthorThrowsException(): Unit {
+        assertThrows(Exception::class.java) {
             runTest {
+                libraryRepository.saveLocally(authorRoaldDahl)
+                libraryRepository.deleteLocally(authorRoaldDahl)
                 libraryRepository.getAuthorLocally(authorRoaldDahl.id).first()
+            }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun gettingADeletedWorkPrefThrowsException(): Unit {
+        assertThrows(Exception::class.java) {
+            runTest {
+                libraryRepository.saveLocally(workMrFoxPref)
+                libraryRepository.deleteLocally(workMrFoxPref)
+                libraryRepository.getWorkPrefLocally(workMrFox.id).first()
             }
         }
     }

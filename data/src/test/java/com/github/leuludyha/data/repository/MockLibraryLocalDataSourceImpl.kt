@@ -5,6 +5,7 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -12,6 +13,7 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
     private val savedWorks: HashMap<String, Work> = hashMapOf()
     private val savedEditions: HashMap<String, Edition> = hashMapOf()
     private val savedAuthors: HashMap<String, Author> = hashMapOf()
+    private val savedWorkPrefs: HashMap<String, WorkPreference> = hashMapOf()
 
     override fun getWork(workId: String): Flow<Work> =
         if (savedWorks[workId] != null)
@@ -40,6 +42,11 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
             flowOf()
 
     override fun getCover(coverId: Long): Flow<Cover> = flowOf(Cover(coverId))
+    override fun getWorkPreference(workId: String): Flow<WorkPreference> =
+        if (savedWorkPrefs[workId] != null)
+            flowOf(savedWorkPrefs[workId]!!)
+        else
+            flowOf()
 
     override suspend fun save(work: Work) {
         savedWorks[work.id] = work
@@ -47,6 +54,10 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
 
     override suspend fun save(author: Author) {
         savedAuthors[author.id] = author
+    }
+
+    override suspend fun save(workPref: WorkPreference) {
+        savedWorkPrefs[workPref.work.id] = workPref
     }
 
     override suspend fun delete(work: Work) {
@@ -59,6 +70,10 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
 
     override suspend fun delete(author: Author) {
         savedAuthors.remove(author.id)
+    }
+
+    override suspend fun delete(workPref: WorkPreference) {
+        savedWorkPrefs.remove(workPref.work.id)
     }
 
     override suspend fun save(edition: Edition) {
