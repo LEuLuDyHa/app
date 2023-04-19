@@ -65,4 +65,11 @@ object Mocks {
     )
 
     val authContext: AuthenticationContext = AuthenticationContext(mainUser)
+
+    //These are a few locations near EPFL, Pair<Latitude, Longitude>
+    val userLocationList: List<Pair<Double, Double>> = listOf(
+        Pair(46.521131, 6.566055),
+        Pair(46.522397, 6.563162),
+        Pair(46.518300, 6.560984)
+    )
 }

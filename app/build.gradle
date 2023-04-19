@@ -132,9 +132,10 @@ dependencies {
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
 
-    //Google Play Services dependency for the Maps SDK for android
+    //Google Play Services dependencies for the Maps SDK for android
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.maps.android:maps-compose:2.11.0'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
 
 
 //========== ======== ==== ==
