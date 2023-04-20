@@ -79,7 +79,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-auth:21.0.3'
 
-    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    //implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
     implementation "com.google.firebase:firebase-auth-ktx"
     implementation "com.google.firebase:firebase-firestore-ktx"
 
