@@ -2,13 +2,10 @@ package com.github.leuludyha.ibdb.presentation.screen.maps
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowCircleUp
 import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.*
@@ -22,11 +19,12 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Mocks
-import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import com.github.leuludyha.ibdb.presentation.Orientation
+import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationServices
@@ -36,7 +34,6 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
-import kotlin.streams.toList
 
 /**
  * For now, this screen only starts google maps and displays a few hardcoded markers at EPFL.
@@ -46,25 +43,29 @@ import kotlin.streams.toList
 @Composable
 fun GoogleMapsScreen(
     navController: NavHostController,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    viewModel: GoogleMapsScreenViewModel = hiltViewModel()
 ) {
-    val epfl = LatLng(46.520536, 6.568318)
-
     val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(epfl, 15f)
+        position = CameraPosition.fromLatLngZoom(viewModel.defaultLocation, 15f)
     }
 
     val locationPermissionState =
-        rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
-    var uiSettings by remember { mutableStateOf(MapUiSettings(
-        //I did my own implementation of this, I encountered problems and no documentation online
-        myLocationButtonEnabled = false,
-        zoomControlsEnabled = false)) }
+        rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+    val uiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(
+                //I did my own implementation of this, I encountered problems and no documentation online
+                myLocationButtonEnabled = false,
+                zoomControlsEnabled = false
+            )
+        )
+    }
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     //This allows to get the location of the user
     val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-    var nearbyUsers by remember { mutableStateOf(listOf<LatLng>()) }
+    val nearbyUsers by viewModel.nearbyUsers
 
     GoogleMap(
         modifier = Modifier
@@ -89,12 +90,20 @@ fun GoogleMapsScreen(
                     it.alpha = 0.5f
                 },
                 onInfoWindowClick = {
-                    Toast.makeText(context, "I will send you to another screen with this user", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "I will send you to another screen with this user's info",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             ) {
-                //TODO: Put a display of the books once we can get it
-                Screen.BookDetails.passBookId(Mocks.work1984.id)
-                Text("Here a book will be displayed")
+                //TODO: Put a display of all the books from a given user in a scrollable view.
+                // For some reason, MiniBookView doesn't work here.
+                MiniBookView(
+                    work = Mocks.workLaFermeDesAnimaux,
+                    onClick = {},
+                    orientation = Orientation.Horizontal
+                )
             }
         }
     }
@@ -108,7 +117,7 @@ fun GoogleMapsScreen(
     ) {
         //This is the refresh users button
         MapsButton(Modifier.testTag("GoogleMaps::refresh_button"), Icons.Filled.Autorenew) {
-            nearbyUsers = fetchNearbyUsers(cameraPositionState, context)
+            viewModel.nearbyUsers.value = viewModel.fetchNearbyUsers(cameraPositionState, context)
         }
 
         Spacer(modifier = Modifier.size(30.dp))
@@ -128,7 +137,7 @@ fun GoogleMapsScreen(
                             CameraUpdateFactory.newCameraPosition(
                                 CameraPosition.fromLatLngZoom(
                                     LatLng(it.latitude, it.longitude),
-                                    ZoomLevels.Street.zoom
+                                    GoogleMapsScreenViewModel.ZoomLevels.Street.zoom
                                 )
                             )
                         )
@@ -137,43 +146,6 @@ fun GoogleMapsScreen(
             }
         }
     }
-}
-
-/**
- * An enumeration meant to store a few default zoom levels for the camera in the maps screen.
- * Bizarrely, it looks like this enum doesn't exist by default.
- * They are taken from [here](https://developers.google.com/maps/documentation/android-sdk/views#zoom).
- */
-private enum class ZoomLevels (val zoom: Float) {
-    World(1f),
-    Continent(5f),
-    City(10f),
-    Street(15f),
-    Buildings(20f)
-}
-
-//TODO: Should move this into a viewModel
-//TODO: This has to be modified to be linked to users. I have to consult with the others the best way of doing so.
-// it will be probably be changed to a user instead of a LatLng
-/**
- * This function takes care of calling Firebase to find users that are registered close to
- * within the camera's view.
- */
-private fun fetchNearbyUsers(cameraPositionState: CameraPositionState, context: Context): List<LatLng> {
-    if(cameraPositionState.position.zoom < ZoomLevels.City.zoom) {
-        Toast.makeText(context, "Try zooming a bit more, this is too broad!", Toast.LENGTH_SHORT).show()
-        Log.d("Debug", "Zoom: " + cameraPositionState.position.zoom)
-        return listOf()
-    }
-
-    //call firebase with bounds of the map
-    val cameraBounds = cameraPositionState.projection?.visibleRegion?.latLngBounds
-    //TODO: Call Firebase once it is available
-
-    //For now, I use a few mock locations
-    return Mocks.userLocationList.stream()
-        .map { pair -> LatLng(pair.first, pair.second) }
-        .toList()
 }
 
 /**
@@ -188,9 +160,11 @@ private fun fetchNearbyUsers(cameraPositionState: CameraPositionState, context: 
  */
 @Composable
 private fun MapsButton(modifier: Modifier, icon: ImageVector, onClick: () -> Unit) {
-    Box(modifier = modifier
-        .padding(horizontal = 10.dp)
-        .offset((-20).dp, (-20).dp)) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 10.dp)
+            .offset((-20).dp, (-20).dp)
+    ) {
         Button(
             onClick = { onClick() },
             shape = CircleShape,
@@ -218,7 +192,6 @@ private fun EpflMarkerAndLimits() {
     val showEpflLimits = remember { mutableStateOf(false) }
 
     MarkerInfoWindowContent(
-        tag = "test_tag",
         state = MarkerState(position = epfl),
         onInfoWindowClick = {
             showEpflLimits.value = true
