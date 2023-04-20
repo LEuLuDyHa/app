@@ -1,34 +1,74 @@
 {
   "project_info": {
-    "project_number": "892796746414",
-    "firebase_url": "https://sdp-firebase-bootcamp-20b07-default-rtdb.europe-west1.firebasedatabase.app",
-    "project_id": "sdp-firebase-bootcamp-20b07",
-    "storage_bucket": "sdp-firebase-bootcamp-20b07.appspot.com"
+    "project_number": "342548490143",
+    "firebase_url": "https://ibdb-df1ac-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ibdb-df1ac",
+    "storage_bucket": "ibdb-df1ac.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:892796746414:android:3ab32a7a7e8ade46700b3f",
+        "mobilesdk_app_id": "1:342548490143:android:c7a771410287b4d79d3faa",
         "android_client_info": {
           "package_name": "com.github.leuludyha.ibdb"
         }
       },
       "oauth_client": [
         {
-          "client_id": "892796746414-ebg00rlg64434903gfkgkrd5fqfhi5d2.apps.googleusercontent.com",
+          "client_id": "342548490143-n3k1tp77m3n9886f3kisibtk61ndp7fr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "c925e168b1bf32d2a7784b571f8a66c4f05e0675"
+          }
+        },
+        {
+          "client_id": "342548490143-okcot4g4udgdvqnlfbdv9nif7slo5d19.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "5936cc8832affddd15cdd05db9ecf83488934bef"
+          }
+        },
+        {
+          "client_id": "342548490143-qneuh0042cd1qnq98u38ukvia3rbh6f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "25f31302b3277a269e9757937c70c4c040d1e2bc"
+          }
+        },
+        {
+          "client_id": "342548490143-sm0c6ms3hiailh80rmc7al9cupp3i4rb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "2fab367ad431a2d45ba0b117c6653b888e14c545"
+          }
+        },
+        {
+          "client_id": "342548490143-sut45k458aoqotoebjggkbqi6561rg3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.ibdb",
+            "certificate_hash": "047a100a408e0f765e84bb0c4d4543126622bbc5"
+          }
+        },
+        {
+          "client_id": "342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAC8W9UxcdZH20Q0BFNsF49h5fJD1WnLmI"
+          "current_key": "AIzaSyDG6KLNEYtYC5DFJ-M5b5Ek-vSVCTNKqVI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "892796746414-ebg00rlg64434903gfkgkrd5fqfhi5d2.apps.googleusercontent.com",
+              "client_id": "342548490143-f60jq36i2julq004vjt94jt4b461klgr.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

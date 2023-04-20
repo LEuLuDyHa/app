@@ -96,23 +96,13 @@ class UserDatabase {
         return future
     }
 
-    /**
-     * Retrieves a list of users within a certain radius from a given latitude and longitude coordinates.
-     * @param latitude The latitude coordinate to use as the center of the search radius.
-     * @param longitude The longitude coordinate to use as the center of the search radius.
-     * @param radius The radius of the search in meters.
-     * @return A CompletableFuture that will eventually hold a List of User objects within the search radius.
-     */
-    fun getNearbyUsers(latitude: Double, longitude: Double, radius: Int): CompletableFuture<List<User>>{
+    fun getNearbyUsers(latitudeMax: Double, longitudeMax: Double, latitudeMin: Double, longitudeMin: Double): CompletableFuture<List<User>>{
        return getAllUsers().thenApply { users ->
            users.filter { user ->
                val userLatitude = user.latitude
                val userLongitude = user.longitude
-               val distance = SphericalUtil.computeDistanceBetween(
-                   LatLng(latitude, longitude),
-                   LatLng(userLatitude, userLongitude)
-               )
-               distance < radius
+               userLongitude < longitudeMax && userLatitude < latitudeMax &&
+                       userLongitude > longitudeMin && userLatitude > latitudeMin
            }
        }
     }
