@@ -1,9 +1,9 @@
 package com.github.leuludyha.ibdb
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import androidx.test.rule.GrantPermissionRule
@@ -63,7 +63,7 @@ class GoogleMapsScreenTest {
         composeTestRule.waitForIdle()
     }
 
-    //TODO: This test has to be refined by implementing a mock viewModel once it Firebase is working
+    //TODO: This test has to be refined by implementing a mock viewModel once Firebase is working
     @Test
     fun clickingOnRefreshButtonCreatesNewMarkersUnderMainComposable() {
         val viewModel = GoogleMapsScreenViewModel()
@@ -86,8 +86,6 @@ class GoogleMapsScreenTest {
 
         composeTestRule.waitForIdle()
 
-        Log.d("Debug", "old" + oldNumberOfNearbyUsers.size)
-        Log.d("Debug", "new" + viewModel.nearbyUsers.value.size)
         assert(oldNumberOfNearbyUsers.size < viewModel.nearbyUsers.value.size)
     }
 }
