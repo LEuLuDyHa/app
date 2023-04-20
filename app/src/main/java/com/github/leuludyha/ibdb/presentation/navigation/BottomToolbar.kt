@@ -11,41 +11,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
-// List of all bottom tabs
-val Home = TabDescriptor(
-    "Home", Icons.Filled.Home
-) { navHost ->
-    navHost.navigate(route = Screen.Home.route)
-}
-
-val Search = TabDescriptor(
-    "Search", Icons.Filled.Search
-) { navHost ->
-    navHost.navigate(route = Screen.BookSearch.route)
-}
-
-val Collection = TabDescriptor(
-    "Collection", Icons.Filled.LibraryBooks
-) { navHost ->
-    navHost.navigate(route = Screen.Collection.route)
-}
-
-val Maps = TabDescriptor(
-    "Maps", Icons.Filled.Map
-) { navHost ->
-    navHost.navigate(route = Screen.GoogleMaps.route)
-}
-
-val Profile = TabDescriptor(
-    "Profile", Icons.Filled.AccountCircle
-)
-
 @Composable
 fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) {
     var selectedItem by remember { mutableStateOf(defaultSelection) }
 
     val tabs = listOf(
-        Home, Search, Collection, Maps, Profile
+        TabDescriptor.Home,
+        TabDescriptor.Search,
+        TabDescriptor.Maps,
+        TabDescriptor.Profile
     )
 
     BottomAppBar {
@@ -66,11 +40,49 @@ fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) 
     }
 }
 
-data class TabDescriptor(
+
+sealed class TabDescriptor(
     val displayName: String,
     val displayIcon: ImageVector,
     val onClick: (navController: NavHostController) -> Unit = { },
-)
+) {
+    // List of all bottom tabs
+    object Home : TabDescriptor(
+        "Home", Icons.Filled.Home,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.Home.route)
+        }
+    )
+
+    object Search : TabDescriptor(
+        "Search", Icons.Filled.Search,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.BookSearch.route)
+        }
+    )
+
+    object Collection : TabDescriptor(
+        "Collection", Icons.Filled.LibraryBooks,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.Collection.route)
+        }
+    )
+
+    object Maps : TabDescriptor(
+        "Maps", Icons.Filled.Map,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.GoogleMaps.route)
+        }
+    )
+
+    object Profile : TabDescriptor(
+        "Profile", Icons.Filled.AccountCircle,
+        onClick = { navHost ->
+            navHost.navigate(route = Screen.UserProfile.route)
+        }
+    )
+
+}
 
 @Preview
 @Composable

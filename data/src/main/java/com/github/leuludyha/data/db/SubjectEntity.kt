@@ -9,4 +9,10 @@ data class SubjectEntity(
     val subjectName: String,
 ): Raw<String> {
     override fun toModel(libraryDao: LibraryDao): String = subjectName
+
+    companion object {
+        fun from(subject: String) = SubjectEntity(
+            subjectName = subject
+        )
+    }
 }

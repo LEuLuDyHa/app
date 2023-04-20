@@ -9,11 +9,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
-import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
+import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
+import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
+import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.util.Constant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,14 +28,32 @@ fun NavGraph(navController: NavHostController) {
             navController = navController,
             startDestination = Screen.Home.route
         ) {
+            composable(route = Screen.Profile.route) {
+                ProfileScreen(navController, padding)
+            }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
             }
             composable(route = Screen.BarcodeScan.route) {
-                BarcodeScreen(navController)
+                BarcodeScreen(navController, padding)
             }
-            composable(route = Screen.BookSearch.route) {
-                BookSearchScreen(navController, padding)
+            composable(
+                route = Screen.BookSearch.route,
+                arguments = listOf(navArgument(Constant.SEARCH_QUERY_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                })
+            ) { backStackEntry ->
+                backStackEntry.arguments
+                    ?.getString(Constant.SEARCH_QUERY_ARGUMENT_KEY)
+                    .let { arg ->
+                        var query: String? = null
+                        if (arg != "{${Constant.SEARCH_QUERY_ARGUMENT_KEY}}" && arg != null) {
+                            query = arg
+                        }
+                        BookSearchScreen(
+                            navController, padding, query = query
+                        )
+                    }
             }
             composable(
                 route = Screen.BookDetails.route,
@@ -54,6 +74,9 @@ fun NavGraph(navController: NavHostController) {
             }
             composable(route = Screen.FindBook.route) {
                 // TODO Add find book screen here
+            }
+            composable(route = Screen.UserProfile.route) {
+                UserProfile(navController, padding)
             }
             //TODO: Find the way of doing this properly
 //            composable(

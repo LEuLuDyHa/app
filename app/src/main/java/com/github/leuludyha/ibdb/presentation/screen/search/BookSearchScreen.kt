@@ -7,7 +7,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.PagingItemList
-import com.github.leuludyha.ibdb.presentation.components.book_views.MiniBookView
+import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -15,14 +15,19 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun BookSearchScreen(
     navController: NavHostController,
-    padding: PaddingValues
+    padding: PaddingValues,
+    query: String? = null
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
 
     SideEffect { systemUiController.setStatusBarColor(color = systemBarColor) }
 
-    BookSearch(navController = navController, outerPadding = padding) { queryResult ->
+    BookSearch(
+        navController = navController,
+        outerPadding = padding,
+        query = query
+    ) { queryResult ->
         PagingItemList(
             orientation = Orientation.Vertical,
             values = queryResult,

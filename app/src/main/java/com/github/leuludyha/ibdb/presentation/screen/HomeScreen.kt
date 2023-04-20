@@ -1,22 +1,28 @@
 package com.github.leuludyha.ibdb.presentation.screen
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
-import coil.size.Scale
-import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
+import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
+import com.github.leuludyha.ibdb.presentation.components.books.recommendations.RecommendationList
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navController: NavHostController,
@@ -26,34 +32,39 @@ fun HomeScreen(
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
 
+    val (isEmpty, setEmpty) = remember { mutableStateOf(true) }
+
     SideEffect {
         systemUiController.setStatusBarColor(color = systemBarColor)
     }
 
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(outerPadding),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            BookSearchScreen(navController = navController, padding = outerPadding)
-        }
-        Image(
-            modifier = Modifier
-                .padding(
-                    end = 4.dp,
-                )
-                .width(120.dp),
-            painter = rememberImagePainter(
-                data = "https://covers.openlibrary.org/b/id/10521270-L.jpg",
-                builder = {
-                    crossfade(true)
-                    scale(Scale.FILL)
-                }),
-            contentDescription = null,
-            contentScale = ContentScale.Fit
+    val userPreferences = viewModel.authContext.principal.preferences
+
+    Column(
+        modifier = Modifier
+            .padding(outerPadding)
+            .fillMaxWidth()
+            .verticalScroll(state = ScrollState(0), enabled = true)
+    ) {
+        Text(
+            modifier = Modifier.padding(start = 10.dp, top = 10.dp),
+            text = stringResource(id = R.string.reading_list_title),
+            style = MaterialTheme.typography.headlineMedium
         )
+        ReadingList(
+            navController = navController,
+            preferences = userPreferences
+        )
+        Divider()
+        // Only display the header if the recommendation list is not empty
+        if (!isEmpty) {
+            Text(
+                modifier = Modifier.padding(start = 10.dp, top = 10.dp),
+                text = stringResource(id = R.string.recommendation_list_title),
+                style = MaterialTheme.typography.headlineMedium
+            )
+        }
+        // The recommendation list is not visible if empty either way
+        RecommendationList(navController, onRecommendations = { setEmpty(it) })
     }
 }

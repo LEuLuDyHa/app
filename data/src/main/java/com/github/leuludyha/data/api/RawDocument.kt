@@ -36,23 +36,28 @@ data class RawDocument(
         val editions = flow {
             emit(editionIds
                 .orEmpty()
+                .distinct()
                 .map { libraryApi.getEdition(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
-                .distinct()
             )
         }
 
         val authors = flow {
             emit(authorIds
                 .orEmpty()
+                .distinct()
                 .map { libraryApi.getAuthor(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
-                .distinct()
             )
         }
 
         val covers = flow {
-            emit(if (coverId == null) listOf() else listOf(Cover(coverId)))
+            emit(
+                if (coverId != null && coverId > 0)
+                    listOf(Cover(coverId))
+                else
+                    listOf()
+            )
         }
 
         return Work(

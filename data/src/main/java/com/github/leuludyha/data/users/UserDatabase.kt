@@ -1,12 +1,12 @@
 package com.github.leuludyha.data.users
 
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.CompletableFuture
-import com.google.maps.android.SphericalUtil
 
 /**
  * This class provides access to the Firebase Realtime Database for storing and retrieving user data.
@@ -29,6 +29,25 @@ class UserDatabase {
                 future.complete(user)
             }
             else future.completeExceptionally(IllegalArgumentException("User not found"))
+        }.addOnFailureListener {
+            future.completeExceptionally(it)
+        }
+        return future
+    }
+
+    /**
+     * Retrieves a user object for the given phone number from the Firebase Realtime Database
+     * @param phoneNumber The phone number of the user to retrieve
+     * @retrun A CompletableFuture that will eventually hold the User object for the given phone number.
+     *         If the user is not found, the CompletableFuture will complete exceptionally with an IllegalArgumentException.
+     */
+    fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
+        val future = CompletableFuture<User>()
+        db.equalTo(phoneNumber, "phoneNumber").get().addOnSuccessListener { data ->
+            if (data.exists()) {
+                val user = data.getValue(User::class.java)
+                future.complete(user)
+            } else future.completeExceptionally(IllegalArgumentException("User not found"))
         }.addOnFailureListener {
             future.completeExceptionally(it)
         }
@@ -97,13 +116,23 @@ class UserDatabase {
     }
 
     fun getNearbyUsers(latitudeMax: Double, longitudeMax: Double, latitudeMin: Double, longitudeMin: Double): CompletableFuture<List<User>>{
-       return getAllUsers().thenApply { users ->
-           users.filter { user ->
-               val userLatitude = user.latitude
-               val userLongitude = user.longitude
-               userLongitude < longitudeMax && userLatitude < latitudeMax &&
-                       userLongitude > longitudeMin && userLatitude > latitudeMin
-           }
-       }
+        return getAllUsers().thenApply { users ->
+            users.filter { user ->
+                val userLatitude = user.latitude
+                val userLongitude = user.longitude
+                userLongitude < longitudeMax && userLatitude < latitudeMax &&
+                        userLongitude > longitudeMin && userLatitude > latitudeMin
+            }
+        }
+    }
+
+    /**
+     * @param user User to get the neighbours of
+     * @param distance Distance to use to get the neighbours
+     * @param n Number of nearest neighbours to return
+     * @return a sorted list of [User], ranked from smallest distance to largest distance
+     */
+    fun getNeighbouringUsersOf(user: User, distance: (User, User) -> Float, n: Int): List<User> {
+        return listOf(Mocks.mainUser)
     }
 }

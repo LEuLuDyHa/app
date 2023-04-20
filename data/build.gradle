@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id "com.google.gms.google-services"
 }
 
 android {
@@ -41,6 +42,7 @@ dependencies {
 
     implementation "androidx.core:core-ktx:$core_ktx_version"
     implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation 'androidx.paging:paging-runtime-ktx:3.1.1'
     testImplementation "junit:junit:$junit_version"
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -57,6 +59,7 @@ dependencies {
 
     // Coroutines test
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4"
 
     // Mock web server
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.10.0'
@@ -75,17 +78,20 @@ dependencies {
     // Paging 3.0
     implementation "androidx.paging:paging-compose:$paging_version"
 
+    //Firebase
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+
+    //Play Services
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
+    implementation "com.google.android.gms:play-services-auth:$play_services_auth_version"
+
     // Submodules
     implementation project(path: ':domain')
 
-    //Google Play Services dependency for the Maps SDK for android
-    implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'com.google.maps.android:maps-compose:2.11.0'
-    implementation 'com.google.maps.android:android-maps-utils:3.4.0'
-    implementation 'com.google.maps.android:maps-utils-ktx:3.4.0'
-
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:31.3.0')
+    //implementation platform('com.google.firebase:firebase-bom:31.3.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-auth:21.0.3'

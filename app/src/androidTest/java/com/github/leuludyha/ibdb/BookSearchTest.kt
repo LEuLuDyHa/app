@@ -57,7 +57,11 @@ class BookSearchTest {
                     }
                 }
                 composable(route = Screen.BarcodeScan.route) {
-                    BarcodeScreen(navController, BarcodeScreenViewModel())
+                    BarcodeScreen(
+                        navController,
+                        padding = PaddingValues(),
+                        BarcodeScreenViewModel()
+                    )
                 }
             }
         }
@@ -112,7 +116,7 @@ class BookSearchTest {
             result != null
         }
 
-        assertEquals(listOf(Mocks.work), result?.itemSnapshotList?.items)
+        assertEquals(listOf(Mocks.work1984), result?.itemSnapshotList?.items)
     }
 
     //I am not sure that this is a good test returning that Result.Loading doesn't look ideal to me
@@ -160,14 +164,14 @@ class BookSearchTest {
  * This mock class is created to control the kind of requests the view model will make.
  */
 private class LibraryRepositoryMock(
-    val searchReturn: () -> PagingData<Work>? = { PagingData.from(listOf(Mocks.work)) }
+    val searchReturn: () -> PagingData<Work>? = { PagingData.from(listOf(Mocks.work1984)) }
 ) : LibraryRepository {
 
     override fun searchRemotely(query: String): Flow<PagingData<Work>> =
         searchReturn()?.let { flowOf(it) } ?: flowOf()
 
     override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
-        flowOf(Result.Success(Mocks.work))
+        flowOf(Result.Success(Mocks.work1984))
 
     override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
         flowOf(Result.Error("Couldn't retrieve any edition"))
@@ -176,7 +180,7 @@ private class LibraryRepositoryMock(
         flowOf(Result.Error("Couldn't retrieve any edition"))
 
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
-        flowOf(Result.Success(Mocks.author))
+        flowOf(Result.Success(Mocks.authorGeorgeOrwell))
 
     override suspend fun saveWorkLocally(work: Work) {
         TODO("Not yet implemented")
@@ -191,11 +195,15 @@ private class LibraryRepositoryMock(
     }
 
     override fun getWorkLocally(workId: String): Flow<Work> =
-        flowOf(Mocks.work)
+        flowOf(Mocks.work1984)
 
     override fun getAuthorLocally(authorId: String): Flow<Author> =
-        flowOf(Mocks.author)
+        flowOf(Mocks.authorGeorgeOrwell)
 
     override fun getEditionLocally(editionId: String): Flow<Edition> =
         flowOf()
+
+    override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
+        flowOf()
+
 }

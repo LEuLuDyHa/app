@@ -36,29 +36,29 @@ data class RawEdition(
         val authors = flow {
             emit(authorRawKeys
                 .orEmpty()
+                .distinct()
                 .mapNotNull { extractIdFromKey(it.key, "/authors/") }
                 .map { libraryApi.getAuthor(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
-                .distinct()
             )
         }
 
         val works = flow {
             emit(workRawKeys
                 .orEmpty()
+                .distinct()
                 .mapNotNull { extractIdFromKey(it.key, "/works/") }
                 .map { libraryApi.getWork(it) }
                 .mapNotNull { rawResponseToModel(it, libraryApi) }
-                .distinct()
             )
         }
 
         val covers = flow {
             emit(coverIds
                 .orEmpty()
+                .distinct()
                 .filter{ it > 0 }
                 .map { Cover(it) }
-                .distinct()
             )
         }
 

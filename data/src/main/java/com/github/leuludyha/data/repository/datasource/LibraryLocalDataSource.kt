@@ -9,6 +9,10 @@ import kotlinx.coroutines.flow.Flow
 interface LibraryLocalDataSource {
     fun getWork(workId: String): Flow<Work>
     fun getEdition(editionId: String): Flow<Edition>
+    fun getEditionByISBN(isbn: String): Flow<Edition>
     fun getAuthor(authorId: String): Flow<Author>
     fun getCover(coverId: Long): Flow<Cover>
+    suspend fun saveWork(work: Work)
+    suspend fun saveEdition(edition: Edition)
+    suspend fun saveAuthor(author: Author)
 }

@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.BarcodeAnalyser
-import com.github.leuludyha.ibdb.util.Constant
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -44,6 +44,7 @@ import java.util.concurrent.Executors
 @Composable
 fun BarcodeScreen(
     navController: NavHostController,
+    padding: PaddingValues,
     viewModel: BarcodeScreenViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
@@ -60,16 +61,16 @@ fun BarcodeScreen(
     }
 
     Column(
+        modifier = Modifier.padding(padding),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Bottom
     ) {
         Spacer(modifier = Modifier.height(10.dp))
 
-        CameraPreview {isbn ->
-            navController.previousBackStackEntry
-                ?.savedStateHandle
-                ?.set(Constant.BARCODE_RESULT_KEY, isbn)
-            navController.popBackStack()
+        CameraPreview { isbn ->
+            navController.navigate(
+                route = Screen.BookSearch.passQuery(isbn)
+            )
         }
     }
 }

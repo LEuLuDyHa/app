@@ -1,7 +1,7 @@
 package com.github.leuludyha.data.api
 
-import com.github.leuludyha.data.io.FileReader
 import com.github.leuludyha.data.RequiringLibraryApiTest
+import com.github.leuludyha.data.io.FileReader
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -27,7 +27,7 @@ class LibraryApiTest: RequiringLibraryApiTest() {
             coverId = 0,
             authorNames = listOf("Author0", "Author1"),
             firstPublishYear = 2023,
-            key = "key0",
+            key = "/works/id0",
             authorIds = listOf("author0", "author1"),
             editionIds = listOf("edition0", "edition1", "edition2")
         )
@@ -37,7 +37,7 @@ class LibraryApiTest: RequiringLibraryApiTest() {
             coverId = 1,
             authorNames = listOf("Author2"),
             firstPublishYear = 2023,
-            key = "key1",
+            key = "/works/id1",
             authorIds = listOf("author2"),
             editionIds = listOf("edition3", "edition4")
         )

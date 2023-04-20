@@ -5,7 +5,10 @@ import com.github.leuludyha.data.api.RawDocument
 import com.github.leuludyha.data.api.RawEdition
 import com.github.leuludyha.data.api.RawKey
 import com.github.leuludyha.data.io.FileReader
-import com.github.leuludyha.domain.model.library.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.flowOf
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -19,12 +22,7 @@ open class RequiringLibraryApiTest {
     protected lateinit var libraryApi: LibraryApi
     protected lateinit var mockWebServer: MockWebServer
 
-    protected lateinit var workJson: String
-    protected lateinit var authorJson: String
-    protected lateinit var editionJson: String
-    protected lateinit var workEditionsJson: String
-    protected lateinit var authorWorksJson: String
-
+    protected lateinit var searchResponse: MockResponse
     protected lateinit var workResponse: MockResponse
     protected lateinit var authorResponse: MockResponse
     protected lateinit var editionResponse: MockResponse
@@ -43,21 +41,23 @@ open class RequiringLibraryApiTest {
     @Before
     fun initializeMockResponses() {
 
-        editionJson = FileReader
+        val editionJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getEdition.json")
 
-        authorJson = FileReader
+        val authorJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getAuthor.json")
 
-        workJson = FileReader
+        val workJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getWork.json")
 
-        workEditionsJson = FileReader
+        val workEditionsJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getWorkEditions.json")
 
-        authorWorksJson = FileReader
+        val authorWorksJson = FileReader
             .readResourceFromFile(this.javaClass.classLoader!!, "getAuthorWorks.json")
 
+        val searchJson = FileReader
+            .readResourceFromFile(this.javaClass.classLoader!!, "search_2docs.json")
 
         editionResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
@@ -74,6 +74,9 @@ open class RequiringLibraryApiTest {
         authorWorksResponse = MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK)
             .setBody(authorWorksJson)
+        searchResponse = MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK)
+            .setBody(searchJson)
 
         // To avoid infinite loop
         val dumbWork = Work(
@@ -93,7 +96,7 @@ open class RequiringLibraryApiTest {
             //bio = "Roald Dahl was a British novelist, short story writer, and screenwriter.",
             id = "OL34184A",
             works = flowOf(listOf(dumbWork)),
-            photos = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
+            covers = flowOf ( listOf(9395323, 9395316, 9395314, 9395313, 6287214).map { Cover(it.toLong()) } ),
         )
 
         mockEdition = Edition(
