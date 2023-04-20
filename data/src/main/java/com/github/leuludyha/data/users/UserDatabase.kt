@@ -2,7 +2,6 @@ package com.github.leuludyha.data.users
 
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
-import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
