@@ -1,8 +1,14 @@
 package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.ListItem
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -12,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,13 +28,9 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.ibdb.presentation.components.ItemList
-import com.github.leuludyha.domain.model.user.preferences.UserPreferences
-import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.ItemList
-import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
