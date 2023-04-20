@@ -3,6 +3,7 @@ package com.github.leuludyha.ibdb.di
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.repository.UserRepository
+import com.github.leuludyha.domain.useCase.GetAuthorRemotelyUseCase
 import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.FirebaseSignInUseCase
@@ -35,6 +36,10 @@ object UseCaseModule {
     @Provides
     fun getWorkByIdUseCase(libraryRepository: LibraryRepository) =
         GetWorkRemotelyUseCase(libraryRepository)
+
+    @Provides
+    fun getAuthorByIdUseCase(libraryRepository: LibraryRepository) =
+        GetAuthorRemotelyUseCase(libraryRepository)
 
     @Provides
     fun getUserFromPhoneNumberUseCase(userRepository: UserRepository) =
