@@ -14,6 +14,9 @@ data class Friend(
     override val preferences: UserPreferences,
     override val friends: List<User>,
     override val statistics: UserStatistics,
+    override val latitude: Double,
+    override val longitude: Double
+
 ) : User {
 
     override fun Id(): String = userId
