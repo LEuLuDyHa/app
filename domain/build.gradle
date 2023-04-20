@@ -74,14 +74,13 @@ dependencies {
     //implementation "androidx.paging:paging-compose:$paging_version"
 
     //Firebase
-    implementation platform('com.google.firebase:firebase-bom:$firebase_bom_version')
+    implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-firestore-ktx"
+
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-database-ktx'
     implementation 'com.google.firebase:firebase-auth:21.0.3'
-
-    //implementation platform("com.google.firebase:firebase-bom:$firebase_bom_version")
-    implementation "com.google.firebase:firebase-auth-ktx"
-    implementation "com.google.firebase:firebase-firestore-ktx"
 
     //Play Services
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$play_services_version"
