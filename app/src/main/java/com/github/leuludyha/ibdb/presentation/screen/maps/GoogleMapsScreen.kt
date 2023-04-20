@@ -3,16 +3,20 @@ package com.github.leuludyha.ibdb.presentation.screen.maps
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowCircleUp
+import androidx.compose.material.icons.filled.Autorenew
 import androidx.compose.material.icons.filled.MyLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -20,7 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationServices
@@ -50,13 +56,15 @@ fun GoogleMapsScreen(
 
     val locationPermissionState =
         rememberPermissionState(permission = Manifest.permission.ACCESS_COARSE_LOCATION)
-    val uiSettings by remember { mutableStateOf(MapUiSettings(
+    var uiSettings by remember { mutableStateOf(MapUiSettings(
         //I did my own implementation of this, I encountered problems and no documentation online
         myLocationButtonEnabled = false,
         zoomControlsEnabled = false)) }
-    //This allows to get the location of the user
-    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
+    //This allows to get the location of the user
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    var nearbyUsers by remember { mutableStateOf(listOf<LatLng>()) }
 
     GoogleMap(
         modifier = Modifier
@@ -68,6 +76,27 @@ fun GoogleMapsScreen(
     ) {
         EpflMarkerAndLimits()
         SatelliteMarker()
+
+        nearbyUsers.forEach { user ->
+            MarkerInfoWindowContent(
+                state = MarkerState(
+                    position = LatLng(
+                        user.latitude,
+                        user.longitude
+                    )
+                ),
+                onInfoWindowClose = {
+                    it.alpha = 0.5f
+                },
+                onInfoWindowClick = {
+                    Toast.makeText(context, "I will send you to another screen with this user", Toast.LENGTH_SHORT).show()
+                }
+            ) {
+                //TODO: Put a display of the books once we can get it
+                Screen.BookDetails.passBookId(Mocks.work1984.id)
+                Text("Here a book will be displayed")
+            }
+        }
     }
 
     Column(
@@ -77,7 +106,15 @@ fun GoogleMapsScreen(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.Bottom
     ) {
-        LocationButton(Modifier.testTag("GoogleMaps::location_button")) {
+        //This is the refresh users button
+        MapsButton(Modifier.testTag("GoogleMaps::refresh_button"), Icons.Filled.Autorenew) {
+            nearbyUsers = fetchNearbyUsers(cameraPositionState, context)
+        }
+
+        Spacer(modifier = Modifier.size(30.dp))
+
+        //This is the location button
+        MapsButton(Modifier.testTag("GoogleMaps::location_button"), Icons.Filled.MyLocation) {
             locationPermissionState.launchPermissionRequest()
 
             //Center camera on user
@@ -117,13 +154,15 @@ private enum class ZoomLevels (val zoom: Float) {
 
 //TODO: Should move this into a viewModel
 //TODO: This has to be modified to be linked to users. I have to consult with the others the best way of doing so.
+// it will be probably be changed to a user instead of a LatLng
 /**
  * This function takes care of calling Firebase to find users that are registered close to
  * within the camera's view.
  */
 private fun fetchNearbyUsers(cameraPositionState: CameraPositionState, context: Context): List<LatLng> {
-    if(cameraPositionState.position.zoom > ZoomLevels.City.zoom) {
+    if(cameraPositionState.position.zoom < ZoomLevels.City.zoom) {
         Toast.makeText(context, "Try zooming a bit more, this is too broad!", Toast.LENGTH_SHORT).show()
+        Log.d("Debug", "Zoom: " + cameraPositionState.position.zoom)
         return listOf()
     }
 
@@ -148,7 +187,7 @@ private fun fetchNearbyUsers(cameraPositionState: CameraPositionState, context: 
  * @param onClick Function that will be called when this button is clicked.
  */
 @Composable
-private fun LocationButton(modifier: Modifier, onClick: () -> Unit) {
+private fun MapsButton(modifier: Modifier, icon: ImageVector, onClick: () -> Unit) {
     Box(modifier = modifier
         .padding(horizontal = 10.dp)
         .offset((-20).dp, (-20).dp)) {
@@ -160,7 +199,7 @@ private fun LocationButton(modifier: Modifier, onClick: () -> Unit) {
         ) {
             // Inner content including an icon and a text label
             Icon(
-                imageVector = Icons.Filled.MyLocation,
+                imageVector = icon,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
