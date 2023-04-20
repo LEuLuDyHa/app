@@ -49,7 +49,7 @@ fun FullAuthorView(
         verticalArrangement = Arrangement.Top
     ) {
 
-        Text(text = author.name.orEmpty(), style = MaterialTheme.typography.titleLarge)
+        Text(text = author.toString(), style = MaterialTheme.typography.titleLarge)
 
         ItemList(
             values = works.value,

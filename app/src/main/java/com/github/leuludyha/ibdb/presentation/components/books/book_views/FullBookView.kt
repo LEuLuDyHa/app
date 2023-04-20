@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.ListItem
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
@@ -62,6 +64,7 @@ fun FullBookView(
             contentScale = ContentScale.FillWidth,
             contentDescription = stringResource(id = R.string.ui_bookCover_altText)
         )
+        Subjects(subjects.value)
     }
 }
 
@@ -98,16 +101,32 @@ fun MiniAuthorViews(
                         style = MaterialTheme.typography.titleSmall
                     )
                 }
-                // Each item of the reading list will be a mini book view
-                /*MiniAuthorView( TODO
-                    author = author,
-                    // On click, redirect to the BookDetails screen on this book
-                    onClick = { clickedAuthor ->
-                        navController.navigate(Screen.AuthorDetails.passAuthorId(clickedAuthor.Id()))
-                    }
-                )*/
             }
         }
+    }
+}
+
+@Composable
+fun Subjects(
+    subjects: List<String>,
+) {
+    Row(
+        modifier = Modifier.wrapContentSize(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val subjectLabel = stringResource(id = R.string.full_book_view_subject_label)
+        Text(
+            text = when (subjects.size) {
+                0 -> ""
+                1 -> "$subjectLabel: "
+                else -> "${subjectLabel}s: "
+            },
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = subjects.take(3).toText(),
+            style = MaterialTheme.typography.titleSmall
+        )
     }
 }
 
