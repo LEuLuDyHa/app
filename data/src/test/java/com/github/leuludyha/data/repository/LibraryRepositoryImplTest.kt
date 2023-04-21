@@ -1,7 +1,5 @@
 package com.github.leuludyha.data.repository
 
-import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
-import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.library.Mocks.authorGeorgeOrwell
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.edition1984
@@ -14,23 +12,21 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
 class LibraryRepositoryImplTest {
-    private lateinit var remoteDataSource: LibraryRemoteDataSource
-    private lateinit var localDataSource: LibraryLocalDataSource
-
     private lateinit var libraryRepository: LibraryRepository
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() = runTest {
-        remoteDataSource = MockLibraryRemoteDataSourceImpl()
-
-        localDataSource = MockLibraryLocalDataSourceImpl()
-        localDataSource.saveWork(workMrFox)
-        localDataSource.saveEdition(editionMrFox)
-        localDataSource.saveAuthor(authorRoaldDahl)
+        val remoteDataSource = MockLibraryRemoteDataSourceImpl()
+        val localDataSource = MockLibraryLocalDataSourceImpl()
+        localDataSource.save(workMrFox)
+        localDataSource.save(editionMrFox)
+        localDataSource.save(authorRoaldDahl)
 
         libraryRepository = LibraryRepositoryImpl(remoteDataSource, localDataSource)
     }
@@ -135,7 +131,7 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveWorkLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveWorkLocally(work1984)
+        libraryRepository.saveLocally(work1984)
         assertThat(libraryRepository.getWorkLocally(work1984.id).first())
             .isEqualTo(work1984)
     }
@@ -143,7 +139,7 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveEditionLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveEditionLocally(edition1984)
+        libraryRepository.saveLocally(edition1984)
         assertThat(libraryRepository.getEditionLocally(edition1984.id).first())
             .isEqualTo(edition1984)
     }
@@ -151,8 +147,41 @@ class LibraryRepositoryImplTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun saveAuthorLocallySavesTheCorrectWork() = runTest {
-        libraryRepository.saveAuthorLocally(authorGeorgeOrwell)
+        libraryRepository.saveLocally(authorGeorgeOrwell)
         assertThat(libraryRepository.getAuthorLocally(authorGeorgeOrwell.id).first())
             .isEqualTo(authorGeorgeOrwell)
+    }
+
+    @Test
+    fun gettingADeletedWorkThrowsException(): Unit = runTest {
+        libraryRepository.saveLocally(workMrFox)
+        libraryRepository.deleteLocally(workMrFox)
+        Assert.assertThrows(Exception::class.java) {
+            runTest {
+                libraryRepository.getWorkLocally(workMrFox.id).first()
+            }
+        }
+    }
+
+    @Test
+    fun gettingADeletedEditionThrowsException(): Unit = runTest {
+        libraryRepository.saveLocally(editionMrFox)
+        libraryRepository.deleteLocally(editionMrFox)
+        Assert.assertThrows(Exception::class.java) {
+            runTest {
+                libraryRepository.getWorkLocally(editionMrFox.id).first()
+            }
+        }
+    }
+
+    @Test
+    fun gettingADeletedAuthorThrowsException(): Unit = runTest {
+        libraryRepository.saveLocally(authorRoaldDahl)
+        libraryRepository.deleteLocally(authorRoaldDahl)
+        Assert.assertThrows(Exception::class.java) {
+            runTest {
+                libraryRepository.getAuthorLocally(authorRoaldDahl.id).first()
+            }
+        }
     }
 }

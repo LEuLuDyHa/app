@@ -10,6 +10,7 @@ import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -178,7 +179,7 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessAWorkAfterDeleteAllWorksReturnsNull() = runTest {
         libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorks()
+        libraryDao.delete(workMrFox)
         val result = libraryDao.getWork(workMrFox.id).first()
         assertThat(result).isNull()
     }
@@ -188,17 +189,18 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessAnAuthorAfterDeleteAllAuthorsReturnsNull() = runTest {
         libraryDao.insert(authorRoaldDahl)
-        libraryDao.deleteAllAuthors()
+        libraryDao.delete(authorRoaldDahl)
         val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
         assertThat(result).isNull()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessCoversAfterDeleteAllCoversReturnsEmpty() = runTest {
-        libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllCovers()
-        val result = libraryDao.getCover(editionMrFox.covers.first()[0].id).first()
+    fun tryingToAccessCoversAfterDeletingItReturnsEmpty() = runTest {
+        val cover = editionMrFox.covers.first()[0]
+        libraryDao.insert(cover)
+        libraryDao.delete(cover)
+        val result = libraryDao.getCover(cover.id).first()
         assertThat(result).isNull()
     }
 
@@ -206,7 +208,7 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessAnEditionAfterDeleteAllEditionsReturnsNull() = runTest {
         libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditions()
+        libraryDao.delete(editionMrFox)
         val result = libraryDao.getEdition(editionMrFox.id).first()
         assertThat(result).isNull()
     }
@@ -215,71 +217,79 @@ class LibraryDaoTest {
     @Test
     fun tryingToAccessSubjectsAfterDeleteAllSubjectsReturnsEmpty() = runTest {
         libraryDao.insert(workMrFox)
-        libraryDao.deleteAllSubjects()
+        val subjects = workMrFox.subjects.first()
+        subjects.forEach { libraryDao.deleteSubject(it) }
         val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
         assertThat(result.subjects).isEmpty()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessAuthorCoverCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(authorRoaldDahl)
-        libraryDao.deleteAllAuthorCoverCrossRefs()
-        val result = libraryDao.getAuthorWithCovers(authorRoaldDahl.id).first()
-        assertThat(result.covers).isEmpty()
+    fun insertingWorkWithoutAnyAuthorsWorksAsExpected() = runTest {
+        libraryDao.insert(workMrFox.copy(authors = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessEditionAuthorCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditionAuthorCrossRefs()
-        val result = libraryDao.getEditionWithAuthors(editionMrFox.id).first()
-        assertThat(result.authors).isEmpty()
+    fun insertingWorkWithoutAnyEditionsWorksAsExpected() = runTest {
+        libraryDao.insert(workMrFox.copy(editions = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessEditionCoverCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(editionMrFox)
-        libraryDao.deleteAllEditionCoverCrossRefs()
-        val result = libraryDao.getEditionWithCovers(editionMrFox.id).first()
-        assertThat(result.covers).isEmpty()
+    fun insertingWorkWithoutAnySubjectsWorksAsExpected() = runTest {
+        libraryDao.insert(workMrFox.copy(subjects = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessWorkAuthorCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkAuthorCrossRefs()
-        val result = libraryDao.getWorkWithAuthors(workMrFox.id).first()
-        assertThat(result.authors).isEmpty()
+    fun insertingWorkWithoutAnyCoversWorksAsExpected() = runTest {
+        libraryDao.insert(workMrFox.copy(covers = flowOf()))
+        val result = libraryDao.getWork(workMrFox.id).first()
+        assertThat(result).isEqualTo(WorkEntity.from(workMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessWorkCoverCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkCoverCrossRefs()
-        val result = libraryDao.getWorkWithCovers(workMrFox.id).first()
-        assertThat(result.covers).isEmpty()
+    fun insertingEditionWithoutAnyAuthorsWorksAsExpected() = runTest {
+        libraryDao.insert(editionMrFox.copy(authors = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessWorkEditionCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkEditionCrossRefs()
-        val result = libraryDao.getWorkWithEditions(workMrFox.id).first()
-        assertThat(result.editions).isEmpty()
+    fun insertingEditionWithoutAnyWorksWorksAsExpected() = runTest {
+        libraryDao.insert(editionMrFox.copy(works = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun tryingToAccessWorkSubjectCrossRefAfterDeleteAllReturnsEmpty() = runTest {
-        libraryDao.insert(workMrFox)
-        libraryDao.deleteAllWorkSubjectCrossRefs()
-        val result = libraryDao.getWorkWithSubjects(workMrFox.id).first()
-        assertThat(result.subjects).isEmpty()
+    fun insertingEditionWithoutAnyCoversWorksAsExpected() = runTest {
+        libraryDao.insert(editionMrFox.copy(covers = flowOf()))
+        val result = libraryDao.getEdition(editionMrFox.id).first()
+        assertThat(result).isEqualTo(EditionEntity.from(editionMrFox))
+    }
+
+    @Test
+    fun insertingAuthorWithoutAnyWorksWorksAsExpected() = runTest {
+        libraryDao.insert(authorRoaldDahl.copy(works = flowOf()))
+        val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
+        assertThat(result).isEqualTo(AuthorEntity.from(authorRoaldDahl))
+    }
+
+    @Test
+    fun insertingAuthorWithoutAnyCoversWorksAsExpected() = runTest {
+        libraryDao.insert(authorRoaldDahl.copy(covers = flowOf()))
+        val result = libraryDao.getAuthor(authorRoaldDahl.id).first()
+        assertThat(result).isEqualTo(AuthorEntity.from(authorRoaldDahl))
     }
 }

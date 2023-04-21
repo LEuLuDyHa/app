@@ -182,15 +182,27 @@ private class LibraryRepositoryMock(
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
         flowOf(Result.Success(Mocks.authorGeorgeOrwell))
 
-    override suspend fun saveWorkLocally(work: Work) {
+    override suspend fun saveLocally(work: Work) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun saveAuthorLocally(author: Author) {
+    override suspend fun saveLocally(author: Author) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun saveEditionLocally(edition: Edition) {
+    override suspend fun saveLocally(edition: Edition) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocally(work: Work) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocally(author: Author) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocally(edition: Edition) {
         TODO("Not yet implemented")
     }
 

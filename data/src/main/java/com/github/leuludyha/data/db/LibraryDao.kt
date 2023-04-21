@@ -47,41 +47,41 @@ interface LibraryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(join: WorkSubjectCrossRef)
 
-    @Query("DELETE FROM works")
-    suspend fun deleteAllWorks()
+    @Query("DELETE FROM works where workId = :workId")
+    suspend fun deleteWork(workId: String)
 
-    @Query("DELETE FROM authors")
-    suspend fun deleteAllAuthors()
+    @Query("DELETE FROM authors where authorId = :authorId")
+    suspend fun deleteAuthor(authorId: String)
 
-    @Query("DELETE FROM Covers")
-    suspend fun deleteAllCovers()
+    @Query("DELETE FROM Covers where coverId = :coverId")
+    suspend fun deleteCover(coverId: Long)
 
-    @Query("DELETE FROM editions")
-    suspend fun deleteAllEditions()
+    @Query("DELETE FROM editions where editionId = :editionId")
+    suspend fun deleteEdition(editionId: String)
 
-    @Query("DELETE FROM subjects")
-    suspend fun deleteAllSubjects()
+    @Query("DELETE FROM subjects where subjectName = :subject")
+    suspend fun deleteSubject(subject: String)
 
-    @Query("DELETE FROM AuthorCoverCrossRef")
-    suspend fun deleteAllAuthorCoverCrossRefs()
+    @Query("DELETE FROM AuthorCoverCrossRef where authorId = :authorId")
+    suspend fun deleteAuthorCoversForId(authorId: String)
 
-    @Query("DELETE FROM EditionAuthorCrossRef")
-    suspend fun deleteAllEditionAuthorCrossRefs()
+    @Query("DELETE FROM EditionAuthorCrossRef where editionId = :editionId")
+    suspend fun deleteEditionAuthorsForId(editionId: String)
 
-    @Query("DELETE FROM EditionCoverCrossRef")
-    suspend fun deleteAllEditionCoverCrossRefs()
+    @Query("DELETE FROM EditionCoverCrossRef where editionId = :editionId")
+    suspend fun deleteEditionCoversForId(editionId: String)
 
-    @Query("DELETE FROM WorkAuthorCrossRef")
-    suspend fun deleteAllWorkAuthorCrossRefs()
+    @Query("DELETE FROM WorkAuthorCrossRef where workId = :workId")
+    suspend fun deleteWorkAuthors(workId: String)
 
-    @Query("DELETE FROM WorkCoverCrossRef")
-    suspend fun deleteAllWorkCoverCrossRefs()
+    @Query("DELETE FROM WorkCoverCrossRef where workId = :workId")
+    suspend fun deleteWorkCovers(workId: String)
 
-    @Query("DELETE FROM WorkEditionCrossRef")
-    suspend fun deleteAllWorkEditionCrossRefs()
+    @Query("DELETE FROM WorkEditionCrossRef where workId = :workId")
+    suspend fun deleteWorkEditions(workId: String)
 
-    @Query("DELETE FROM WorkSubjectCrossRef")
-    suspend fun deleteAllWorkSubjectCrossRefs()
+    @Query("DELETE FROM WorkSubjectCrossRef where workId = :workId")
+    suspend fun deleteWorkSubjects(workId: String)
 
     @Query("SELECT * FROM works")
     fun getAllWorks(): Flow<List<WorkEntity>>
@@ -203,4 +203,27 @@ interface LibraryDao {
     suspend fun insert(cover: Cover) = insert(CoverEntity(cover.id))
 
     suspend fun insertSubject(subject: String) = insert(SubjectEntity(subject))
+
+    suspend fun delete(work: Work) {
+        deleteWork(work.id)
+        deleteWorkAuthors(work.id)
+        deleteWorkCovers(work.id)
+        deleteWorkSubjects(work.id)
+        deleteWorkEditions(work.id)
+    }
+
+    suspend fun delete(author: Author) {
+        deleteAuthor(author.id)
+        deleteAuthorCoversForId(author.id)
+    }
+
+    suspend fun delete(edition: Edition) {
+        deleteEdition(edition.id)
+        deleteEditionAuthorsForId(edition.id)
+        deleteEditionCoversForId(edition.id)
+    }
+
+    suspend fun delete(cover: Cover) {
+        deleteCover(cover.id)
+    }
 }

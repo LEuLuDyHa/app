@@ -15,6 +15,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -26,9 +27,9 @@ class LocalUseCasesTest {
     fun setup() = runTest {
         libraryRepository = MockLibraryRepositoryImpl()
 
-        libraryRepository.saveWorkLocally(workMrFox)
-        libraryRepository.saveEditionLocally(editionMrFox)
-        libraryRepository.saveAuthorLocally(authorRoaldDahl)
+        libraryRepository.saveLocally(workMrFox)
+        libraryRepository.saveLocally(editionMrFox)
+        libraryRepository.saveLocally(authorRoaldDahl)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -103,6 +104,59 @@ class LocalUseCasesTest {
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun accessingADeletedWorkThrowsAnException(): Unit = runTest {
+        val testWork = Work(
+            id = "TestWork",
+            title = "title",
+            editions = flowOf(),
+            authors = flowOf(),
+            covers = flowOf(),
+            subjects = flowOf()
+        )
+        SaveWorkLocallyUseCase(libraryRepository)(testWork)
+        DeleteWorkLocallyUseCase(libraryRepository)(testWork)
+        assertThrows(Exception::class.java) { runTest {
+            GetWorkLocallyUseCase(libraryRepository)(testWork.id).first()
+        }}
+    }
+
+    @Test
+    fun accessingADeletedAuthorThrowsAnException(): Unit = runTest {
+        val testAuthor = Author(
+            id = "TestAuthor",
+            name = "Michael Jackson",
+            birthDate = "23 janvier 2024",
+            deathDate = "10 septembre 2024",
+            wikipedia = "wikipedia.com",
+            works = flowOf(),
+            covers = flowOf()
+        )
+        SaveAuthorLocallyUseCase(libraryRepository)(testAuthor)
+        DeleteAuthorLocallyUseCase(libraryRepository)(testAuthor)
+        assertThrows(Exception::class.java) { runTest {
+            GetAuthorLocallyUseCase(libraryRepository)(testAuthor.id).first()
+        }}
+    }
+
+    @Test
+    fun accessingADeletedEditionThrowsAnException(): Unit = runTest {
+        val testEdition = Edition(
+            id = "testEdition",
+            title = "title",
+            isbn13 = "isbn13",
+            isbn10 = "isbn10",
+            works = flowOf(),
+            authors = flowOf(),
+            covers = flowOf(),
+        )
+        SaveEditionLocallyUseCase(libraryRepository)(testEdition)
+        DeleteEditionLocallyUseCase(libraryRepository)(testEdition)
+        assertThrows(Exception::class.java) { runTest {
+            GetEditionLocallyUseCase(libraryRepository)(testEdition.id).first()
+        }}
+    }
+
     @Test
     fun canRecursivelyAccessFieldsOfSavedEdition() = runTest {
         val testCover = Cover(1)

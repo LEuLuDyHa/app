@@ -41,15 +41,27 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
 
     override fun getCover(coverId: Long): Flow<Cover> = flowOf(Cover(coverId))
 
-    override suspend fun saveWork(work: Work) {
+    override suspend fun save(work: Work) {
         savedWorks[work.id] = work
     }
 
-    override suspend fun saveAuthor(author: Author) {
+    override suspend fun save(author: Author) {
         savedAuthors[author.id] = author
     }
 
-    override suspend fun saveEdition(edition: Edition) {
+    override suspend fun delete(work: Work) {
+        savedWorks.remove(work.id)
+    }
+
+    override suspend fun delete(edition: Edition) {
+        savedEditions.remove(edition.id)
+    }
+
+    override suspend fun delete(author: Author) {
+        savedAuthors.remove(author.id)
+    }
+
+    override suspend fun save(edition: Edition) {
         savedEditions[edition.id] = edition
     }
 }
