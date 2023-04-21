@@ -48,6 +48,9 @@ class GoogleMapsScreenTest {
             )
         }
 
+        //This is to wait for the map to load
+        composeTestRule.waitForIdle()
+
         composeTestRule
             .onNodeWithTag("GoogleMaps::location_button")
             .performClick()
@@ -64,6 +67,9 @@ class GoogleMapsScreenTest {
                 viewModel = GoogleMapsScreenViewModel(injectedUseCase)
             )
         }
+
+        //This is to wait for the map to load
+        composeTestRule.waitForIdle()
 
         composeTestRule
             .onNodeWithTag("GoogleMaps::refresh_button")
@@ -84,6 +90,9 @@ class GoogleMapsScreenTest {
                 viewModel = viewModel
             )
         }
+
+        //This is to wait for the map to load
+        composeTestRule.waitForIdle()
 
 //        composeTestRule.onRoot(true).printToLog("Debug", maxDepth = 10)
 
