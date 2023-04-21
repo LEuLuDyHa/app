@@ -92,6 +92,9 @@ interface LibraryDao {
     @Query("SELECT * FROM editions WHERE editionId LIKE :editionId")
     fun getEdition(editionId: String): Flow<EditionEntity>
 
+    @Query("SELECT * FROM editions WHERE (isbn10 LIKE :isbn OR isbn13 LIKE :isbn)")
+    fun getEditionByISBN(isbn: String): Flow<EditionEntity>
+
     @Query("SELECT * FROM authors WHERE authorId LIKE :authorId")
     fun getAuthor(authorId: String): Flow<AuthorEntity>
 

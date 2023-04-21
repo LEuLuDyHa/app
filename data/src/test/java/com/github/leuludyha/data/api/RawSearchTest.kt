@@ -28,6 +28,16 @@ class RawSearchTest: RequiringLibraryApiTest() {
         assertThat(search.error).isEqualTo("x")
     }
 
+    @Test
+    fun `Default list of documents is empty`() {
+        val search = RawSearch(
+            error = "x"
+        )
+
+        assertThat(search.documents).isEmpty()
+        assertThat(search.error).isEqualTo("x")
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `toModel returns expected works`() { runTest {

@@ -180,7 +180,7 @@ private class LibraryRepositoryMock(
         flowOf(Result.Error("Couldn't retrieve any edition"))
 
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
-        flowOf(Result.Success(Mocks.author))
+        flowOf(Result.Success(Mocks.authorGeorgeOrwell))
 
     override suspend fun saveWorkLocally(work: Work) {
         TODO("Not yet implemented")
@@ -198,8 +198,12 @@ private class LibraryRepositoryMock(
         flowOf(Mocks.work1984)
 
     override fun getAuthorLocally(authorId: String): Flow<Author> =
-        flowOf(Mocks.author)
+        flowOf(Mocks.authorGeorgeOrwell)
 
     override fun getEditionLocally(editionId: String): Flow<Edition> =
         flowOf()
+
+    override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
+        flowOf()
+
 }

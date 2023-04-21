@@ -26,7 +26,8 @@ class UserDatabase {
             if (data.exists()) {
                 val user = data.getValue(User::class.java)
                 future.complete(user)
-            } else future.completeExceptionally(IllegalArgumentException("User not found"))
+            }
+            else future.completeExceptionally(IllegalArgumentException("User not found"))
         }.addOnFailureListener {
             future.completeExceptionally(it)
         }
@@ -53,6 +54,29 @@ class UserDatabase {
     }
 
     /**
+     * Retrieves a list of all users from the Firebase Realtime Database.
+     * @return A CompletableFuture that will eventually hold a List of User objects.
+     * */
+    fun getAllUsers(): CompletableFuture<List<User>> {
+        val future = CompletableFuture<List<User>>()
+        db.get().addOnSuccessListener { data ->
+            val userList = mutableListOf<User>()
+            if (data.exists()) {
+                for (userSnapshot in data.children) {
+                    val user = userSnapshot.getValue(User::class.java)
+                    if (user != null) {
+                        userList.add(user)
+                    }
+                }
+                future.complete(userList)
+            } else future.completeExceptionally(IllegalArgumentException("No users found"))
+        }.addOnFailureListener {
+            future.completeExceptionally(it)
+        }
+        return future
+    }
+
+    /**
      * Adds a new user to the Firebase Realtime Database.
      * @param user The User object to add.
      * @return A CompletableFuture that will eventually complete with a null value if the operation was successful.
@@ -63,15 +87,19 @@ class UserDatabase {
 
         db.child(user.username).setValue(user)
             .addOnSuccessListener {
-                future.complete(null)
-            }
+                future.complete(null) }
             .addOnFailureListener {
-                future.completeExceptionally(it)
-            }
+                future.completeExceptionally(it) }
 
         return future
     }
 
+    /**
+     * Updates a user's information in the Firebase Realtime Database.
+     * @param username The username of the user to update.
+     * @param newUser The new User object with updated information.
+     * @return A CompletableFuture that will eventually hold the updated User object if the operation was successful.
+     */
     fun updateUserInfo(username: String, newUser: User): CompletableFuture<User> {
         val future = CompletableFuture<User>()
 
@@ -86,12 +114,15 @@ class UserDatabase {
         return future
     }
 
-    fun getNearbyUsers(
-        longitude: Double,
-        latitude: Double,
-        radius: Int
-    ): CompletableFuture<List<User>> {
-        TODO("not yet implemented")
+    fun getNearbyUsers(latitudeMax: Double, longitudeMax: Double, latitudeMin: Double, longitudeMin: Double): CompletableFuture<List<User>>{
+        return getAllUsers().thenApply { users ->
+            users.filter { user ->
+                val userLatitude = user.latitude
+                val userLongitude = user.longitude
+                userLongitude < longitudeMax && userLatitude < latitudeMax &&
+                        userLongitude > longitudeMin && userLatitude > latitudeMin
+            }
+        }
     }
 
     /**
@@ -103,5 +134,4 @@ class UserDatabase {
     fun getNeighbouringUsersOf(user: User, distance: (User, User) -> Float, n: Int): List<User> {
         return listOf(Mocks.mainUser)
     }
-
 }

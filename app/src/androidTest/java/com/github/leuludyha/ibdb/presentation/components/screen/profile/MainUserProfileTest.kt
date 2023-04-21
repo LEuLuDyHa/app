@@ -45,7 +45,9 @@ class MainUserProfileTest {
             preferredSubjects = listOf(),
             preferredAuthors = listOf(),
             averageNumberOfPages = 0
-        ), friends = listOf()
+        ), friends = listOf(),
+        latitude = 0.0,
+        longitude = 0.0
     )
     private val authContext = AuthenticationContext(mainUser)
     private val viewModel = UserProfileViewModel(authContext)

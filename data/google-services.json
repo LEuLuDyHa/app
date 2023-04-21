@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "342548490143",
+    "firebase_url": "https://ibdb-df1ac-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "ibdb-df1ac",
     "storage_bucket": "ibdb-df1ac.appspot.com"
   },
@@ -14,10 +15,42 @@
       },
       "oauth_client": [
         {
+          "client_id": "342548490143-n3k1tp77m3n9886f3kisibtk61ndp7fr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.data",
+            "certificate_hash": "c925e168b1bf32d2a7784b571f8a66c4f05e0675"
+          }
+        },
+        {
+          "client_id": "342548490143-okcot4g4udgdvqnlfbdv9nif7slo5d19.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.data",
+            "certificate_hash": "5936cc8832affddd15cdd05db9ecf83488934bef"
+          }
+        },
+        {
+          "client_id": "342548490143-qneuh0042cd1qnq98u38ukvia3rbh6f3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.data",
+            "certificate_hash": "25f31302b3277a269e9757937c70c4c040d1e2bc"
+          }
+        },
+        {
+          "client_id": "342548490143-sm0c6ms3hiailh80rmc7al9cupp3i4rb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.github.leuludyha.data",
+            "certificate_hash": "2fab367ad431a2d45ba0b117c6653b888e14c545"
+          }
+        },
+        {
           "client_id": "342548490143-sut45k458aoqotoebjggkbqi6561rg3r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.github.leuludyha.ibdb",
+            "package_name": "com.github.leuludyha.data",
             "certificate_hash": "047a100a408e0f765e84bb0c4d4543126622bbc5"
           }
         },

@@ -29,7 +29,9 @@ object TestMocks {
             preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
             averageNumberOfPages = 256,
         ),
-        friends = listOf()
+        friends = listOf(),
+        latitude = 0.0,
+        longitude = 0.0
     )
 
     val user2: User = MainUser(
@@ -43,11 +45,13 @@ object TestMocks {
         ),
         UserStatistics(
             preferredSubjects = listOf(),
-            preferredAuthors = listOf(Mocks.author),
+            preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
             preferredWorks = listOf(Mocks.work1984),
             averageNumberOfPages = 14,
         ),
-        friends = listOf(user1)
+        friends = listOf(user1),
+        latitude = 0.0,
+        longitude = 0.0
     )
 
     val user3: User = MainUser(
@@ -64,10 +68,12 @@ object TestMocks {
         ),
         UserStatistics(
             preferredSubjects = listOf(),
-            preferredAuthors = listOf(Mocks.author),
+            preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
             preferredWorks = listOf(Mocks.work1984, Mocks.workLaFermeDesAnimaux),
             averageNumberOfPages = 1092,
         ),
-        friends = listOf(user1)
+        friends = listOf(user1),
+        latitude = 0.0,
+        longitude = 0.0
     )
 }

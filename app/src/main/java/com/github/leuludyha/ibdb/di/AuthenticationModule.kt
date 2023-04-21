@@ -24,12 +24,14 @@ object AuthenticationModule {
             Firebase.auth.currentUser?.phoneNumber,
             Mocks.userPreferences,
             UserStatistics(
-                preferredAuthors = listOf(Mocks.author),
+                preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
                 preferredSubjects = listOf("Political Science"),
                 preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
                 averageNumberOfPages = 42,
             ),
-            friends = listOf(Mocks.mainUser)
+            friends = listOf(Mocks.mainUser),
+            0.0,
+            0.0
         )
     )
 

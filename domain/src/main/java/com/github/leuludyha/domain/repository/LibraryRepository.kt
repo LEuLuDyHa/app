@@ -21,4 +21,5 @@ interface LibraryRepository {
     fun getWorkLocally(workId: String): Flow<Work>
     fun getAuthorLocally(authorId: String): Flow<Author>
     fun getEditionLocally(editionId: String): Flow<Edition>
+    fun getEditionByISBNLocally(isbn: String): Flow<Edition>
 }
