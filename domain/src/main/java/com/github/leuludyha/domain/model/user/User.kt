@@ -21,4 +21,8 @@ interface User : Keyed {
     val friends: List<User>
 
     val statistics: UserStatistics
+
+    val latitude: Double
+
+    val longitude: Double
 }
