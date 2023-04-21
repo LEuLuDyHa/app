@@ -101,7 +101,7 @@ class UserDatabase {
      * @return a sorted list of [User], ranked from smallest distance to largest distance
      */
     fun getNeighbouringUsersOf(user: User, distance: (User, User) -> Float, n: Int): List<User> {
-        return listOf(Mocks.mainUser)
+        return listOf(Mocks.friend1, Mocks.friend2)
     }
 
 }

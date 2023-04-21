@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCodeScanner
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -84,18 +86,16 @@ fun BookSearch(
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     viewModel.searchWorks(searchQuery)
-                })
-            )
-
-            Button(
-                modifier = Modifier
-                    .testTag("book_search::barcode_scan_button"),
-                onClick = {
-                    navController.navigate(Screen.BarcodeScan.route)
+                }),
+                trailingIcon = {
+                    IconButton(
+                        modifier = Modifier.testTag("book_search::barcode_scan_button"),
+                        onClick = {
+                            navController.navigate(Screen.BarcodeScan.route)
+                        }
+                    ) { Icon(Icons.Filled.QrCodeScanner, contentDescription = null) }
                 }
-            ) {
-                Text(text = "Scanner")
-            }
+            )
         }
         if (queryLoading) {
             Column(

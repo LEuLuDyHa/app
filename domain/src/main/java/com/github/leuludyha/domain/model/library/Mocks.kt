@@ -1,6 +1,7 @@
 package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.user.Friend
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
@@ -107,6 +108,24 @@ object Mocks {
         )
     )
 
+    val workCallOfCthlhu = Work(
+        id = "12630792", title = "L'appel de Cthulhu",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf()),
+        covers = flowOf(listOf(Cover(12630792L))),
+        nbOfPages = 0,
+        subjects = flowOf(listOf())
+    )
+
+    val workLaPetiteFilleDeMrLinh = Work(
+        id = "10563015", title = "La Petite Fille de Monsieur Linh",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf()),
+        covers = flowOf(listOf(Cover(10563015))),
+        nbOfPages = 0,
+        subjects = flowOf(listOf())
+    )
+
     val mainUser: MainUser = MainUser(
         UUID.randomUUID().toString(),
         username = "Mockentosh",
@@ -120,6 +139,58 @@ object Mocks {
             averageNumberOfPages = 42
         ),
         friends = listOf()
+    )
+
+    val friend1: Friend = Friend(
+        UUID.randomUUID().toString(),
+        "Friend 1", "",
+        "", preferences = UserPreferences(
+            workPreferences = mutableMapOf(
+                Pair(
+                    workLaPetiteFilleDeMrLinh.id,
+                    WorkPreference(
+                        workLaPetiteFilleDeMrLinh,
+                        WorkPreference.ReadingState.FINISHED,
+                        false
+                    )
+                ),
+                Pair(
+                    workLaFermeDesAnimaux.id,
+                    WorkPreference(
+                        workLaFermeDesAnimaux,
+                        WorkPreference.ReadingState.FINISHED,
+                        false
+                    )
+                ),
+            )
+        ), listOf(), UserStatistics(
+            preferredWorks = listOf(workLaPetiteFilleDeMrLinh),
+            preferredSubjects = listOf("Abandon"),
+            preferredAuthors = listOf(authorRoaldDahl),
+            averageNumberOfPages = 42
+        )
+    )
+
+    val friend2: Friend = Friend(
+        UUID.randomUUID().toString(),
+        "Friend 2", "",
+        "", preferences = UserPreferences(
+            workPreferences = mutableMapOf(
+                Pair(
+                    workCallOfCthlhu.id,
+                    WorkPreference(workCallOfCthlhu, WorkPreference.ReadingState.FINISHED, false)
+                ),
+                Pair(
+                    work1984.id,
+                    WorkPreference(work1984, WorkPreference.ReadingState.FINISHED, false)
+                ),
+            )
+        ), listOf(), UserStatistics(
+            preferredWorks = listOf(workCallOfCthlhu),
+            preferredSubjects = listOf("Abandon"),
+            preferredAuthors = listOf(authorRoaldDahl),
+            averageNumberOfPages = 42
+        )
     )
 
     val authContext: AuthenticationContext = AuthenticationContext(mainUser)
