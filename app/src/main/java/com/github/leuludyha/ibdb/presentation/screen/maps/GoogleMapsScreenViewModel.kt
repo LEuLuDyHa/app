@@ -56,15 +56,17 @@ class GoogleMapsScreenViewModel @Inject constructor(
         //call firebase with bounds of the map
         val cameraBounds = cameraPositionState.projection?.visibleRegion?.latLngBounds
 
-        if (cameraBounds != null) {
-            return useCase.invoke(
+        return if (cameraBounds != null) {
+            useCase.invoke(
                 cameraBounds.northeast.latitude,
                 cameraBounds.northeast.longitude,
                 cameraBounds.southwest.latitude,
                 cameraBounds.southwest.longitude
             )
         } else {
-            throw java.lang.NullPointerException("Camera bounds is null")
+            //The camera bounds have not been initialized yet (map didn't load)
+            //Since the map isn't loaded yet, no point on fetching any value to display on it
+            CompletableFuture.completedFuture(listOf())
         }
     }
 }

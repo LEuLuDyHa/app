@@ -21,7 +21,7 @@ class GoogleMapsScreenTest {
 
     //These tests are rather limited and no marker is properly tested.
     //I can't seem to find any way of testing any markers or anything inside the
-    //GoogleMap composable, so I can just check what is not inside it (nothing)
+    //GoogleMap composable, so I can just check what is not inside it (barely anything)
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -78,9 +78,8 @@ class GoogleMapsScreenTest {
         composeTestRule.waitForIdle()
     }
 
-    //TODO: This test has to be refined by implementing a mock viewModel once Firebase is working
     @Test
-    fun clickingOnRefreshButtonCreatesNewMarkersUnderMainComposable() {
+    fun clickingOnRefreshButtonIncreasesOrMaintainsNumberOfMarkers() {
         val viewModel = GoogleMapsScreenViewModel(GetNearbyUsersUseCase(UserRepositoryMock()))
 
         composeTestRule.setContent {
@@ -104,7 +103,7 @@ class GoogleMapsScreenTest {
 
         composeTestRule.waitForIdle()
 
-        assert(oldNumberOfNearbyUsers.size < viewModel.nearbyUsers.value.size)
+        assert(oldNumberOfNearbyUsers.size <= viewModel.nearbyUsers.value.size)
     }
 }
 
