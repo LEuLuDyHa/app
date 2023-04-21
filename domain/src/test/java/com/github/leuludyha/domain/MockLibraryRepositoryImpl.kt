@@ -46,16 +46,28 @@ class MockLibraryRepositoryImpl: LibraryRepository {
         else
             flowOf(Result.Error("id not found"))
 
-    override suspend fun saveWorkLocally(work: Work) {
+    override suspend fun saveLocally(work: Work) {
         savedWorks[work.id] = work
     }
 
-    override suspend fun saveAuthorLocally(author: Author) {
+    override suspend fun saveLocally(author: Author) {
         savedAuthors[author.id] = author
     }
 
-    override suspend fun saveEditionLocally(edition: Edition) {
+    override suspend fun saveLocally(edition: Edition) {
         savedEditions[edition.id] = edition
+    }
+
+    override suspend fun deleteLocally(work: Work) {
+        savedWorks.remove(work.id)
+    }
+
+    override suspend fun deleteLocally(author: Author) {
+        savedAuthors.remove(author.id)
+    }
+
+    override suspend fun deleteLocally(edition: Edition) {
+        savedEditions.remove(edition.id)
     }
 
     override fun getWorkLocally(workId: String): Flow<Work> =
