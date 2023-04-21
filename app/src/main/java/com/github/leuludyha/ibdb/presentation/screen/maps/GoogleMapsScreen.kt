@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.screen.maps
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -22,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
@@ -36,10 +38,10 @@ import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
 
 /**
- * For now, this screen only starts google maps and displays a few hardcoded markers at EPFL.
+ * This screen opens a google maps composable. Currently implemented features include user
+ * localisation and nearby users display. When clicking on a marker, it can open the actual
+ * google maps app to propose a route to get to the marker.
  */
-@OptIn(ExperimentalPermissionsApi::class)
-@SuppressLint("MissingPermission")
 @Composable
 fun GoogleMapsScreen(
     navController: NavHostController,
@@ -50,8 +52,6 @@ fun GoogleMapsScreen(
         position = CameraPosition.fromLatLngZoom(viewModel.defaultLocation, 15f)
     }
 
-    val locationPermissionState =
-        rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
     val uiSettings by remember {
         mutableStateOf(
             MapUiSettings(
@@ -62,9 +62,6 @@ fun GoogleMapsScreen(
         )
     }
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    //This allows to get the location of the user
-    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
     val nearbyUsers by viewModel.nearbyUsers
 
     GoogleMap(
@@ -79,34 +76,41 @@ fun GoogleMapsScreen(
         SatelliteMarker()
 
         nearbyUsers.forEach { user ->
-            MarkerInfoWindowContent(
-                state = MarkerState(
-                    position = LatLng(
-                        user.latitude,
-                        user.longitude
-                    )
-                ),
-                onInfoWindowClose = {
-                    it.alpha = 0.5f
-                },
-                onInfoWindowClick = {
-                    Toast.makeText(
-                        context,
-                        "I will send you to another screen with this user's info",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            ) {
-                //TODO: Put a display of all the books from a given user in a scrollable view.
-                // For some reason, MiniBookView doesn't work here.
-                MiniBookView(
-                    work = Mocks.workLaFermeDesAnimaux,
-                    onClick = {},
-                    orientation = Orientation.Horizontal
-                )
-            }
+            BookSharingMarker(user = user, context = context)
         }
     }
+
+    MapsUI(
+        viewModel = viewModel,
+        paddingValues = paddingValues,
+        cameraPositionState = cameraPositionState,
+        context = context
+    )
+}
+
+/**
+ * This is the UI that will be used on top the map. It consists of a composable that should be superimposed
+ * onto the map. Right now, it contains two buttons for location and refreshing.
+ * @param viewModel of the maps screen
+ * @param paddingValues of the maps screen (make sure they are the same so that it properly is on top of the map!
+ * @param cameraPositionState of the map. It might be updated from calls to the UI
+ * @param context of the map
+ */
+@OptIn(ExperimentalPermissionsApi::class)
+//This permission check is actually done in the code, but for some reason the compiler cries it about it not being done without suppressing it.
+@SuppressLint("MissingPermission")
+@Composable
+private fun MapsUI(
+    viewModel: GoogleMapsScreenViewModel,
+    paddingValues: PaddingValues,
+    cameraPositionState: CameraPositionState,
+    context: Context
+) {
+    //This allows to get the location of the user
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+    val locationPermissionState =
+        rememberPermissionState(permission = Manifest.permission.ACCESS_FINE_LOCATION)
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -117,7 +121,11 @@ fun GoogleMapsScreen(
     ) {
         //This is the refresh users button
         MapsButton(Modifier.testTag("GoogleMaps::refresh_button"), Icons.Filled.Autorenew) {
-            viewModel.nearbyUsers.value = viewModel.fetchNearbyUsers(cameraPositionState, context)
+            viewModel.fetchNearbyUsers(cameraPositionState, context).thenAccept {
+                //TODO: Remove the mock users from the list once we can add users to Firebase
+                // for testing and examples
+                viewModel.nearbyUsers.value = it.plus(Mocks.userList)
+            }
         }
 
         Spacer(modifier = Modifier.size(30.dp))
@@ -145,6 +153,49 @@ fun GoogleMapsScreen(
                 }
             }
         }
+
+        //This spacer is here to allow for google commands to appear when clicking on a marker
+        Spacer(modifier = Modifier.size(50.dp))
+    }
+}
+
+/**
+ * This is maps compose marker meant to display books when clicked on.
+ *
+ * @param user whose books and location will be used for the marker.
+ * @param context of the map
+ */
+@Composable
+private fun BookSharingMarker(
+    user: User,
+    context: Context
+) {
+    MarkerInfoWindowContent(
+        state = MarkerState(
+            position = LatLng(
+                user.latitude,
+                user.longitude
+            )
+        ),
+        onInfoWindowClose = {
+            it.alpha = 0.5f
+        },
+        onInfoWindowClick = {
+            Toast.makeText(
+                context,
+                "I will send you to another screen with this user's info",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    ) {
+        //TODO: Put a display of all the books from a given user in a scrollable view.
+        // Right now users do not have their stored books willing to be shared
+        // For some reason, MiniBookView doesn't work here.
+        MiniBookView(
+            work = Mocks.workLaFermeDesAnimaux,
+            onClick = {},
+            orientation = Orientation.Horizontal
+        )
     }
 }
 

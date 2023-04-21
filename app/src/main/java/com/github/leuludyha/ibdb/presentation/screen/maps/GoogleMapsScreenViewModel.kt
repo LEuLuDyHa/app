@@ -4,23 +4,23 @@ import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.concurrent.CompletableFuture
 import javax.inject.Inject
-import kotlin.streams.toList
 
 @HiltViewModel
 class GoogleMapsScreenViewModel @Inject constructor(
-    //private var getUserFromPhoneNumberUseCase: GetUserFromPhoneNumberUseCase
+    private var useCase: GetNearbyUsersUseCase
 ) : ViewModel() {
 
     //Epfl's location
     val defaultLocation = LatLng(46.520536, 6.568318)
 
-    //TODO: Modify to users when ready
-    val nearbyUsers = mutableStateOf(listOf<LatLng>())
+    val nearbyUsers = mutableStateOf(listOf<User>())
 
     /**
      * An enumeration meant to store a few default zoom levels for the camera in the maps screen.
@@ -35,8 +35,6 @@ class GoogleMapsScreenViewModel @Inject constructor(
         Buildings(20f)
     }
 
-    //TODO: This has to be modified to be linked to users. I have to consult with the others the best way of doing so.
-    // it will be probably be changed to a user instead of a LatLng
     /**
      * This function takes care of calling Firebase to find users that are registered close to
      * within the camera's view. When the camera is zoomed out too much, it returns an empty list.
@@ -44,7 +42,7 @@ class GoogleMapsScreenViewModel @Inject constructor(
     fun fetchNearbyUsers(
         cameraPositionState: CameraPositionState,
         context: Context
-    ): List<LatLng> {
+    ): CompletableFuture<List<User>> {
         if (cameraPositionState.position.zoom < ZoomLevels.City.zoom) {
             Toast.makeText(
                 context,
@@ -52,16 +50,21 @@ class GoogleMapsScreenViewModel @Inject constructor(
                 Toast.LENGTH_SHORT
             )
                 .show()
-            return listOf()
+            return CompletableFuture.completedFuture(listOf())
         }
 
         //call firebase with bounds of the map
         val cameraBounds = cameraPositionState.projection?.visibleRegion?.latLngBounds
-        //TODO: Call Firebase once it is available
 
-        //For now, I use a few mock locations
-        return Mocks.userLocationList.stream()
-            .map { pair -> LatLng(pair.first, pair.second) }
-            .toList()
+        if (cameraBounds != null) {
+            return useCase.invoke(
+                cameraBounds.northeast.latitude,
+                cameraBounds.northeast.longitude,
+                cameraBounds.southwest.latitude,
+                cameraBounds.southwest.longitude
+            )
+        } else {
+            throw java.lang.NullPointerException("Camera bounds is null")
+        }
     }
 }
