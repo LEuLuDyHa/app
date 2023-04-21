@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.ibdb.presentation.screen
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -7,10 +7,15 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import androidx.test.rule.GrantPermissionRule
+import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.user.User
+import com.github.leuludyha.domain.repository.UserRepository
+import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreenViewModel
 import org.junit.Rule
 import org.junit.Test
+import java.util.concurrent.CompletableFuture
 
 class GoogleMapsScreenTest {
 
@@ -27,6 +32,10 @@ class GoogleMapsScreenTest {
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+    //The useCase can be used on multiple test but careful! The viewModels have to be recreated for each test!
+    //They cannot be shared
+    private val injectedUseCase: GetNearbyUsersUseCase = GetNearbyUsersUseCase(UserRepositoryMock())
+
     @Test
     fun clickingOnLocationButtonDoesNotCrash() {
         //It doesn't look like there is any way of accessing markers from the tests,
@@ -35,7 +44,7 @@ class GoogleMapsScreenTest {
             GoogleMapsScreen(
                 navController = rememberNavController(),
                 paddingValues = PaddingValues(0.dp),
-                viewModel = GoogleMapsScreenViewModel()
+                viewModel = GoogleMapsScreenViewModel(injectedUseCase)
             )
         }
 
@@ -52,7 +61,7 @@ class GoogleMapsScreenTest {
             GoogleMapsScreen(
                 navController = rememberNavController(),
                 paddingValues = PaddingValues(0.dp),
-                viewModel = GoogleMapsScreenViewModel()
+                viewModel = GoogleMapsScreenViewModel(injectedUseCase)
             )
         }
 
@@ -66,7 +75,7 @@ class GoogleMapsScreenTest {
     //TODO: This test has to be refined by implementing a mock viewModel once Firebase is working
     @Test
     fun clickingOnRefreshButtonCreatesNewMarkersUnderMainComposable() {
-        val viewModel = GoogleMapsScreenViewModel()
+        val viewModel = GoogleMapsScreenViewModel(GetNearbyUsersUseCase(UserRepositoryMock()))
 
         composeTestRule.setContent {
             GoogleMapsScreen(
@@ -88,4 +97,28 @@ class GoogleMapsScreenTest {
 
         assert(oldNumberOfNearbyUsers.size < viewModel.nearbyUsers.value.size)
     }
+}
+
+private class UserRepositoryMock: UserRepository {
+    override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
+        return CompletableFuture.completedFuture(Mocks.mainUser)
+    }
+
+    override fun getNearbyUsers(
+        latitudeMax: Double,
+        longitudeMax: Double,
+        latitudeMin: Double,
+        longitudeMin: Double
+    ): CompletableFuture<List<User>> {
+        return CompletableFuture.completedFuture(Mocks.userList)
+    }
+
+    override fun getNeighbouringUsersOf(
+        user: User,
+        distance: (User, User) -> Float,
+        n: Int
+    ): List<User> {
+        return Mocks.userList
+    }
+
 }
