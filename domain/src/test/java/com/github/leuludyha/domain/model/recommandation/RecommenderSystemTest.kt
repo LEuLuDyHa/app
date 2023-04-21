@@ -30,6 +30,15 @@ class RecommenderSystemTest {
                     TODO("Not yet implemented")
                 }
 
+                override fun getNearbyUsers(
+                    latitudeMax: Double,
+                    longitudeMax: Double,
+                    latitudeMin: Double,
+                    longitudeMin: Double
+                ): CompletableFuture<List<User>> {
+                    TODO("Not yet implemented")
+                }
+
                 override fun getNeighbouringUsersOf(
                     user: User,
                     distance: (User, User) -> Float,
