@@ -8,7 +8,9 @@ import com.github.leuludyha.domain.repository.UserRepository
 import com.github.leuludyha.domain.util.Constants
 import com.github.leuludyha.ibdb.util.normalizedWeights
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
@@ -98,27 +100,35 @@ class RecommenderSystem(
 
         // All works read linked to their reader among the neighbours
         val worksReadBy = neighbours.associateWith { neighbour ->
-            // We must have user preferences for this call
-            val readWorks = neighbour.preferences.workPreferences.values
-                .asSequence()
-                .filter { it.readingState == WorkPreference.ReadingState.FINISHED }
-                .map { it.work }
-                .filter { work ->
-                    val workPreferences = user.preferences.workPreferences
+            runBlocking {
+                val neighborWorkPrefs = neighbour.workPreferences.firstOrNull()
+                val userWorkPrefs = user.workPreferences.firstOrNull()
 
-                    val isAlreadyInterested =
-                        (workPreferences[work.id]?.readingState == WorkPreference.ReadingState.INTERESTED) and !removeInterested
+                return@runBlocking if (neighborWorkPrefs == null || userWorkPrefs == null)
+                    emptyList<Work>()
+                else {
+                    // We must have user preferences for this call
+                    val readWorks = neighborWorkPrefs.values
+                        .asSequence()
+                        .filter { it.readingState == WorkPreference.ReadingState.FINISHED }
+                        .map { it.work }
+                        .filter { work ->
 
-                    val isNotInReadingList = !workPreferences.containsKey(work.id)
+                            val isAlreadyInterested =
+                                (userWorkPrefs[work.id]?.readingState == WorkPreference.ReadingState.INTERESTED) and !removeInterested
 
-                    isNotInReadingList or (isAlreadyInterested and !removeInterested)
-                    // Note : We do not filter out already recommended works
-                    // because that would make backpropagation more complicated
-                }.toList()
-                // Sort by distance, from smallest to largest : Get preferred books first
-                .sortedBy { workTasteDistance(user, it) }
+                            val isNotInReadingList = !userWorkPrefs.containsKey(work.id)
 
-            readWorks
+                            isNotInReadingList or (isAlreadyInterested and !removeInterested)
+                            // Note : We do not filter out already recommended works
+                            // because that would make backpropagation more complicated
+                        }.toList()
+                        // Sort by distance, from smallest to largest : Get preferred books first
+                        .sortedBy { workTasteDistance(user, it) }
+
+                    readWorks
+                }
+            }
         }
         logDebug("Works read : $worksReadBy")
 
@@ -194,7 +204,7 @@ class RecommenderSystem(
         logDebug("Final Dist : $finalDistFor")
 
         // Selected works sorted by minimal dist
-        return flow { emit(selectedWorks.toList().sortedBy { finalDistFor[it] }) }
+        return flowOf(selectedWorks.toList().sortedBy { finalDistFor[it] })
     }
 
 }

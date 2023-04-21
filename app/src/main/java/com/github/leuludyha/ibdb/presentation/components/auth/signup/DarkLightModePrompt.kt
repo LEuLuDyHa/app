@@ -48,7 +48,7 @@ object DarkLightModePrompt : SignUpPrompt {
     ) {
         val context = LocalContext.current
         // Whether the theme should be dark or light
-        val (darkTheme, setDarkTheme) = remember { authContext.principal.preferences.darkTheme }
+        val (darkTheme, setDarkTheme) = remember { authContext.principal.userPreferences.darkTheme }
 
         // Collects the size of the background when it is mounted on the view
         val (colSize, setColSize) = remember { mutableStateOf(Pair(0f, 0f)) }

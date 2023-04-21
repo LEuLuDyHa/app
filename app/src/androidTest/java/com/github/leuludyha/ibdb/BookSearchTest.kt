@@ -231,4 +231,8 @@ private class LibraryRepositoryMock(
         TODO("Not yet implemented")
     }
 
+    override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> {
+        TODO("Not yet implemented")
+    }
+
 }

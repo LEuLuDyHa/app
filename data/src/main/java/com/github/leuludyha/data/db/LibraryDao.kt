@@ -113,6 +113,9 @@ interface LibraryDao {
 
     fun getWorkPref(workId: String) = getWorkPref(WorkEntity(workId = workId, title = null))
 
+    @Query("SELECT * FROM workPrefs")
+    fun getAllWorkPrefs(): Flow<List<WorkPrefEntity>>
+
     @Transaction
     @Query("SELECT * FROM works WHERE workId LIKE :workId")
     fun getWorkWithAuthors(workId: String): Flow<WorkWithAuthors>
@@ -149,73 +152,81 @@ interface LibraryDao {
     @Query("SELECT * FROM editions WHERE editionId LIKE :editionId")
     fun getEditionWithCovers(editionId: String): Flow<EditionWithCovers>
 
-    suspend fun insert(work: Work) {
+    suspend fun insert(work: Work, recursive: Boolean = true) {
+        if(recursive) {
+            val authors = work.authors.firstOrNull()
+            authors?.forEach { insert(it, false) }
+            val workAuthorCrossRefs = authors?.map { WorkAuthorCrossRef.from(work, it) }
+
+            val editions = work.editions.firstOrNull()
+            editions?.forEach { insert(it, false) }
+            val workEditionCrossRefs = editions?.map { WorkEditionCrossRef.from(work, it) }
+
+            val subjects = work.subjects.firstOrNull()
+            subjects?.forEach { insertSubject(it) }
+            val workSubjectCrossRefs = subjects?.map { WorkSubjectCrossRef.from(work, it) }
+
+            val covers = work.covers.firstOrNull()
+            covers?.forEach { insert(it) }
+            val workCoverCrossRefs = covers?.map { WorkCoverCrossRef.from(work, it) }
+
+            workAuthorCrossRefs?.forEach { insert(it) }
+            workEditionCrossRefs?.forEach { insert(it) }
+            workSubjectCrossRefs?.forEach { insert(it) }
+            workCoverCrossRefs?.forEach { insert(it) }
+        }
+
         val workEntity = WorkEntity.from(work)
-
-        val authors = work.authors.firstOrNull()
-        authors?.forEach { insert(it) }
-        val workAuthorCrossRefs = authors?.map { WorkAuthorCrossRef.from(work, it) }
-
-        val editions = work.editions.firstOrNull()
-        editions?.forEach { insert(it) }
-        val workEditionCrossRefs = editions?.map { WorkEditionCrossRef.from(work, it) }
-
-        val subjects = work.subjects.firstOrNull()
-        subjects?.forEach { insertSubject(it) }
-        val workSubjectCrossRefs = subjects?.map { WorkSubjectCrossRef.from(work, it) }
-
-        val covers = work.covers.firstOrNull()
-        covers?.forEach { insert(it) }
-        val workCoverCrossRefs = covers?.map { WorkCoverCrossRef.from(work, it) }
-
         insert(workEntity)
-        workAuthorCrossRefs?.forEach { insert(it) }
-        workEditionCrossRefs?.forEach { insert(it) }
-        workSubjectCrossRefs?.forEach { insert(it) }
-        workCoverCrossRefs?.forEach { insert(it) }
     }
 
-    suspend fun insert(edition: Edition) {
+    suspend fun insert(edition: Edition, recursive: Boolean = true) {
+        if (recursive) {
+            val authors = edition.authors.firstOrNull()
+            authors?.forEach { insert(it, false) }
+            val editionAuthorCrossRefs = authors?.map { EditionAuthorCrossRef.from(edition, it) }
+
+            val works = edition.works.firstOrNull()
+            works?.forEach { insert(it, false) }
+            val editionWorkCrossRefs = works?.map { WorkEditionCrossRef.from(it, edition) }
+
+            val covers = edition.covers.firstOrNull()
+            covers?.forEach { insert(it) }
+            val editionCoverCrossRefs = covers?.map { EditionCoverCrossRef.from(edition, it) }
+
+            editionAuthorCrossRefs?.forEach { insert(it) }
+            editionWorkCrossRefs?.forEach { insert(it) }
+            editionCoverCrossRefs?.forEach { insert(it) }
+        }
+
         val editionEntity = EditionEntity.from(edition)
-
-        val authors = edition.authors.firstOrNull()
-        authors?.forEach { insert(it) }
-        val editionAuthorCrossRefs = authors?.map { EditionAuthorCrossRef.from(edition, it) }
-
-        val works = edition.works.firstOrNull()
-        works?.forEach { insert(it) }
-        val editionWorkCrossRefs = works?.map { WorkEditionCrossRef.from(it, edition) }
-
-        val covers = edition.covers.firstOrNull()
-        covers?.forEach { insert(it) }
-        val editionCoverCrossRefs = covers?.map { EditionCoverCrossRef.from(edition, it) }
-
         insert(editionEntity)
-        editionAuthorCrossRefs?.forEach { insert(it) }
-        editionWorkCrossRefs?.forEach { insert(it) }
-        editionCoverCrossRefs?.forEach { insert(it) }
     }
 
-    suspend fun insert(author: Author) {
+    suspend fun insert(author: Author, recursive: Boolean = true) {
+        if (recursive) {
+            val works = author.works.firstOrNull()
+            works?.forEach { insert(it) }
+            val authorWorkCrossRefs = works?.map { WorkAuthorCrossRef.from(it, author) }
+
+            val covers = author.covers.firstOrNull()
+            covers?.forEach { insert(it) }
+            val authorCoverCrossRefs = covers?.map { AuthorCoverCrossRef.from(author, it) }
+
+            authorWorkCrossRefs?.forEach { insert(it) }
+            authorCoverCrossRefs?.forEach { insert(it) }
+        }
         val authorEntity = AuthorEntity.from(author)
-
-        val works = author.works.firstOrNull()
-        works?.forEach { insert(it) }
-        val authorWorkCrossRefs = works?.map { WorkAuthorCrossRef.from(it, author) }
-
-        val covers = author.covers.firstOrNull()
-        covers?.forEach { insert(it) }
-        val authorCoverCrossRefs = covers?.map { AuthorCoverCrossRef.from(author, it) }
-
         insert(authorEntity)
-        authorWorkCrossRefs?.forEach { insert(it) }
-        authorCoverCrossRefs?.forEach { insert(it) }
     }
 
     suspend fun insert(cover: Cover) = insert(CoverEntity(cover.id))
 
-    suspend fun insert(workPref: WorkPreference) {
-        insert(workPref.work)
+    suspend fun insert(workPref: WorkPreference, recursive: Boolean = true) {
+        if(recursive) {
+            insert(workPref.work, false)
+        }
+
         insert(WorkPrefEntity.from(workPref))
     }
 

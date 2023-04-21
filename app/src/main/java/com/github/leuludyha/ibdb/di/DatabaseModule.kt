@@ -9,6 +9,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 /**
  * Provides all the dependency injection related to the database.
@@ -17,6 +18,7 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
+    @Singleton
     @Provides
     fun provideLibraryDatabase(app: Application): LibraryDatabase =
         Room.databaseBuilder(app, LibraryDatabase::class.java, "library_db")
@@ -26,6 +28,7 @@ object DatabaseModule {
     @Provides
     fun provideUserDatabase(): UserDatabase = UserDatabase()
 
+    @Singleton
     @Provides
     fun provideLibraryDao(libraryDatabase: LibraryDatabase): LibraryDao =
         libraryDatabase.libraryDao()

@@ -6,6 +6,7 @@ import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import kotlinx.coroutines.flow.flowOf
 import java.util.*
 
 object TestMocks {
@@ -14,15 +15,14 @@ object TestMocks {
         UUID.randomUUID().toString(),
         "Camilla", "",
         null,
-        UserPreferences(
-            mutableMapOf(
-                Pair(
-                    Mocks.workLaFermeDesAnimaux.id, WorkPreference(
-                        Mocks.workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true
-                    )
+        UserPreferences(),
+        flowOf(mutableMapOf(
+            Pair(
+                Mocks.workLaFermeDesAnimaux.id, WorkPreference(
+                    Mocks.workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true
                 )
             )
-        ),
+        )),
         UserStatistics(
             preferredSubjects = listOf("Fantasy", "Historical", "Political Science"),
             preferredAuthors = listOf(),
@@ -36,11 +36,8 @@ object TestMocks {
         UUID.randomUUID().toString(),
         "Hector", "",
         null,
-        UserPreferences(
-            mutableMapOf(
-
-            )
-        ),
+        UserPreferences(),
+        flowOf(mutableMapOf()),
         UserStatistics(
             preferredSubjects = listOf(),
             preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
@@ -53,15 +50,14 @@ object TestMocks {
     val user3: User = MainUser(
         UUID.randomUUID().toString(),
         "Stella", "", null,
-        UserPreferences(
-            mutableMapOf(
-                Pair(
-                    Mocks.workLaFermeDesAnimaux.id, WorkPreference(
-                        Mocks.workLaFermeDesAnimaux, WorkPreference.ReadingState.INTERESTED, true
-                    )
+        UserPreferences(),
+        flowOf(mutableMapOf(
+            Pair(
+                Mocks.workLaFermeDesAnimaux.id, WorkPreference(
+                    Mocks.workLaFermeDesAnimaux, WorkPreference.ReadingState.INTERESTED, true
                 )
             )
-        ),
+        )),
         UserStatistics(
             preferredSubjects = listOf(),
             preferredAuthors = listOf(Mocks.authorGeorgeOrwell),

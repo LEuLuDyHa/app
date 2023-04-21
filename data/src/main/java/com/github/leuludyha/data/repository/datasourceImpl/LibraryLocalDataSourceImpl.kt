@@ -24,6 +24,9 @@ class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLoc
     override fun getWorkPreference(workId: String): Flow<WorkPreference> =
         libraryDao.getWorkPref(workId = workId).map { it.toModel(libraryDao) }
 
+    override fun getAllWorkPreferences(): Flow<List<WorkPreference>> =
+        libraryDao.getAllWorkPrefs().map { workPrefs -> workPrefs.map { it.toModel(libraryDao) } }
+
     override suspend fun save(work: Work) =
         libraryDao.insert(work)
     override suspend fun save(edition: Edition) =

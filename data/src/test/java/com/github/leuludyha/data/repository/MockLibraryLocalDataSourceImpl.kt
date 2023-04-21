@@ -48,6 +48,9 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
         else
             flowOf()
 
+    override fun getAllWorkPreferences(): Flow<List<WorkPreference>> =
+        flowOf(savedWorkPrefs.values.toList())
+
     override suspend fun save(work: Work) {
         savedWorks[work.id] = work
     }

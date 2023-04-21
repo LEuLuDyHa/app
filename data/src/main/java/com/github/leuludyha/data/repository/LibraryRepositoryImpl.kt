@@ -124,4 +124,10 @@ class LibraryRepositoryImpl(
     override fun getWorkPrefLocally(workId: String): Flow<WorkPreference> =
         libraryLocalDataSource.getWorkPreference(workId)
 
+    /**
+     * @return the result of a local [WorkPreference] query for all work ids.
+     */
+    override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> =
+        libraryLocalDataSource.getAllWorkPreferences()
+
 }

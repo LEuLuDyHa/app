@@ -3,6 +3,8 @@ package com.github.leuludyha.domain.model.user
 import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import kotlinx.coroutines.flow.Flow
 
 /**
  * A user of the application, could be either
@@ -16,7 +18,9 @@ interface User : Keyed {
 
     val phoneNumber: String?
 
-    val preferences: UserPreferences
+    val userPreferences: UserPreferences
+
+    val workPreferences: Flow<Map<String, WorkPreference>>
 
     val friends: List<User>
 

@@ -14,6 +14,7 @@ interface LibraryLocalDataSource {
     fun getAuthor(authorId: String): Flow<Author>
     fun getCover(coverId: Long): Flow<Cover>
     fun getWorkPreference(workId: String): Flow<WorkPreference>
+    fun getAllWorkPreferences(): Flow<List<WorkPreference>>
 
     suspend fun save(work: Work)
     suspend fun save(edition: Edition)

@@ -1,13 +1,9 @@
 package com.github.leuludyha.domain.useCases
 
-import com.github.leuludyha.domain.MockLibraryRepositoryImpl
-import com.github.leuludyha.domain.model.library.Author
-import com.github.leuludyha.domain.model.library.Cover
-import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
-import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat

@@ -3,8 +3,7 @@ package com.github.leuludyha.ibdb.di
 import com.github.leuludyha.domain.repository.AuthRepository
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.repository.UserRepository
-import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
-import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
+import com.github.leuludyha.domain.useCase.*
 import com.github.leuludyha.domain.useCase.auth.signin.FirebaseSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.OneTapSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases
@@ -24,6 +23,18 @@ object UseCaseModule {
     @Provides
     fun provideSearchUseCase(libraryRepository: LibraryRepository) =
         SearchRemotelyUseCase(libraryRepository)
+
+    @Provides
+    fun provideGetAllWorkPrefsLocallyUseCase(libraryRepository: LibraryRepository) =
+        GetAllWorkPrefsLocallyUseCase(libraryRepository)
+
+    @Provides
+    fun provideSaveWorkPrefLocallyUseCase(libraryRepository: LibraryRepository) =
+        SaveWorkPrefLocallyUseCase(libraryRepository)
+
+    @Provides
+    fun provideDeleteWorkPrefLocallyUseCase(libraryRepository: LibraryRepository) =
+        DeleteWorkPrefLocallyUseCase(libraryRepository)
 
     @Provides
     fun provideSignInUseCases(authRepository: AuthRepository) =

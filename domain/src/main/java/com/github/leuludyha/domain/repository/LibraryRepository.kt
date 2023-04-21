@@ -31,4 +31,5 @@ interface LibraryRepository {
     fun getEditionLocally(editionId: String): Flow<Edition>
     fun getEditionByISBNLocally(isbn: String): Flow<Edition>
     fun getWorkPrefLocally(workId: String): Flow<WorkPreference>
+    fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>>
 }
