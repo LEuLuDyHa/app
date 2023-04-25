@@ -14,6 +14,9 @@ data class MainUser(
     override val workPreferences: Flow<Map<String, WorkPreference>>,
     override val statistics: UserStatistics,
     override val friends: List<User>,
+    override val latitude: Double,
+    override val longitude: Double
+
 ) : User {
 
     override fun Id(): String = userId

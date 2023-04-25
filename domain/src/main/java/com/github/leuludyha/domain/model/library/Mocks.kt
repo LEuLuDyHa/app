@@ -127,7 +127,9 @@ object Mocks {
             preferredAuthors = listOf(authorGeorgeOrwell),
             averageNumberOfPages = 42
         ),
-        friends = listOf()
+        friends = listOf(),
+        latitude = 0.0,
+        longitude = 0.0
     )
 
     val authContext: AuthenticationContext = AuthenticationContext(mainUser)
