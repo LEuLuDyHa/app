@@ -9,6 +9,7 @@ import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.repository.UserRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsInAnyOrder
@@ -58,11 +59,11 @@ class RecommenderSystemTest {
     fun recommenderReturnsUserWorksOnOneUserInSystem() {
         runTest {
             initRecommender { _, _, _ -> listOf(TestMocks.user1) }
-            val recommendations = recommender(TestMocks.user2)
-            assertThat("Should not be empty", recommendations.first().isNotEmpty())
+            val recommendations = recommender(TestMocks.user2).firstOrNull()
+            assertThat("Should not be empty", !recommendations.isNullOrEmpty())
             assertEquals(
-                TestMocks.user1.preferences.getWorksInReadingList().toSet(),
-                recommendations.first().toSet()
+                TestMocks.user1.workPreferences.firstOrNull()?.values?.map { it.work }?.toSet(),
+                recommendations?.toSet()
             )
         }
     }

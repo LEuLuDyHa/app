@@ -27,12 +27,12 @@ class DarkLightModePromptTest {
 
         DarkLightModePrompt.isDynamicCompatible = false
 
-        user.preferences.darkTheme.component2()(true)
+        user.userPreferences.darkTheme.component2()(true)
 
         // Mount the prompt on the view
         composeTestRule.setContent {
             DarkLightModePrompt.Display(authContext = authContext) {
-                assertThat(user.preferences.darkTheme.value, Is(false))
+                assertThat(user.userPreferences.darkTheme.value, Is(false))
             }
         }
 
@@ -83,12 +83,12 @@ class DarkLightModePromptTest {
         // This makes the CLI crash
         DarkLightModePrompt.isDynamicCompatible = false
 
-        user.preferences.darkTheme.component2()(false)
+        user.userPreferences.darkTheme.component2()(false)
 
         // Mount the prompt on the view
         composeTestRule.setContent {
             DarkLightModePrompt.Display(authContext = authContext) {
-                assertThat(user.preferences.darkTheme.value, Is(true))
+                assertThat(user.userPreferences.darkTheme.value, Is(true))
             }
         }
 

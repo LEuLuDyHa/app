@@ -16,6 +16,7 @@ import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfileViewModel
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +41,9 @@ class MainUserProfileTest {
         "TestUser",
         "",
         "",
-        UserPreferences(), UserStatistics(
+        UserPreferences(),
+        flowOf(mapOf()),
+        UserStatistics(
             preferredWorks = listOf(),
             preferredSubjects = listOf(),
             preferredAuthors = listOf(),

@@ -1,10 +1,14 @@
 package com.github.leuludyha.domain.model.library
 
+import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import com.github.leuludyha.domain.repository.LibraryRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import java.util.*
 
@@ -48,6 +52,13 @@ object Mocks {
         editions = flowOf(listOf(editionMrFox)),
         covers = flowOf(listOf(6498519, 8904777, 108274, 233884, 1119236, 10222599, 10482837, 3216657, 10519563, 10835922, 10835924, 10861366, 10883671, 8760472, 12583098, 10482548, 10831929, 10835926, 12333895, 12498647, 7682784, 12143357, 12781739, 3077458).map{Cover(it.toLong())}),
         subjects = flowOf(listOf("Animals", "Hunger", "Open Library Staff Picks", "Juvenile fiction", "Children's stories, English", "Foxes", "Fiction", "Zorros", "Ficci\u00f3n juvenil", "Tunnels", "Interviews", "Farmers", "Children's stories", "Rats", "Welsh Authors", "English Authors", "Thieves", "Tricksters", "Badgers", "Children's fiction", "Foxes, fiction", "Underground", "Renards", "Romans, nouvelles, etc. pour la jeunesse", "Children's literature", "Plays", "Children's plays", "Children's stories, Welsh", "Agriculteurs", "Large type books", "Fantasy fiction")),
+    )
+
+    val workMrFoxPref = WorkPreference(
+        work = workMrFox,
+        readingState = WorkPreference.ReadingState.READING,
+        possessed = true,
+        rating = null
     )
 
     private val dumbWork1984 = Work(
@@ -97,20 +108,17 @@ object Mocks {
         subjects = flowOf(listOf("Fiction", "Historical", "Political Science"))
     )
 
-    val userPreferences: UserPreferences = UserPreferences(
-        mutableMapOf(
-            Pair(work1984.id, WorkPreference(work1984, WorkPreference.ReadingState.READING, false)),
-            Pair(
-                workLaFermeDesAnimaux.id,
-                WorkPreference(workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true)
-            )
-        )
+    val userPreferences: UserPreferences = UserPreferences()
+    val workPreferences: Map<String, WorkPreference> = mapOf(
+        work1984.id to WorkPreference(work1984, WorkPreference.ReadingState.READING, false),
+        workLaFermeDesAnimaux.id to WorkPreference(workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true)
     )
 
     val mainUser: MainUser = MainUser(
         UUID.randomUUID().toString(),
         username = "Mockentosh",
-        preferences = userPreferences,
+        userPreferences = userPreferences,
+        workPreferences = flowOf(workPreferences),
         phoneNumber = "",
         profilePictureUrl = "",
         statistics = UserStatistics(
@@ -125,4 +133,123 @@ object Mocks {
     )
 
     val authContext: AuthenticationContext = AuthenticationContext(mainUser)
+
+    val libraryRepository = MockLibraryRepositoryImpl()
+}
+
+class MockLibraryRepositoryImpl: LibraryRepository {
+    private val savedWorks: HashMap<String, Work> = hashMapOf()
+    private val savedEditions: HashMap<String, Edition> = hashMapOf()
+    private val savedAuthors: HashMap<String, Author> = hashMapOf()
+    private val savedWorkPrefs: HashMap<String, WorkPreference> = hashMapOf()
+
+    private val worksFlow = MutableStateFlow(listOf<Work>())
+    private val editionsFlow = MutableStateFlow(listOf<Edition>())
+    private val authorsFlow = MutableStateFlow(listOf<Author>())
+    private val workPrefsFlow = MutableStateFlow(listOf<WorkPreference>())
+
+    override fun searchRemotely(query: String): Flow<PagingData<Work>> {
+        return flowOf(PagingData.from(listOf(Mocks.workMrFox)))
+        // TODO("How to test PagingData???")
+    }
+
+    override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
+        if (workId == Mocks.workMrFox.id)
+            flowOf(Result.Success(Mocks.workMrFox))
+        else
+            flowOf(Result.Error("id not found"))
+
+    override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
+        if (editionId == Mocks.editionMrFox.id)
+            flowOf(Result.Success(Mocks.editionMrFox))
+        else
+            flowOf(Result.Error("id not found"))
+
+    override fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>> =
+        if (isbn == Mocks.editionMrFox.isbn10 || isbn == Mocks.editionMrFox.isbn13)
+            flowOf(Result.Success(Mocks.editionMrFox))
+        else
+            flowOf(Result.Error("isbn not found"))
+
+    override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
+        if (authorId == Mocks.authorRoaldDahl.id)
+            flowOf(Result.Success(Mocks.authorRoaldDahl))
+        else
+            flowOf(Result.Error("id not found"))
+
+    override suspend fun saveLocally(work: Work) {
+        savedWorks[work.id] = work
+        worksFlow.value = savedWorks.values.toList()
+    }
+
+    override suspend fun saveLocally(author: Author) {
+        savedAuthors[author.id] = author
+        authorsFlow.value = savedAuthors.values.toList()
+    }
+
+    override suspend fun saveLocally(edition: Edition) {
+        savedEditions[edition.id] = edition
+        editionsFlow.value = savedEditions.values.toList()
+    }
+
+    override suspend fun saveLocally(workPref: WorkPreference) {
+        savedWorkPrefs[workPref.work.id] = workPref
+        workPrefsFlow.value = savedWorkPrefs.values.toList()
+    }
+
+    override suspend fun deleteLocally(work: Work) {
+        savedWorks.remove(work.id)
+        worksFlow.value = savedWorks.values.toList()
+    }
+
+    override suspend fun deleteLocally(author: Author) {
+        savedAuthors.remove(author.id)
+        authorsFlow.value = savedAuthors.values.toList()
+    }
+
+    override suspend fun deleteLocally(edition: Edition) {
+        savedEditions.remove(edition.id)
+        editionsFlow.value = savedEditions.values.toList()
+    }
+
+    override suspend fun deleteLocally(workPref: WorkPreference) {
+        savedWorkPrefs.remove(workPref.work.id)
+        workPrefsFlow.value = savedWorkPrefs.values.toList()
+    }
+
+    override fun getWorkLocally(workId: String): Flow<Work> =
+        if (savedWorks[workId] != null)
+            flowOf(savedWorks[workId]!!)
+        else
+            flowOf()
+
+    override fun getAuthorLocally(authorId: String): Flow<Author> =
+        if (savedAuthors[authorId] != null)
+            flowOf(savedAuthors[authorId]!!)
+        else
+            flowOf()
+
+    override fun getEditionLocally(editionId: String): Flow<Edition> =
+        if (savedEditions[editionId] != null)
+            flowOf(savedEditions[editionId]!!)
+        else
+            flowOf()
+
+    override fun getEditionByISBNLocally(isbn: String): Flow<Edition> {
+        val editions = savedEditions.values.filter { it.isbn10 == isbn || it.isbn13 == isbn }
+        return if(editions.firstOrNull() == null)
+            flowOf()
+        else
+            flowOf(editions.first())
+    }
+
+    override fun getWorkPrefLocally(workId: String): Flow<WorkPreference> =
+        if (savedWorkPrefs[workId] != null)
+            flowOf(savedWorkPrefs[workId]!!)
+        else
+            flowOf()
+
+    override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> =
+        workPrefsFlow
+
 }

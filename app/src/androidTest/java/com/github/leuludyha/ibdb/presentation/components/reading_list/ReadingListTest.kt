@@ -24,26 +24,27 @@ class ReadingListTest {
 
     private val work1: Work = Mocks.work1984
     private val work2: Work = Mocks.workLaFermeDesAnimaux
-    private lateinit var preferences: UserPreferences
+    private lateinit var userPrefs: UserPreferences
+    private lateinit var workPrefs: Map<String, WorkPreference>
     private lateinit var state: WorkPreference
 
     private lateinit var navController: NavHostController
 
     @Before
     fun initContent() {
-        preferences = UserPreferences()
-        preferences.addPreference(
-            WorkPreference(work1, WorkPreference.ReadingState.READING, true)
+        userPrefs = UserPreferences()
+        workPrefs = mapOf(
+            work1.id to WorkPreference(work1, WorkPreference.ReadingState.READING, true)
         )
 
-        state = preferences.workPreferences[work1.id]!!
+        state = workPrefs[work1.id]!!
 
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 
         composeTestRule.setContent {
             ReadingList(
                 navController = navController,
-                preferences = preferences,
+                workPreferences = workPrefs,
             )
         }
     }

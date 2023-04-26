@@ -9,10 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -38,7 +35,7 @@ fun HomeScreen(
         systemUiController.setStatusBarColor(color = systemBarColor)
     }
 
-    val userPreferences = viewModel.authContext.principal.preferences
+    val workPreferences = viewModel.authContext.principal.workPreferences.collectAsState(initial = mapOf())
 
     Column(
         modifier = Modifier
@@ -53,7 +50,7 @@ fun HomeScreen(
         )
         ReadingList(
             navController = navController,
-            preferences = userPreferences
+            workPreferences = workPreferences.value
         )
         Divider()
         // Only display the header if the recommendation list is not empty

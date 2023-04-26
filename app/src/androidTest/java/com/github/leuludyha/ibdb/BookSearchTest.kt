@@ -13,6 +13,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.*
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
@@ -194,6 +195,10 @@ private class LibraryRepositoryMock(
         TODO("Not yet implemented")
     }
 
+    override suspend fun saveLocally(workPref: WorkPreference) {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun deleteLocally(work: Work) {
         TODO("Not yet implemented")
     }
@@ -203,6 +208,10 @@ private class LibraryRepositoryMock(
     }
 
     override suspend fun deleteLocally(edition: Edition) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun deleteLocally(workPref: WorkPreference) {
         TODO("Not yet implemented")
     }
 
@@ -217,5 +226,13 @@ private class LibraryRepositoryMock(
 
     override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
         flowOf()
+
+    override fun getWorkPrefLocally(workId: String): Flow<WorkPreference> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> {
+        TODO("Not yet implemented")
+    }
 
 }

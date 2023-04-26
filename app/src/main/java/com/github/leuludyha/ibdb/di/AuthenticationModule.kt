@@ -4,35 +4,42 @@ import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
+import com.github.leuludyha.domain.repository.LibraryRepository
+import com.github.leuludyha.domain.useCase.GetAllWorkPrefsLocallyUseCase
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.flow.map
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthenticationModule {
 
     @Provides
-    fun provideAuthenticationContext(): AuthenticationContext = AuthenticationContext(
-        MainUser(
-            Firebase.auth.currentUser?.uid!!,
-            Firebase.auth.currentUser?.displayName ?: "username",
-            Firebase.auth.currentUser?.photoUrl.toString(),
-            Firebase.auth.currentUser?.phoneNumber,
-            Mocks.userPreferences,
-            UserStatistics(
-                preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
-                preferredSubjects = listOf("Political Science"),
-                preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
-                averageNumberOfPages = 42,
-            ),
-            friends = listOf(Mocks.mainUser),
-            0.0,
-            0.0
+    fun provideAuthenticationContext(libraryRepository: LibraryRepository): AuthenticationContext {
+        return AuthenticationContext(
+            MainUser(
+                Firebase.auth.currentUser?.uid!!,
+                Firebase.auth.currentUser?.displayName ?: "username",
+                Firebase.auth.currentUser?.photoUrl.toString(),
+                Firebase.auth.currentUser?.phoneNumber,
+                Mocks.userPreferences,
+                GetAllWorkPrefsLocallyUseCase(libraryRepository = libraryRepository)
+                    ().map { workPrefs -> workPrefs.associateBy { it.work.id } },
+                UserStatistics(
+                    preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
+                    preferredSubjects = listOf("Political Science"),
+                    preferredWorks = listOf(Mocks.workLaFermeDesAnimaux),
+                    averageNumberOfPages = 42,
+                ),
+                friends = listOf(Mocks.mainUser),
+                0.0,
+                0.0
+            )
         )
-    )
+    }
 
 }

@@ -50,11 +50,11 @@ class MainActivity : ComponentActivity() {
         // If the state change, refresh dark theme, sorry if it's a bit hacky
         LaunchedEffect(
             key1 = isAuthContextPresent,
-            key2 = authContext?.principal?.preferences?.darkTheme?.value,
+            key2 = authContext?.principal?.userPreferences?.darkTheme?.value,
         ) {
             if (isAuthContextPresent) {
                 // We can "!!" because authContext is present
-                setDarkTheme(authContext!!.principal.preferences.darkTheme.value)
+                setDarkTheme(authContext!!.principal.userPreferences.darkTheme.value)
             }
         }
 

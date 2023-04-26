@@ -4,6 +4,9 @@ import androidx.room.Entity
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
 
+/**
+ * Cross reference between a [WorkEntity] and an [EditionEntity]
+ */
 @Entity(primaryKeys = ["workId", "editionId"])
 data class WorkEditionCrossRef(
     val workId: String,

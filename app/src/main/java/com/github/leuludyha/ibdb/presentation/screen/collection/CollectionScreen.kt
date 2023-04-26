@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,7 +26,7 @@ fun CollectionScreen(
     ) {
 
         DisplayIfAuthenticated(viewModel.authContext) { authenticatedPrincipal ->
-            val userPreferences = authenticatedPrincipal.preferences
+            val workPreferences = authenticatedPrincipal.workPreferences.collectAsState(initial = mapOf())
 
             Column(
                 modifier = Modifier.fillMaxWidth()
@@ -36,7 +37,7 @@ fun CollectionScreen(
                 )
                 ReadingList(
                     navController = navController,
-                    preferences = userPreferences
+                    workPreferences = workPreferences.value
                 )
             }
         }
