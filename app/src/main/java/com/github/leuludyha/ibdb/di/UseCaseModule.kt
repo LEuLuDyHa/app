@@ -48,6 +48,10 @@ object UseCaseModule {
         GetWorkRemotelyUseCase(libraryRepository)
 
     @Provides
+    fun getAuthorByIdUseCase(libraryRepository: LibraryRepository) =
+        GetAuthorRemotelyUseCase(libraryRepository)
+
+    @Provides
     fun getUserFromPhoneNumberUseCase(userRepository: UserRepository) =
         GetUserFromPhoneNumberUseCase(userRepository)
 }

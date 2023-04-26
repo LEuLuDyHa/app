@@ -1,5 +1,6 @@
 package com.github.leuludyha.domain.model.library
 
+import com.github.leuludyha.domain.model.interfaces.Keyed
 import kotlinx.coroutines.flow.Flow
 
 data class Author(
@@ -11,7 +12,8 @@ data class Author(
     val wikipedia: String?,
     val works: Flow<List<Work>>,
     val covers: Flow<List<Cover>>,
-) {
+): Keyed {
+    override fun Id() = id
     override fun toString(): String = name?: "Unknown author"
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

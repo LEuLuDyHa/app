@@ -20,4 +20,6 @@
     <string name="prompt_next_button">Next</string>
     <string name="friends_add">Add Friend</string>
     <string name="recommendation_list_title">Selected for you…</string>
+    <string name="full_book_view_author_label">Author</string>
+    <string name="full_book_view_subject_label">Subject</string>
 </resources>
