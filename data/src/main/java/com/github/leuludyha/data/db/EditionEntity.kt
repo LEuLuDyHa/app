@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Edition
 import kotlinx.coroutines.flow.map
 
+/**
+ * Database entity representing an [Edition]
+ */
 @Entity(tableName = "editions")
 data class EditionEntity (
     @PrimaryKey

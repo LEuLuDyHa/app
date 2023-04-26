@@ -2,6 +2,10 @@ package com.github.leuludyha.data.db
 
 import androidx.room.TypeConverter
 
+/**
+ * Converter from [WorkEntity] to [ByteArray] and conversely. Used to store [WorkEntity]
+ * as an embedded field.
+ */
 class WorkEntityConverter {
     @TypeConverter
     fun fromWorkEntity(workEntity: WorkEntity) : ByteArray {

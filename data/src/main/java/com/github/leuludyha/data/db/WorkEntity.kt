@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.map
 
+/**
+ * Database entity representing a [Work]
+ */
 @Entity(tableName = "works")
 data class WorkEntity (
     @PrimaryKey

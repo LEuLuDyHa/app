@@ -8,12 +8,17 @@ import retrofit2.HttpException
 
 /**
  * [PagingSource] using a [LibraryApi] as a data source
+ *
+ * See: https://developer.android.com/reference/kotlin/androidx/paging/PagingSource for more details
  */
 class SearchPagingSource(
     private val libraryApi: LibraryApi,
     private val query: String
 ) : PagingSource<Int, Work>() {
 
+    /**
+     * Load a page of data using the given [params].
+     */
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Work> {
         val currentPage = params.key ?: 1
         return try {

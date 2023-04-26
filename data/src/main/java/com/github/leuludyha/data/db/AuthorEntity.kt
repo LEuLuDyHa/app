@@ -5,7 +5,9 @@ import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Author
 import kotlinx.coroutines.flow.map
 
-
+/**
+ * Database entity representing an [Author]
+ */
 @Entity(tableName = "authors")
 data class AuthorEntity (
     @PrimaryKey

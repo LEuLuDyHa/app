@@ -4,6 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
+/**
+ * One-to-many relation between one [WorkEntity] and many [EditionEntity]
+ */
 data class WorkWithEditions(
     @Embedded val work: WorkEntity,
     @Relation(
