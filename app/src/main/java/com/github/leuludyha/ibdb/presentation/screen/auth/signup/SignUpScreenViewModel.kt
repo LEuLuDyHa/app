@@ -19,6 +19,10 @@ class SignUpScreenViewModel @Inject constructor(
 
     private var walkThroughCompleted by mutableStateOf(false)
 
+    //TODO: All methods here are implemented using SharedPreferences. I believe this will be changed
+    // further in development, as Dylan intended to implement userPreferences in a different way.
+    // This is just a temporary way of doing it.
+
     /**
      * Saves a boolean which indicates that the walk-through has been completed once
      * by the user. The boolean is persisted through sessions (Application restarts)
@@ -55,5 +59,15 @@ class SignUpScreenViewModel @Inject constructor(
         spEditor.putString(Constant.PREFERRED_USERNAME, authContext.principal.username)
         spEditor.putBoolean(Constant.DARK_THEME_PREFERENCE, authContext.principal.userPreferences.darkTheme.value)
         spEditor.apply()
+    }
+
+    /**
+     * Loads the walkthrough preferences on the authentication context.
+     */
+    fun updateWalkthroughPreferences(context: Context) {
+        val sp = context.getSharedPreferences(Constant.SIGN_UP_SHARED_PREFERENCES_KEY, Context.MODE_PRIVATE)
+        authContext.principal.username =
+            sp.getString(Constant.PREFERRED_USERNAME, authContext.principal.username).toString()
+        authContext.principal.userPreferences.darkTheme.value = sp.getBoolean(Constant.DARK_THEME_PREFERENCE, false)
     }
 }

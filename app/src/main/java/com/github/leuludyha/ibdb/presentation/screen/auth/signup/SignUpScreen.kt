@@ -26,6 +26,7 @@ fun FirstTimeLogInCheck(
 
     // If check is passed, display content
     if (viewModel.isWalkThroughCompleted(context)) {
+        viewModel.updateWalkthroughPreferences(context)
         onCheckPassed()
     } else {
 
