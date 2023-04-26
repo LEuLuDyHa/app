@@ -13,11 +13,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.flow.map
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthenticationModule {
 
+    @Singleton
     @Provides
     fun provideAuthenticationContext(libraryRepository: LibraryRepository): AuthenticationContext {
         return AuthenticationContext(
