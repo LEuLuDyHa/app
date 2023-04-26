@@ -4,6 +4,8 @@ import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFoxPref
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.*
 import com.google.common.truth.Truth.assertThat
@@ -21,11 +23,13 @@ class LocalUseCasesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() = runTest {
+
         libraryRepository = MockLibraryRepositoryImpl()
 
         libraryRepository.saveLocally(workMrFox)
         libraryRepository.saveLocally(editionMrFox)
         libraryRepository.saveLocally(authorRoaldDahl)
+        libraryRepository.saveLocally(workMrFoxPref)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -47,6 +51,27 @@ class LocalUseCasesTest {
     fun getAuthorLocallyUseCaseGivesCorrectResult() = runTest {
         assertThat(GetAuthorLocallyUseCase(libraryRepository)(authorRoaldDahl.id).first())
             .isEqualTo(authorRoaldDahl)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getWorkPrefLocallyUseCaseGivesCorrectResult() = runTest {
+        assertThat(GetWorkPrefLocallyUseCase(libraryRepository)(workMrFoxPref.work.id).first())
+            .isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getAllWorkPrefsLocallyUseCaseGivesCorrectResult() = runTest {
+        val testWorkPref = WorkPreference(
+            work = workMrFox.copy(id = "id"),
+            readingState = WorkPreference.ReadingState.FINISHED,
+            possessed = false,
+            rating = null
+        )
+        SaveWorkPrefLocallyUseCase(libraryRepository)(testWorkPref)
+        assertThat(GetAllWorkPrefsLocallyUseCase(libraryRepository)().first().toSet())
+            .isEqualTo(listOf(testWorkPref, workMrFoxPref).toSet())
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -101,6 +126,20 @@ class LocalUseCasesTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun saveWorkPrefLocallyUseCaseCorrectlySavesNewAuthor() = runTest {
+        val testWorkPref = WorkPreference(
+            work = workMrFox,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        SaveWorkPrefLocallyUseCase(libraryRepository)(testWorkPref)
+        assertThat(GetWorkPrefLocallyUseCase(libraryRepository)(testWorkPref.work.id).first())
+            .isEqualTo(testWorkPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun accessingADeletedWorkThrowsAnException(): Unit = runTest {
         val testWork = Work(
             id = "TestWork",
@@ -135,6 +174,23 @@ class LocalUseCasesTest {
         }}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun accessingADeletedWorkPrefThrowsAnException(): Unit = runTest {
+        val testWorkPref = WorkPreference(
+            work = workMrFox,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        SaveWorkPrefLocallyUseCase(libraryRepository)(testWorkPref)
+        DeleteWorkPrefLocallyUseCase(libraryRepository)(testWorkPref)
+        assertThrows(Exception::class.java) { runTest {
+            GetWorkPrefLocallyUseCase(libraryRepository)(testWorkPref.work.id).first()
+        }}
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun accessingADeletedEditionThrowsAnException(): Unit = runTest {
         val testEdition = Edition(
@@ -153,6 +209,7 @@ class LocalUseCasesTest {
         }}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun canRecursivelyAccessFieldsOfSavedEdition() = runTest {
         val testCover = Cover(1)
