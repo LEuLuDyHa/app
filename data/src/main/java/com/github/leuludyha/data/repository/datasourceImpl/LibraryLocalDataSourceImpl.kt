@@ -9,6 +9,9 @@ import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Concrete implementation of the [LibraryLocalDataSource]
+ */
 class LibraryLocalDataSourceImpl(private val libraryDao: LibraryDao): LibraryLocalDataSource {
     override fun getWork(workId: String): Flow<Work> =
         libraryDao.getWork(workId).map { it.toModel(libraryDao) }

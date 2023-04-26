@@ -4,6 +4,9 @@ import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
 
+/**
+ * One-to-many relation between one [AuthorEntity] and many [WorkEntity]
+ */
 data class AuthorWithWorks(
     @Embedded val author: AuthorEntity,
     @Relation(

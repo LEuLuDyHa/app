@@ -4,6 +4,9 @@ import androidx.room.Entity
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Edition
 
+/**
+ * Cross reference between an [EditionEntity] and a [CoverEntity]
+ */
 @Entity(primaryKeys = ["editionId", "coverId"])
 data class EditionCoverCrossRef(
     val editionId: String,
