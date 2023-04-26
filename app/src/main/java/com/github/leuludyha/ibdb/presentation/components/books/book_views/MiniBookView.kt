@@ -91,6 +91,7 @@ private fun VerticalBookView(
                         text = it,
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary,
+                        maxLines = 1
                     )
                 }
                 Spacer(modifier = Modifier.height(1.dp))
@@ -99,7 +100,8 @@ private fun VerticalBookView(
                     text = authors.value.toText(),
                     color = MaterialTheme.colorScheme.secondary,
                     style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.testTag("worklist::author_name")
+                    modifier = Modifier.testTag("worklist::author_name"),
+                    maxLines = 1
                 )
 
                 Spacer(modifier = Modifier.height(3.dp))
@@ -162,7 +164,11 @@ private fun HorizontalBookView(
 
                 // Display the title of the book
                 work.title?.let {
-                    Text(text = it, style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(1.dp))
@@ -170,7 +176,8 @@ private fun HorizontalBookView(
                 Text(
                     text = authors.value.toText(),
                     style = MaterialTheme.typography.titleSmall,
-                    modifier = Modifier.testTag("worklist::author_name")
+                    modifier = Modifier.testTag("worklist::author_name"),
+                    maxLines = 1
                 )
 
 
