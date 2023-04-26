@@ -1,22 +1,31 @@
 package com.github.leuludyha.ibdb.presentation.screen.auth.signin
 
 import android.app.Activity
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
-import com.github.leuludyha.ibdb.presentation.components.auth.signin.LoadAuthenticationContext
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+
 
 /**
  * Tries logging the user in through Google One Tap on launch.
@@ -29,14 +38,20 @@ fun AuthenticationProvider(
     signedInContent: (@Composable () -> Unit),
 ) {
     val (signedIn, setSignedIn) = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.oneTapSignIn()
+    LaunchedEffect(context) {
+        if (checkNetworkAvailable(context)) {
+            viewModel.oneTapSignIn()
+            loadAuthenticationContextFromFirebase(viewModel.authContext)
+        } else {
+            setSignedIn(true)
+        }
     }
 
     if (signedIn) {
         // Notify parent on signed in
-        LoadAuthenticationContext { onSignedIn(it) }
+        onSignedIn(viewModel.authContext)
         signedInContent()
     } else {
 
@@ -103,4 +118,31 @@ fun AuthenticationProvider(
         }
 
     }
+}
+
+/**
+ * This method will update the fields from authentication context that can be update from firebase.
+ */
+private fun loadAuthenticationContextFromFirebase(authContext: AuthenticationContext) {
+    authContext.principal.userId = Firebase.auth.currentUser?.uid!!
+    authContext.principal.username =
+        Firebase.auth.currentUser?.displayName ?: authContext.principal.username
+    authContext.principal.profilePictureUrl = Firebase.auth.currentUser?.photoUrl.toString()
+    authContext.principal.phoneNumber = Firebase.auth.currentUser?.phoneNumber
+}
+
+/**
+ * This is implemented following the recommendations from [here](https://stackoverflow.com/questions/56709604/check-for-internet-connectivity-on-api29).
+ *
+ * @return true if a network is available. Both wifi and mobile are acceptable.
+ */
+private fun checkNetworkAvailable(context: Context): Boolean {
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val networkAvailability =
+        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+
+    return networkAvailability != null
+            && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 }

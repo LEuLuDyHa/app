@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.OneTapSignInResponse
 import com.github.leuludyha.domain.repository.SignInWithGoogleResponse
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class AuthenticationProviderViewModel @Inject constructor(
     val oneTapClient: SignInClient, // TODO AR
     private val signInUseCases: SignInUseCases,
+    val authContext: AuthenticationContext
 ) : ViewModel() {
 
     // variables keep track of the state of the request and can be observed by the UI

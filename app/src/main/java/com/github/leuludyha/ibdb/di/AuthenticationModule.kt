@@ -6,8 +6,6 @@ import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.GetAllWorkPrefsLocallyUseCase
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,10 +22,14 @@ object AuthenticationModule {
     fun provideAuthenticationContext(libraryRepository: LibraryRepository): AuthenticationContext {
         return AuthenticationContext(
             MainUser(
-                Firebase.auth.currentUser?.uid!!,
-                Firebase.auth.currentUser?.displayName ?: "username",
-                Firebase.auth.currentUser?.photoUrl.toString(),
-                Firebase.auth.currentUser?.phoneNumber,
+                //TODO: Unfortunately cannot call Firebase directly from here (would fail if there were
+                // no available network). I put mocks for now, but this should be replaced by
+                // an access to the stored values in persistent memory in my opinion once this
+                // option is available.
+                Mocks.mainUser.userId,
+                Mocks.mainUser.username,
+                Mocks.mainUser.profilePictureUrl,
+                Mocks.mainUser.phoneNumber,
                 Mocks.userPreferences,
                 GetAllWorkPrefsLocallyUseCase(libraryRepository = libraryRepository)
                     ().map { workPrefs -> workPrefs.associateBy { it.work.id } },
