@@ -1,7 +1,5 @@
 package com.github.leuludyha.domain.model.library
 
-import java.io.Serializable
-
 data class Cover(
     val id: Long
 ) {

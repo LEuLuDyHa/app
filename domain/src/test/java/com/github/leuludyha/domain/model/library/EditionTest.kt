@@ -1,6 +1,5 @@
-package com.github.leuludyha.domain.model
+package com.github.leuludyha.domain.model.library
 
-import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.edition1984
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox

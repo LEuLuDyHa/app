@@ -1,8 +1,13 @@
 package com.github.leuludyha.domain
 
+import android.graphics.Rect
+import android.media.Image
+import androidx.camera.core.ImageInfo
+import androidx.camera.core.ImageProxy
 import com.github.leuludyha.domain.model.library.BarcodeAnalyser
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
+import org.junit.jupiter.api.assertDoesNotThrow
 
 class BarcodeAnalyserTest {
 
@@ -25,7 +30,46 @@ class BarcodeAnalyserTest {
     }
 
     @Test
-    fun check_barcode_analyser_with_default_image() {
-        //TODO: This has proven too difficult for me to do
+    fun analyseDoesNotFailOnNullImage() {
+        val analyser = BarcodeAnalyser {}
+        assertDoesNotThrow { analyser.analyze(MockImageProxy(null)) }
+    }
+
+    class MockImageProxy(
+        private val image: Image? = null
+    ): ImageProxy{
+        override fun close() {
+
+        }
+
+        override fun getCropRect(): Rect {
+            throw NotImplementedError()
+        }
+
+        override fun setCropRect(rect: Rect?) {
+            throw NotImplementedError()
+        }
+
+        override fun getFormat(): Int {
+            throw NotImplementedError()
+        }
+
+        override fun getHeight(): Int {
+            throw NotImplementedError()
+        }
+
+        override fun getWidth(): Int {
+            throw NotImplementedError()
+        }
+
+        override fun getPlanes(): Array<ImageProxy.PlaneProxy> {
+            throw NotImplementedError()
+        }
+
+        override fun getImageInfo(): ImageInfo {
+            throw NotImplementedError()
+        }
+
+        override fun getImage(): Image? = image
     }
 }
