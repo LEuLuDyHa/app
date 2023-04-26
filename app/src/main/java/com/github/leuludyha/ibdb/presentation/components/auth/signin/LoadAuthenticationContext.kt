@@ -12,7 +12,7 @@ import com.github.leuludyha.domain.model.authentication.AuthenticationContext
  */
 @Composable
 fun LoadAuthenticationContext(
-    viewModel: LoadedAuthenticationContextViewModel = hiltViewModel(),
+    viewModel: LoadAuthenticationContextViewModel = hiltViewModel(),
     onSignedIn: ((AuthenticationContext) -> Unit),
 ) {
     LaunchedEffect(Unit) {

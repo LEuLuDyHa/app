@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class LoadedAuthenticationContextViewModel @Inject constructor(
+class LoadAuthenticationContextViewModel @Inject constructor(
     _authContext: AuthenticationContext
 ) : ViewModel() {
     val authContext = _authContext
