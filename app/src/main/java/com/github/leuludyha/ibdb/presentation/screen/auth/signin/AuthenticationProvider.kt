@@ -7,58 +7,40 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
-import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.components.auth.signin.LoadedAuthenticationContext
+import com.github.leuludyha.ibdb.presentation.components.auth.signin.LoadAuthenticationContext
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
 /**
- * SignInScreen allows user to sign in with a button for Google One Tap
- *
- * Once the user is signed in, displays the content of [signedInContent]
+ * Tries logging the user in through Google One Tap on launch.
+ * Once the user is signed in, calls [onSignedIn] and displays the content of [signedInContent].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthenticationProvider(
-    viewModel: SignInViewModel = hiltViewModel(),
+    viewModel: AuthenticationProviderViewModel = hiltViewModel(),
     onSignedIn: (AuthenticationContext) -> Unit,
     signedInContent: (@Composable () -> Unit),
 ) {
     val (signedIn, setSignedIn) = remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        viewModel.oneTapSignIn()
+    }
+
     if (signedIn) {
         // Notify parent on signed in
-        LoadedAuthenticationContext { onSignedIn(it) }
+        LoadAuthenticationContext { onSignedIn(it) }
         signedInContent()
     } else {
-        Scaffold(
-            content = { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = {
-                            viewModel.oneTapSignIn()
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.sign_in_label))
-                    }
-                }
-            },
-        )
+
+        //TODO: Maybe add some decoration here, instead of an empty white screen on the background
 
         // will invoke firebaseSignIn() when oneTapSignInResponse
         // once we have a response from OneTapSignIn

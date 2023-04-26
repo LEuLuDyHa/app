@@ -20,7 +20,7 @@ import javax.inject.Inject
  * gives the UI access to the responses current values
  */
 @HiltViewModel
-class SignInViewModel @Inject constructor(
+class AuthenticationProviderViewModel @Inject constructor(
     val oneTapClient: SignInClient, // TODO AR
     private val signInUseCases: SignInUseCases,
 ) : ViewModel() {
