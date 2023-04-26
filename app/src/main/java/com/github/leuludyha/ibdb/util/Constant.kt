@@ -5,7 +5,8 @@ object Constant {
     const val BOOK_DETAILS_ARGUMENT_KEY = "bookId"
     const val AUTHOR_DETAILS_ARGUMENT_KEY = "authorId"
     const val BARCODE_RESULT_KEY = "barcodeResult"
-    const val MAPS_INITIAL_LATITUDE = "mapsInitialLat"
-    const val MAPS_INITIAL_LONGITUDE = "mapsInitialLong"
-    const val MAPS_INTEREST_POINTS = "mapsInterestPoints"
+    const val SIGN_UP_SHARED_PREFERENCES_KEY = "singUpKey"
+    const val SIGN_UP_WALKTHROUGH_COMPLETED = "walkThroughCompleted"
+    const val PREFERRED_USERNAME = "preferred_username"
+    const val DARK_THEME_PREFERENCE = "dark_theme_preference"
 }
