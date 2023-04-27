@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.author_views.AuthorDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
+import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
@@ -54,6 +55,9 @@ fun NavGraph(navController: NavHostController) {
                             navController, padding, query = query
                         )
                     }
+            }
+            composable(route = Screen.Collection.route) {
+                CollectionScreen(navController, padding)
             }
             composable(
                 route = Screen.BookDetails.route,

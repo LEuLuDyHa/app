@@ -7,12 +7,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.github.leuludyha.ibdb.R
 
 /**
  * Simple search bar Composable executing the given actions.
@@ -39,6 +42,7 @@ fun SearchBar(
                 viewModel.updateSearchQuery(it)
                 onValueChange(it)
             },
+            placeholder = { Text(text = stringResource(id = R.string.search_placeholder)) },
             singleLine = true,
             modifier = Modifier
                 .testTag("search_bar::search_field")

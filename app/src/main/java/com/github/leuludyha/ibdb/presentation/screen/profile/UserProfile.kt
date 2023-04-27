@@ -9,15 +9,19 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 
 const val defaultProfilePicture =
     "https://images.freeimages.com/images/large-previews/023/geek-avatar-1632962.jpg"
@@ -28,6 +32,16 @@ fun UserProfile(
     outerPadding: PaddingValues,
     viewModel: UserProfileViewModel = hiltViewModel()
 ) {
+
+    val workPreferences = viewModel.authContext.principal
+        .workPreferences
+        .collectAsState(initial = mapOf())
+
+    val booksReadCount = remember {
+        workPreferences.value
+            .filter { it.value.readingState == WorkPreference.ReadingState.FINISHED }
+            .count()
+    }
 
     Column(
         modifier = Modifier
@@ -57,6 +71,13 @@ fun UserProfile(
             fontSize = 22.sp,
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.primary
+        )
+        Text(
+            text = booksReadCount.toString()
+                    + " "
+                    + stringResource(id = com.github.leuludyha.ibdb.R.string.books_read_count_lbl),
+            fontSize = 22.sp,
+            style = MaterialTheme.typography.headlineSmall,
         )
         Spacer(modifier = Modifier.height(50.dp))
         Column(

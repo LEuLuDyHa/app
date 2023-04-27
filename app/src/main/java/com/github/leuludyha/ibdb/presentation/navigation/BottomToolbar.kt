@@ -18,7 +18,7 @@ fun BottomToolbar(navController: NavHostController?, defaultSelection: Int = 0) 
     val tabs = listOf(
         TabDescriptor.Home,
         TabDescriptor.Search,
-        TabDescriptor.Maps,
+        TabDescriptor.Collection,
         TabDescriptor.Profile
     )
 
