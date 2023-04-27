@@ -25,4 +25,9 @@ class EditionTest {
         assertThat(editionMrFox.works.first()).isEqualTo(listOf(workMrFox))
         assertThat(editionMrFox.covers.first()).isEqualTo(listOf(Cover(13269612)))
     }
+
+    @Test
+    fun hashCodeIsOnlyOnId() {
+        assertThat(editionMrFox.hashCode()).isEqualTo(editionMrFox.id.hashCode())
+    }
 }

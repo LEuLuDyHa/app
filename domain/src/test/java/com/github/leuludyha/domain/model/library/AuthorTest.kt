@@ -39,4 +39,9 @@ class AuthorTest {
     @Test
     fun toStringIsUnknownAuthorWhenNameNull() =
         assertThat(authorRoaldDahl.copy(name = null).toString()).isEqualTo("Unknown author")
+
+    @Test
+    fun hashCodeIsOnlyOnId() {
+        assertThat(authorRoaldDahl.hashCode()).isEqualTo(authorRoaldDahl.id.hashCode())
+    }
 }

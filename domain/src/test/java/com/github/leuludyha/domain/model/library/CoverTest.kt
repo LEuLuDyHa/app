@@ -17,4 +17,10 @@ class CoverTest {
         assertThat(cover).isNotEqualTo("test")
         assertThat(cover).isNotEqualTo(Cover(2))
     }
+
+    @Test
+    fun hashCodeIsOnlyOnId() {
+        val cover = Cover(1)
+        assertThat(cover.hashCode()).isEqualTo(cover.id.hashCode())
+    }
 }
