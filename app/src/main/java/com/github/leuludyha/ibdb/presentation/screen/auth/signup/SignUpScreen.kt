@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeProfilePicturePrompt
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt
@@ -22,10 +21,8 @@ fun FirstTimeLogInCheck(
     viewModel: SignUpScreenViewModel = hiltViewModel(),
     onCheckPassed: (@Composable () -> Unit),
 ) {
-    val context = LocalContext.current
-
     // If check is passed, display content
-    if (viewModel.isWalkThroughCompleted(context)) {
+    if (viewModel.isWalkThroughCompleted()) {
         onCheckPassed()
     } else {
 
@@ -45,8 +42,8 @@ fun FirstTimeLogInCheck(
                 ),
                 // On walk through complete, navigate to home screen
                 onComplete = {
-                    viewModel.rememberWalkThroughIsCompleted(context)
-                    viewModel.persistWalkthroughOptions(context)
+                    viewModel.rememberWalkThroughIsCompleted()
+                    viewModel.persistUserState()
                 }
             )
         }
