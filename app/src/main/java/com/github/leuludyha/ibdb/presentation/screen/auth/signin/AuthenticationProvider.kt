@@ -142,6 +142,17 @@ private fun checkNetworkAvailable(context: Context): Boolean {
     val networkAvailability =
         connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
 
+    // TODO: check https://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
+//    connectivityManager.let {
+//        it.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+//            override fun onAvailable(network: Network) {
+//                //take action when network connection is gained
+//            }
+//            override fun onLost(network: Network?) {
+//                //take action when network connection is lost
+//            }
+//        })
+//    }
     return networkAvailability != null
             && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
