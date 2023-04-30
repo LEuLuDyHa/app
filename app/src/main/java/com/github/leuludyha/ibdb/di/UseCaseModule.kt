@@ -42,6 +42,6 @@ object UseCaseModule {
         GetUserFromPhoneNumberUseCase(userRepository)
 
     @Provides
-    fun getNearbyUsers(userRepository: UserRepository) =
+    fun getNearbyUsersUseCase(userRepository: UserRepository) =
         GetNearbyUsersUseCase(userRepository)
 }
