@@ -55,7 +55,8 @@ fun GoogleMapsScreen(
     val uiSettings by remember {
         mutableStateOf(
             MapUiSettings(
-                //I did my own implementation of this, I encountered problems and no documentation online
+                //I did my own implementation of this location button,
+                //I encountered problems and no documentation online with the default solution
                 myLocationButtonEnabled = false,
                 zoomControlsEnabled = false
             )
@@ -63,6 +64,12 @@ fun GoogleMapsScreen(
     }
     val context = LocalContext.current
     val nearbyUsers by viewModel.nearbyUsers
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchNearbyUsers(cameraPositionState, context).thenAccept {
+            viewModel.nearbyUsers.value = it
+        }
+    }
 
     GoogleMap(
         modifier = Modifier
@@ -97,7 +104,7 @@ fun GoogleMapsScreen(
  * @param context of the map
  */
 @OptIn(ExperimentalPermissionsApi::class)
-//This permission check is actually done in the code, but for some reason the compiler cries it about it not being done without suppressing it.
+//This permission check is actually done in the code, but for some reason the compiler cries about it not being done without suppressing it.
 @SuppressLint("MissingPermission")
 @Composable
 private fun MapsUI(
