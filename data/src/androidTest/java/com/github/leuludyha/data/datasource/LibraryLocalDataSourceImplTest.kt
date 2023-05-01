@@ -1,11 +1,13 @@
 package com.github.leuludyha.data.datasource
 
+import androidx.core.R
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.db.LibraryDatabase
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryLocalDataSourceImpl
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
@@ -80,6 +82,16 @@ class LibraryLocalDataSourceImplTest {
         localDataSource.save(workMrFoxPref)
         val data = localDataSource.getWorkPreference(workMrFox.id).first()
         assertThat(data).isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getCoverBitmapGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.save(workMrFox)
+        val cover = workMrFox.covers.first().first()
+        localDataSource.getCoverBitmap(cover, CoverSize.Small).collect {
+            assertThat(it).isEqualTo(R.drawable.ic_call_answer)
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

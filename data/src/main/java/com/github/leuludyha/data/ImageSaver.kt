@@ -25,7 +25,7 @@ class ImageSaver {
         suspend fun loadImageToInternalStorage(context: Context, fileName: String): Bitmap? {
             return withContext(Dispatchers.IO) {
                 val directory = context.filesDir
-                val file = File(directory, fileName)
+                val file = File(directory, "$fileName.jpg")
 
                 if(!(file.canRead() && file.isFile && file.name.endsWith(".jpg"))) {
                     val bytes = file.readBytes()
