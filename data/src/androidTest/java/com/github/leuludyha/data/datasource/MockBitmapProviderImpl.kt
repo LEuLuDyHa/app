@@ -7,6 +7,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.github.leuludyha.data.repository.datasource.BitmapProvider
 
+/**
+ * Mock implementation of a [BitmapProvider], always return the same [Bitmap]: [R.drawable.ic_call_answer]
+ */
 class MockBitmapProviderImpl(private val context: Context): BitmapProvider {
     override fun invoke(path: String): Bitmap? =
         ContextCompat.getDrawable(context, R.drawable.ic_call_answer)?.toBitmap()

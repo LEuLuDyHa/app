@@ -41,7 +41,9 @@ interface LibraryLocalDataSource {
      * Gets all the [WorkPreference]s from the local database.
      */
     fun getAllWorkPreferences(): Flow<List<WorkPreference>>
-
+    /**
+     * Gets the bitmap associated to the given [Cover] for the given [CoverSize]
+     */
     fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap>
 
     /**

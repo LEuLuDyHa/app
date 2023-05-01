@@ -4,6 +4,9 @@ import android.graphics.Bitmap
 import com.github.leuludyha.data.repository.datasource.BitmapProvider
 import com.squareup.picasso.Picasso
 
+/**
+ * Fetches a [Bitmap] online.
+ */
 class BitmapProviderImpl: BitmapProvider {
     override fun invoke(path: String): Bitmap? {
         return try {
