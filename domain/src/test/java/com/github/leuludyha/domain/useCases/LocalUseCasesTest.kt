@@ -156,6 +156,7 @@ class LocalUseCasesTest {
         }}
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun accessingADeletedAuthorThrowsAnException(): Unit = runTest {
         val testAuthor = Author(
