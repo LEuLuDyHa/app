@@ -15,6 +15,10 @@ sealed class Screen(val route: String) {
         fun passBookId(bookId: String) = "book_details_screen/$bookId"
     }
 
+    object AuthorDetails : Screen("author_details_screen/{authorId}") {
+        fun passAuthorId(authorId: String) = "author_details_screen/$authorId"
+    }
+
     object FindBook : Screen("find_book")
     object UserProfile : Screen("user_profile")
     object GoogleMaps : Screen("maps")

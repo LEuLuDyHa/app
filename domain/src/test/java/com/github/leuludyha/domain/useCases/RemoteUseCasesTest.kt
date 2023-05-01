@@ -1,6 +1,6 @@
 package com.github.leuludyha.domain.useCases
 
-import com.github.leuludyha.domain.MockLibraryRepositoryImpl
+import com.github.leuludyha.domain.model.library.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox

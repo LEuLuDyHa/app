@@ -9,12 +9,14 @@ import com.github.leuludyha.data.paging.SearchPagingSource
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Edition
-import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-
+/**
+ * Concrete implementation of the [LibraryRemoteDataSource]
+ */
 class LibraryRemoteDataSourceImpl(
     private val libraryApi: LibraryApi,
 ): LibraryRemoteDataSource {

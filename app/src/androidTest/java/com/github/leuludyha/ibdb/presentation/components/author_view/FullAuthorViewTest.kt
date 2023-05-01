@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components.reading_list
+package com.github.leuludyha.ibdb.presentation.components.author_view
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -10,6 +10,7 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import com.github.leuludyha.ibdb.presentation.components.books.author_views.FullAuthorView
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import org.junit.Before
 import org.junit.Rule
@@ -17,48 +18,35 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class ReadingListTest {
+class FullAuthorViewTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private val work1: Work = Mocks.work1984
-    private val work2: Work = Mocks.workLaFermeDesAnimaux
-    private lateinit var userPrefs: UserPreferences
-    private lateinit var workPrefs: Map<String, WorkPreference>
-    private lateinit var state: WorkPreference
+    private val author1 = Mocks.authorGeorgeOrwell
+    val work1: Work = Mocks.work1984 // of author1
 
     private lateinit var navController: NavHostController
 
     @Before
     fun initContent() {
-        userPrefs = UserPreferences()
-        workPrefs = mapOf(
-            work1.id to WorkPreference(work1, WorkPreference.ReadingState.READING, true)
-        )
-
-        state = workPrefs[work1.id]!!
-
         navController = TestNavHostController(ApplicationProvider.getApplicationContext())
 
         composeTestRule.setContent {
-            ReadingList(
-                navController = navController,
-                workPreferences = workPrefs,
-            )
+            FullAuthorView(navController, author1)
         }
+    }
+
+    @Test
+    fun authorNameIsDisplayed() {
+        composeTestRule.onNodeWithText(author1.toString())
+            .assertExists("The author name should be displayed")
     }
 
     @Test
     fun likedWorkIsInList() {
         composeTestRule.onNodeWithText(work1.title!!)
             .assertExists("A liked work should appear in the reading list")
-    }
-
-    @Test
-    fun notLikedWorkIsNotInList() {
-        composeTestRule.onNodeWithText(work2.title!!)
-            .assertDoesNotExist()
     }
 
 }

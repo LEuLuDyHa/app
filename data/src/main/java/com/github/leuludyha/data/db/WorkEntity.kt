@@ -5,6 +5,9 @@ import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Work
 import kotlinx.coroutines.flow.map
 
+/**
+ * Database entity representing a [Work]
+ */
 @Entity(tableName = "works")
 data class WorkEntity (
     @PrimaryKey
@@ -47,6 +50,15 @@ data class WorkEntity (
             subjects = modelSubjects
         )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is WorkEntity) return false
+
+        return workId == other.workId
+    }
+
+    override fun hashCode(): Int = workId.hashCode()
 
     companion object {
         fun from(work: Work) = WorkEntity(

@@ -6,103 +6,58 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Concrete implementation of the [LibraryRepository]
+ */
 class LibraryRepositoryImpl(
     private val libraryRemoteDataSource: LibraryRemoteDataSource,
     private val libraryLocalDataSource: LibraryLocalDataSource
     ) : LibraryRepository
 {
-    /**
-     * @return the result of an online search of the given [query].
-     */
     override fun searchRemotely(query: String) =
         libraryRemoteDataSource.search(query)
-
-    /**
-     * @return the result of an online [Work] fetch query for the given work id.
-     */
     override fun getWorkRemotely(workId: String): Flow<Result<Work>> =
         libraryRemoteDataSource.getWork(workId)
-
-    /**
-     * @return the result of an online [Edition] fetch query for the given edition id.
-     */
     override fun getEditionRemotely(editionId: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEdition(editionId)
-
-    /**
-     * @return the result of an online [Edition] fetch query for the given isbn (either 13 or 10).
-     */
     override fun getEditionByISBNRemotely(isbn: String): Flow<Result<Edition>> =
         libraryRemoteDataSource.getEditionByISBN(isbn)
-
-    /**
-     * @return the result of an online [Author] fetch query for the given author id.
-     */
     override fun getAuthorRemotely(authorId: String): Flow<Result<Author>> =
         libraryRemoteDataSource.getAuthor(authorId)
 
-    /**
-     * Saves the given [Work] locally.
-     */
     override suspend fun saveLocally(work: Work) =
         libraryLocalDataSource.save(work)
-
-    /**
-     * Saves the given [Author] locally.
-     */
     override suspend fun saveLocally(author: Author) =
         libraryLocalDataSource.save(author)
-
-    /**
-     * Saves the given [Edition] locally.
-     */
     override suspend fun saveLocally(edition: Edition) =
         libraryLocalDataSource.save(edition)
+    override suspend fun saveLocally(workPref: WorkPreference) =
+        libraryLocalDataSource.save(workPref)
 
-    /**
-     * Deletes the given [Work] locally.
-     */
     override suspend fun deleteLocally(work: Work) =
         libraryLocalDataSource.delete(work)
-
-    /**
-     * Deletes the given [Author] locally.
-     */
     override suspend fun deleteLocally(author: Author) =
         libraryLocalDataSource.delete(author)
-
-    /**
-     * Deletes the given [Edition] locally.
-     */
     override suspend fun deleteLocally(edition: Edition) =
         libraryLocalDataSource.delete(edition)
+    override suspend fun deleteLocally(workPref: WorkPreference) =
+        libraryLocalDataSource.delete(workPref)
 
-    /**
-     * @return the result of a local [Work] work query for the given work id.
-     */
     override fun getWorkLocally(workId: String): Flow<Work> =
         libraryLocalDataSource.getWork(workId)
-
-    /**
-     * @return the result of a local [Author] work query for the given author id.
-     */
     override fun getAuthorLocally(authorId: String): Flow<Author> =
         libraryLocalDataSource.getAuthor(authorId)
-
-    /**
-     * @return the result of a local [Edition] work query for the given edition id.
-     */
     override fun getEditionLocally(editionId: String): Flow<Edition> =
         libraryLocalDataSource.getEdition(editionId)
-
-    /**
-     * @return the result of a local [Edition] work query for the given edition isbn.
-     * It can be either an ISBN10 or ISBN13.
-     */
     override fun getEditionByISBNLocally(isbn: String): Flow<Edition> =
         libraryLocalDataSource.getEditionByISBN(isbn)
+    override fun getWorkPrefLocally(workId: String): Flow<WorkPreference> =
+        libraryLocalDataSource.getWorkPreference(workId)
+    override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> =
+        libraryLocalDataSource.getAllWorkPreferences()
 
 }

@@ -4,6 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.github.leuludyha.domain.model.library.Cover
 
+/**
+ * Database entity representing a [Cover]
+ */
 @Entity(tableName = "covers")
 data class CoverEntity(
     @PrimaryKey

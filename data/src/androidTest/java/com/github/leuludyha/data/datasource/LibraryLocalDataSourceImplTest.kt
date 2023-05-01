@@ -8,6 +8,7 @@ import com.github.leuludyha.data.repository.datasourceImpl.LibraryLocalDataSourc
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
+import com.github.leuludyha.domain.model.library.Mocks.workMrFoxPref
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -73,6 +74,14 @@ class LibraryLocalDataSourceImplTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
+    fun getWorkPrefGivesCorrectResultAfterSavingIt() = runTest {
+        localDataSource.save(workMrFoxPref)
+        val data = localDataSource.getWorkPreference(workMrFox.id).first()
+        assertThat(data).isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
     fun gettingADeletedWorkThrowsException() {
         assertThrows(java.lang.Exception::class.java) { runTest {
                 localDataSource.save(workMrFox)
@@ -98,6 +107,16 @@ class LibraryLocalDataSourceImplTest {
             localDataSource.save(authorRoaldDahl)
             localDataSource.delete(authorRoaldDahl)
             localDataSource.getAuthor(authorRoaldDahl.id).first()
+        }}
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun gettingADeletedWorkPrefThrowsException() {
+        assertThrows(java.lang.Exception::class.java) { runTest {
+            localDataSource.save(workMrFoxPref)
+            localDataSource.delete(workMrFoxPref)
+            localDataSource.getWorkPreference(workMrFox.id).first()
         }}
     }
 }

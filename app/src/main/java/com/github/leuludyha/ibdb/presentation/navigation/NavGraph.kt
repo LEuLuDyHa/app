@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
+import com.github.leuludyha.ibdb.presentation.screen.author_views.AuthorDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
@@ -67,6 +68,18 @@ fun NavGraph(navController: NavHostController) {
                         BookDetailsScreen(
                             navController, padding, workId
                         )
+                    }
+            }
+            composable(
+                route = Screen.AuthorDetails.route,
+                arguments = listOf(navArgument(Constant.AUTHOR_DETAILS_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                })
+            ) { backStackEntry ->
+                backStackEntry.arguments
+                    ?.getString(Constant.AUTHOR_DETAILS_ARGUMENT_KEY)
+                    ?.let { authorId ->
+                        AuthorDetailsScreen(navController, padding, authorId)
                     }
             }
             composable(route = Screen.Collection.route) {

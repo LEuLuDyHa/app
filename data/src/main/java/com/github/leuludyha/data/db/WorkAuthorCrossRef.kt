@@ -4,6 +4,9 @@ import androidx.room.Entity
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Work
 
+/**
+ * Cross reference between a [WorkEntity] and an [AuthorEntity]
+ */
 @Entity(primaryKeys = ["workId", "authorId"])
 data class WorkAuthorCrossRef(
     val workId: String,

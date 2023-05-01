@@ -3,7 +3,7 @@ package com.github.leuludyha.domain.model.user.preferences
 import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.domain.model.library.Work
 
-open class WorkPreference(
+data class WorkPreference(
     val work: Work,
     var readingState: ReadingState,
     val possessed: Boolean = false,
@@ -30,6 +30,16 @@ open class WorkPreference(
         }
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is WorkPreference) return false
+
+        return work == other.work
+                && readingState == other.readingState
+                && possessed == other.possessed
+                && rating == other.rating
+    }
+
     override fun Id(): String {
         return this.work.id; }
 
@@ -48,5 +58,13 @@ open class WorkPreference(
                 }
             }
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = work.hashCode()
+        result = 31 * result + readingState.hashCode()
+        result = 31 * result + possessed.hashCode()
+        result = 31 * result + (rating?.hashCode() ?: 0)
+        return result
     }
 }

@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,35 +41,33 @@ fun ReadingStateControl(
     work: Work,
     viewModel: ReadingStateControlViewModel = hiltViewModel()
 ) {
-    val userPreferences = viewModel.userPreferences
+    val workPreferences = viewModel.workPreferences.collectAsState(initial = mapOf())
 
-    val (liked, setLiked) = remember {
-        mutableStateOf(
-            // Initiate it to the current liked state
-            userPreferences.workPreferences.containsKey(work.id)
-        )
-    }
+    val liked = workPreferences.value.keys.contains(work.id)
+
     // Whether the menu button is expanded (visible) or not
     val (expanded, setExpanded) = remember { mutableStateOf(false) }
 
     fun onLikeButtonClicked(like: Boolean) {
-        setLiked(like)
-
         // If the user dislikes the work, remove it from its preferences
         if (!like) {
-            userPreferences.workPreferences.remove(work.Id())
+            workPreferences.value[work.id]?.let { viewModel.deleteWorkPref(it) }
             // Otherwise, add it in its preferences, annotating it as interested and not possessed
         } else {
-            userPreferences.workPreferences[work.Id()] = WorkPreference(
-                work, WorkPreference.ReadingState.INTERESTED, false
+            viewModel.saveWorkPref(
+                WorkPreference(
+                work,
+                WorkPreference.ReadingState.INTERESTED,
+                    false
+                )
             )
         }
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
         // Set the reading state to the one set by the user using the menu button
-        userPreferences.workPreferences[work.Id()]?.let {
-            it.readingState = readingState
+        workPreferences.value[work.id]?.let {
+            viewModel.saveWorkPref(it.copy(readingState = readingState))
         }
         setExpanded(false)
     }
@@ -104,7 +103,7 @@ fun ReadingStateControl(
                 ) {
                     // Display the current reading state in a button,
                     // Once it is clicked, a menu will appear with all states
-                    userPreferences.workPreferences[work.id]?.let {
+                    workPreferences.value[work.id]?.let {
                         Text(
                             text = it.readingState.toString(),
                             color = MaterialTheme.colorScheme.onSecondaryContainer

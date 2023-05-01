@@ -4,16 +4,22 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.library.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
-import com.github.leuludyha.domain.model.user.MainUser
-import com.github.leuludyha.domain.model.user.preferences.UserPreferences
-import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import com.github.leuludyha.domain.repository.LibraryRepository
+import com.github.leuludyha.domain.useCase.DeleteWorkPrefLocallyUseCase
+import com.github.leuludyha.domain.useCase.GetAllWorkPrefsLocallyUseCase
+import com.github.leuludyha.domain.useCase.GetWorkPrefLocallyUseCase
+import com.github.leuludyha.domain.useCase.SaveWorkPrefLocallyUseCase
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.TestTags
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import onNodeByTag
 import org.hamcrest.MatcherAssert.*
 import org.junit.Assert.*
@@ -30,40 +36,25 @@ class ReadingStateControlTest {
     val composeTestRule = createComposeRule()
 
     private val work: Work = Mocks.work1984
-    private lateinit var preferences: UserPreferences
-    private lateinit var state: WorkPreference
+    private lateinit var libraryRepository: LibraryRepository
 
     @Before
     fun initContent() {
-        preferences = UserPreferences()
-        preferences.addPreference(
-            WorkPreference(work, WorkPreference.ReadingState.READING, true)
-        )
+        val workPref = WorkPreference(work, WorkPreference.ReadingState.READING, true)
 
-        state = preferences.workPreferences[work.id]!!
+        libraryRepository = MockLibraryRepositoryImpl()
+        runBlocking {
+            libraryRepository.saveLocally(work)
+            libraryRepository.saveLocally(workPref)
+        }
 
         composeTestRule.setContent {
             ReadingStateControl(
                 work = work,
                 viewModel = ReadingStateControlViewModel(
-                    AuthenticationContext(
-                        MainUser(
-                            userId = UUID.randomUUID().toString(),
-                            username = "Bobby",
-                            phoneNumber = null,
-                            profilePictureUrl = "",
-                            preferences = preferences,
-                            statistics = UserStatistics(
-                                preferredWorks = listOf(Mocks.work1984),
-                                preferredSubjects = listOf("Censorship"),
-                                preferredAuthors = listOf(Mocks.authorGeorgeOrwell),
-                                averageNumberOfPages = 42
-                            ),
-                            friends = listOf(),
-                            latitude = 0.0,
-                            longitude = 0.0
-                        )
-                    )
+                    GetAllWorkPrefsLocallyUseCase(libraryRepository = libraryRepository),
+                    SaveWorkPrefLocallyUseCase(libraryRepository = libraryRepository),
+                    DeleteWorkPrefLocallyUseCase(libraryRepository = libraryRepository)
                 )
             )
         }
@@ -73,7 +64,7 @@ class ReadingStateControlTest {
     fun displaysAlreadyExistingState() {
         // Maybe the mocked object can change so just handle this case
         composeTestRule.onNodeWithText(
-            state.readingState.toString(), substring = true
+            WorkPreference.ReadingState.READING.toString(), substring = true
         ).assertExists("Reading state label does not exist in hierarchy !")
     }
 
@@ -87,21 +78,24 @@ class ReadingStateControlTest {
         readingStateController.assertDoesNotExist()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun likeAndDislikeModifiesEntryToPreferences() {
+    fun dislikeAndLikeModifiesEntryToPreferences() {
         val likeButton = composeTestRule.onNodeByTag(TestTags.likeButton)
 
         // Dislike, remove entry
-        likeButton.performClick()
-        assertThat(
-            "Work is no longer in preferences",
-            !preferences.workPreferences.containsKey(work.id)
-        )
-        likeButton.performClick()
-        assertThat(
-            "Work is back in preferences",
-            preferences.workPreferences.containsKey(work.id)
-        )
+        runTest{
+            likeButton.performClick()
+            assertThat(
+                "Work is no longer in preferences",
+                GetWorkPrefLocallyUseCase(libraryRepository)(work.id).firstOrNull() == null
+            )
+            likeButton.performClick()
+            assertThat(
+                "Work is back in preferences",
+                GetWorkPrefLocallyUseCase(libraryRepository)(work.id).firstOrNull() != null
+            )
+        }
     }
 
     @Test
@@ -116,10 +110,9 @@ class ReadingStateControlTest {
         finishedButton.assertExists("Menu should be opened and propose \"Finished\" state")
 
         finishedButton.performClick()
-        assertThat(
-            "State has changed",
-            state.readingState == WorkPreference.ReadingState.FINISHED
-        )
+        composeTestRule.onNodeWithText(
+            WorkPreference.ReadingState.FINISHED.toString()
+        ).assertExists("State should be FINISHED")
     }
 
 }
