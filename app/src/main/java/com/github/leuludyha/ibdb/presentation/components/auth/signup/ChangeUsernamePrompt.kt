@@ -49,7 +49,7 @@ object ChangeUsernamePrompt : SignUpPromptBase(
             text =
             stringResource(id = R.string.prompt_username_title_begin) +
                     authContext.principal.username +
-                    stringResource(id = R.string.prompt_username_title_end),
+                    stringResource(id = R.string.prompt_username_title_end)
         )
     }
 
