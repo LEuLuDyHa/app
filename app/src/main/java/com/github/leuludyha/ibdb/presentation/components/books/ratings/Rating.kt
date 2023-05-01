@@ -145,7 +145,7 @@ private fun DefaultPreview() {
         Rating(
             value = 3.5f,
             onChange = { Log.i("Rating", it.toString()) },
-            size = RatingSize.Default,
+            size = RatingSize.Small,
             label = "My Rating"
         )
     }
