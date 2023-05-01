@@ -22,8 +22,6 @@ import com.github.leuludyha.ibdb.util.NetworkUtils.checkNetworkAvailable
 import com.github.leuludyha.ibdb.util.NetworkUtils.registerCallbackOnNetworkAvailable
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 
 /**
@@ -37,24 +35,29 @@ fun AuthenticationProvider(
     signedInContent: (@Composable () -> Unit),
 ) {
     val (signedIn, setSignedIn) = remember { mutableStateOf(false) }
+    val (skipSignIn, setSkipSignIn) = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
     LaunchedEffect(context) {
         if (checkNetworkAvailable(context)) {
             viewModel.oneTapSignIn()
-            loadAuthenticationContextFromFirebase(viewModel.authContext)
         } else {
             //If no network is available, setup a callback for logging once one becomes
             //available.
+            viewModel.loadAuthenticationContextFromLocalMemory(context)
             registerCallbackOnNetworkAvailable(context) {
                 viewModel.oneTapSignIn()
-                loadAuthenticationContextFromFirebase(viewModel.authContext)
             }
-            setSignedIn(true)
+            setSkipSignIn(true)
         }
     }
 
-    if (signedIn) {
+    if (skipSignIn || signedIn) {
+        if(signedIn) {
+            viewModel.loadAuthenticationContextFromFirebase()
+            viewModel.writeAuthenticationContextToPersistentMemory(context)
+        }
+
         // Notify parent on signed in
         onSignedIn(viewModel.authContext)
         signedInContent()
@@ -121,17 +124,5 @@ fun AuthenticationProvider(
                 Log.i("Auth", signInWithGoogleResponse.message.toString())
             }
         }
-
     }
-}
-
-/**
- * This method will update the fields from authentication context that can be update from firebase.
- */
-private fun loadAuthenticationContextFromFirebase(authContext: AuthenticationContext) {
-    authContext.principal.userId = Firebase.auth.currentUser?.uid!!
-    authContext.principal.username =
-        Firebase.auth.currentUser?.displayName ?: authContext.principal.username
-    authContext.principal.profilePictureUrl = Firebase.auth.currentUser?.photoUrl.toString()
-    authContext.principal.phoneNumber = Firebase.auth.currentUser?.phoneNumber
 }

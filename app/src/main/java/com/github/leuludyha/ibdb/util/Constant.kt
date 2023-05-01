@@ -10,7 +10,13 @@ object Constant {
     const val SIGN_UP_WALKTHROUGH_COMPLETED = "walkThroughCompleted"
     const val PREFERRED_USERNAME = "preferred_username"
     const val DARK_THEME_PREFERENCE = "dark_theme_preference"
+    const val AUTHENTICATION_CONTEXT_STORED = "authentication_context_stored"
+    const val AUTHENTICATION_CONTEXT_STORED_USERNAME = "authentication_context_stored_username"
+    const val AUTHENTICATION_CONTEXT_STORED_USERID = "authentication_context_stored_userID"
+    const val AUTHENTICATION_CONTEXT_STORED_PROFILE_PICTURE_URL = "authentication_context_stored_profile_picture_url"
+    const val AUTHENTICATION_CONTEXT_STORED_PHONE_NUMBER = "authentication_context_stored_phone_number"
 
     //Strings for UI
     const val NETWORK_UNAVAILABLE_TOAST = "Network unavailable!"
+    const val USER_NOT_FOUND = "User not found!"
 }
