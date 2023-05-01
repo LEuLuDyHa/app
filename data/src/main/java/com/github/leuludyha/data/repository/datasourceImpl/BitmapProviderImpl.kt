@@ -13,6 +13,6 @@ class BitmapProviderImpl: BitmapProvider {
             Picasso.get().load(path).get()
         } catch(e: Exception) {
             null
-        }
+        } 
     }
 }
