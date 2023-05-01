@@ -1,7 +1,9 @@
 package com.github.leuludyha.data.repository.datasource
 
+import android.graphics.Bitmap
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
@@ -39,6 +41,8 @@ interface LibraryLocalDataSource {
      * Gets all the [WorkPreference]s from the local database.
      */
     fun getAllWorkPreferences(): Flow<List<WorkPreference>>
+
+    fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap>
 
     /**
      * Saves the given [Work] in the local database.

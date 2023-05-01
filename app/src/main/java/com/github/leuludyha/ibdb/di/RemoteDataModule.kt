@@ -1,7 +1,9 @@
 package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.data.api.LibraryApi
+import com.github.leuludyha.data.repository.datasource.BitmapProvider
 import com.github.leuludyha.data.repository.datasource.LibraryRemoteDataSource
+import com.github.leuludyha.data.repository.datasourceImpl.BitmapProviderImpl
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryRemoteDataSourceImpl
 import dagger.Module
 import dagger.Provides
@@ -18,4 +20,7 @@ object RemoteDataModule {
     fun provideLibraryRemoteDataSource(libraryApi: LibraryApi): LibraryRemoteDataSource =
         LibraryRemoteDataSourceImpl(libraryApi)
 
+    @Provides
+    fun provideBitmapProvider(): BitmapProvider =
+        BitmapProviderImpl()
 }

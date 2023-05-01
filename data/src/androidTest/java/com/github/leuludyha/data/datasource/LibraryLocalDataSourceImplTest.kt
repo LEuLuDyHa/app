@@ -2,6 +2,7 @@ package com.github.leuludyha.data.datasource
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.db.LibraryDatabase
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryLocalDataSourceImpl
@@ -29,7 +30,8 @@ class LibraryLocalDataSourceImplTest {
         ).allowMainThreadQueries().build()
         val libraryDao = libraryDatabase.libraryDao()
 
-        localDataSource = LibraryLocalDataSourceImpl(libraryDao)
+        val context = InstrumentationRegistry.getInstrumentation().context
+        localDataSource = LibraryLocalDataSourceImpl(context, MockBitmapProviderImpl(context), libraryDao)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

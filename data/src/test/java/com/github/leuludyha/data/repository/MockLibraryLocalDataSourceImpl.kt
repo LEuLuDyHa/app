@@ -1,8 +1,10 @@
 package com.github.leuludyha.data.repository
 
+import android.graphics.Bitmap
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
@@ -50,6 +52,10 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
 
     override fun getAllWorkPreferences(): Flow<List<WorkPreference>> =
         flowOf(savedWorkPrefs.values.toList())
+
+    override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun save(work: Work) {
         savedWorks[work.id] = work
