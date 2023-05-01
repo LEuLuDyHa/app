@@ -5,6 +5,9 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 
+/**
+ * Auxiliary functions related to network connection.
+ */
 object NetworkUtils {
     /**
      * This is implemented following the recommendations from [here](https://stackoverflow.com/questions/56709604/check-for-internet-connectivity-on-api29).
