@@ -12,6 +12,17 @@ interface UserRepository {
     fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User>
 
     /**
+     * Fetches and returns all users whose stored location in Firebase is within a defined latitude and longitude.
+     *
+     * @param latitudeMax Limits of the space
+     * @param longitudeMax Limits of the space
+     * @param latitudeMin Limits of the space
+     * @param longitudeMin Limits of the space
+     * @return a list of [User]
+     */
+    fun getNearbyUsers(latitudeMax: Double, longitudeMax: Double, latitudeMin: Double, longitudeMin: Double): CompletableFuture<List<User>>
+
+    /**
      * @param user User to get the neighbours of
      * @param distance Distance to use to get the neighbours
      * @param n Number of nearest neighbours to return

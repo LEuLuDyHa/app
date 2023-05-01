@@ -7,6 +7,7 @@ import com.github.leuludyha.domain.useCase.*
 import com.github.leuludyha.domain.useCase.auth.signin.FirebaseSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.OneTapSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases
+import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
 import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
 import dagger.Module
 import dagger.Provides
@@ -54,4 +55,8 @@ object UseCaseModule {
     @Provides
     fun getUserFromPhoneNumberUseCase(userRepository: UserRepository) =
         GetUserFromPhoneNumberUseCase(userRepository)
+
+    @Provides
+    fun getNearbyUsersUseCase(userRepository: UserRepository) =
+        GetNearbyUsersUseCase(userRepository)
 }
