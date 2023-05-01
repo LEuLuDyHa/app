@@ -1,9 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.screen.auth.signin
 
 import android.app.Activity
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
@@ -21,6 +18,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.ibdb.util.NetworkUtils.checkNetworkAvailable
+import com.github.leuludyha.ibdb.util.NetworkUtils.registerCallbackOnNetworkAvailable
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
@@ -45,6 +44,12 @@ fun AuthenticationProvider(
             viewModel.oneTapSignIn()
             loadAuthenticationContextFromFirebase(viewModel.authContext)
         } else {
+            //If no network is available, setup a callback for logging once one becomes
+            //available.
+            registerCallbackOnNetworkAvailable(context) {
+                viewModel.oneTapSignIn()
+                loadAuthenticationContextFromFirebase(viewModel.authContext)
+            }
             setSignedIn(true)
         }
     }
@@ -129,31 +134,4 @@ private fun loadAuthenticationContextFromFirebase(authContext: AuthenticationCon
         Firebase.auth.currentUser?.displayName ?: authContext.principal.username
     authContext.principal.profilePictureUrl = Firebase.auth.currentUser?.photoUrl.toString()
     authContext.principal.phoneNumber = Firebase.auth.currentUser?.phoneNumber
-}
-
-/**
- * This is implemented following the recommendations from [here](https://stackoverflow.com/questions/56709604/check-for-internet-connectivity-on-api29).
- *
- * @return true if a network is available. Both wifi and mobile are acceptable.
- */
-private fun checkNetworkAvailable(context: Context): Boolean {
-    val connectivityManager =
-        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val networkAvailability =
-        connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-
-    // TODO: check https://stackoverflow.com/questions/25678216/android-internet-connectivity-change-listener
-//    connectivityManager.let {
-//        it.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
-//            override fun onAvailable(network: Network) {
-//                //take action when network connection is gained
-//            }
-//            override fun onLost(network: Network?) {
-//                //take action when network connection is lost
-//            }
-//        })
-//    }
-    return networkAvailability != null
-            && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            && networkAvailability.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
 }

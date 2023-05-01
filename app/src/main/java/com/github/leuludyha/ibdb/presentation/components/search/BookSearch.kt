@@ -10,6 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
@@ -20,6 +21,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.util.Constant
+import com.github.leuludyha.ibdb.util.NetworkUtils.checkNetworkAvailable
 
 /**
  * This composable will instantiate a search bar and a scanning button next to it. Whenever a new search
@@ -35,7 +37,7 @@ fun BookSearch(
     query: String? = null,
     onBooksFoundContent: @Composable (LazyPagingItems<Work>) -> Unit,
 ) {
-
+    val context = LocalContext.current
     val queryLoading by viewModel.queryLoading
     val isReadingISBN by viewModel.isReadingISBN
     val searchQuery by viewModel.searchQuery
@@ -44,7 +46,7 @@ fun BookSearch(
     LaunchedEffect(Unit) {
         if (query != null) {
             viewModel.searchQuery.value = query
-            viewModel.searchWorks(query)
+            viewModel.searchWorks(context, query)
         }
     }
 
@@ -55,9 +57,9 @@ fun BookSearch(
     barcodeReadingResultState?.value?.let {
         //This condition is meant to avoid this being called multiple times. It is a workaround and not
         //a fix of the main problem, since I couldn't find a fix. Moreover it looks like this behavior is not even deterministic.
-        if (!isReadingISBN) {
+        if (!isReadingISBN && checkNetworkAvailable(context)) {
             viewModel.updateIsReadingISBN(true)
-            viewModel.searchWorks(it)
+            viewModel.searchWorks(context, it)
             navController.currentBackStackEntry
                 ?.savedStateHandle
                 ?.remove<String>(Constant.BARCODE_RESULT_KEY)
@@ -83,7 +85,7 @@ fun BookSearch(
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = {
-                    viewModel.searchWorks(searchQuery)
+                    viewModel.searchWorks(context, searchQuery)
                 })
             )
 

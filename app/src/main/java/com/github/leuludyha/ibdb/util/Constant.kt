@@ -1,6 +1,7 @@
 package com.github.leuludyha.ibdb.util
 
 object Constant {
+    //Keys used in the code
     const val SEARCH_QUERY_ARGUMENT_KEY = "searchQuery"
     const val BOOK_DETAILS_ARGUMENT_KEY = "bookId"
     const val AUTHOR_DETAILS_ARGUMENT_KEY = "authorId"
@@ -9,4 +10,7 @@ object Constant {
     const val SIGN_UP_WALKTHROUGH_COMPLETED = "walkThroughCompleted"
     const val PREFERRED_USERNAME = "preferred_username"
     const val DARK_THEME_PREFERENCE = "dark_theme_preference"
+
+    //Strings for UI
+    const val NETWORK_UNAVAILABLE_TOAST = "Network unavailable!"
 }
