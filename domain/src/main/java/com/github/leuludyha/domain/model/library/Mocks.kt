@@ -239,7 +239,11 @@ object Mocks {
     val userPreferences: UserPreferences = UserPreferences()
     val workPreferences: Map<String, WorkPreference> = mapOf(
         work1984.id to WorkPreference(work1984, WorkPreference.ReadingState.READING, false),
-        workLaFermeDesAnimaux.id to WorkPreference(workLaFermeDesAnimaux, WorkPreference.ReadingState.FINISHED, true)
+        workLaFermeDesAnimaux.id to WorkPreference(
+            workLaFermeDesAnimaux,
+            WorkPreference.ReadingState.FINISHED,
+            true
+        )
     )
 
     val mainUser: MainUser = MainUser(
@@ -263,7 +267,8 @@ object Mocks {
     val user2: MainUser = MainUser(
         UUID.randomUUID().toString(),
         username = "MockMike",
-        preferences = userPreferences,
+        userPreferences = userPreferences,
+        workPreferences = flowOf(workPreferences),
         phoneNumber = "",
         profilePictureUrl = "",
         statistics = UserStatistics(
@@ -288,7 +293,7 @@ object Mocks {
     val libraryRepository = MockLibraryRepositoryImpl()
 }
 
-class MockLibraryRepositoryImpl: LibraryRepository {
+class MockLibraryRepositoryImpl : LibraryRepository {
     private val savedWorks: HashMap<String, Work> = hashMapOf()
     private val savedEditions: HashMap<String, Edition> = hashMapOf()
     private val savedAuthors: HashMap<String, Author> = hashMapOf()
@@ -388,7 +393,7 @@ class MockLibraryRepositoryImpl: LibraryRepository {
 
     override fun getEditionByISBNLocally(isbn: String): Flow<Edition> {
         val editions = savedEditions.values.filter { it.isbn10 == isbn || it.isbn13 == isbn }
-        return if(editions.firstOrNull() == null)
+        return if (editions.firstOrNull() == null)
             flowOf()
         else
             flowOf(editions.first())
