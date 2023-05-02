@@ -33,7 +33,7 @@ abstract class SignUpPromptBase(
         Text(
             text = text,
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
+            color = MaterialTheme.colorScheme.primary
         )
     }
 
