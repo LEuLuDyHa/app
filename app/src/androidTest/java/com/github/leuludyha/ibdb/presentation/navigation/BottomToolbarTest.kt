@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.ibdb.presentation.navigation
 
 import dagger.hilt.android.testing.HiltAndroidTest
 
