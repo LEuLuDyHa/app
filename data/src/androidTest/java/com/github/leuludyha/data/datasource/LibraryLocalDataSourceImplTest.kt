@@ -1,6 +1,5 @@
 package com.github.leuludyha.data.datasource
 
-import androidx.core.R
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.platform.app.InstrumentationRegistry
@@ -8,6 +7,7 @@ import com.github.leuludyha.data.db.LibraryDatabase
 import com.github.leuludyha.data.repository.datasource.LibraryLocalDataSource
 import com.github.leuludyha.data.repository.datasourceImpl.LibraryLocalDataSourceImpl
 import com.github.leuludyha.domain.model.library.CoverSize
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
@@ -22,7 +22,7 @@ import org.junit.Test
 
 class LibraryLocalDataSourceImplTest {
 
-    lateinit var localDataSource: LibraryLocalDataSource
+    private lateinit var localDataSource: LibraryLocalDataSource
 
     @Before
     fun setup() {
@@ -33,7 +33,7 @@ class LibraryLocalDataSourceImplTest {
         val libraryDao = libraryDatabase.libraryDao()
 
         val context = InstrumentationRegistry.getInstrumentation().context
-        localDataSource = LibraryLocalDataSourceImpl(context, MockBitmapProviderImpl(context), libraryDao)
+        localDataSource = LibraryLocalDataSourceImpl(context, MockBitmapProviderImpl(), libraryDao)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -90,7 +90,7 @@ class LibraryLocalDataSourceImplTest {
         localDataSource.save(workMrFox)
         val cover = workMrFox.covers.first().first()
         localDataSource.getCoverBitmap(cover, CoverSize.Small).collect {
-            assertThat(it).isEqualTo(R.drawable.ic_call_answer)
+            assertThat(it).isEqualTo(Mocks.bitmap())
         }
     }
 

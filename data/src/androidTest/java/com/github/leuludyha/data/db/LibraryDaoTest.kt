@@ -36,7 +36,7 @@ class LibraryDaoTest {
         ).allowMainThreadQueries().build()
         libraryDao = libraryDatabase.libraryDao()
         context = InstrumentationRegistry.getInstrumentation().context
-        bmpProvider = MockBitmapProviderImpl(context)
+        bmpProvider = MockBitmapProviderImpl()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

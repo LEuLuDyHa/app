@@ -1,5 +1,7 @@
 package com.github.leuludyha.data.repository
 
+import com.github.leuludyha.domain.model.library.CoverSize
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Mocks.authorGeorgeOrwell
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.edition1984
@@ -135,6 +137,13 @@ class LibraryRepositoryImplTest {
     fun getWorkPrefLocallyReturnsCorrectWork() = runTest {
         assertThat(libraryRepository.getWorkPrefLocally(workMrFox.id).first())
             .isEqualTo(workMrFoxPref)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getCoverBitmapReturnsCorrectBitmap() = runTest {
+        assertThat(libraryRepository.getCoverBitmap(workMrFox.covers.first().first(), CoverSize.Small).first()
+            .sameAs(Mocks.bitmap()))
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

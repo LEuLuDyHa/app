@@ -6,6 +6,7 @@ import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import kotlinx.coroutines.flow.Flow
@@ -53,9 +54,8 @@ class MockLibraryLocalDataSourceImpl: LibraryLocalDataSource {
     override fun getAllWorkPreferences(): Flow<List<WorkPreference>> =
         flowOf(savedWorkPrefs.values.toList())
 
-    override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> {
-        TODO("Not yet implemented")
-    }
+    override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> =
+        flowOf(Mocks.bitmap())
 
     override suspend fun save(work: Work) {
         savedWorks[work.id] = work
