@@ -7,63 +7,63 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
-import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.util.NetworkUtils.checkNetworkAvailable
+import com.github.leuludyha.ibdb.util.NetworkUtils.registerCallbackOnNetworkAvailable
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
+
 /**
- * SignInScreen allows user to sign in with a button for Google One Tap
- *
- * Once the user is signed in, displays the content of [signedInContent]
+ * Tries logging the user in through Google One Tap on launch.
+ * Once the user is signed in, calls [onSignedIn] and displays the content of [signedInContent].
  */
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AuthenticationProvider(
-    viewModel: SignInViewModel = hiltViewModel(),
+    viewModel: AuthenticationProviderViewModel = hiltViewModel(),
     onSignedIn: (AuthenticationContext) -> Unit,
     signedInContent: (@Composable () -> Unit),
 ) {
-
     val (signedIn, setSignedIn) = remember { mutableStateOf(false) }
+    val (skipSignIn, setSkipSignIn) = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    LaunchedEffect(signedIn) {
-        // Notify parent on signed in
-        if (signedIn) {
-            onSignedIn(viewModel.authContext)
+    LaunchedEffect(context) {
+        if (checkNetworkAvailable(context)) {
+            viewModel.oneTapSignIn()
+        } else {
+            //If no network is available, setup a callback for logging once one becomes
+            //available.
+            viewModel.loadAuthenticationContextFromLocalMemory(context)
+            registerCallbackOnNetworkAvailable(context) {
+                viewModel.oneTapSignIn()
+            }
+            setSkipSignIn(true)
         }
     }
 
-    if (signedIn) {
+    if (skipSignIn || signedIn) {
+        if(signedIn) {
+            viewModel.loadAuthenticationContextFromFirebase()
+            viewModel.writeAuthenticationContextToPersistentMemory(context)
+        }
+
+        // Notify parent on signed in
+        onSignedIn(viewModel.authContext)
         signedInContent()
     } else {
-        Scaffold(
-            content = { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Button(
-                        onClick = {
-                            viewModel.oneTapSignIn()
-                        }
-                    ) {
-                        Text(text = stringResource(id = R.string.sign_in_label))
-                    }
-                }
-            },
-        )
+
+        //TODO: Maybe add some decoration here, instead of an empty white screen on the background
 
         // will invoke firebaseSignIn() when oneTapSignInResponse
         // once we have a response from OneTapSignIn
@@ -124,6 +124,5 @@ fun AuthenticationProvider(
                 Log.i("Auth", signInWithGoogleResponse.message.toString())
             }
         }
-
     }
 }

@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb
+package com.github.leuludyha.ibdb.presentation.components.search
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,8 +23,6 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
-import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
-import com.github.leuludyha.ibdb.presentation.components.search.BookSearchViewModel
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreenViewModel

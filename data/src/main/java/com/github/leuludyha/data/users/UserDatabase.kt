@@ -114,6 +114,14 @@ class UserDatabase {
         return future
     }
 
+    /**
+     * Retrieves a list of users that are looking to share books within a given geographical area.
+     * @param latitudeMax to search users on an area
+     * @param longitudeMin to search users on an area
+     * @param latitudeMin to search users on an area
+     * @param longitudeMax to search users on an area
+     * @return a list of users who are located in the given area.
+     */
     fun getNearbyUsers(latitudeMax: Double, longitudeMax: Double, latitudeMin: Double, longitudeMin: Double): CompletableFuture<List<User>>{
         return getAllUsers().thenApply { users ->
             users.filter { user ->

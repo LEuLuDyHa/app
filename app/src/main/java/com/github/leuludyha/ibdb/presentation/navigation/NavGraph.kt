@@ -11,7 +11,6 @@ import androidx.navigation.navArgument
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.author_views.AuthorDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
-import com.github.leuludyha.ibdb.presentation.screen.collection.CollectionScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
@@ -82,36 +81,17 @@ fun NavGraph(navController: NavHostController) {
                         AuthorDetailsScreen(navController, padding, authorId)
                     }
             }
-            composable(route = Screen.Collection.route) {
-                CollectionScreen(navController, padding)
-            }
             composable(route = Screen.FindBook.route) {
                 // TODO Add find book screen here
             }
             composable(route = Screen.UserProfile.route) {
                 UserProfile(navController, padding)
             }
-            //TODO: Find the way of doing this properly
-//            composable(
-//                route = Screen.GoogleMaps.route,
-//                arguments = listOf(
-//                    navArgument(Constant.MAPS_INITIAL_LATITUDE) { NavType.StringType},
-//                    navArgument(Constant.MAPS_INITIAL_LONGITUDE) { NavType.StringType},
-//                    navArgument(Constant.MAPS_INTEREST_POINTS) { NavType.StringArrayType}
-//                )) { backStackEntry ->
-//                    GoogleMapsScreen(
-//                        navController = navController,
-//                        initialLatitude = backStackEntry.arguments?.getString(Constant.MAPS_INITIAL_LATITUDE),
-//                        initialLongitude = backStackEntry.arguments?.getString(Constant.MAPS_INITIAL_LONGITUDE),
-//                        interestPoints = backStackEntry.arguments?.getStringArray(Constant.MAPS_INTEREST_POINTS)
-//                    )
-//            }
             composable(route = Screen.GoogleMaps.route) {
+                //We haven't used padding values until now, but without them, the navBar and google maps overlap onto each other.
                 GoogleMapsScreen(
                     navController = navController,
-                    initialLatitude = null,
-                    initialLongitude = null,
-                    interestPoints = null
+                    paddingValues = padding
                 )
             }
         }
