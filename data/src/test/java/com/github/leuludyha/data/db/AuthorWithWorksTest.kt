@@ -29,7 +29,6 @@ class AuthorWithWorksTest {
         val bytes = converter.fromWorkEntity(entity)
         val res = converter.toWorkEntity(bytes)
 
-        println("##bytes" + String(bytes))
         Truth.assertThat(res).isEqualTo(entity)
     }
 }

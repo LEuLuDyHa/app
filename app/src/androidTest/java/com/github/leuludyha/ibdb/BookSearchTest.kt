@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb
 
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -12,7 +13,13 @@ import androidx.navigation.compose.rememberNavController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.test.rule.GrantPermissionRule
-import com.github.leuludyha.domain.model.library.*
+import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.CoverSize
+import com.github.leuludyha.domain.model.library.Edition
+import com.github.leuludyha.domain.model.library.Mocks
+import com.github.leuludyha.domain.model.library.Result
+import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
@@ -232,6 +239,10 @@ private class LibraryRepositoryMock(
     }
 
     override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> {
         TODO("Not yet implemented")
     }
 

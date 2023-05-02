@@ -1,13 +1,21 @@
 package com.github.leuludyha.data.db
 
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.room.*
+import com.github.leuludyha.data.ImageSaver
+import com.github.leuludyha.data.repository.datasource.BitmapProvider
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.withContext
+import java.io.IOException
 
 /**
  * Library local DAO.
@@ -288,14 +296,14 @@ interface LibraryDao {
      * It includes inserting the corresponding [WorkEntity], all its [Cover]s and `Subject`s
      * and – if [recursive] – all its authors and editions.
      */
-    suspend fun insert(work: Work, recursive: Boolean = true) {
+    suspend fun insert(context: Context, bmpProvider: BitmapProvider, work: Work, recursive: Boolean = true) {
         if(recursive) {
             val authors = work.authors.firstOrNull()
-            authors?.forEach { insert(it, false) }
+            authors?.forEach { insert(context, bmpProvider, it, false) }
             val workAuthorCrossRefs = authors?.map { WorkAuthorCrossRef.from(work, it) }
 
             val editions = work.editions.firstOrNull()
-            editions?.forEach { insert(it, false) }
+            editions?.forEach { insert(context, bmpProvider, it, false) }
             val workEditionCrossRefs = editions?.map { WorkEditionCrossRef.from(work, it) }
 
             workAuthorCrossRefs?.forEach { insert(it) }
@@ -311,7 +319,7 @@ interface LibraryDao {
         workSubjectCrossRefs?.forEach { insert(it) }
 
         val covers = work.covers.firstOrNull()
-        covers?.forEach { insert(it) }
+        covers?.forEach { insert(context, bmpProvider, it) }
         val workCoverCrossRefs = covers?.map { WorkCoverCrossRef.from(work, it) }
         workCoverCrossRefs?.forEach { insert(it) }
     }
@@ -322,14 +330,14 @@ interface LibraryDao {
      * It includes inserting the corresponding [EditionEntity], all its [Cover]s
      * and – if [recursive] – all its authors and works.
      */
-    suspend fun insert(edition: Edition, recursive: Boolean = true) {
+    suspend fun insert(context: Context, bmpProvider: BitmapProvider, edition: Edition, recursive: Boolean = true) {
         if (recursive) {
             val authors = edition.authors.firstOrNull()
-            authors?.forEach { insert(it, false) }
+            authors?.forEach { insert(context, bmpProvider, it, false) }
             val editionAuthorCrossRefs = authors?.map { EditionAuthorCrossRef.from(edition, it) }
 
             val works = edition.works.firstOrNull()
-            works?.forEach { insert(it, false) }
+            works?.forEach { insert(context, bmpProvider, it, false) }
             val editionWorkCrossRefs = works?.map { WorkEditionCrossRef.from(it, edition) }
 
             editionAuthorCrossRefs?.forEach { insert(it) }
@@ -340,7 +348,7 @@ interface LibraryDao {
         insert(editionEntity)
 
         val covers = edition.covers.firstOrNull()
-        covers?.forEach { insert(it) }
+        covers?.forEach { insert(context, bmpProvider, it) }
         val editionCoverCrossRefs = covers?.map { EditionCoverCrossRef.from(edition, it) }
         editionCoverCrossRefs?.forEach { insert(it) }
     }
@@ -351,10 +359,10 @@ interface LibraryDao {
      * It includes inserting the corresponding [AuthorEntity], all its [Cover]s
      * and – if [recursive] – all its works.
      */
-    suspend fun insert(author: Author, recursive: Boolean = true) {
+    suspend fun insert(context: Context, bmpProvider: BitmapProvider, author: Author, recursive: Boolean = true) {
         if (recursive) {
             val works = author.works.firstOrNull()
-            works?.forEach { insert(it) }
+            works?.forEach { insert(context, bmpProvider,  it) }
             val authorWorkCrossRefs = works?.map { WorkAuthorCrossRef.from(it, author) }
 
             authorWorkCrossRefs?.forEach { insert(it) }
@@ -363,7 +371,7 @@ interface LibraryDao {
         insert(authorEntity)
 
         val covers = author.covers.firstOrNull()
-        covers?.forEach { insert(it) }
+        covers?.forEach { insert(context, bmpProvider, it) }
         val authorCoverCrossRefs = covers?.map { AuthorCoverCrossRef.from(author, it) }
         authorCoverCrossRefs?.forEach { insert(it) }
     }
@@ -371,18 +379,31 @@ interface LibraryDao {
     /**
      * Inserts the given [Cover] in the database.
      *
-     * It only includes inserting the corresponding [CoverEntity]
+     * It only includes inserting the corresponding [CoverEntity] and save the file locally using
+     * the given [bmpProvider]
+     *
+     * @param bmpProvider given an url, returns the corresponding [Bitmap]
      */
-    suspend fun insert(cover: Cover) = insert(CoverEntity(cover.id))
+    suspend fun insert(context: Context, bmpProvider: BitmapProvider, cover: Cover) {
+        insert(CoverEntity(cover.id))
+
+        // Save bitmap
+        withContext(Dispatchers.IO) {
+            CoverSize.values().forEach { size ->
+                val bmp = bmpProvider(cover.urlForSize(size))
+                bmp?.let { ImageSaver.saveImageToInternalStorage(context, cover.fileNameForSize(size), it) }
+            }
+        }
+    }
 
     /**
      * Inserts the given [WorkPreference] in the database.
      *
      * It includes inserting the corresponding [WorkPrefEntity] and – if [recursive] – its work.
      */
-    suspend fun insert(workPref: WorkPreference, recursive: Boolean = true) {
+    suspend fun insert(context: Context, bmpProvider: BitmapProvider, workPref: WorkPreference, recursive: Boolean = true) {
         if(recursive) {
-            insert(workPref.work, false)
+            insert(context, bmpProvider, workPref.work, true)
         }
 
         insert(WorkPrefEntity.from(workPref))
@@ -401,13 +422,15 @@ interface LibraryDao {
      * It includes deleting the corresponding [WorkEntity], [WorkAuthorCrossRef],
      * [WorkCoverCrossRef], [WorkEditionCrossRef], [WorkSubjectCrossRef] and [WorkPrefEntity]
      */
-    suspend fun delete(work: Work) {
+    suspend fun delete(context: Context, work: Work) {
         deleteWork(work.id)
         deleteWorkAuthors(work.id)
         deleteWorkCovers(work.id)
         deleteWorkSubjects(work.id)
         deleteWorkEditions(work.id)
         deleteWorkPref(WorkEntity.from(work))
+
+        work.covers.firstOrNull()?.forEach { delete(context, it) }
     }
 
     /**
@@ -415,9 +438,11 @@ interface LibraryDao {
      *
      * It includes deleting the corresponding [AuthorEntity] and [AuthorCoverCrossRef]
      */
-    suspend fun delete(author: Author) {
+    suspend fun delete(context: Context, author: Author) {
         deleteAuthor(author.id)
         deleteAuthorCoversForId(author.id)
+
+        author.covers.firstOrNull()?.forEach { delete(context, it) }
     }
 
     /**
@@ -425,10 +450,12 @@ interface LibraryDao {
      *
      * It includes deleting the corresponding [EditionEntity], [EditionAuthorCrossRef] and [EditionCoverCrossRef]
      */
-    suspend fun delete(edition: Edition) {
+    suspend fun delete(context: Context, edition: Edition) {
         deleteEdition(edition.id)
         deleteEditionAuthorsForId(edition.id)
         deleteEditionCoversForId(edition.id)
+
+        edition.covers.firstOrNull()?.forEach { delete(context, it) }
     }
 
     /**
@@ -436,8 +463,16 @@ interface LibraryDao {
      *
      * It includes deleting the corresponding [CoverEntity]
      */
-    suspend fun delete(cover: Cover) {
+    suspend fun delete(context: Context, cover: Cover) {
         deleteCover(cover.id)
+
+        withContext(Dispatchers.IO) {
+            CoverSize.values().forEach {
+                try {
+                    ImageSaver.deleteImageFromInternalStorage(context, cover.fileNameForSize(it))
+                } catch(_: IOException) { }
+            }
+        }
     }
 
     /**

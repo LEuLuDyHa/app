@@ -21,16 +21,7 @@ class ReadingStateControlViewModel @Inject constructor(
         list.associateBy { it.work.id }
     }
 
-    init {
-        viewModelScope.launch {
-            _getAllWorkPrefsLocallyUseCase().collect {
-                println("## COLLECT " + it)
-            }
-        }
-    }
-
     fun saveWorkPref(workPreference: WorkPreference) = viewModelScope.launch {
-        println("## SAVE " + workPreference)
         _saveWorkPrefLocallyUseCase(workPreference)
     }
 
