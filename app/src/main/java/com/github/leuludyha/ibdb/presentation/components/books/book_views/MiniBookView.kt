@@ -70,7 +70,8 @@ private fun VerticalBookView(
             Image(
                 modifier = Modifier
                     .height(300.dp)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
+                    .testTag("thumbnail"),
                 painter = rememberImagePainter(
                     data =  covers.value.firstOrNull()?.urlForSize(CoverSize.Large),
                     builder = {
@@ -107,7 +108,10 @@ private fun VerticalBookView(
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
                 if (displaySubjects) {
-                    SubjectList(subjectNames = subjects.value)
+                    SubjectList(
+                        modifier = Modifier.testTag("subject_list"),
+                        subjectNames = subjects.value
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(3.dp))
@@ -144,6 +148,7 @@ private fun HorizontalBookView(
             // Display the book's thumbnail
             if (covers.value.isNotEmpty()) {
                 Image(
+                    modifier = Modifier.testTag("thumbnail"),
                     painter = rememberImagePainter(
                         data = covers.value.firstOrNull()?.urlForSize(CoverSize.Medium),
                         builder = {
@@ -184,7 +189,10 @@ private fun HorizontalBookView(
                 Spacer(modifier = Modifier.height(3.dp))
                 // Display the list of subjects of the book
                 if (displaySubjects) {
-                    SubjectList(subjectNames = subjects.value)
+                    SubjectList(
+                        modifier = Modifier.testTag("subject_list"),
+                        subjectNames = subjects.value
+                    )
                 }
 
                 Spacer(modifier = Modifier.height(3.dp))
@@ -199,11 +207,12 @@ private fun HorizontalBookView(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun SubjectList(
+    modifier: Modifier = Modifier,
     subjectNames: List<String>
 ) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
