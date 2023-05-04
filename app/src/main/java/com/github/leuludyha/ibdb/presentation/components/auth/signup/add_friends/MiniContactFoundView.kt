@@ -1,22 +1,35 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PersonAdd
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.screen.profile.defaultProfilePicture
 
 @Composable
 fun MiniContactFoundView(
@@ -49,10 +62,10 @@ fun MiniContactFoundView(
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
-                    modifier = Modifier.size(80.dp),
+                    modifier = Modifier.size(80.dp).testTag("profile_picture"),
                     painter = rememberImagePainter(
                         // Take the member's google account's picture for now
-                        user.profilePictureUrl ?: defaultProfilePicture
+                        user.profilePictureUrl
                     ),
                     contentDescription = "Profile Picture",
                     contentScale = ContentScale.Fit,
@@ -78,13 +91,15 @@ fun MiniContactFoundView(
             ) {
                 // Add as friend
                 IconButton(
+                    modifier = Modifier.testTag("send_request_button"),
                     onClick = { sendFriendRequest() },
                     enabled = !requestSent,
 
                     ) {
                     Icon(
-                        Icons.Filled.PersonAdd,
-                        stringResource(id = R.string.friends_add),
+                        modifier = Modifier.testTag("send_request_icon"),
+                        imageVector = Icons.Filled.PersonAdd,
+                        contentDescription = stringResource(id = R.string.friends_add),
                         tint = if (requestSent)
                             MaterialTheme.colorScheme.secondary
                         else
