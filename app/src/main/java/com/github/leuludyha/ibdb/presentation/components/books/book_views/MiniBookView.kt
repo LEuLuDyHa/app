@@ -19,6 +19,7 @@ import com.github.leuludyha.ibdb.presentation.Orientation
 
 @Composable
 fun MiniBookView(
+    modifier: Modifier = Modifier,
     work: Work,
     onClick: (work: Work) -> Unit,
     orientation: Orientation = Orientation.Vertical,
@@ -28,11 +29,13 @@ fun MiniBookView(
 
     when (orientation) {
         Orientation.Vertical -> VerticalBookView(
+            modifier,
             work,
             onClick,
             footer,
             displaySubjects)
         Orientation.Horizontal -> HorizontalBookView(
+            modifier,
             work,
             onClick,
             footer,
@@ -44,6 +47,7 @@ fun MiniBookView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun VerticalBookView(
+    modifier: Modifier = Modifier,
     work: Work,
     onClick: (work: Work) -> Unit,
     footer: (@Composable (work: Work) -> Unit)? = null,
@@ -126,6 +130,7 @@ private fun VerticalBookView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HorizontalBookView(
+    modifier: Modifier = Modifier,
     work: Work,
     onClick: (work: Work) -> Unit,
     footer: (@Composable (work: Work) -> Unit)? = null,

@@ -28,8 +28,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -44,8 +44,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox.copy(covers = flowOf()),
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -60,8 +60,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox.copy(covers = flowOf()),
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -76,8 +76,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -92,8 +92,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -108,8 +108,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox.copy(title = null),
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -124,8 +124,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -141,8 +141,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -158,8 +158,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -175,8 +175,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -191,8 +191,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = true
             )
         }
@@ -207,8 +207,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Vertical,
-                null,
+                orientation = Orientation.Vertical,
+                footer = null,
                 displaySubjects = false
             )
         }
@@ -223,8 +223,8 @@ class MiniBookViewTest {
             MiniBookView(
                 work = workMrFox,
                 onClick = { },
-                Orientation.Horizontal,
-                null,
+                orientation = Orientation.Horizontal,
+                footer = null,
                 displaySubjects = false
             )
         }
