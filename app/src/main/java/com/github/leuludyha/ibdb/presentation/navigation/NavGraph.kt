@@ -55,9 +55,6 @@ fun NavGraph(navController: NavHostController) {
                         )
                     }
             }
-            composable(route = Screen.Collection.route) {
-                CollectionScreen(navController, padding)
-            }
             composable(
                 route = Screen.BookDetails.route,
                 arguments = listOf(navArgument(Constant.BOOK_DETAILS_ARGUMENT_KEY) {
