@@ -1,7 +1,10 @@
 package com.github.leuludyha.domain.repository
 
+import android.graphics.Bitmap
 import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.library.Author
+import com.github.leuludyha.domain.model.library.Cover
+import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Edition
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.model.library.Work
@@ -94,4 +97,8 @@ interface LibraryRepository {
      * @return the result of a local [WorkPreference] query for all work ids.
      */
     fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>>
+    /**
+     * @return the bitmap associated to the given [Cover] for the given [CoverSize]
+     */
+    fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap>
 }

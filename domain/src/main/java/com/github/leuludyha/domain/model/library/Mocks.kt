@@ -1,5 +1,6 @@
 package com.github.leuludyha.domain.model.library
 
+import android.graphics.Bitmap
 import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.user.MainUser
@@ -11,7 +12,7 @@ import com.github.leuludyha.domain.repository.LibraryRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
-import java.util.*
+import java.util.UUID
 
 /** A mock work we can use to preview stuff or test */
 object Mocks {
@@ -291,6 +292,10 @@ object Mocks {
     )
 
     val libraryRepository = MockLibraryRepositoryImpl()
+
+    fun bitmap(): Bitmap = Bitmap.createBitmap(
+        intArrayOf(0x000000, 0xFFFFFF, 0x000000, 0xFFFFFF, 0x000000, 0xFFFFFF),
+        3, 2, Bitmap.Config.ALPHA_8)
 }
 
 class MockLibraryRepositoryImpl : LibraryRepository {
@@ -407,5 +412,9 @@ class MockLibraryRepositoryImpl : LibraryRepository {
 
     override fun getAllWorkPrefsLocally(): Flow<List<WorkPreference>> =
         workPrefsFlow
+
+    override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> {
+        return flowOf(Mocks.bitmap())
+    }
 
 }
