@@ -3,16 +3,20 @@ package com.github.leuludyha.domain.model.library
 import android.graphics.Bitmap
 import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.library.Mocks.mainUser
+import com.github.leuludyha.domain.model.library.Mocks.user2
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
+import com.github.leuludyha.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 
 /** A mock work we can use to preview stuff or test */
 object Mocks {
@@ -416,5 +420,28 @@ class MockLibraryRepositoryImpl : LibraryRepository {
     override fun getCoverBitmap(cover: Cover, coverSize: CoverSize): Flow<Bitmap> {
         return flowOf(Mocks.bitmap())
     }
+}
+
+class MockUserRepositoryImpl : UserRepository {
+    /** Returns a completed future containing [Mocks.mainUser] */
+    override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> =
+        CompletableFuture.completedFuture(mainUser)
+
+    /** Returns a completed future containing [Mocks.mainUser] and [Mocks.user2] */
+    override fun getNearbyUsers(
+        latitudeMax: Double,
+        longitudeMax: Double,
+        latitudeMin: Double,
+        longitudeMin: Double
+    ): CompletableFuture<List<User>> =
+        CompletableFuture.completedFuture(listOf(mainUser, user2))
+
+    /** Returns a list containing [Mocks.mainUser] and [Mocks.user2] */
+    override fun getNeighbouringUsersOf(
+        user: User,
+        distance: (User, User) -> Float,
+        n: Int
+    ): List<User> =
+        listOf(mainUser, user2)
 
 }
