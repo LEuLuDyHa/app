@@ -1,6 +1,5 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends
 
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
@@ -20,10 +19,6 @@ class AddFriendsFromContactsViewModelTest {
     lateinit var viewModel: AddFriendsFromContactsViewModel
 
     @get:Rule
-    val composeTestRule = createComposeRule()
-
-    @JvmField
-    @Rule
     val contactsPermissionRule: GrantPermissionRule =
         GrantPermissionRule.grant(android.Manifest.permission.READ_CONTACTS)
 
