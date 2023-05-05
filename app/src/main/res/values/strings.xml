@@ -22,4 +22,12 @@
     <string name="recommendation_list_title">Selected for you…</string>
     <string name="full_book_view_author_label">Author</string>
     <string name="full_book_view_subject_label">Subject</string>
+    <string name="search_placeholder">Search by title, author…</string>
+    <string name="trailing_icon">Trailing Button Icon</string>
+    <string name="books_read_button_lbl">Read</string>
+    <string name="reading_list_button_lbl">Want to read</string>
+    <string name="works_on_sale_button_lbl">Currently trading/selling</string>
+    <string name="books_read_count_lbl">books read</string>
+    <string name="weekly_popular_label">Popular books this week</string>
+    <string name="more_works_by">"More works by "</string>
 </resources>

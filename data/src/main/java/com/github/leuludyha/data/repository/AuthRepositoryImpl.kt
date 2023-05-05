@@ -34,6 +34,7 @@ class AuthRepositoryImpl(
             Result.Success(signInResult)
         } catch (e: Exception) {
             try {
+
                 Log.i("Auth", "Failed sign in, begin sign up")
                 val signUpResult = oneTapClient.beginSignIn(signUpRequest).await()
                 Log.i("Auth", "Finished sign up")
