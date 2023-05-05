@@ -9,15 +9,25 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.components.books.WorkList
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import com.github.leuludyha.ibdb.presentation.components.books.recommendations.RecommendationList
+import com.github.leuludyha.ibdb.presentation.components.utils.WithHeader
+import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -43,15 +53,12 @@ fun HomeScreen(
             .fillMaxWidth()
             .verticalScroll(state = ScrollState(0), enabled = true)
     ) {
-        Text(
-            modifier = Modifier.padding(start = 10.dp, top = 10.dp),
-            text = stringResource(id = R.string.reading_list_title),
-            style = MaterialTheme.typography.headlineMedium
-        )
-        ReadingList(
-            navController = navController,
-            workPreferences = workPreferences.value
-        )
+        WithHeader(header = stringResource(id = R.string.reading_list_title)) {
+            ReadingList(
+                navController = navController,
+                workPreferences = workPreferences.value
+            )
+        }
         Divider()
         // Only display the header if the recommendation list is not empty
         if (!isEmpty) {
@@ -63,5 +70,24 @@ fun HomeScreen(
         }
         // The recommendation list is not visible if empty either way
         RecommendationList(navController, onRecommendations = { setEmpty(it) })
+        Divider()
+        WithHeader(header = stringResource(id = R.string.weekly_popular_label)) {
+            WorkList(navController = navController, works = Mocks.weeklyPopularWorks)
+        }
+        Divider()
+        WithHeader(header = stringResource(id = R.string.more_works_by) + Mocks.authorJrrTolkien.name) {
+            WorkList(navController = navController, works = Mocks.jrrTolkienWorks)
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun DefaultPreview() {
+    IBDBTheme {
+        HomeScreen(
+            navController = rememberNavController(),
+            outerPadding = PaddingValues(0.dp)
+        )
     }
 }
