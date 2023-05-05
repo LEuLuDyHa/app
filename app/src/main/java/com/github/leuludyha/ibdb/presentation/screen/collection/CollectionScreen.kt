@@ -19,6 +19,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.utils.ButtonWithIcon
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 @Composable
@@ -51,7 +52,7 @@ fun CollectionScreen(
         )
         ButtonWithIcon(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { /*TODO*/ },
+            onClick = { navController.navigate(Screen.Collection.route) },
             containerColor = MaterialTheme.colorScheme.tertiaryContainer,
             contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
             text = stringResource(id = R.string.works_on_sale_button_lbl),
