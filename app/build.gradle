@@ -27,7 +27,7 @@ android {
             useSupportLibrary true
         }
 
-        testInstrumentationRunner = "com.github.leuludyha.ibdb.HiltTestRunner"
+        //testInstrumentationRunner = "com.github.leuludyha.ibdb.HiltTestRunner"
     }
 
     buildTypes {
