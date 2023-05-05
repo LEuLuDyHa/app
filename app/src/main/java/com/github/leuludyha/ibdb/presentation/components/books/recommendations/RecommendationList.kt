@@ -4,7 +4,9 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.presentation.components.ItemList
@@ -33,9 +35,11 @@ fun RecommendationList(
     }
 
     ItemList(
+        modifier = Modifier.testTag("item_list"),
         values = recommendations.value,
     ) {
         MiniBookView(
+            modifier = Modifier.testTag("mini_book_view"),
             work = it,
             displaySubjects = false,
             onClick = { clickedWork ->

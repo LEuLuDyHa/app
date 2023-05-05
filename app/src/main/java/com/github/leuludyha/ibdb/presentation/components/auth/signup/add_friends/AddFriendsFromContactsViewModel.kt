@@ -11,8 +11,6 @@ import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.concurrent.CompletableFuture
-import java.util.concurrent.CompletionException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -90,7 +88,7 @@ class AddFriendsFromContactsViewModel @Inject constructor(
         return List(contacts.size) { Mocks.mainUser }
         // TODO fix the firebase bug
 
-        // Map phone numbers to users
+        /*// Map phone numbers to users
         val userFutures = contacts
             .filter { it.isPhoneNumberValid() }
             .map { getUserFromPhoneNumberUseCase(it.phoneNumber!!) }
@@ -106,6 +104,6 @@ class AddFriendsFromContactsViewModel @Inject constructor(
                         null
                     }
                 }.toList()
-            }.join()
+            }.join()*/
     }
 }

@@ -70,9 +70,4 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
     ) {
         DefaultTitle(text = stringResource(id = R.string.prompt_add_friends_title))
     }
-
-
-
-
-
 }
