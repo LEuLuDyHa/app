@@ -9,8 +9,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -42,6 +47,7 @@ fun HomeScreen(
             .padding(outerPadding)
             .fillMaxWidth()
             .verticalScroll(state = ScrollState(0), enabled = true)
+            .testTag("Home::main")
     ) {
         Text(
             modifier = Modifier.padding(start = 10.dp, top = 10.dp),
