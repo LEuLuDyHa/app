@@ -9,7 +9,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,12 +21,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.CoverSize
@@ -50,18 +56,29 @@ fun FullBookView(
         verticalArrangement = Arrangement.Top
     ) {
         Text(text = work.title.orEmpty(), style = MaterialTheme.typography.titleLarge)
-        ReadingStateControl(work = work)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            ReadingStateControl(work = work)
+            IconButton(onClick = { navController.navigate(Screen.Share.shareBookId(work.id)) }) {
+                Icon(Icons.Filled.Send, "Share")
+            }
+        }
         MiniAuthorViews(authors.value, navController)
         Image(
             modifier = Modifier
                 .height(300.dp)
                 .fillMaxWidth(),
-            painter = rememberImagePainter(
-                data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large),
-                builder = {
-                    crossfade(true)
-                    scale(Scale.FILL)
-                }),
+            painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
+                    .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large))
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                        scale(Scale.FILL)
+                    }).build()
+            ),
             contentScale = ContentScale.FillWidth,
             contentDescription = stringResource(id = R.string.ui_bookCover_altText)
         )

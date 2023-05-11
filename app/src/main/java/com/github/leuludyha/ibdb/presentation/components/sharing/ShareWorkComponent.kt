@@ -1,17 +1,28 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
-import com.github.leuludyha.domain.model.library.Work
+import com.github.leuludyha.ibdb.presentation.components.ItemList
 
-private enum class State {
-    Loading, Discovering, EndpointChoice, WaitingForConnection, ConnectionPrompt, Connected,
+private enum class SharerState {
+    Loading, Discovering, WaitingForConnection, Connected,
     Error,
 }
 
@@ -20,25 +31,27 @@ private enum class State {
  */
 @Composable
 fun ShareWorkComponent(
-    work: Work,
+    navController: NavHostController,
+    padding: PaddingValues,
+    workId: String,
     viewModel: ShareWorkComponentViewModel = hiltViewModel(),
     onSuccessfullyShared: () -> Unit,
 ) {
 
     val (error, setError) = remember { mutableStateOf("") }
-    val (state, setState) = remember { mutableStateOf(State.Loading) }
+    val (state, setState) = remember { mutableStateOf(SharerState.Loading) }
 
     DisposableEffect(viewModel.connection) {
         val handler = object : ConnectionLifecycleHandler() {
             // On error, display the error in the state
             override fun onError(description: String) {
                 setError(description)
-                setState(State.Error)
+                setState(SharerState.Error)
             }
 
             // On discovery successfully started, display endpoints choices
             override fun onDiscoveryStarted() {
-                setState(State.EndpointChoice)
+                setState(SharerState.Discovering)
             }
 
             // Update the list of endpoints available if the list changes
@@ -49,17 +62,17 @@ fun ShareWorkComponent(
             // Set error state if the connection is rejected
             override fun onConnectionRejected(endpointId: String) {
                 setError("Connection rejected by $endpointId")
-                setState(State.Error)
+                setState(SharerState.Error)
             }
 
             override fun onConnected(endpointId: String) {
-                setState(State.Connected)
+                setState(SharerState.Connected)
             }
 
             override fun onDisconnected(endpointId: String) {
-                if (state == State.Connected) {
+                if (state == SharerState.Connected) {
                     setError("Disconnected")
-                    setState(State.Error)
+                    setState(SharerState.Error)
                 }
             }
         }
@@ -78,12 +91,38 @@ fun ShareWorkComponent(
         }
     }
 
-
+    fun connectTo(endpointId: String) {
+        viewModel.connection.requestConnection(endpointId)
+        setState(SharerState.WaitingForConnection)
+    }
 
     when (state) {
+        SharerState.Loading -> Loading()
         // TODO Other screens : List choice etc...
-        State.Connected -> {
-            viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, work.id))
+        SharerState.Discovering -> {
+            // Start discovery mode
+            DisposableEffect(viewModel.connection) {
+                viewModel.connection.startDiscovery()
+                onDispose { viewModel.connection.stopDiscovery() }
+            }
+            // List all users discovered so far
+            ItemList(values = viewModel.endpointChoices) { endpoint ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        onClick = { connectTo(endpoint.id) }
+                    ) { Text(text = endpoint.id) }
+                }
+            }
+        }
+
+        SharerState.WaitingForConnection -> Loading()
+
+        SharerState.Connected -> {
+            viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
             viewModel.connection.disconnect()
             onSuccessfullyShared()
         }
@@ -91,4 +130,13 @@ fun ShareWorkComponent(
         // TODO Refine error display
         else -> Text(text = error)
     }
+}
+
+@Composable
+private fun Loading() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) { CircularProgressIndicator() }
 }

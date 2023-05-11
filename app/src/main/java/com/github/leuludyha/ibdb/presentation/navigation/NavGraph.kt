@@ -16,6 +16,7 @@ import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
+import com.github.leuludyha.ibdb.presentation.screen.share.ShareScreen
 import com.github.leuludyha.ibdb.util.Constant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,6 +94,16 @@ fun NavGraph(navController: NavHostController) {
                     navController = navController,
                     paddingValues = padding
                 )
+            }
+            composable(
+                route = Screen.Share.route,
+                arguments = listOf(navArgument(Constant.SHARE_BOOK_ID_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                })
+            ) { backStackEntry ->
+                backStackEntry.arguments
+                    ?.getString(Constant.SHARE_BOOK_ID_ARGUMENT_KEY)
+                    ?.let { workId -> ShareScreen(navController, padding, workId) }
             }
         }
     }
