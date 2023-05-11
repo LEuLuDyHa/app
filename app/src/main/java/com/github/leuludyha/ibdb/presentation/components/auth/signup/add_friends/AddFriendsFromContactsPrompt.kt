@@ -12,7 +12,9 @@ import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.ItemList
-import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPromptBase
+import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt.DefaultDisplay
+import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt.DefaultTitle
+import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPrompt
 
 
 /**
@@ -20,14 +22,23 @@ import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPromp
  * add friends who already downloaded the application and are
  * in their contacts
  */
-object AddFriendsFromContactsPrompt : SignUpPromptBase() {
+object AddFriendsFromContactsPrompt : SignUpPrompt {
 
     @Composable
-    override fun Content(
-        authContext: AuthenticationContext,
-        onComplete: () -> Unit,
+    override fun Display(authContext: AuthenticationContext, onComplete: () -> Unit) {
+        DefaultDisplay(
+            content = {
+                Content()
+            },
+            authContext = authContext,
+            onComplete = onComplete
+        )
+    }
+
+    @Composable
+    fun Content(
+        viewModel: AddFriendsFromContactsViewModel = hiltViewModel()
     ) {
-        val viewModel: AddFriendsFromContactsViewModel = hiltViewModel()
 
         val context = LocalContext.current
 
@@ -65,9 +76,7 @@ object AddFriendsFromContactsPrompt : SignUpPromptBase() {
     }
 
     @Composable
-    override fun Title(
-        authContext: AuthenticationContext
-    ) {
+    fun Title() {
         DefaultTitle(text = stringResource(id = R.string.prompt_add_friends_title))
     }
 }

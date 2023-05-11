@@ -1,7 +1,15 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +37,7 @@ abstract class SignUpPromptBase(
     }
 
     @Composable
-    protected fun DefaultTitle(text: String) {
+    fun DefaultTitle(text: String) {
         Text(
             text = text,
             style = MaterialTheme.typography.titleLarge,
@@ -38,7 +46,7 @@ abstract class SignUpPromptBase(
     }
 
     @Composable
-    override fun Display(authContext: AuthenticationContext, onComplete: () -> Unit) {
+    fun DefaultDisplay(content: @Composable () -> Unit, authContext: AuthenticationContext, onComplete: () -> Unit) {
         val isOptional = !required
 
         Column(
@@ -58,10 +66,7 @@ abstract class SignUpPromptBase(
             }
 
             // Display the content of the prompt
-            Content(
-                authContext = authContext,
-                onComplete = onComplete
-            )
+            content()
 
             // If the component is not required, display a "skip" button
             if (isOptional) {
@@ -85,6 +90,20 @@ abstract class SignUpPromptBase(
                 }
             }
         }
+    }
+
+    @Composable
+    override fun Display(authContext: AuthenticationContext, onComplete: () -> Unit) {
+        DefaultDisplay(
+            content = {
+                Content(
+                    authContext = authContext,
+                    onComplete = onComplete
+                )
+            },
+            authContext = authContext,
+            onComplete = onComplete
+        )
     }
 
     /**
