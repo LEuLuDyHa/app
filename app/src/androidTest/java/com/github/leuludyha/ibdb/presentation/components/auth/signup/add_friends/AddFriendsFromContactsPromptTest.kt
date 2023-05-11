@@ -6,6 +6,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.MockUserRepositoryImpl
 import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
+import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,5 +37,14 @@ class AddFriendsFromContactsPromptTest {
         }
 
         composeTestRule.onNodeWithText("Connect with people you know on the app !").assertExists()
+    }
+
+    @Test
+    fun contentDoesNotCrash() {
+        composeTestRule.setContent {
+            AddFriendsFromContactsPrompt.Content(viewModel = viewModel)
+        }
+
+        assertThat(true).isTrue()
     }
 }
