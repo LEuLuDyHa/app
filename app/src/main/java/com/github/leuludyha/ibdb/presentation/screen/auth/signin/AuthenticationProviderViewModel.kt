@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.leuludyha.data.nearby_connection.NearbyConnectionImpl
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.OneTapSignInResponse
@@ -52,17 +53,20 @@ class AuthenticationProviderViewModel @Inject constructor(
     /**
      * This method will update the fields from authentication context that can be updated from firebase.
      */
-    fun loadAuthenticationContextFromFirebase() {
+    fun loadAuthenticationContextFromFirebase(context: Context) {
         authContext.principal.userId = Firebase.auth.currentUser?.uid!!
         //The username may be updated from other places with a higher priority
         //I am aware doing this is an awful practice, but I am also out of ideas to make it cleaner
         //This below is a patch, and hopefully someone comes up with a better way.
-        if(authContext.principal.username == Constant.USER_NOT_FOUND) {
+        if (authContext.principal.username == Constant.USER_NOT_FOUND) {
             authContext.principal.username =
                 Firebase.auth.currentUser?.displayName ?: authContext.principal.username
         }
         authContext.principal.profilePictureUrl = Firebase.auth.currentUser?.photoUrl.toString()
         authContext.principal.phoneNumber = Firebase.auth.currentUser?.phoneNumber
+
+        // Initialize the nearby connection object
+        initializeConnection(context)
     }
 
     /**
@@ -86,6 +90,15 @@ class AuthenticationProviderViewModel @Inject constructor(
             Constant.AUTHENTICATION_CONTEXT_STORED_PHONE_NUMBER,
             Constant.USER_NOT_FOUND
         )!!
+
+        // Initialize the nearby connection object
+        initializeConnection(context)
+    }
+
+    private fun initializeConnection(context: Context) {
+        authContext.nearbyConnection = NearbyConnectionImpl(
+            context, authContext.principal.username,
+        )
     }
 
     /**

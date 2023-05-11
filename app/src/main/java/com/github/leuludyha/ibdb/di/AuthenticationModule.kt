@@ -1,6 +1,7 @@
 package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
@@ -51,7 +52,8 @@ object AuthenticationModule {
                 friends = listOf(Mocks.mainUser),
                 0.0,
                 0.0
-            )
+            ),
+            nearbyConnection = NearbyConnection.Empty
         )
     }
 }

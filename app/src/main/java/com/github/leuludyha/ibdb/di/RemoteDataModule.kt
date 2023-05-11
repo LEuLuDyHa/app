@@ -23,4 +23,5 @@ object RemoteDataModule {
     @Provides
     fun provideBitmapProvider(): BitmapProvider =
         BitmapProviderImpl()
+
 }
