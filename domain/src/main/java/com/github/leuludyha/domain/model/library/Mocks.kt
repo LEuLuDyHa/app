@@ -3,6 +3,7 @@ package com.github.leuludyha.domain.model.library
 import android.graphics.Bitmap
 import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.library.Mocks.mainUser
 import com.github.leuludyha.domain.model.library.Mocks.user2
 import com.github.leuludyha.domain.model.user.MainUser
@@ -287,7 +288,7 @@ object Mocks {
         longitude = 6.563162
     )
 
-    val authContext: AuthenticationContext = AuthenticationContext(mainUser)
+    val authContext: AuthenticationContext = AuthenticationContext(mainUser, NearbyConnection.Empty)
 
     //These are a few locations near EPFL, Pair<Latitude, Longitude>
     val userList: List<User> = listOf(
