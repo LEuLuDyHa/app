@@ -60,7 +60,8 @@ private fun VerticalBookView(
     ElevatedCard(
         modifier = Modifier
             .wrapContentHeight()
-            .width(200.dp),
+            .width(200.dp)
+            .testTag("minibook::button"),
         // On click, navigate to the book's details screen using its id
         onClick = { onClick(work) }
     ) {

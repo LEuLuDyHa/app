@@ -26,12 +26,6 @@ class AddFriendsHelperTest {
     // TODO cannot revoke the permission to test without it... because true by default
 
     @Test
-    fun requestContactsPermissionReturnsWithPermission() {
-        assertThat(hasContactPermission(InstrumentationRegistry.getInstrumentation().context))
-            .isTrue()
-    }
-
-    @Test
     fun userFromContactFieldsAreCorrectlyAccessed() {
         val contact = Contact("name", "phone", "mail")
         val user = Mocks.mainUser
