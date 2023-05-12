@@ -19,7 +19,7 @@ import com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends
  */
 @Composable
 fun FirstTimeLogInCheck(
-    viewModel: SignUpScreenViewModel = hiltViewModel(),
+    viewModel: FirstTimeLogInChecklViewModel = hiltViewModel(),
     onCheckPassed: (@Composable () -> Unit),
 ) {
     val context = LocalContext.current
