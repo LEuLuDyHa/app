@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.common.truth.Truth.assertThat
 import com.google.maps.android.compose.CameraPositionState
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -28,13 +29,18 @@ class GoogleMapsScreenViewModelTest {
         android.Manifest.permission.ACCESS_FINE_LOCATION
     )
 
+    @Before
+    fun setup() {
+        if(Looper.myLooper() == null)
+            Looper.prepare()
+    }
+
     @Test
     fun fetchNearbyUsersReturnsEmptyListOnTooSmallZoom() {
         val viewModel = GoogleMapsScreenViewModel(
             GetNearbyUsersUseCase(MockUserRepositoryImpl())
         )
 
-        Looper.prepare()
         val nearbyUsers = viewModel.fetchNearbyUsers(
             cameraPositionState = CameraPositionState(CameraPosition.fromLatLngZoom(LatLng(10.0, 10.0), 2f)),
             context = InstrumentationRegistry.getInstrumentation().context
@@ -49,7 +55,6 @@ class GoogleMapsScreenViewModelTest {
             GetNearbyUsersUseCase(MockUserRepositoryImpl())
         )
 
-        Looper.prepare()
         val nearbyUsers = viewModel.fetchNearbyUsers(
             cameraPositionState = CameraPositionState(CameraPosition.fromLatLngZoom(LatLng(10.0, 10.0), 16f)),
             context = InstrumentationRegistry.getInstrumentation().context
