@@ -442,6 +442,6 @@ class MockUserRepositoryImpl : UserRepository {
         distance: (User, User) -> Float,
         n: Int
     ): List<User> =
-        listOf(mainUser, user2)
+        listOf(user2)
 
 }

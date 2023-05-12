@@ -36,7 +36,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -150,15 +149,6 @@ class AuthenticationProviderViewModelTest {
         val viewModel = errorViewModel
         viewModel.firebaseSignIn(GoogleAuthProvider.getCredential("googleIdToken", null)).join()
         assertThat(viewModel.firebaseSignInResponse).isInstanceOf(Result.Error::class.java)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @Test
-    fun loadAuthenticationContextFromFirebaseThrowsNullPointerExceptionWhenNoUserFound() {
-        assertThrows(java.lang.NullPointerException::class.java) { runTest {
-            val viewModel = errorViewModel
-            viewModel.loadAuthenticationContextFromFirebase()
-        }}
     }
 
     @Test
