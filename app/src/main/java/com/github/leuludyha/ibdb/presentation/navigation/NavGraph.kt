@@ -29,7 +29,7 @@ fun NavGraph(navController: NavHostController) {
             startDestination = Screen.Home.route
         ) {
             composable(route = Screen.Profile.route) {
-                ProfileScreen(navController, padding)
+                ProfileScreen(padding)
             }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)

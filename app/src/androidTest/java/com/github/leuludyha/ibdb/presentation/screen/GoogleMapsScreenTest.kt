@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.MockUserRepositoryImpl
 import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
@@ -15,7 +16,9 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class GoogleMapsScreenTest {
 
     //These tests are rather limited and no marker is properly tested.
@@ -64,7 +67,6 @@ class GoogleMapsScreenTest {
             GoogleMapsScreen(
                 paddingValues = PaddingValues(0.dp),
                 viewModel = GoogleMapsScreenViewModel(injectedUseCase),
-                debug = true
             )
         }
 

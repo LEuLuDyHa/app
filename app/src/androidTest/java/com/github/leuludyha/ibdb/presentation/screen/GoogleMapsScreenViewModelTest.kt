@@ -2,6 +2,7 @@ package com.github.leuludyha.ibdb.presentation.screen
 
 import android.os.Looper
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.GrantPermissionRule
 import com.github.leuludyha.domain.model.library.MockUserRepositoryImpl
@@ -13,7 +14,9 @@ import com.google.common.truth.Truth.assertThat
 import com.google.maps.android.compose.CameraPositionState
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class GoogleMapsScreenViewModelTest {
 
     @get:Rule
