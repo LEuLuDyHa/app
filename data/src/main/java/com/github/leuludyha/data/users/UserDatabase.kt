@@ -77,6 +77,7 @@ class UserDatabase {
     }
 
     /**
+     * TODO CRASHES BECAUSE OF FLOWS
      * Adds a new user to the Firebase Realtime Database.
      * @param user The User object to add.
      * @return A CompletableFuture that will eventually complete with a null value if the operation was successful.
@@ -95,6 +96,7 @@ class UserDatabase {
     }
 
     /**
+     * TODO CRASHES BECAUSE OF FLOWS
      * Updates a user's information in the Firebase Realtime Database.
      * @param username The username of the user to update.
      * @param newUser The new User object with updated information.
