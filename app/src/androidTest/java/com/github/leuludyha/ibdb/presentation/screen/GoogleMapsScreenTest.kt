@@ -5,17 +5,16 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import androidx.test.rule.GrantPermissionRule
-import com.github.leuludyha.domain.model.library.Mocks
-import com.github.leuludyha.domain.model.user.User
-import com.github.leuludyha.domain.repository.UserRepository
+import com.github.leuludyha.domain.model.library.MockUserRepositoryImpl
 import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreen
 import com.github.leuludyha.ibdb.presentation.screen.maps.GoogleMapsScreenViewModel
+import com.github.leuludyha.ibdb.presentation.screen.maps.getDefaultEpflLimits
+import com.google.android.gms.maps.model.LatLng
+import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
 import org.junit.Test
-import java.util.concurrent.CompletableFuture
 
 class GoogleMapsScreenTest {
 
@@ -34,7 +33,7 @@ class GoogleMapsScreenTest {
 
     //The useCase can be used on multiple test but careful! The viewModels have to be recreated for each test!
     //They cannot be shared
-    private val injectedUseCase: GetNearbyUsersUseCase = GetNearbyUsersUseCase(UserRepositoryMock())
+    private val injectedUseCase: GetNearbyUsersUseCase = GetNearbyUsersUseCase(MockUserRepositoryImpl())
 
     @Test
     fun clickingOnLocationButtonDoesNotCrash() {
@@ -42,7 +41,6 @@ class GoogleMapsScreenTest {
         //so no way of checking that markers appeared or anything like that.
         composeTestRule.setContent {
             GoogleMapsScreen(
-                navController = rememberNavController(),
                 paddingValues = PaddingValues(0.dp),
                 viewModel = GoogleMapsScreenViewModel(injectedUseCase)
             )
@@ -59,10 +57,27 @@ class GoogleMapsScreenTest {
     }
 
     @Test
+    fun clickOnMapDoesNotCrash() {
+        //It doesn't look like there is any way of accessing markers from the tests,
+        //so no way of checking that markers appeared or anything like that.
+        composeTestRule.setContent {
+            GoogleMapsScreen(
+                paddingValues = PaddingValues(0.dp),
+                viewModel = GoogleMapsScreenViewModel(injectedUseCase),
+                debug = true
+            )
+        }
+
+        //This is to wait for the map to load
+        composeTestRule.waitForIdle()
+
+        composeTestRule.onNodeWithTag("GoogleMaps::main").performClick()
+    }
+
+    @Test
     fun clickingOnRefreshButtonDoesNotCrash() {
         composeTestRule.setContent {
             GoogleMapsScreen(
-                navController = rememberNavController(),
                 paddingValues = PaddingValues(0.dp),
                 viewModel = GoogleMapsScreenViewModel(injectedUseCase)
             )
@@ -80,11 +95,10 @@ class GoogleMapsScreenTest {
 
     @Test
     fun clickingOnRefreshButtonIncreasesOrMaintainsNumberOfMarkers() {
-        val viewModel = GoogleMapsScreenViewModel(GetNearbyUsersUseCase(UserRepositoryMock()))
+        val viewModel = GoogleMapsScreenViewModel(GetNearbyUsersUseCase(MockUserRepositoryImpl()))
 
         composeTestRule.setContent {
             GoogleMapsScreen(
-                navController = rememberNavController(),
                 paddingValues = PaddingValues(0.dp),
                 viewModel = viewModel
             )
@@ -105,28 +119,15 @@ class GoogleMapsScreenTest {
 
         assert(oldNumberOfNearbyUsers.size <= viewModel.nearbyUsers.value.size)
     }
-}
 
-private class UserRepositoryMock: UserRepository {
-    override fun getUserFromPhoneNumber(phoneNumber: String): CompletableFuture<User> {
-        return CompletableFuture.completedFuture(Mocks.mainUser)
+    @Test
+    fun epflLimitsAreCorrect() {
+        assertThat(getDefaultEpflLimits()).isEqualTo(listOf(
+            LatLng(46.522259, 6.563326),
+            LatLng(46.515126, 6.560001),
+            LatLng(46.518263, 6.572170),
+            LatLng(46.521600, 6.571801),
+            LatLng(46.522259, 6.563326)
+        ))
     }
-
-    override fun getNearbyUsers(
-        latitudeMax: Double,
-        longitudeMax: Double,
-        latitudeMin: Double,
-        longitudeMin: Double
-    ): CompletableFuture<List<User>> {
-        return CompletableFuture.completedFuture(Mocks.userList)
-    }
-
-    override fun getNeighbouringUsersOf(
-        user: User,
-        distance: (User, User) -> Float,
-        n: Int
-    ): List<User> {
-        return Mocks.userList
-    }
-
 }
