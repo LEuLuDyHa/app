@@ -11,7 +11,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,7 +33,7 @@ fun BookDetailsScreen(
     readingStateControlViewModel: ReadingStateControlViewModel = hiltViewModel()
 ) {
     // Go fetch the work based on its work id
-    LaunchedEffect(key1 = viewModel) { viewModel.loadWorkFrom(workId) }
+    SideEffect { viewModel.loadWorkFrom(workId) }
 
     // Collect the resulting work as a state
     val workResult by viewModel.work.collectAsState()
