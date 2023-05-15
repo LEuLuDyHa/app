@@ -71,6 +71,7 @@ dependencies {
 
     //ROOM DB
     implementation "androidx.room:room-runtime:2.5.1"
+    androidTestImplementation 'org.junit.jupiter:junit-jupiter'
     kapt "androidx.room:room-compiler:$room_version"
     implementation "androidx.room:room-ktx:2.5.1"
     implementation "androidx.room:room-paging:2.5.1"

@@ -11,10 +11,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
-import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt.DefaultDisplay
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.ChangeUsernamePrompt.DefaultTitle
 import com.github.leuludyha.ibdb.presentation.components.auth.signup.SignUpPrompt
+import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
 
 
 /**

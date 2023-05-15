@@ -6,8 +6,8 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -15,11 +15,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
-import com.github.leuludyha.ibdb.presentation.components.ItemList
+import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
+import com.github.leuludyha.ibdb.presentation.components.utils.Loading
 
 private enum class SharerState {
     Loading, Discovering, WaitingForConnection, Connected,
@@ -31,7 +34,6 @@ private enum class SharerState {
  */
 @Composable
 fun ShareWorkComponent(
-    navController: NavHostController,
     padding: PaddingValues,
     workId: String,
     viewModel: ShareWorkComponentViewModel = hiltViewModel(),
@@ -82,7 +84,9 @@ fun ShareWorkComponent(
         viewModel.connection.startDiscovery()
         // On dispose, stop discovery and remove listener
         onDispose {
-            viewModel.connection.stopDiscovery()
+            if (viewModel.connection.isDiscovering()) {
+                viewModel.connection.stopDiscovery()
+            }
             // TODO Careful with race condition with when(state) -> Connected -> disconnect()
             if (viewModel.connection.isConnected()) {
                 viewModel.connection.disconnect()
@@ -97,24 +101,50 @@ fun ShareWorkComponent(
     }
 
     when (state) {
-        SharerState.Loading -> Loading()
-        // TODO Other screens : List choice etc...
+        // Waiting for discovery to start
+        SharerState.Loading -> Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) { Loading() }
+
         SharerState.Discovering -> {
-            // Start discovery mode
-            DisposableEffect(viewModel.connection) {
-                viewModel.connection.startDiscovery()
-                onDispose { viewModel.connection.stopDiscovery() }
-            }
             // List all users discovered so far
-            ItemList(values = viewModel.endpointChoices) { endpoint ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+            if (viewModel.endpointChoices.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Button(
-                        onClick = { connectTo(endpoint.id) }
-                    ) { Text(text = endpoint.id) }
+                    Text(
+                        modifier = Modifier.padding(10.dp),
+                        text = stringResource(id = R.string.nearby_discovering_people)
+                    )
+                    Loading()
+                }
+            } else {
+                ItemList(
+                    modifier = Modifier.padding(padding),
+                    values = viewModel.endpointChoices
+                ) { endpoint ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Button(
+                            onClick = {
+                                connectTo(endpoint.id)
+                                if (viewModel.connection.isDiscovering()) {
+                                    viewModel.connection.stopDiscovery()
+                                }
+                            }
+                        ) { Text(text = endpoint.id) }
+                    }
                 }
             }
         }
@@ -130,13 +160,4 @@ fun ShareWorkComponent(
         // TODO Refine error display
         else -> Text(text = error)
     }
-}
-
-@Composable
-private fun Loading() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) { CircularProgressIndicator() }
 }

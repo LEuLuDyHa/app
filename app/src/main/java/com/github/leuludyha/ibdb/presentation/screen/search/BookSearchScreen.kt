@@ -7,10 +7,10 @@ import androidx.compose.runtime.SideEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.presentation.Orientation
-import com.github.leuludyha.ibdb.presentation.components.PagingItemList
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearchViewModel
+import com.github.leuludyha.ibdb.presentation.components.utils.PagingItemList
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 

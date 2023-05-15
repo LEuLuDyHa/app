@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components
+package com.github.leuludyha.ibdb.presentation.components.utils
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.ibdb.presentation.Orientation
 
@@ -22,8 +23,14 @@ fun <T : Keyed> PagingItemList(
     itemMapper: @Composable (t: T) -> Unit,
 ) {
     val content: LazyListScope.() -> Unit = {
-        items(items = values, key = { it.Id() }) { value ->
-            value?.let { itemMapper(it) }
+        items(
+            count = values.itemCount,
+            key = values.itemKey(key = { it.Id() }),
+            contentType = values.itemContentType(
+            )
+        ) { index ->
+            val item = values[index]
+            item?.let { itemMapper(it) }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.github.leuludyha.ibdb.presentation.components
+package com.github.leuludyha.ibdb.presentation.components.utils
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

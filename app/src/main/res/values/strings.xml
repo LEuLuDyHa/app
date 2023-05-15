@@ -22,4 +22,6 @@
     <string name="recommendation_list_title">Selected for you…</string>
     <string name="full_book_view_author_label">Author</string>
     <string name="full_book_view_subject_label">Subject</string>
+    <string name="nearby_service_id">com.github.leuludyha.ibdb\n</string>
+    <string name="nearby_discovering_people">Looking for people near you…</string>
 </resources>

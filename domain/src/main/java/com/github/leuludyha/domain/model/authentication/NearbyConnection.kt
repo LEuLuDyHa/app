@@ -8,6 +8,9 @@ interface NearbyConnection {
     /** Stop the devices discovery */
     fun stopDiscovery()
 
+    /** Whether the connection is in discovery mode */
+    fun isDiscovering(): Boolean
+
     /** Start the search for nearby devices to connect to */
     fun startDiscovery()
 
@@ -38,6 +41,11 @@ interface NearbyConnection {
         override fun startAdvertising() = this.error()
 
         override fun stopDiscovery() = this.error()
+
+        override fun isDiscovering(): Boolean {
+            this.error()
+            return false
+        }
 
         override fun startDiscovery() = this.error()
 

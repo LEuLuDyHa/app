@@ -3,11 +3,18 @@ package com.github.leuludyha.ibdb.presentation.components.books.reading_list.con
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +30,7 @@ import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.util.TestTag
 import com.github.leuludyha.domain.util.testTag
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.components.utils.Loading
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 object TestTags {
@@ -43,6 +51,8 @@ fun ReadingStateControl(
 ) {
     val workPreferences = viewModel.workPreferences.collectAsState(initial = mapOf())
 
+    val (saving, setSaving) = remember { mutableStateOf(false) }
+
     val liked = workPreferences.value.keys.contains(work.id)
 
     // Whether the menu button is expanded (visible) or not
@@ -51,79 +61,91 @@ fun ReadingStateControl(
     fun onLikeButtonClicked(like: Boolean) {
         // If the user dislikes the work, remove it from its preferences
         if (!like) {
-            workPreferences.value[work.id]?.let { viewModel.deleteWorkPref(it) }
+            workPreferences.value[work.id]?.let {
+                setSaving(true)
+                viewModel.deleteWorkPref(it)
+                    .invokeOnCompletion { setSaving(false) }
+            }
             // Otherwise, add it in its preferences, annotating it as interested and not possessed
         } else {
+            setSaving(true)
             viewModel.saveWorkPref(
                 WorkPreference(
-                work,
-                WorkPreference.ReadingState.INTERESTED,
+                    work,
+                    WorkPreference.ReadingState.INTERESTED,
                     false
                 )
-            )
+            ).invokeOnCompletion { setSaving(false) }
         }
     }
 
     fun setReadingState(readingState: WorkPreference.ReadingState) {
         // Set the reading state to the one set by the user using the menu button
         workPreferences.value[work.id]?.let {
+            setSaving(true)
             viewModel.saveWorkPref(it.copy(readingState = readingState))
+                .invokeOnCompletion { setSaving(false) }
         }
         setExpanded(false)
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            modifier = Modifier.testTag(TestTags.likeButton),
-            onClick = { onLikeButtonClicked(!liked) },
-            colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary
-            )
-        ) {
-            if (!liked) {
-                Icon(Icons.Filled.FavoriteBorder, stringResource(id = R.string.book_like))
-            } else {
-                Icon(Icons.Filled.Favorite, stringResource(id = R.string.book_dislike))
-            }
-        }
-
-        // Only display reading state controls if the work is "liked"
-        if (liked) {
-            Column {
-                Button(
-                    onClick = { setExpanded(!expanded) },
-                    modifier = Modifier.testTag(TestTags.readingStateController),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondaryContainer
+        if (!saving) {
+            IconButton(
+                modifier = Modifier.testTag(TestTags.likeButton),
+                onClick = { onLikeButtonClicked(!liked) },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary
+                )
+            ) {
+                when (liked) {
+                    true -> Icon(Icons.Filled.Favorite, stringResource(id = R.string.book_dislike))
+                    false -> Icon(
+                        Icons.Filled.FavoriteBorder,
+                        stringResource(id = R.string.book_like)
                     )
-                ) {
-                    // Display the current reading state in a button,
-                    // Once it is clicked, a menu will appear with all states
-                    workPreferences.value[work.id]?.let {
-                        Text(
-                            text = it.readingState.toString(),
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
-                        )
-                    }
                 }
+            }
 
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { setExpanded(false) }
-                ) {
-                    WorkPreference.ReadingState.values().map {
-                        DropdownMenuItem(text = {
-                            Text(text = it.toString())
-                        }, onClick = {
-                            setReadingState(it)
-                        })
+            // Only display reading state controls if the work is "liked"
+            if (liked) {
+                Column {
+                    Button(
+                        onClick = { setExpanded(!expanded) },
+                        modifier = Modifier.testTag(TestTags.readingStateController),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.secondaryContainer
+                        )
+                    ) {
+                        // Display the current reading state in a button,
+                        // Once it is clicked, a menu will appear with all states
+                        workPreferences.value[work.id]?.let {
+                            Text(
+                                text = it.readingState.toString(),
+                                color = MaterialTheme.colorScheme.onSecondaryContainer
+                            )
+                        }
+                    }
+
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { setExpanded(false) }
+                    ) {
+                        WorkPreference.ReadingState.values().map {
+                            DropdownMenuItem(text = {
+                                Text(text = it.toString())
+                            }, onClick = {
+                                setReadingState(it)
+                            })
+                        }
                     }
                 }
             }
+        } else {
+            Loading()
         }
     }
 }

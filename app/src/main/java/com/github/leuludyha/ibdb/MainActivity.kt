@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 // Check if the user is logged in for the first time
                 FirstTimeLogInCheck {
                     // Start listening for people sharing other works
-                    SharedWorkListener()
+                    SharedWorkListener(navController = navController)
                     // Once check is passed, display rest of the app
                     NavGraph(navController = navController)
                 }
