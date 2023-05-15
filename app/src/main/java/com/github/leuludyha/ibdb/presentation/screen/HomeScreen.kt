@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.ReadingList
 import com.github.leuludyha.ibdb.presentation.components.books.recommendations.RecommendationList
+import com.github.leuludyha.ibdb.presentation.components.books.recommendations.RecommendationListViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -30,6 +31,7 @@ fun HomeScreen(
     navController: NavHostController,
     outerPadding: PaddingValues,
     viewModel: HomeScreenViewModel = hiltViewModel(),
+    recommendationListViewModel: RecommendationListViewModel = hiltViewModel(),
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
@@ -68,6 +70,9 @@ fun HomeScreen(
             )
         }
         // The recommendation list is not visible if empty either way
-        RecommendationList(navController, onRecommendations = { setEmpty(it) })
+        RecommendationList(
+            navController = navController,
+            viewModel = recommendationListViewModel,
+            onRecommendations = { setEmpty(it) })
     }
 }

@@ -24,8 +24,10 @@ class BookDetailsScreenViewModel @Inject constructor(
 
     fun loadWorkFrom(workId: String) {
         viewModelScope.launch {
-            bookById(workId).collect {
-                _work.value = it
+            if (_work.value == null) {
+                bookById(workId).collect {
+                    _work.value = it
+                }
             }
         }
     }

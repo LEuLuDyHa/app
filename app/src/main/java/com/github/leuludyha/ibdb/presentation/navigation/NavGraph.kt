@@ -29,7 +29,7 @@ fun NavGraph(navController: NavHostController) {
             startDestination = Screen.Home.route
         ) {
             composable(route = Screen.Profile.route) {
-                ProfileScreen(navController, padding)
+                ProfileScreen(padding)
             }
             composable(route = Screen.Home.route) {
                 HomeScreen(navController, padding)
@@ -90,7 +90,6 @@ fun NavGraph(navController: NavHostController) {
             composable(route = Screen.GoogleMaps.route) {
                 //We haven't used padding values until now, but without them, the navBar and google maps overlap onto each other.
                 GoogleMapsScreen(
-                    navController = navController,
                     paddingValues = padding
                 )
             }

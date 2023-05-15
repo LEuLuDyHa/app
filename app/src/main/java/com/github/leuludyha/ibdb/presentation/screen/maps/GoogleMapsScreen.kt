@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.R
@@ -44,9 +43,8 @@ import kotlinx.coroutines.launch
  */
 @Composable
 fun GoogleMapsScreen(
-    navController: NavHostController,
     paddingValues: PaddingValues,
-    viewModel: GoogleMapsScreenViewModel = hiltViewModel()
+    viewModel: GoogleMapsScreenViewModel = hiltViewModel(),
 ) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(viewModel.defaultLocation, 15f)
@@ -299,7 +297,7 @@ private fun SatelliteMarker() {
 /**
  * Returns hardcoded EPFL limits in a list.
  */
-private fun getDefaultEpflLimits(): List<LatLng> {
+fun getDefaultEpflLimits(): List<LatLng> {
     return listOf(
         LatLng(46.522259, 6.563326),
         LatLng(46.515126, 6.560001),

@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpScreenViewModel @Inject constructor(
+class FirstTimeLogInCheckViewModel @Inject constructor(
     _authContext: AuthenticationContext
 ) : ViewModel() {
 

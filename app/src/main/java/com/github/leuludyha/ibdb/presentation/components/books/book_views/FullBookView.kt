@@ -17,26 +17,26 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberImagePainter
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.CoverSize
-import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
+import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
-import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 @Composable
 fun FullBookView(
+    readingStateControlViewModel: ReadingStateControlViewModel = hiltViewModel(),
     navController: NavHostController,
     work: Work
 ) {
@@ -50,10 +50,11 @@ fun FullBookView(
         verticalArrangement = Arrangement.Top
     ) {
         Text(text = work.title.orEmpty(), style = MaterialTheme.typography.titleLarge)
-        ReadingStateControl(work = work)
+        ReadingStateControl(work = work, readingStateControlViewModel)
         MiniAuthorViews(authors.value, navController)
         Image(
             modifier = Modifier
+                .testTag("full_book_view::book_cover")
                 .height(300.dp)
                 .fillMaxWidth(),
             painter = rememberImagePainter(
@@ -98,6 +99,7 @@ fun MiniAuthorViews(
                     }
                 ) {
                     Text(
+                        modifier = Modifier.testTag("mini_author_view::author_name"),
                         text = author.name.orEmpty(),
                         style = MaterialTheme.typography.titleSmall
                     )
@@ -127,17 +129,6 @@ fun Subjects(
         Text(
             text = subjects.take(3).toText(),
             style = MaterialTheme.typography.titleSmall
-        )
-    }
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-    IBDBTheme {
-        FullBookView(
-            navController = rememberNavController(),
-            work = Mocks.work1984
         )
     }
 }
