@@ -7,16 +7,11 @@ import androidx.compose.material.icons.outlined.AddLocation
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.github.leuludyha.domain.model.library.Mocks.work1984
-import com.github.leuludyha.domain.model.library.Mocks.workLaFermeDesAnimaux
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
-import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
 /**
  * The reading list of the user, it takes the user preferences and display
@@ -118,27 +113,4 @@ private fun ReadingStateIcon(
             )
         }
     )
-}
-
-@Preview
-@Composable
-fun DefaultPreview() {
-    // Preview of the reading list
-    IBDBTheme {
-        ReadingList(
-            navController = rememberNavController(),
-            workPreferences = mapOf(
-                work1984.id to WorkPreference(
-                    work1984,
-                    WorkPreference.ReadingState.FINISHED,
-                    false
-                ),
-                workLaFermeDesAnimaux.id to WorkPreference(
-                    workLaFermeDesAnimaux,
-                    WorkPreference.ReadingState.READING,
-                    true
-                )
-            )
-        )
-    }
 }

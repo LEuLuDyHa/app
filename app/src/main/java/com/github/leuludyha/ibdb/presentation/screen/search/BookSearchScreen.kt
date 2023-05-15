@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.PagingItemList
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearch
+import com.github.leuludyha.ibdb.presentation.components.search.BookSearchViewModel
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -16,7 +18,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun BookSearchScreen(
     navController: NavHostController,
     padding: PaddingValues,
-    query: String? = null
+    query: String? = null,
+    bookSearchViewModel: BookSearchViewModel = hiltViewModel()
 ) {
     val systemUiController = rememberSystemUiController()
     val systemBarColor = MaterialTheme.colorScheme.primary
@@ -26,7 +29,8 @@ fun BookSearchScreen(
     BookSearch(
         navController = navController,
         outerPadding = padding,
-        query = query
+        query = query,
+        viewModel = bookSearchViewModel
     ) { queryResult ->
         PagingItemList(
             orientation = Orientation.Vertical,

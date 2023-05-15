@@ -120,6 +120,7 @@ class BookSearchTest {
 
         composeTestRule.waitUntil(timeoutMillis = 1000) {
             result != null
+            
         }
 
         assertEquals(listOf(Mocks.work1984), result?.itemSnapshotList?.items)
