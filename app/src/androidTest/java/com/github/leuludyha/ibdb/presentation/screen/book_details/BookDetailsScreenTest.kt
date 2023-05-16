@@ -18,6 +18,7 @@ import com.github.leuludyha.domain.useCase.GetWorkRemotelyUseCase
 import com.github.leuludyha.domain.useCase.SaveWorkPrefLocallyUseCase
 import com.github.leuludyha.ibdb.EmptyDataMockLibraryRepositoryImpl
 import com.github.leuludyha.ibdb.LoadingMockLibraryRepositoryImpl
+import com.github.leuludyha.ibdb.MockTrueNetworkProvider
 import com.github.leuludyha.ibdb.NullErrorMessageMockLibraryRepositoryImpl
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
 import org.junit.Rule
@@ -36,7 +37,7 @@ class BookDetailsScreenTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
                 workId = workMrFox.id,
-                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(MockLibraryRepositoryImpl())),
+                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(MockLibraryRepositoryImpl(), MockTrueNetworkProvider)),
                 readingStateControlViewModel = ReadingStateControlViewModel(
                     GetAllWorkPrefsLocallyUseCase(MockLibraryRepositoryImpl()),
                     SaveWorkPrefLocallyUseCase(MockLibraryRepositoryImpl()),
@@ -55,7 +56,7 @@ class BookDetailsScreenTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
                 workId = workMrFox.id,
-                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(EmptyDataMockLibraryRepositoryImpl())),
+                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(EmptyDataMockLibraryRepositoryImpl(), MockTrueNetworkProvider)),
                 readingStateControlViewModel = ReadingStateControlViewModel(
                     GetAllWorkPrefsLocallyUseCase(EmptyDataMockLibraryRepositoryImpl()),
                     SaveWorkPrefLocallyUseCase(EmptyDataMockLibraryRepositoryImpl()),
@@ -74,7 +75,7 @@ class BookDetailsScreenTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
                 workId = work1984.id,
-                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(MockLibraryRepositoryImpl())),
+                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(MockLibraryRepositoryImpl(), MockTrueNetworkProvider)),
                 readingStateControlViewModel = ReadingStateControlViewModel(
                     GetAllWorkPrefsLocallyUseCase(MockLibraryRepositoryImpl()),
                     SaveWorkPrefLocallyUseCase(MockLibraryRepositoryImpl()),
@@ -92,7 +93,7 @@ class BookDetailsScreenTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
                 workId = workMrFox.id,
-                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(NullErrorMessageMockLibraryRepositoryImpl())),
+                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(NullErrorMessageMockLibraryRepositoryImpl(), MockTrueNetworkProvider)),
                 readingStateControlViewModel = ReadingStateControlViewModel(
                     GetAllWorkPrefsLocallyUseCase(NullErrorMessageMockLibraryRepositoryImpl()),
                     SaveWorkPrefLocallyUseCase(NullErrorMessageMockLibraryRepositoryImpl()),
@@ -111,7 +112,7 @@ class BookDetailsScreenTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
                 workId = workMrFox.id,
-                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(LoadingMockLibraryRepositoryImpl())),
+                viewModel = BookDetailsScreenViewModel(Mocks.authContext, GetWorkRemotelyUseCase(LoadingMockLibraryRepositoryImpl(), MockTrueNetworkProvider)),
                 readingStateControlViewModel = ReadingStateControlViewModel(
                     GetAllWorkPrefsLocallyUseCase(LoadingMockLibraryRepositoryImpl()),
                     SaveWorkPrefLocallyUseCase(LoadingMockLibraryRepositoryImpl()),
