@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -58,6 +59,7 @@ fun ShareWorkComponent(
 
             // Update the list of endpoints available if the list changes
             override fun onFoundEndpointsChanged() {
+                Log.i("SHARE_SHARE", "FOUND ENDPOINT")
                 viewModel.updateEndpointList()
             }
 
@@ -149,12 +151,29 @@ fun ShareWorkComponent(
             }
         }
 
-        SharerState.WaitingForConnection -> Loading()
+        SharerState.WaitingForConnection -> Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                modifier = Modifier.padding(10.dp),
+                text = stringResource(id = R.string.nearby_connecting)
+            )
+            Loading()
+        }
 
         SharerState.Connected -> {
-            viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
-            viewModel.connection.disconnect()
-            onSuccessfullyShared()
+            if (viewModel.connection.isConnected()) {
+                viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
+                viewModel.connection.disconnect()
+                onSuccessfullyShared()
+            } else {
+                setState(SharerState.Error)
+                setError("Disconnected")
+            }
         }
         // Otherwise, display error text with description
         // TODO Refine error display

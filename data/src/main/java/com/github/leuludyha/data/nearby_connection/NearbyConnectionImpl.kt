@@ -1,6 +1,7 @@
 package com.github.leuludyha.data.nearby_connection
 
 import android.content.Context
+import android.util.Log
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
@@ -100,23 +101,28 @@ open class NearbyConnectionImpl(
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
                         // We're connected! Can now start sending and receiving data.
+                        connectedEndpoint = endpointId
                         state = State.Connected
                         notifyAll { it.onConnected(endpointId) }
                     }
 
                     ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
                         // The connection was rejected by one or both sides.
+                        putToRest()
                         notifyAll { it.onConnectionRejected(endpointId) }
                     }
 
                     ConnectionsStatusCodes.STATUS_ERROR -> {
                         // The connection broke before it was able to be accepted.
+                        putToRest()
                         result.status.statusMessage?.let { msg -> notifyAll { it.onError(msg) } }
                     }
 
                     else -> {
                         // Unknown status code
-                        result.status.statusMessage?.let { msg -> notifyAll { it.onError(msg) } }
+                        result.status.statusMessage?.let { msg ->
+                            notifyAll { it.onError(msg) }
+                        }
                     }
                 }
             }
@@ -124,7 +130,8 @@ open class NearbyConnectionImpl(
             override fun onDisconnected(endpointId: String) {
                 // We've been disconnected from this endpoint. No more data can be
                 // sent or received.
-                state = State.Idle
+                Log.i("DISCONNECTED", "DISCONNECTED")
+                putToRest()
                 connectedEndpoint = null
                 notifyAll { it.onDisconnected(endpointId) }
             }
@@ -182,8 +189,11 @@ open class NearbyConnectionImpl(
         state = State.Idle
     }
 
+    override fun isAdvertising() = state == State.Advertising
+
     override fun startAdvertising() {
         if (state != State.Idle) {
+            Log.i("SHARE", "ERROR CONNECTION BUSY")
             throw UnsupportedOperationException("The connection is already busy")
         }
         val options = AdvertisingOptions.Builder()
@@ -192,9 +202,14 @@ open class NearbyConnectionImpl(
         state = State.Advertising
 
         client.startAdvertising(username, serviceId, connectionLifecycleCallback, options)
-            .addOnSuccessListener { notifyAll { it.onAdvertisingStarted() } }
+            .addOnSuccessListener {
+                Log.i("SHARE", "Advertising successfully started")
+                notifyAll { it.onAdvertisingStarted() }
+            }
             .addOnFailureListener { error ->
                 state = State.Idle
+                Log.i("SHARE", error.message!!)
+                putToRest()
                 notifyAll {
                     it.onError(
                         "Unable to start discovery !" +
@@ -203,6 +218,19 @@ open class NearbyConnectionImpl(
                     )
                 }
             }
+    }
+
+    private fun putToRest() {
+        if (isConnected()) {
+            disconnect()
+        }
+        if (isAdvertising()) {
+            stopAdvertising()
+        }
+        if (isDiscovering()) {
+            stopDiscovery()
+        }
+        state = State.Idle
     }
 
     override fun stopDiscovery() {

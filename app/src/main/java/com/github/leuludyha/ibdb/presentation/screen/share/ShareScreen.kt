@@ -13,7 +13,6 @@ fun ShareScreen(
 ) {
 
     ShareWorkComponent(
-        navController = navController,
         padding = padding,
         workId = workId
     ) { navController.popBackStack() }

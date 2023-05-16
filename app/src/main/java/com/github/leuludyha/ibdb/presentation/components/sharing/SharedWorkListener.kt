@@ -1,10 +1,13 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
+import android.Manifest
 import android.R
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
@@ -13,6 +16,8 @@ import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 
 private enum class ListenerState {
@@ -22,6 +27,7 @@ private enum class ListenerState {
 /**
  * Listens to nearby user who want to share a work
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SharedWorkListener(
     viewModel: SharedWorkListenerViewModel = hiltViewModel(),
@@ -29,7 +35,31 @@ fun SharedWorkListener(
 ) {
     val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
     val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }
+
+    val permissionState = rememberMultiplePermissionsState(
+        listOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_WIFI_STATE,
+            Manifest.permission.CHANGE_WIFI_STATE,
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.BLUETOOTH_ADVERTISE,
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.NEARBY_WIFI_DEVICES
+        )
+    )
+
     val (connectedEndpointId, setConnectedEndpointId) = remember { mutableStateOf("") }
+
+    SideEffect {
+        if (!permissionState.allPermissionsGranted) {
+            permissionState.launchMultiplePermissionRequest()
+        }
+    }
 
     DisposableEffect(viewModel.connection) {
 
@@ -43,7 +73,9 @@ fun SharedWorkListener(
             // one connection anyway
             override fun onConnected(endpointId: String) {
                 setConnectedEndpointId(endpointId)
-                viewModel.connection.stopAdvertising()
+                if (viewModel.connection.isAdvertising()) {
+                    viewModel.connection.stopAdvertising()
+                }
             }
 
             override fun onDisconnected(endpointId: String) {
@@ -54,17 +86,25 @@ fun SharedWorkListener(
 
             override fun onPacketReceived(packet: NearbyMsgPacket) {
                 setPacket(packet)
+                Log.i("SHARE", "RECEIVED")
                 setState(ListenerState.Received)
+            }
+
+            override fun onError(description: String) {
+                throw Error(description)
             }
         }
 
         // Listen to the connection's events and start advertising
         viewModel.connection.addListener(handler)
+        Log.i("SHARE", "ADVERTISING STARTED")
         viewModel.connection.startAdvertising()
 
         onDispose {
             // Stop listening and stop advertising
-            viewModel.connection.stopAdvertising()
+            if (viewModel.connection.isAdvertising()) {
+                viewModel.connection.stopAdvertising()
+            }
             // And disconnect if the connection is active
             if (viewModel.connection.isConnected()) {
                 viewModel.connection.disconnect()
@@ -86,6 +126,7 @@ fun SharedWorkListener(
 
         else -> {}
     }
+
 }
 
 @Composable

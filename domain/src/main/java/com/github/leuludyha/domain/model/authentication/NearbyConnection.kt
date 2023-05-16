@@ -17,6 +17,9 @@ interface NearbyConnection {
     /** Stop advertising this device for nearby connection */
     fun stopAdvertising()
 
+    /** Whether the connection is in advertising mode */
+    fun isAdvertising(): Boolean
+
     /**
      * Request a connection to the specified [endpointId].
      * Throws [UnsupportedOperationException] if the [NearbyConnection]
@@ -50,6 +53,11 @@ interface NearbyConnection {
         override fun startDiscovery() = this.error()
 
         override fun stopAdvertising() = this.error()
+
+        override fun isAdvertising(): Boolean {
+            this.error()
+            return false
+        }
 
         override fun requestConnection(endpointId: String) = this.error()
 

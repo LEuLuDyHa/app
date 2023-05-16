@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.interfaces.Keyed
@@ -18,7 +19,7 @@ class ShareWorkComponentViewModel @Inject constructor(
         endpointChoices.addAll(connection.getDiscoveredEndpointIds().map { Endpoint(it) })
     }
 
-    val endpointChoices = mutableListOf<Endpoint>()
+    val endpointChoices = mutableStateListOf<Endpoint>()
 
     val connection = _authContext.nearbyConnection
 
