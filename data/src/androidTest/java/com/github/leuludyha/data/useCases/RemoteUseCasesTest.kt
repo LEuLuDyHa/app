@@ -1,6 +1,7 @@
 package com.github.leuludyha.data.useCases
 
 import android.content.Context
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.data.MockTrueNetworkProvider
 import com.github.leuludyha.domain.model.library.MockLibraryRepositoryImpl
@@ -16,7 +17,9 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class RemoteUseCasesTest {
     lateinit var libraryRepository: LibraryRepository
     lateinit var context: Context

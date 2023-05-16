@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.useCases
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
@@ -16,7 +17,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class LocalUseCasesTest {
     lateinit var libraryRepository: LibraryRepository
 
