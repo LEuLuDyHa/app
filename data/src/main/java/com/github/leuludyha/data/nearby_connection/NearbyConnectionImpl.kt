@@ -3,6 +3,7 @@ package com.github.leuludyha.data.nearby_connection
 import android.content.Context
 import android.util.Log
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
+import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.google.android.gms.nearby.Nearby
@@ -38,10 +39,12 @@ open class NearbyConnectionImpl(
 
     override fun addListener(handler: ConnectionLifecycleHandler) {
         handlers.add(handler)
+        handler.onMount()
     }
 
     override fun removeListener(handler: ConnectionLifecycleHandler) {
         handlers.remove(handler)
+        handler.onDismount()
     }
 
     private fun notifyAll(action: (ConnectionLifecycleHandler) -> Unit) {
@@ -52,15 +55,13 @@ open class NearbyConnectionImpl(
 //        STATE
 //========== ======== ==== ==
 
-
-
     /** All states of the Connection */
     enum class State { Idle, Advertising, Discovering, Connected }
 
     protected var state: State = State.Idle
 
     /** The endpoint this connection is connected to or null if it is not connected */
-    private var connectedEndpoint: String? = null
+    private var connectedEndpoint: Endpoint? = null
 
     override fun isConnected(): Boolean = state == State.Connected
 
@@ -94,6 +95,10 @@ open class NearbyConnectionImpl(
         object : ConnectionLifecycleCallback() {
             override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
                 client.acceptConnection(endpointId, payloadCallback)
+                connectedEndpoint = Endpoint(
+                    name = info.endpointName,
+                    id = endpointId
+                )
             }
 
 
@@ -101,7 +106,6 @@ open class NearbyConnectionImpl(
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
                         // We're connected! Can now start sending and receiving data.
-                        connectedEndpoint = endpointId
                         state = State.Connected
                         notifyAll { it.onConnected(endpointId) }
                     }
@@ -141,16 +145,19 @@ open class NearbyConnectionImpl(
 //        ENDPOINT LIST
 //========== ======== ==== ==
 
-    private val discoveredEndpointsIds = mutableSetOf<String>()
+    private val discoveredEndpointsIds = mutableMapOf<String, Endpoint>()
 
-    override fun getDiscoveredEndpointIds() = buildList { addAll(discoveredEndpointsIds) }
+    override fun getDiscoveredEndpointIds() = buildList { addAll(discoveredEndpointsIds.values) }
 
     private val endpointDiscoveryCallback: EndpointDiscoveryCallback =
         object : EndpointDiscoveryCallback() {
             override fun onEndpointFound(endpointId: String, info: DiscoveredEndpointInfo) {
                 // An endpoint was found.
                 // Update discovered endpoints
-                discoveredEndpointsIds.add(endpointId)
+                discoveredEndpointsIds[endpointId] = Endpoint(
+                    name = info.endpointName,
+                    id = endpointId
+                )
                 // And notify lifecycle handler
                 notifyAll { it.onFoundEndpointsChanged() }
             }
@@ -196,6 +203,7 @@ open class NearbyConnectionImpl(
             Log.i("SHARE", "ERROR CONNECTION BUSY")
             throw UnsupportedOperationException("The connection is already busy")
         }
+
         val options = AdvertisingOptions.Builder()
             .setStrategy(Strategy.P2P_POINT_TO_POINT)
             .build()
@@ -212,7 +220,7 @@ open class NearbyConnectionImpl(
                 putToRest()
                 notifyAll {
                     it.onError(
-                        "Unable to start discovery !" +
+                        "Unable to start advertising !" +
                                 "\n${error.message}" +
                                 "\n${error.stackTrace.joinToString(separator = "\n")}"
                     )
@@ -231,6 +239,7 @@ open class NearbyConnectionImpl(
             stopDiscovery()
         }
         state = State.Idle
+        connectedEndpoint = null
     }
 
     override fun stopDiscovery() {
@@ -269,7 +278,7 @@ open class NearbyConnectionImpl(
         }
         connectedEndpoint?.let {
             client.sendPayload(
-                it, Payload.fromBytes(
+                it.id, Payload.fromBytes(
                     packet.descriptor.encodeToByteArray()
                 )
             )
@@ -281,7 +290,7 @@ open class NearbyConnectionImpl(
             throw UnsupportedOperationException("The connection is not connected to an endpoint")
         }
         connectedEndpoint?.let {
-            client.disconnectFromEndpoint(it)
+            client.disconnectFromEndpoint(it.id)
             state = State.Idle
         } ?: throw IllegalStateException("The endpoint is null")
     }

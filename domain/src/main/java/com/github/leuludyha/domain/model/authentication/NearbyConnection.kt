@@ -1,5 +1,7 @@
 package com.github.leuludyha.domain.model.authentication
 
+import com.github.leuludyha.domain.model.interfaces.Keyed
+
 interface NearbyConnection {
 
     /** Start advertising this device is available for nearby connections */
@@ -28,7 +30,7 @@ interface NearbyConnection {
     fun requestConnection(endpointId: String)
 
     /** @return The list of endpoint ids discovered at this point */
-    fun getDiscoveredEndpointIds(): List<String>
+    fun getDiscoveredEndpointIds(): List<Endpoint>
 
     /** Send the bytes to the connection when the connection is established */
     fun sendPacket(packet: NearbyMsgPacket)
@@ -61,7 +63,7 @@ interface NearbyConnection {
 
         override fun requestConnection(endpointId: String) = this.error()
 
-        override fun getDiscoveredEndpointIds(): List<String> {
+        override fun getDiscoveredEndpointIds(): List<Endpoint> {
             this.error()
             return emptyList()
         }
@@ -96,4 +98,11 @@ interface NearbyConnection {
      */
     fun isConnected(): Boolean
 
+}
+
+class Endpoint(
+    val name: String,
+    val id: String
+) : Keyed {
+    override fun Id() = id
 }
