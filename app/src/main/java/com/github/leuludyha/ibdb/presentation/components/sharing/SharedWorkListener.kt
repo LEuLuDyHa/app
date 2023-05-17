@@ -43,6 +43,7 @@ private enum class ListenerState {
 @Composable
 fun SharedWorkListener(
     navController: NavHostController,
+    viewModel: SharedWorkListenerViewModel = hiltViewModel()
 ) {
 
     Log.i("VERSION", Build.VERSION.SDK_INT.toString())
@@ -85,15 +86,15 @@ fun SharedWorkListener(
             )
         })
     {
-        SharedWorkListenerComponent(navController = navController)
+        SharedWorkListenerComponent(navController = navController, viewModel = viewModel)
     }
 
 }
 
 @Composable
 private fun SharedWorkListenerComponent(
-    viewModel: SharedWorkListenerViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    viewModel: SharedWorkListenerViewModel
 ) {
     val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
     val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }

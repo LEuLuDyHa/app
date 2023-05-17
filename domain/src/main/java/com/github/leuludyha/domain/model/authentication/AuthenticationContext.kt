@@ -9,5 +9,5 @@ import com.github.leuludyha.domain.model.user.MainUser
  */
 open class AuthenticationContext(
     val principal: MainUser,
-    var nearbyConnection: NearbyConnection,
+    var nearbyConnection: NearbyConnection = NearbyConnection.Empty,
 )
