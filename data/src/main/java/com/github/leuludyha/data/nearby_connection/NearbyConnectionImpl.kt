@@ -138,7 +138,8 @@ open class NearbyConnectionImpl(
                         checkThatStateIs(State.ConnectionPending)
                         // We're connected! Can now start sending and receiving data.
                         updateStateTo(State.Connected)
-                        notifyAll { it.onConnected(endpointId) }
+                        // At this point, both side should have connectedEnpoint not null
+                        notifyAll { it.onConnected(connectedEndpoint!!) }
                     }
 
                     ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
