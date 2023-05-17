@@ -19,7 +19,7 @@ abstract class ConnectionLifecycleHandler {
 //========== ======== ==== ==
 
     /** Called when this device connected to another endpoint */
-    open fun onConnected(endpointId: String) {}
+    open fun onConnected(endpoint: Endpoint) {}
 
     /** Called when the connection was refused by one of the endpoints */
     open fun onConnectionRejected(endpointId: String) {}

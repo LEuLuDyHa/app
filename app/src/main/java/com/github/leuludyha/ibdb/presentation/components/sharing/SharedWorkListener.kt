@@ -1,7 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
 import android.Manifest
-import android.R
 import android.os.Build
 import android.util.Log
 import androidx.compose.material3.AlertDialog
@@ -17,6 +16,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
+import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -37,9 +37,10 @@ fun SharedWorkListener(
     navController: NavHostController,
 ) {
 
-    Log.i("VERSION", Build.VERSION.SDK_INT.toString())
-
     val permissionState = rememberMultiplePermissionsState(
+        // Only add permissions allowed by the system's version
+        // -> NearbyConnection API handles cases all cases :
+        // It reduces its functionalities depending on the granted permissions
         listOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -49,10 +50,16 @@ fun SharedWorkListener(
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.BLUETOOTH_ADVERTISE,
-            Manifest.permission.BLUETOOTH_CONNECT,
-            Manifest.permission.BLUETOOTH_SCAN,
-            Manifest.permission.NEARBY_WIFI_DEVICES
+        ).plus(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) listOf(
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_SCAN,
+            ) else emptyList()
+        ).plus(
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) listOf(
+                Manifest.permission.NEARBY_WIFI_DEVICES
+            ) else emptyList()
         )
     )
 
@@ -75,10 +82,9 @@ fun SharedWorkListener(
                 "PERMISSIONS",
                 "Sharing permissions not available !"
             )
-        })
-    {
-        SharedWorkListenerComponent(navController = navController)
-    }
+        },
+        content = { SharedWorkListenerComponent(navController = navController) }
+    )
 
 }
 
@@ -88,15 +94,15 @@ private fun SharedWorkListenerComponent(
     navController: NavHostController
 ) {
     val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
-    val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }
+    val (packet, setPacket) = remember { mutableStateOf<NearbyMsgPacket?>(null) }
 
-    val (connectedEndpointName, setConnectedEndpointName) = remember { mutableStateOf("") }
+    val (connectedEndpoint, setConnectedEndpoint) = remember { mutableStateOf<Endpoint?>(null) }
+
 
     DisposableEffect(viewModel.connection) {
 
         val handler = object : ConnectionLifecycleHandler() {
             override fun onMount() {
-                Log.i("SHARE", "ADVERTISING STARTED")
                 if (!viewModel.connection.isAdvertising()) {
                     viewModel.connection.startAdvertising()
                 }
@@ -105,9 +111,7 @@ private fun SharedWorkListenerComponent(
             // Pause/Restart advertising when discovery is started : We can only have
             // one connection anyway
             override fun onDiscoveryStarted() {
-                if (viewModel.connection.isAdvertising()) {
-                    viewModel.connection.stopAdvertising()
-                }
+                viewModel.connection.stopAdvertising()
             }
 
             override fun onDiscoveryStopped() {
@@ -118,15 +122,14 @@ private fun SharedWorkListenerComponent(
 
             // Pause/Restart advertising when connected to an endpoint : We can only have
             // one connection anyway
-            override fun onConnected(endpointId: String) {
-                setConnectedEndpointName(endpointId)
-                if (viewModel.connection.isAdvertising()) {
-                    viewModel.connection.stopAdvertising()
-                }
+            override fun onConnected(endpoint: Endpoint) {
+                setConnectedEndpoint(endpoint)
+                viewModel.connection.stopAdvertising()
             }
 
             override fun onDisconnected(endpointId: String) {
-                setConnectedEndpointName("")
+                setConnectedEndpoint(null)
+                setPacket(null)
                 if (!viewModel.connection.isAdvertising()) {
                     viewModel.connection.startAdvertising()
                 }
@@ -134,7 +137,6 @@ private fun SharedWorkListenerComponent(
 
             override fun onPacketReceived(packet: NearbyMsgPacket) {
                 setPacket(packet)
-                Log.i("SHARE", "RECEIVED")
                 setState(ListenerState.Received)
             }
 
@@ -157,6 +159,8 @@ private fun SharedWorkListenerComponent(
         // Listen to the connection's events and start advertising
         viewModel.connection.addListener(handler)
 
+        // Once this component is removed from the composition,
+        // Remove the connection's listener
         onDispose { viewModel.connection.removeListener(handler) }
     }
 
@@ -164,8 +168,8 @@ private fun SharedWorkListenerComponent(
         // If a packet is received, process it
         ListenerState.Received -> {
             PacketProcessor(
-                endpointName = connectedEndpointName,
-                packet = packet,
+                endpoint = connectedEndpoint!!,
+                packet = packet!!,
                 navController = navController,
                 onProcessed = {
                     if (viewModel.connection.isConnected()) {
@@ -176,13 +180,14 @@ private fun SharedWorkListenerComponent(
             )
         }
 
-        else -> {}
+        else -> { /* Show nothing */
+        }
     }
 }
 
 @Composable
 private fun PacketProcessor(
-    endpointName: String,
+    endpoint: Endpoint,
     packet: NearbyMsgPacket,
     navController: NavHostController,
     onProcessed: () -> Unit
@@ -190,7 +195,7 @@ private fun PacketProcessor(
     when (packet.prefix) {
         NearbyMsgPacket.ShareWork.id -> {
             ProcessShareWorkPacket(
-                endpointName = endpointName,
+                endpoint = endpoint,
                 workId = packet.content,
                 navController = navController,
                 onProcessed = onProcessed
@@ -199,7 +204,7 @@ private fun PacketProcessor(
 
         NearbyMsgPacket.AddFriend.id -> {
             ProcessAddFriendPacket(
-                endpointName = endpointName,
+                endpoint = endpoint,
                 navController = navController,
                 onProcessed = onProcessed
             )
@@ -217,7 +222,7 @@ private fun PacketProcessor(
 
 @Composable
 private fun ProcessShareWorkPacket(
-    endpointName: String,
+    endpoint: Endpoint,
     workId: String,
     navController: NavHostController,
     onProcessed: () -> Unit
@@ -225,8 +230,8 @@ private fun ProcessShareWorkPacket(
     AlertDialog(
         modifier = Modifier.zIndex(1000f),
         onDismissRequest = { onProcessed() },
-        title = { Text("Accept $endpointName's sharing") },
-        text = { Text(text = "$endpointName wants to share a book with you") },
+        title = { Text("Accept ${endpoint.name}'s sharing") },
+        text = { Text(text = "${endpoint.name} wants to share a book with you") },
         confirmButton = {
             Button(onClick = {
                 navController.navigate(Screen.BookDetails.passBookId(workId))
@@ -240,22 +245,22 @@ private fun ProcessShareWorkPacket(
                 TODO("Not yet implemented")
             }) { Text(text = "Refuse") }
         },
-        icon = { R.drawable.ic_dialog_alert }
+        icon = { android.R.drawable.ic_dialog_alert }
     )
 
 }
 
 @Composable
 private fun ProcessAddFriendPacket(
-    endpointName: String,
+    endpoint: Endpoint,
     navController: NavHostController,
     onProcessed: () -> Unit
 ) {
     AlertDialog(
         modifier = Modifier.zIndex(1000f),
         onDismissRequest = { onProcessed() },
-        title = { Text("Accept $endpointName's friend request") },
-        text = { Text(text = "$endpointName wants to add you as their friend") },
+        title = { Text("Accept ${endpoint.name}'s friend request") },
+        text = { Text(text = "${endpoint.name} wants to add you as their friend") },
         confirmButton = {
             Button(onClick = {
                 onProcessed()
@@ -269,6 +274,6 @@ private fun ProcessAddFriendPacket(
                 TODO("Not yet implemented")
             }) { Text(text = "Refuse") }
         },
-        icon = { R.drawable.ic_dialog_alert }
+        icon = { android.R.drawable.ic_dialog_alert }
     )
 }

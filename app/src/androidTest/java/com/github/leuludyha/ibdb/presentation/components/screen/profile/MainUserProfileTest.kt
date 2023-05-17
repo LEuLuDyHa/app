@@ -11,6 +11,7 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
@@ -52,7 +53,7 @@ class MainUserProfileTest {
         latitude = 0.0,
         longitude = 0.0
     )
-    private val authContext = AuthenticationContext(mainUser)
+    private val authContext = AuthenticationContext(mainUser, NearbyConnection.Empty)
     private val viewModel = UserProfileViewModel(authContext)
 
     @Test

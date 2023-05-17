@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
+import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
@@ -73,7 +74,7 @@ fun ShareWorkComponent(
                 setState(SharerState.Error)
             }
 
-            override fun onConnected(endpointId: String) {
+            override fun onConnected(endpoint: Endpoint) {
                 setState(SharerState.Connected)
             }
 
