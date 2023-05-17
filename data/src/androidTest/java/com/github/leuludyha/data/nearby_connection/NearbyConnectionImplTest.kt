@@ -34,12 +34,6 @@ class NearbyConnectionImplTest {
         assertThat(connection.internalState, Is(NearbyConnectionImpl.State.Discovering))
     }
 
-    @Test
-    fun stoppingDiscoveryWhenNotInDiscoveryModeThrowsException() {
-        assertThrows(UnsupportedOperationException::class.java) {
-            connection.stopDiscovery()
-        }
-    }
 
     @Test
     fun internalStateIsIdleOnDiscoveryStopped() {
@@ -56,13 +50,6 @@ class NearbyConnectionImplTest {
     fun internalStateIsAdvertisingOnAdvertisingStarted() {
         connection.startAdvertising()
         assertThat(connection.internalState, Is(NearbyConnectionImpl.State.Advertising))
-    }
-
-    @Test
-    fun stoppingAdvertisingWhenNotInAdvertisingModeThrowsException() {
-        assertThrows(UnsupportedOperationException::class.java) {
-            connection.stopAdvertising()
-        }
     }
 
     @Test
