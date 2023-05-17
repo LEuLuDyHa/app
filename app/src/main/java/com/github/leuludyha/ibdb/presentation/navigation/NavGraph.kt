@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.github.leuludyha.ibdb.presentation.components.sharing.SharedWorkListener
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.author_views.AuthorDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
@@ -103,6 +104,10 @@ fun NavGraph(navController: NavHostController) {
                 backStackEntry.arguments
                     ?.getString(Constant.SHARE_BOOK_ID_ARGUMENT_KEY)
                     ?.let { workId -> ShareScreen(navController, padding, workId) }
+            }
+            composable(route = Screen.ReceiveNearbyWork.route) {
+                //TODO: Add Hana's screen once it is finished
+                SharedWorkListener(navController = navController)
             }
         }
     }

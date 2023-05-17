@@ -20,4 +20,7 @@ object Constant {
     //Strings for UI
     const val NETWORK_UNAVAILABLE_TOAST = "Network unavailable!"
     const val USER_NOT_FOUND = "User not found!"
+    const val USER_PROFILE_MY_FRIENDS = "My Friends"
+    const val USER_PROFILE_RECEIVE_WORK = "Receive work"
+    const val USER_PROFILE_SETTINGS = "Settings"
 }
