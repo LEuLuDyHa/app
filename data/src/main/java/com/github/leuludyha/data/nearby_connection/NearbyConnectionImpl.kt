@@ -21,7 +21,17 @@ import com.google.android.gms.nearby.connection.PayloadCallback
 import com.google.android.gms.nearby.connection.PayloadTransferUpdate
 import com.google.android.gms.nearby.connection.Strategy
 
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                           BEGIN                                             ||
+// ||                                                                                             ||
+// \\=============================================================================================//
 
+/**
+ * Uses a state machine
+ * @throws IllegalStateException When the state machine has the incorrect state. Used for
+ * debugging since it should not happen
+ */
 open class NearbyConnectionImpl(
     private val context: Context,
     private val username: String,
@@ -56,18 +66,19 @@ open class NearbyConnectionImpl(
 //========== ======== ==== ==
 
     /** All states of the Connection */
-    enum class State { Idle, Advertising, Discovering, Connected }
+    enum class State { Idle, Advertising, Discovering, ConnectionPending, Connected }
 
+    /** The current state of the connection */
     protected var state: State = State.Idle
 
     /** The endpoint this connection is connected to or null if it is not connected */
     private var connectedEndpoint: Endpoint? = null
 
-    override fun isConnected(): Boolean = state == State.Connected
-
-//========== ======== ==== ==
-//        CALLBACKS
-//========== ======== ==== ==
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                         CALLBACKS                                           ||
+// ||                                                                                             ||
+// \\=============================================================================================//
 
     private val payloadCallback: PayloadCallback =
         object : PayloadCallback() {
@@ -85,44 +96,65 @@ open class NearbyConnectionImpl(
                 endpointId: String,
                 update: PayloadTransferUpdate
             ) {
-                // Bytes payloads are sent as a single chunk, so you'll receive a SUCCESS update immediately
-                // after the call to onPayloadReceived().
+                // Bytes payloads are sent as a single chunk, so you'll receive a
+                // SUCCESS update immediately after the call to onPayloadReceived().
             }
 
         }
 
     private val connectionLifecycleCallback: ConnectionLifecycleCallback =
         object : ConnectionLifecycleCallback() {
+            //========== ======== ==== ==
+            //        INITIATED
+            //========== ======== ==== ==
             override fun onConnectionInitiated(endpointId: String, info: ConnectionInfo) {
-                client.acceptConnection(endpointId, payloadCallback)
+                when (state) {
+                    State.Advertising -> {
+                        // First stop advertising since someone requested connection
+                        stopAdvertising()
+                        // Then Update state
+                        updateStateTo(State.ConnectionPending)
+                    }
+
+                    State.ConnectionPending -> { /* All good */
+                    }
+                    // Discovery should have stopped on requestConnection
+                    else -> throw IllegalStateException("Something went wrong...")
+                }
+
                 connectedEndpoint = Endpoint(
                     name = info.endpointName,
                     id = endpointId
                 )
+                client.acceptConnection(endpointId, payloadCallback)
             }
 
-
+            //========== ======== ==== ==
+            //        RESOLVED
+            //========== ======== ==== ==
             override fun onConnectionResult(endpointId: String, result: ConnectionResolution) {
                 when (result.status.statusCode) {
                     ConnectionsStatusCodes.STATUS_OK -> {
+                        checkThatStateIs(State.ConnectionPending)
                         // We're connected! Can now start sending and receiving data.
-                        state = State.Connected
+                        updateStateTo(State.Connected)
                         notifyAll { it.onConnected(endpointId) }
                     }
 
                     ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED -> {
                         // The connection was rejected by one or both sides.
-                        putToRest()
+                        reset()
                         notifyAll { it.onConnectionRejected(endpointId) }
                     }
 
                     ConnectionsStatusCodes.STATUS_ERROR -> {
                         // The connection broke before it was able to be accepted.
-                        putToRest()
+                        reset()
                         result.status.statusMessage?.let { msg -> notifyAll { it.onError(msg) } }
                     }
 
                     else -> {
+                        reset()
                         // Unknown status code
                         result.status.statusMessage?.let { msg ->
                             notifyAll { it.onError(msg) }
@@ -131,19 +163,22 @@ open class NearbyConnectionImpl(
                 }
             }
 
+            //========== ======== ==== ==
+            //        DISCONNECTED
+            //========== ======== ==== ==
             override fun onDisconnected(endpointId: String) {
                 // We've been disconnected from this endpoint. No more data can be
                 // sent or received.
-                Log.i("DISCONNECTED", "DISCONNECTED")
-                putToRest()
-                connectedEndpoint = null
+                reset()
                 notifyAll { it.onDisconnected(endpointId) }
             }
         }
 
-//========== ======== ==== ==
-//        ENDPOINT LIST
-//========== ======== ==== ==
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                     ENDPOINTS LISTING                                       ||
+// ||                                                                                             ||
+// \\=============================================================================================//
 
     private val discoveredEndpointsIds = mutableMapOf<String, Endpoint>()
 
@@ -171,45 +206,91 @@ open class NearbyConnectionImpl(
             }
         }
 
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                      CONTROL METHODS                                        ||
+// ||                                                                                             ||
+// \\=============================================================================================//
+
+    private fun reset() {
+        disconnect()
+        stopAdvertising()
+        stopDiscovery()
+        // Clear all
+        connectedEndpoint = null
+        discoveredEndpointsIds.clear()
+        // Update state
+        updateStateTo(State.Idle)
+    }
+
 //========== ======== ==== ==
-//        CONTROL METHODS
+//        CONNECTION
 //========== ======== ==== ==
 
     override fun requestConnection(endpointId: String) {
         if (state == State.Connected) {
-            throw UnsupportedOperationException("Cannot handle multiple connections at once")
+            // Cannot handle multiple connections at once
+            return
         }
+
         when (state) {
-            State.Advertising -> stopAdvertising()
-            State.Discovering -> stopDiscovery()
-            else -> {}
+            State.Discovering -> {
+                // First stop discovery
+                stopDiscovery()
+                // We request a connection to the specified endpoint.
+                client.requestConnection(username, endpointId, connectionLifecycleCallback)
+            }
+            // Trying to connect when only discovering or in other state
+            else -> throw IllegalStateException("Something went wrong...")
         }
-        // We request a connection to the specified endpoint.
-        client.requestConnection(username, endpointId, connectionLifecycleCallback)
     }
+
+    override fun isConnected(): Boolean = state == State.Connected
+
+    override fun disconnect() {
+        if (state != State.Connected) {
+            return
+        }
+
+        connectedEndpoint?.let {
+            client.disconnectFromEndpoint(it.id)
+            // Back to idle default mode
+            this.reset()
+        } ?: throw IllegalStateException("The endpoint is null")
+    }
+
+//========== ======== ==== ==
+//        ADVERTISEMENT
+//========== ======== ==== ==
 
     override fun stopAdvertising() {
         if (state != State.Advertising) {
             throw UnsupportedOperationException("The connection is not in advertising mode")
         }
         client.stopAdvertising()
-        state = State.Idle
+        updateStateTo(State.Idle)
     }
 
     override fun isAdvertising() = state == State.Advertising
 
+    private val advertisingOptions = AdvertisingOptions.Builder()
+        .setStrategy(Strategy.P2P_POINT_TO_POINT)
+        .build()
+
     override fun startAdvertising() {
         if (state != State.Idle) {
-            Log.i("SHARE", "ERROR CONNECTION BUSY")
-            throw UnsupportedOperationException("The connection is already busy")
+            // Trying to start advertising but the connection is busy...
+            return
         }
 
-        val options = AdvertisingOptions.Builder()
-            .setStrategy(Strategy.P2P_POINT_TO_POINT)
-            .build()
-        state = State.Advertising
+        updateStateTo(State.Advertising)
 
-        client.startAdvertising(username, serviceId, connectionLifecycleCallback, options)
+        client.startAdvertising(
+            username,
+            serviceId,
+            connectionLifecycleCallback,
+            advertisingOptions
+        )
             .addOnSuccessListener {
                 Log.i("SHARE", "Advertising successfully started")
                 notifyAll { it.onAdvertisingStarted() }
@@ -217,7 +298,7 @@ open class NearbyConnectionImpl(
             .addOnFailureListener { error ->
                 state = State.Idle
                 Log.i("SHARE", error.message!!)
-                putToRest()
+                reset()
                 notifyAll {
                     it.onError(
                         "Unable to start advertising !" +
@@ -228,37 +309,35 @@ open class NearbyConnectionImpl(
             }
     }
 
-    private fun putToRest() {
-        if (isConnected()) {
-            disconnect()
-        }
-        if (isAdvertising()) {
-            stopAdvertising()
-        }
-        if (isDiscovering()) {
-            stopDiscovery()
-        }
-        state = State.Idle
-        connectedEndpoint = null
-    }
+//========== ======== ==== ==
+//        DISCOVERY
+//========== ======== ==== ==
 
     override fun stopDiscovery() {
-        if (state != State.Discovering) {
-            throw UnsupportedOperationException("The connection is not in discovery mode")
-        }
         client.stopDiscovery()
-        state = State.Idle
+        // Clear endpoints found since we stopped discovering
+        discoveredEndpointsIds.clear()
+        notifyAll { it.onFoundEndpointsChanged() }
+        // Update internal state
+        updateStateTo(State.Idle)
     }
 
     override fun isDiscovering() = state == State.Discovering
 
-    override fun startDiscovery() {
-        val options = DiscoveryOptions.Builder()
-            .setStrategy(Strategy.P2P_POINT_TO_POINT)
-            .build()
+    private val discoveryOptions = DiscoveryOptions.Builder()
+        .setStrategy(Strategy.P2P_POINT_TO_POINT)
+        .build()
 
-        state = State.Discovering
-        client.startDiscovery(serviceId, endpointDiscoveryCallback, options)
+    override fun startDiscovery() {
+        if (state != State.Idle) {
+            // Trying to start discovering but the connection is busy...
+            return
+        }
+
+        // Update state
+        updateStateTo(State.Discovering)
+
+        client.startDiscovery(serviceId, endpointDiscoveryCallback, discoveryOptions)
             .addOnSuccessListener { notifyAll { it.onDiscoveryStarted() } }
             .addOnFailureListener { error ->
                 state = State.Idle
@@ -272,32 +351,25 @@ open class NearbyConnectionImpl(
             }
     }
 
+//========== ======== ==== ==
+//        MESSAGING
+//========== ======== ==== ==
+
     override fun sendPacket(packet: NearbyMsgPacket) {
         if (state != State.Connected) {
             throw UnsupportedOperationException("The connection is not connected to an endpoint")
         }
+
         connectedEndpoint?.let {
             client.sendPayload(
                 it.id, Payload.fromBytes(
                     packet.descriptor.encodeToByteArray()
                 )
             )
-        } ?: throw IllegalStateException("The endpoint is null")
+        } ?: throw IllegalStateException(
+            "The endpoint this connection is supposed to be connected to is null"
+        )
     }
-
-    override fun disconnect() {
-        if (state != State.Connected) {
-            throw UnsupportedOperationException("The connection is not connected to an endpoint")
-        }
-        connectedEndpoint?.let {
-            client.disconnectFromEndpoint(it.id)
-            state = State.Idle
-        } ?: throw IllegalStateException("The endpoint is null")
-    }
-
-//========== ======== ==== ==
-//        MESSAGE HANDLING
-//========== ======== ==== ==
 
     /** Receive the message */
     private fun receive(byteMsg: ByteArray) {
@@ -311,4 +383,30 @@ open class NearbyConnectionImpl(
         notifyAll { it.onPacketReceived(packet); }
     }
 
+//========== ======== ==== ==
+//        UTILS
+//========== ======== ==== ==
+
+    private fun updateStateTo(nextState: State) {
+        this.state = nextState
+    }
+
+    /**
+     * Check that the current state is the specified state
+     * @throws IllegalStateException If [state] != [saneState]
+     */
+    private fun checkThatStateIs(saneState: State) {
+        if (this.state != saneState) {
+            throw IllegalStateException(
+                "Something went wrong : " +
+                        "\nState is ${this.state} when it should be $saneState"
+            )
+        }
+    }
 }
+
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                            END                                              ||
+// ||                                                                                             ||
+// \\=============================================================================================//

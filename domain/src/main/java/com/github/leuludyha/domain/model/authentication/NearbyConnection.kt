@@ -1,11 +1,23 @@
 package com.github.leuludyha.domain.model.authentication
 
-import com.github.leuludyha.domain.model.interfaces.Keyed
-
 interface NearbyConnection {
+
+//========== ======== ==== ==
+//        ADVERTISEMENT
+//========== ======== ==== ==
 
     /** Start advertising this device is available for nearby connections */
     fun startAdvertising()
+
+    /** Stop advertising this device for nearby connection */
+    fun stopAdvertising()
+
+    /** Whether the connection is in advertising mode */
+    fun isAdvertising(): Boolean
+
+//========== ======== ==== ==
+//        DISCOVERY
+//========== ======== ==== ==
 
     /** Stop the devices discovery */
     fun stopDiscovery()
@@ -16,11 +28,9 @@ interface NearbyConnection {
     /** Start the search for nearby devices to connect to */
     fun startDiscovery()
 
-    /** Stop advertising this device for nearby connection */
-    fun stopAdvertising()
-
-    /** Whether the connection is in advertising mode */
-    fun isAdvertising(): Boolean
+//========== ======== ==== ==
+//        CONTROLS
+//========== ======== ==== ==
 
     /**
      * Request a connection to the specified [endpointId].
@@ -37,6 +47,34 @@ interface NearbyConnection {
 
     /** Disconnects the [NearbyConnection] if it is already connected */
     fun disconnect()
+
+    /**
+     * @return True if the [NearbyConnection] is currently connected to an endpoint, False
+     * otherwise
+     */
+    fun isConnected(): Boolean
+
+//========== ======== ==== ==
+//        LISTENERS
+//========== ======== ==== ==
+
+    /**
+     * Add a [ConnectionLifecycleHandler] to this connection so that it receives callback
+     * when appropriate
+     */
+    fun addListener(handler: ConnectionLifecycleHandler)
+
+    /**
+     * Remove the [ConnectionLifecycleHandler] so that it does no longer receive the
+     * callback events
+     */
+    fun removeListener(handler: ConnectionLifecycleHandler)
+
+// //=============================================================================================\\
+// ||                                                                                             ||
+// ||                                      EMPTY CONNECTION                                       ||
+// ||                                                                                             ||
+// \\=============================================================================================//
 
     object Empty : NearbyConnection {
         private fun error() {
@@ -80,29 +118,5 @@ interface NearbyConnection {
 
     }
 
-    /**
-     * Add a [ConnectionLifecycleHandler] to this connection so that it receives callback
-     * when appropriate
-     */
-    fun addListener(handler: ConnectionLifecycleHandler)
 
-    /**
-     * Remove the [ConnectionLifecycleHandler] so that it does no longer receive the
-     * callback events
-     */
-    fun removeListener(handler: ConnectionLifecycleHandler)
-
-    /**
-     * @return True if the [NearbyConnection] is currently connected to an endpoint, False
-     * otherwise
-     */
-    fun isConnected(): Boolean
-
-}
-
-class Endpoint(
-    val name: String,
-    val id: String
-) : Keyed {
-    override fun Id() = id
 }

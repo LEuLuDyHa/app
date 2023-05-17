@@ -2,16 +2,18 @@ package com.github.leuludyha.ibdb.presentation.components.sharing
 
 import android.Manifest
 import android.R
-import android.app.AlertDialog
-import android.content.DialogInterface
 import android.os.Build
 import android.util.Log
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
@@ -88,7 +90,7 @@ private fun SharedWorkListenerComponent(
     val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
     val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }
 
-    val (connectedEndpointId, setConnectedEndpointId) = remember { mutableStateOf("") }
+    val (connectedEndpointName, setConnectedEndpointName) = remember { mutableStateOf("") }
 
     DisposableEffect(viewModel.connection) {
 
@@ -117,15 +119,14 @@ private fun SharedWorkListenerComponent(
             // Pause/Restart advertising when connected to an endpoint : We can only have
             // one connection anyway
             override fun onConnected(endpointId: String) {
-                setConnectedEndpointId(endpointId)
+                setConnectedEndpointName(endpointId)
                 if (viewModel.connection.isAdvertising()) {
                     viewModel.connection.stopAdvertising()
                 }
             }
 
             override fun onDisconnected(endpointId: String) {
-                setConnectedEndpointId("")
-                setState(ListenerState.Listening)
+                setConnectedEndpointName("")
                 if (!viewModel.connection.isAdvertising()) {
                     viewModel.connection.startAdvertising()
                 }
@@ -163,10 +164,15 @@ private fun SharedWorkListenerComponent(
         // If a packet is received, process it
         ListenerState.Received -> {
             PacketProcessor(
-                endpointId = connectedEndpointId,
+                endpointName = connectedEndpointName,
                 packet = packet,
                 navController = navController,
-                onProcessed = { viewModel.connection.disconnect() }
+                onProcessed = {
+                    if (viewModel.connection.isConnected()) {
+                        viewModel.connection.disconnect()
+                    }
+                    setState(ListenerState.Listening)
+                }
             )
         }
 
@@ -176,7 +182,7 @@ private fun SharedWorkListenerComponent(
 
 @Composable
 private fun PacketProcessor(
-    endpointId: String,
+    endpointName: String,
     packet: NearbyMsgPacket,
     navController: NavHostController,
     onProcessed: () -> Unit
@@ -184,7 +190,7 @@ private fun PacketProcessor(
     when (packet.prefix) {
         NearbyMsgPacket.ShareWork.id -> {
             ProcessShareWorkPacket(
-                endpointId = endpointId,
+                endpointName = endpointName,
                 workId = packet.content,
                 navController = navController,
                 onProcessed = onProcessed
@@ -192,53 +198,77 @@ private fun PacketProcessor(
         }
 
         NearbyMsgPacket.AddFriend.id -> {
-            throw NotImplementedError()
+            ProcessAddFriendPacket(
+                endpointName = endpointName,
+                navController = navController,
+                onProcessed = onProcessed
+            )
+        }
+
+        else -> {
+            throw UnsupportedOperationException(
+                "Unsupported packet : " +
+                        "\n Prefix: \"${packet.prefix}\"" +
+                        "\n Content: \"${packet.descriptor}\""
+            )
         }
     }
 }
 
 @Composable
 private fun ProcessShareWorkPacket(
-    endpointId: String,
+    endpointName: String,
     workId: String,
     navController: NavHostController,
     onProcessed: () -> Unit
 ) {
-    AlertDialog.Builder(LocalContext.current)
-        .setTitle("Accept $endpointId's sharing")
-        .setMessage("$endpointId wants to share a book with you")
-        .setPositiveButton("Accept") { dialog: DialogInterface?, which: Int ->
-            // The user confirmed, so we can accept the work's sharing.
-            navController.navigate(Screen.BookDetails.passBookId(workId))
-            onProcessed()
-        }
-        .setNegativeButton(R.string.cancel) { dialog: DialogInterface?, which: Int ->
-            // The user canceled, so we should reject the connection.
-            TODO("Not yet implemented")
-        }
-        .setIcon(R.drawable.ic_dialog_alert)
-        .show()
+    AlertDialog(
+        modifier = Modifier.zIndex(1000f),
+        onDismissRequest = { onProcessed() },
+        title = { Text("Accept $endpointName's sharing") },
+        text = { Text(text = "$endpointName wants to share a book with you") },
+        confirmButton = {
+            Button(onClick = {
+                navController.navigate(Screen.BookDetails.passBookId(workId))
+                onProcessed()
+            }) { Text(text = "Accept") }
+        },
+        dismissButton = {
+            Button(onClick = {
+                // The user canceled, so we should reject the connection.
+                onProcessed()
+                TODO("Not yet implemented")
+            }) { Text(text = "Refuse") }
+        },
+        icon = { R.drawable.ic_dialog_alert }
+    )
 
 }
 
 @Composable
 private fun ProcessAddFriendPacket(
-    endpointId: String,
+    endpointName: String,
     navController: NavHostController,
     onProcessed: () -> Unit
 ) {
-    AlertDialog.Builder(LocalContext.current)
-        .setTitle("Accept $endpointId's friend request")
-        .setMessage("$endpointId wants to add you as their friend")
-        .setPositiveButton("Accept") { dialog: DialogInterface?, which: Int ->
-            // The user confirmed, so we can accept the connection.
-            TODO("Not yet implemented")
-        }
-        .setNegativeButton("Refuse") { dialog: DialogInterface?, which: Int ->
-            // The user canceled, so we should reject the connection.
-            TODO("Not yet implemented")
-        }
-        .setIcon(R.drawable.ic_dialog_alert)
-        .show()
-
+    AlertDialog(
+        modifier = Modifier.zIndex(1000f),
+        onDismissRequest = { onProcessed() },
+        title = { Text("Accept $endpointName's friend request") },
+        text = { Text(text = "$endpointName wants to add you as their friend") },
+        confirmButton = {
+            Button(onClick = {
+                onProcessed()
+                TODO("Not yet implemented")
+            }) { Text(text = "Accept") }
+        },
+        dismissButton = {
+            Button(onClick = {
+                // The user canceled, so we should reject the connection.
+                onProcessed()
+                TODO("Not yet implemented")
+            }) { Text(text = "Refuse") }
+        },
+        icon = { R.drawable.ic_dialog_alert }
+    )
 }

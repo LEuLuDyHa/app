@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.R
+import com.github.leuludyha.ibdb.presentation.Orientation
 import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
 import com.github.leuludyha.ibdb.presentation.components.utils.Loading
 
@@ -136,23 +137,18 @@ fun ShareWorkComponent(
             } else {
                 ItemList(
                     modifier = Modifier.padding(padding),
-                    values = viewModel.endpointChoices
+                    values = viewModel.endpointChoices,
+                    orientation = Orientation.Vertical
                 ) { endpoint ->
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Button(
-                            modifier = Modifier.fillMaxWidth(fraction = 0.6f),
-                            onClick = {
-                                connectTo(endpoint.id)
-                                if (viewModel.connection.isDiscovering()) {
-                                    viewModel.connection.stopDiscovery()
-                                }
+                    Button(
+                        modifier = Modifier.fillMaxWidth(fraction = 0.6f),
+                        onClick = {
+                            connectTo(endpoint.id)
+                            if (viewModel.connection.isDiscovering()) {
+                                viewModel.connection.stopDiscovery()
                             }
-                        ) { Text(text = endpoint.name) }
-                    }
+                        }
+                    ) { Text(text = endpoint.name) }
                 }
             }
         }
