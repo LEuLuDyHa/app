@@ -4,6 +4,7 @@ import android.Manifest
 import android.R
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.os.Build
 import android.util.Log
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -27,6 +28,7 @@ import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandl
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionsRequired
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 
@@ -40,11 +42,10 @@ private enum class ListenerState {
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SharedWorkListener(
-    viewModel: SharedWorkListenerViewModel = hiltViewModel(),
     navController: NavHostController,
 ) {
-    val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
-    val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }
+
+    Log.i("VERSION", Build.VERSION.SDK_INT.toString())
 
     val permissionState = rememberMultiplePermissionsState(
         listOf(
@@ -63,21 +64,65 @@ fun SharedWorkListener(
         )
     )
 
-    val (connectedEndpointId, setConnectedEndpointId) = remember { mutableStateOf("") }
-
     SideEffect {
         if (!permissionState.allPermissionsGranted) {
             permissionState.launchMultiplePermissionRequest()
         }
     }
 
+    PermissionsRequired(
+        multiplePermissionsState = permissionState,
+        permissionsNotGrantedContent = {
+            Log.w(
+                "PERMISSIONS",
+                "Sharing permissions not granted !"
+            )
+        },
+        permissionsNotAvailableContent = {
+            Log.w(
+                "PERMISSIONS",
+                "Sharing permissions not available !"
+            )
+        })
+    {
+        SharedWorkListenerComponent(navController = navController)
+    }
+
+}
+
+@Composable
+private fun SharedWorkListenerComponent(
+    viewModel: SharedWorkListenerViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
+    val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
+    val (packet, setPacket) = remember { mutableStateOf(NearbyMsgPacket("empty")) }
+
+    val (connectedEndpointId, setConnectedEndpointId) = remember { mutableStateOf("") }
+
     DisposableEffect(viewModel.connection) {
 
         val handler = object : ConnectionLifecycleHandler() {
+            override fun onMount() {
+                Log.i("SHARE", "ADVERTISING STARTED")
+                if (!viewModel.connection.isAdvertising()) {
+                    viewModel.connection.startAdvertising()
+                }
+            }
+
             // Pause/Restart advertising when discovery is started : We can only have
             // one connection anyway
-            override fun onDiscoveryStarted() = viewModel.connection.stopAdvertising()
-            override fun onDiscoveryStopped() = viewModel.connection.startAdvertising()
+            override fun onDiscoveryStarted() {
+                if (viewModel.connection.isAdvertising()) {
+                    viewModel.connection.stopAdvertising()
+                }
+            }
+
+            override fun onDiscoveryStopped() {
+                if (!viewModel.connection.isAdvertising()) {
+                    viewModel.connection.startAdvertising()
+                }
+            }
 
             // Pause/Restart advertising when connected to an endpoint : We can only have
             // one connection anyway
@@ -91,7 +136,9 @@ fun SharedWorkListener(
             override fun onDisconnected(endpointId: String) {
                 setConnectedEndpointId("")
                 setState(ListenerState.Listening)
-                viewModel.connection.startAdvertising()
+                if (!viewModel.connection.isAdvertising()) {
+                    viewModel.connection.startAdvertising()
+                }
             }
 
             override fun onPacketReceived(packet: NearbyMsgPacket) {
@@ -103,24 +150,23 @@ fun SharedWorkListener(
             override fun onError(description: String) {
                 throw Error(description)
             }
+
+            override fun onDismount() {
+                // Stop listening and stop advertising
+                if (viewModel.connection.isAdvertising()) {
+                    viewModel.connection.stopAdvertising()
+                }
+                // And disconnect if the connection is active
+                if (viewModel.connection.isConnected()) {
+                    viewModel.connection.disconnect()
+                }
+            }
         }
 
         // Listen to the connection's events and start advertising
         viewModel.connection.addListener(handler)
-        Log.i("SHARE", "ADVERTISING STARTED")
-        viewModel.connection.startAdvertising()
 
-        onDispose {
-            // Stop listening and stop advertising
-            if (viewModel.connection.isAdvertising()) {
-                viewModel.connection.stopAdvertising()
-            }
-            // And disconnect if the connection is active
-            if (viewModel.connection.isConnected()) {
-                viewModel.connection.disconnect()
-            }
-            viewModel.connection.removeListener(handler)
-        }
+        onDispose { viewModel.connection.removeListener(handler) }
     }
 
     when (state) {
@@ -145,7 +191,6 @@ fun SharedWorkListener(
             }
         }
     }
-
 }
 
 @Composable

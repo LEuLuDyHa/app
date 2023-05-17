@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -46,6 +45,10 @@ fun ShareWorkComponent(
 
     DisposableEffect(viewModel.connection) {
         val handler = object : ConnectionLifecycleHandler() {
+            override fun onMount() {
+                viewModel.connection.startDiscovery()
+            }
+
             // On error, display the error in the state
             override fun onError(description: String) {
                 setError(description)
@@ -79,20 +82,22 @@ fun ShareWorkComponent(
                     setState(SharerState.Error)
                 }
             }
+
+            override fun onDismount() {
+                if (viewModel.connection.isDiscovering()) {
+                    viewModel.connection.stopDiscovery()
+                }
+                // TODO Careful with race condition with when(state) -> Connected -> disconnect()
+                if (viewModel.connection.isConnected()) {
+                    viewModel.connection.disconnect()
+                }
+            }
         }
 
         // On load, add listener and start discovery
         viewModel.connection.addListener(handler)
-        viewModel.connection.startDiscovery()
         // On dispose, stop discovery and remove listener
         onDispose {
-            if (viewModel.connection.isDiscovering()) {
-                viewModel.connection.stopDiscovery()
-            }
-            // TODO Careful with race condition with when(state) -> Connected -> disconnect()
-            if (viewModel.connection.isConnected()) {
-                viewModel.connection.disconnect()
-            }
             viewModel.connection.removeListener(handler)
         }
     }
@@ -133,19 +138,20 @@ fun ShareWorkComponent(
                     modifier = Modifier.padding(padding),
                     values = viewModel.endpointChoices
                 ) { endpoint ->
-                    Row(
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Button(
+                            modifier = Modifier.fillMaxWidth(fraction = 0.6f),
                             onClick = {
                                 connectTo(endpoint.id)
                                 if (viewModel.connection.isDiscovering()) {
                                     viewModel.connection.stopDiscovery()
                                 }
                             }
-                        ) { Text(text = endpoint.id) }
+                        ) { Text(text = endpoint.name) }
                     }
                 }
             }

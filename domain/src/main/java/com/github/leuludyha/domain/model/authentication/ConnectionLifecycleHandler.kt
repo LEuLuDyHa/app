@@ -24,4 +24,17 @@ abstract class ConnectionLifecycleHandler {
     open fun onDiscoveryStopped() {}
 
     open fun onAdvertisingStopped() {}
+
+    /**
+     * When the listener is successfully listening to the connection for the first time, this
+     * method is called
+     */
+    open fun onMount() {}
+
+    /**
+     * When the listener is no longer listening to the connection, this
+     * method is called
+     */
+    open fun onDismount() {}
+
 }
