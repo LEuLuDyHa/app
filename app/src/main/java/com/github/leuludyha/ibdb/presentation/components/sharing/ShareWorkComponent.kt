@@ -1,8 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,18 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.R
 import com.github.leuludyha.ibdb.presentation.Orientation
+import com.github.leuludyha.ibdb.presentation.components.utils.CenteredLoading
+import com.github.leuludyha.ibdb.presentation.components.utils.CenteredText
 import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
-import com.github.leuludyha.ibdb.presentation.components.utils.Loading
 
 private enum class SharerState {
     Loading, Discovering, WaitingForConnection, Connected,
@@ -36,6 +33,21 @@ private enum class SharerState {
  */
 @Composable
 fun ShareWorkComponent(
+    padding: PaddingValues,
+    workId: String,
+    onSuccessfullyShared: () -> Unit,
+) {
+    SharingPermissionRequired {
+        ShareInnerWorkComponent(
+            padding = padding,
+            workId = workId,
+            onSuccessfullyShared = onSuccessfullyShared,
+        )
+    }
+}
+
+@Composable
+private fun ShareInnerWorkComponent(
     padding: PaddingValues,
     workId: String,
     viewModel: ShareWorkComponentViewModel = hiltViewModel(),
@@ -111,63 +123,26 @@ fun ShareWorkComponent(
 
     when (state) {
         // Waiting for discovery to start
-        SharerState.Loading -> Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) { Loading() }
+        SharerState.Loading -> {
+            CenteredLoading(modifier = Modifier.padding(padding))
+        }
 
+        // List all users discovered so far
         SharerState.Discovering -> {
-            // List all users discovered so far
-            if (viewModel.endpointChoices.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        modifier = Modifier.padding(10.dp),
-                        text = stringResource(id = R.string.nearby_discovering_people)
-                    )
-                    Loading()
-                }
-            } else {
-                ItemList(
-                    modifier = Modifier.padding(padding),
-                    values = viewModel.endpointChoices,
-                    orientation = Orientation.Vertical
-                ) { endpoint ->
-                    Button(
-                        modifier = Modifier.fillMaxWidth(fraction = 0.6f),
-                        onClick = {
-                            connectTo(endpoint.id)
-                            if (viewModel.connection.isDiscovering()) {
-                                viewModel.connection.stopDiscovery()
-                            }
-                        }
-                    ) { Text(text = endpoint.name) }
-                }
-            }
-        }
-
-        SharerState.WaitingForConnection -> Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                modifier = Modifier.padding(10.dp),
-                text = stringResource(id = R.string.nearby_connecting)
+            EndpointList(
+                viewModel = viewModel,
+                connectTo = { connectTo(it) },
+                padding = padding
             )
-            Loading()
         }
 
+        // Displays a loading screen with "Connecting..." text
+        SharerState.WaitingForConnection -> CenteredLoading(
+            modifier = Modifier.padding(padding),
+            label = stringResource(id = R.string.nearby_connecting)
+        )
+
+        // Sends the packet then disconnects
         SharerState.Connected -> {
             if (viewModel.connection.isConnected()) {
                 viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
@@ -178,8 +153,42 @@ fun ShareWorkComponent(
                 setError("Disconnected")
             }
         }
+
         // Otherwise, display error text with description
-        // TODO Refine error display
-        else -> Text(text = error)
+        else -> {
+            CenteredText(text = error)
+        }
+    }
+}
+
+@Composable
+private fun EndpointList(
+    viewModel: ShareWorkComponentViewModel,
+    connectTo: (String) -> Unit,
+    padding: PaddingValues
+) {
+    if (viewModel.endpointChoices.isEmpty()) {
+        CenteredLoading(
+            modifier = Modifier.padding(padding),
+            label = stringResource(id = R.string.nearby_discovering_people)
+        )
+    } else {
+        ItemList(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
+            values = viewModel.endpointChoices,
+            orientation = Orientation.Vertical
+        ) { endpoint ->
+            Button(
+                modifier = Modifier.fillMaxWidth(fraction = 0.6f),
+                onClick = {
+                    connectTo(endpoint.id)
+                    if (viewModel.connection.isDiscovering()) {
+                        viewModel.connection.stopDiscovery()
+                    }
+                }
+            ) { Text(text = endpoint.name) }
+        }
     }
 }

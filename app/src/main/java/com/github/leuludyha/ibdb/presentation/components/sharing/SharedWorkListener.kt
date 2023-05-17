@@ -1,14 +1,10 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
-import android.Manifest
-import android.os.Build
-import android.util.Log
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -20,8 +16,6 @@ import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionsRequired
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
 
 
 private enum class ListenerState {
@@ -36,56 +30,7 @@ private enum class ListenerState {
 fun SharedWorkListener(
     navController: NavHostController,
 ) {
-
-    val permissionState = rememberMultiplePermissionsState(
-        // Only add permissions allowed by the system's version
-        // -> NearbyConnection API handles cases all cases :
-        // It reduces its functionalities depending on the granted permissions
-        listOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_WIFI_STATE,
-            Manifest.permission.CHANGE_WIFI_STATE,
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_ADMIN,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        ).plus(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) listOf(
-                Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_CONNECT,
-                Manifest.permission.BLUETOOTH_SCAN,
-            ) else emptyList()
-        ).plus(
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) listOf(
-                Manifest.permission.NEARBY_WIFI_DEVICES
-            ) else emptyList()
-        )
-    )
-
-    SideEffect {
-        if (!permissionState.allPermissionsGranted) {
-            permissionState.launchMultiplePermissionRequest()
-        }
-    }
-
-    PermissionsRequired(
-        multiplePermissionsState = permissionState,
-        permissionsNotGrantedContent = {
-            Log.w(
-                "PERMISSIONS",
-                "Sharing permissions not granted !"
-            )
-        },
-        permissionsNotAvailableContent = {
-            Log.w(
-                "PERMISSIONS",
-                "Sharing permissions not available !"
-            )
-        },
-        content = { SharedWorkListenerComponent(navController = navController) }
-    )
-
+    SharingPermissionRequired { SharedWorkListenerComponent(navController = navController) }
 }
 
 @Composable

@@ -24,5 +24,7 @@
     <string name="full_book_view_subject_label">Subject</string>
     <string name="nearby_service_id">com.github.leuludyha.ibdb\n</string>
     <string name="nearby_discovering_people">Looking for people near you…</string>
-    <string name="nearby_connecting">Connecting...</string>
+    <string name="nearby_connecting">Connecting…</string>
+    <string name="permission_sharing_not_available">Sharing Permissions Not Available !</string>
+    <string name="permission_sharing_not_granted">Sharing permissions are not granted !</string>
 </resources>
