@@ -40,7 +40,6 @@ class RemoteUseCasesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getWorkRemotelyUseCaseGivesCorrectResultOnSuccess() = runTest {
-        println("#### TESTS")
         val data = GetWorkRemotelyUseCase(libraryRepository, MockTrueNetworkProvider)(context, workMrFox.id).first().data
         assertThat(data).isEqualTo(workMrFox)
     }
