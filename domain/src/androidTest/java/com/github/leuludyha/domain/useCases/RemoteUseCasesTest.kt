@@ -1,9 +1,9 @@
-package com.github.leuludyha.data.useCases
+package com.github.leuludyha.domain.useCases
 
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.github.leuludyha.data.MockTrueNetworkProvider
+import com.github.leuludyha.domain.MockTrueNetworkProvider
 import com.github.leuludyha.domain.model.library.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl
 import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
@@ -40,6 +40,7 @@ class RemoteUseCasesTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun getWorkRemotelyUseCaseGivesCorrectResultOnSuccess() = runTest {
+        println("#### TESTS")
         val data = GetWorkRemotelyUseCase(libraryRepository, MockTrueNetworkProvider)(context, workMrFox.id).first().data
         assertThat(data).isEqualTo(workMrFox)
     }
