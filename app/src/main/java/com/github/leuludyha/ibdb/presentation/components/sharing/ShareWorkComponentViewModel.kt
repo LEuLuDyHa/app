@@ -12,11 +12,16 @@ class ShareWorkComponentViewModel @Inject constructor(
     _authContext: AuthenticationContext
 ) : ViewModel() {
 
+    private val authContext = _authContext
+
     /** Update the list of endpoints available */
     fun updateEndpointList() {
         // TODO Ideally, we should check that all found endpoints are users currently using our app
         endpointChoices.clear()
-        endpointChoices.addAll(connection.getDiscoveredEndpointIds())
+        endpointChoices.addAll(
+            connection.getDiscoveredEndpointIds()
+                .filter { it.name != authContext.principal.username }
+        )
     }
 
     val endpointChoices = mutableStateListOf<Endpoint>()
