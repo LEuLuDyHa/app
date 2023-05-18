@@ -112,10 +112,22 @@ class AuthenticationProviderViewModel @Inject constructor(
         )
 
         val spEditor = sp.edit()
-        spEditor.putString(Constant.AUTHENTICATION_CONTEXT_STORED_USERID, authContext.principal.userId)
-        spEditor.putString(Constant.AUTHENTICATION_CONTEXT_STORED_USERNAME, authContext.principal.username)
-        spEditor.putString(Constant.AUTHENTICATION_CONTEXT_STORED_PROFILE_PICTURE_URL, authContext.principal.profilePictureUrl)
-        spEditor.putString(Constant.AUTHENTICATION_CONTEXT_STORED_PHONE_NUMBER, authContext.principal.phoneNumber)
+        spEditor.putString(
+            Constant.AUTHENTICATION_CONTEXT_STORED_USERID,
+            authContext.principal.userId
+        )
+        spEditor.putString(
+            Constant.AUTHENTICATION_CONTEXT_STORED_USERNAME,
+            authContext.principal.username
+        )
+        spEditor.putString(
+            Constant.AUTHENTICATION_CONTEXT_STORED_PROFILE_PICTURE_URL,
+            authContext.principal.profilePictureUrl
+        )
+        spEditor.putString(
+            Constant.AUTHENTICATION_CONTEXT_STORED_PHONE_NUMBER,
+            authContext.principal.phoneNumber
+        )
         spEditor.apply()
     }
 }
