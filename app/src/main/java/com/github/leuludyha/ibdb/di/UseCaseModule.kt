@@ -59,4 +59,9 @@ object UseCaseModule {
     @Provides
     fun getNearbyUsersUseCase(userRepository: UserRepository) =
         GetNearbyUsersUseCase(userRepository)
+
+    @Provides
+    fun getSerializeWorkUseCase(libraryRepository: LibraryRepository) =
+        SerializeWorkUseCase(libraryRepository)
+
 }
