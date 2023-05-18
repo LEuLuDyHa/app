@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
-import com.github.leuludyha.ibdb.presentation.components.sharing.SharedWorkListener
 import com.github.leuludyha.ibdb.presentation.navigation.NavGraph
 import com.github.leuludyha.ibdb.presentation.screen.auth.signin.AuthenticationProvider
 import com.github.leuludyha.ibdb.presentation.screen.auth.signup.FirstTimeLogInCheck
@@ -71,8 +70,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 // Check if the user is logged in for the first time
                 FirstTimeLogInCheck {
-                    // Start listening for people sharing other works
-                    SharedWorkListener(navController = navController)
                     // Once check is passed, display rest of the app
                     NavGraph(navController = navController)
                 }

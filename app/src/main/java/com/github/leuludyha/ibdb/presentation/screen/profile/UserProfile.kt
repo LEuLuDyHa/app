@@ -17,10 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberImagePainter
-
-const val defaultProfilePicture =
-    "https://images.freeimages.com/images/large-previews/023/geek-avatar-1632962.jpg"
+import coil.compose.rememberAsyncImagePainter
+import com.github.leuludyha.ibdb.presentation.navigation.Screen
+import com.github.leuludyha.ibdb.util.Constant
 
 @Composable
 fun UserProfile(
@@ -44,7 +43,7 @@ fun UserProfile(
             border = BorderStroke(0.5.dp, Color.Black)
         ) {
             Image(
-                painter = rememberImagePainter(
+                painter = rememberAsyncImagePainter(
                     // Take the member's google account's picture for now
                     viewModel.authContext.principal.profilePictureUrl
                 ),
@@ -62,17 +61,20 @@ fun UserProfile(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button("My Friends")
-            Button("Something")
-            Button("Settings")
+            Button(Constant.USER_PROFILE_MY_FRIENDS)
+            Button(Constant.USER_PROFILE_RECEIVE_WORK) {
+                // Start listening for people sharing other works
+                navController.navigate(Screen.ReceiveNearbyWork.route)
+            }
+            Button(Constant.USER_PROFILE_SETTINGS)
         }
     }
 }
 
 @Composable
-private fun Button(text: String){
+private fun Button(text: String, onClick: () -> Unit = {}) {
     Button(
-        onClick = { /* Do something */ },
+        onClick = { onClick() },
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)

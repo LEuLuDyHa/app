@@ -1,14 +1,34 @@
 package com.github.leuludyha.ibdb.presentation.components.sharing
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import android.Manifest
+import android.R
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.os.Build
+import android.util.Log
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.zIndex
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
@@ -27,13 +47,19 @@ private enum class ListenerState {
 @Composable
 fun SharedWorkListener(
     navController: NavHostController,
+    viewModel: SharedWorkListenerViewModel = hiltViewModel()
 ) {
-    SharingPermissionRequired { SharedWorkListenerComponent(navController = navController) }
+    SharingPermissionRequired {
+        SharedWorkListenerComponent(
+            viewModel = viewModel,
+            navController = navController
+        )
+    }
 }
 
 @Composable
 private fun SharedWorkListenerComponent(
-    viewModel: SharedWorkListenerViewModel = hiltViewModel(),
+    viewModel: SharedWorkListenerViewModel,
     navController: NavHostController
 ) {
     val (state, setState) = remember { mutableStateOf(ListenerState.Listening) }
@@ -121,7 +147,16 @@ private fun SharedWorkListenerComponent(
             )
         }
 
-        else -> { /* Show nothing */
+
+        else -> {
+            Box(
+                modifier = Modifier
+                    .testTag("shared_work_listener::loading_box")
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                SpinningProgressBar()
+            }
         }
     }
 }
@@ -218,3 +253,58 @@ private fun ProcessAddFriendPacket(
         icon = { android.R.drawable.ic_dialog_alert }
     )
 }
+
+
+/**
+ * An animated Spinning Progress Bar.
+ */
+@Composable
+private fun SpinningProgressBar(modifier: Modifier = Modifier) {
+    val count = 12
+
+    val infiniteTransition = rememberInfiniteTransition()
+    val angle by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = count.toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(count * 80, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+
+    Canvas(modifier = modifier.size(48.dp)) {
+
+        val canvasWidth = size.width
+        val canvasHeight = size.height
+
+        val width = size.width * .3f
+        val height = size.height / 8
+
+        val cornerRadius = width.coerceAtMost(height) / 2
+
+        for (i in 0..360 step 360 / count) {
+            rotate(i.toFloat()) {
+                drawRoundRect(
+                    color = Color.LightGray.copy(alpha = .7f),
+                    topLeft = Offset(canvasWidth - width, (canvasHeight - height) / 2),
+                    size = Size(width, height),
+                    cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                )
+            }
+        }
+
+        val coefficient = 360f / count
+
+        for (i in 1..4) {
+            rotate((angle.toInt() + i) * coefficient) {
+                drawRoundRect(
+                    color = Color.Gray.copy(alpha = (0.2f + 0.2f * i).coerceIn(0f, 1f)),
+                    topLeft = Offset(canvasWidth - width, (canvasHeight - height) / 2),
+                    size = Size(width, height),
+                    cornerRadius = CornerRadius(cornerRadius, cornerRadius)
+                )
+            }
+        }
+    }
+}
+

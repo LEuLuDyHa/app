@@ -25,4 +25,6 @@ sealed class Screen(val route: String) {
     object Share : Screen("share/{bookId}") {
         fun shareBookId(bookId: String) = "share/$bookId"
     }
+
+    object ReceiveNearbyWork: Screen("receive_nearby_work")
 }
