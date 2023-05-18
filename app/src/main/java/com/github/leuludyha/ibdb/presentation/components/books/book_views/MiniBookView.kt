@@ -10,7 +10,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.CoverSize
@@ -35,7 +35,8 @@ fun MiniBookView(
             work,
             onClick,
             footer,
-            displaySubjects)
+            displaySubjects
+        )
         Orientation.Horizontal -> HorizontalBookView(
             modifier,
             work,
@@ -79,7 +80,7 @@ private fun VerticalBookView(
                     .height(300.dp)
                     .fillMaxWidth()
                     .testTag("thumbnail"),
-                painter = rememberAsyncImagePainter(
+                painter = rememberImagePainter(
                     ImageRequest.Builder(LocalContext.current)
                         .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large))
                         .apply(block = fun ImageRequest.Builder.() {
@@ -159,7 +160,7 @@ private fun HorizontalBookView(
             if (covers.value.isNotEmpty()) {
                 Image(
                     modifier = Modifier.testTag("thumbnail"),
-                    painter = rememberAsyncImagePainter(
+                    painter = rememberImagePainter(
                         ImageRequest.Builder(LocalContext.current)
                             .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Medium))
                             .apply(block = fun ImageRequest.Builder.() {

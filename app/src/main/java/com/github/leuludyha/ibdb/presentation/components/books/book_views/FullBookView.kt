@@ -1,22 +1,11 @@
 package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Button
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -28,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.Author
@@ -80,7 +69,7 @@ fun FullBookView(
                 .testTag("full_book_view::book_cover")
                 .height(300.dp)
                 .fillMaxWidth(),
-            painter = rememberAsyncImagePainter(
+            painter = rememberImagePainter(
                 ImageRequest.Builder(LocalContext.current)
                     .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large))
                     .apply(block = fun ImageRequest.Builder.() {

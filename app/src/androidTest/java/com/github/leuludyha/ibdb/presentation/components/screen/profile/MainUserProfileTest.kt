@@ -17,6 +17,7 @@ import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfileViewModel
+import com.github.leuludyha.ibdb.util.Constant
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -85,8 +86,8 @@ class MainUserProfileTest {
             )
         }
 
-        composeTestRule.onNodeWithText("My Friends").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Something").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_MY_FRIENDS).assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_RECEIVE_WORK).assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_SETTINGS).assertIsDisplayed()
     }
 }

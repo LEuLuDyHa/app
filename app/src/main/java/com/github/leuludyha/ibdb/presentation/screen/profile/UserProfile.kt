@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.util.Constant
 
@@ -43,7 +43,7 @@ fun UserProfile(
             border = BorderStroke(0.5.dp, Color.Black)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(
+                painter = rememberImagePainter(
                     // Take the member's google account's picture for now
                     viewModel.authContext.principal.profilePictureUrl
                 ),
