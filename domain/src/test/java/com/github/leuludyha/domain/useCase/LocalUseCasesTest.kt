@@ -1,4 +1,4 @@
-package com.github.leuludyha.domain.useCases
+package com.github.leuludyha.domain.useCase
 
 import com.github.leuludyha.domain.model.library.*
 import com.github.leuludyha.domain.model.library.Mocks.authorRoaldDahl

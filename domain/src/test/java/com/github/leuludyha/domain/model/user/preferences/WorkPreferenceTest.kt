@@ -4,7 +4,7 @@ import com.github.leuludyha.domain.model.library.Mocks.editionMrFox
 import com.github.leuludyha.domain.model.library.Mocks.work1984
 import com.github.leuludyha.domain.model.library.Mocks.workMrFox
 import com.github.leuludyha.domain.model.library.Mocks.workMrFoxPref
-import com.google.common.truth.Truth
+import com.google.common.truth.Truth.assertThat
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Test
 import org.hamcrest.Matchers.`is` as Is
@@ -14,13 +14,13 @@ class WorkPreferenceTest {
     @Test
     fun fieldsAreProperlyAccessed() {
         assertThat(workMrFoxPref, Is(workMrFoxPref))
-        Truth.assertThat(workMrFoxPref).isNotEqualTo(editionMrFox)
-        Truth.assertThat(workMrFoxPref).isNotEqualTo(work1984)
+        assertThat(workMrFoxPref).isNotEqualTo(editionMrFox)
+        assertThat(workMrFoxPref).isNotEqualTo(work1984)
         assertThat(workMrFoxPref.Id(), Is(workMrFoxPref.work.id))
         assertThat(workMrFoxPref.work, Is(workMrFox))
         assertThat(workMrFoxPref.readingState, Is(WorkPreference.ReadingState.READING))
         assertThat(workMrFoxPref.possessed, Is(true))
-        Truth.assertThat(workMrFoxPref.rating).isNull()
+        assertThat(workMrFoxPref.rating).isNull()
     }
 
     @Test
@@ -47,5 +47,49 @@ class WorkPreferenceTest {
                 work1984, WorkPreference.ReadingState.READING, false
             ).getPossessionString(), Is("Not Yet Acquired")
         )
+    }
+
+    @Test
+    fun equalsWithSameWorkPrefReturnsTrue() {
+        assertThat(workMrFoxPref.equals(workMrFoxPref)).isTrue()
+    }
+
+    @Test
+    fun equalsWithNotWorkPrefReturnsFalse() {
+        assertThat(workMrFoxPref.equals("test")).isFalse()
+    }
+
+    @Test
+    fun equalsWithSameFieldsReturnsTrue() {
+        val workPref1 = WorkPreference(
+            work1984,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        val workPref2 = WorkPreference(
+            work1984,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        assertThat(workPref1.equals(workPref2)).isTrue()
+    }
+
+    @Test
+    fun hashcodeWithSameFieldsReturnsSameHashcode() {
+        val workPref1 = WorkPreference(
+            work1984,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        val workPref2 = WorkPreference(
+            work1984,
+            readingState = WorkPreference.ReadingState.READING,
+            possessed = false,
+            rating = null
+        )
+        assertThat(workPref1.hashCode()).isEqualTo(workPref2.hashCode())
     }
 }

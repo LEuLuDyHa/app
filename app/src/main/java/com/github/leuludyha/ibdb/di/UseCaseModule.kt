@@ -9,6 +9,7 @@ import com.github.leuludyha.domain.useCase.auth.signin.OneTapSignInUseCase
 import com.github.leuludyha.domain.useCase.auth.signin.SignInUseCases
 import com.github.leuludyha.domain.useCase.users.GetNearbyUsersUseCase
 import com.github.leuludyha.domain.useCase.users.GetUserFromPhoneNumberUseCase
+import com.github.leuludyha.domain.util.NetworkProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,8 +23,8 @@ import dagger.hilt.components.SingletonComponent
 object UseCaseModule {
 
     @Provides
-    fun provideSearchUseCase(libraryRepository: LibraryRepository) =
-        SearchRemotelyUseCase(libraryRepository)
+    fun provideSearchUseCase(libraryRepository: LibraryRepository, networkProvider: NetworkProvider) =
+        SearchRemotelyUseCase(libraryRepository, networkProvider)
 
     @Provides
     fun provideGetAllWorkPrefsLocallyUseCase(libraryRepository: LibraryRepository) =
@@ -45,12 +46,12 @@ object UseCaseModule {
         )
 
     @Provides
-    fun getWorkByIdUseCase(libraryRepository: LibraryRepository) =
-        GetWorkRemotelyUseCase(libraryRepository)
+    fun getWorkByIdUseCase(libraryRepository: LibraryRepository, networkProvider: NetworkProvider) =
+        GetWorkRemotelyUseCase(libraryRepository, networkProvider)
 
     @Provides
-    fun getAuthorByIdUseCase(libraryRepository: LibraryRepository) =
-        GetAuthorRemotelyUseCase(libraryRepository)
+    fun getAuthorByIdUseCase(libraryRepository: LibraryRepository, networkProvider: NetworkProvider) =
+        GetAuthorRemotelyUseCase(libraryRepository, networkProvider)
 
     @Provides
     fun getUserFromPhoneNumberUseCase(userRepository: UserRepository) =

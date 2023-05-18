@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.domain.model.library.MockLibraryRepositoryImpl
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
+import com.github.leuludyha.ibdb.MockTrueNetworkProvider
 import com.github.leuludyha.ibdb.presentation.components.search.BookSearchViewModel
 import org.junit.Rule
 import org.junit.Test
@@ -25,7 +26,7 @@ class BookSearchScreenTest {
             BookSearchScreen(
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 padding = PaddingValues(4.dp),
-                bookSearchViewModel = BookSearchViewModel(SearchRemotelyUseCase(MockLibraryRepositoryImpl()))
+                bookSearchViewModel = BookSearchViewModel(SearchRemotelyUseCase(MockLibraryRepositoryImpl(), MockTrueNetworkProvider))
             )
         }
 

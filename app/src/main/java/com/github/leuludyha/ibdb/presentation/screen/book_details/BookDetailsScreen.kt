@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -32,8 +33,9 @@ fun BookDetailsScreen(
     viewModel: BookDetailsScreenViewModel = hiltViewModel(),
     readingStateControlViewModel: ReadingStateControlViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     // Go fetch the work based on its work id
-    SideEffect { viewModel.loadWorkFrom(workId) }
+    SideEffect { viewModel.loadWorkFrom(context, workId) }
 
     // Collect the resulting work as a state
     val workResult by viewModel.work.collectAsState()
