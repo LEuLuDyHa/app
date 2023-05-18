@@ -1,7 +1,10 @@
 package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.interfaces.Keyed
+import com.github.leuludyha.domain.model.library.Loaded.LoadedAuthor
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 data class Author(
     val id: String,
@@ -23,4 +26,19 @@ data class Author(
     }
 
     override fun hashCode(): Int = id.hashCode()
+
+    fun toLoadedAuthor(): LoadedAuthor {
+        return runBlocking {
+            LoadedAuthor(
+                id = id,
+                name = name,
+                birthDate = birthDate,
+                deathDate = deathDate,
+                wikipedia = wikipedia,
+                works = works.first().map { it.toLoadedWork() },
+                covers = covers.first(),
+            )
+        }
+    }
+
 }
