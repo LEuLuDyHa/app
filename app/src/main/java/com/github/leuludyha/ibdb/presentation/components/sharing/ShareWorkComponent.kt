@@ -34,13 +34,13 @@ private enum class SharerState {
 @Composable
 fun ShareWorkComponent(
     padding: PaddingValues,
-    workId: String,
+    workJson: String,
     onSuccessfullyShared: () -> Unit,
 ) {
     SharingPermissionRequired {
         ShareInnerWorkComponent(
             padding = padding,
-            workId = workId,
+            workJson = workJson,
             onSuccessfullyShared = onSuccessfullyShared,
         )
     }
@@ -49,7 +49,7 @@ fun ShareWorkComponent(
 @Composable
 private fun ShareInnerWorkComponent(
     padding: PaddingValues,
-    workId: String,
+    workJson: String,
     viewModel: ShareWorkComponentViewModel = hiltViewModel(),
     onSuccessfullyShared: () -> Unit,
 ) {
@@ -145,7 +145,7 @@ private fun ShareInnerWorkComponent(
         // Sends the packet then disconnects
         SharerState.Connected -> {
             if (viewModel.connection.isConnected()) {
-                viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
+                viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workJson))
                 onSuccessfullyShared()
             } else {
                 setState(SharerState.Error)
