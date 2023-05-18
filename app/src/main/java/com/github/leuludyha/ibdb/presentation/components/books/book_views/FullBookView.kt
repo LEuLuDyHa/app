@@ -1,37 +1,33 @@
 package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.util.toText
 import com.github.leuludyha.ibdb.R
-import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControl
 import com.github.leuludyha.ibdb.presentation.components.books.reading_list.controls.ReadingStateControlViewModel
+import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 
 @Composable
@@ -49,8 +45,24 @@ fun FullBookView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = work.title.orEmpty(), style = MaterialTheme.typography.titleLarge)
-        ReadingStateControl(work = work, readingStateControlViewModel)
+        Text(
+            text = work.title.orEmpty(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            ReadingStateControl(work = work, readingStateControlViewModel)
+            IconButton(
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary
+                ),
+                onClick = { navController.navigate(Screen.Share.shareBookId(work.id)) }
+            ) { Icon(Icons.Filled.Send, "Share") }
+        }
         MiniAuthorViews(authors.value, navController)
         Image(
             modifier = Modifier
@@ -58,11 +70,13 @@ fun FullBookView(
                 .height(300.dp)
                 .fillMaxWidth(),
             painter = rememberImagePainter(
-                data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large),
-                builder = {
-                    crossfade(true)
-                    scale(Scale.FILL)
-                }),
+                ImageRequest.Builder(LocalContext.current)
+                    .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large))
+                    .apply(block = fun ImageRequest.Builder.() {
+                        crossfade(true)
+                        scale(Scale.FILL)
+                    }).build()
+            ),
             contentScale = ContentScale.FillWidth,
             contentDescription = stringResource(id = R.string.ui_bookCover_altText)
         )
@@ -87,6 +101,7 @@ fun MiniAuthorViews(
                 else -> "${authorLabel}s: "
             },
             style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
         ItemList(
             values = authors,
@@ -128,7 +143,8 @@ fun Subjects(
         )
         Text(
             text = subjects.take(3).toText(),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

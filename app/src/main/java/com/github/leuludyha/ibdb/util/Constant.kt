@@ -4,6 +4,7 @@ object Constant {
     //Keys used in the code
     const val SEARCH_QUERY_ARGUMENT_KEY = "searchQuery"
     const val BOOK_DETAILS_ARGUMENT_KEY = "bookId"
+    const val SHARE_BOOK_ID_ARGUMENT_KEY = "bookId"
     const val AUTHOR_DETAILS_ARGUMENT_KEY = "authorId"
     const val BARCODE_RESULT_KEY = "barcodeResult"
     const val SIGN_UP_SHARED_PREFERENCES_KEY = "singUpKey"
@@ -19,4 +20,7 @@ object Constant {
     //Strings for UI
     const val NETWORK_UNAVAILABLE_TOAST = "Network unavailable!"
     const val USER_NOT_FOUND = "User not found!"
+    const val USER_PROFILE_MY_FRIENDS = "My Friends"
+    const val USER_PROFILE_RECEIVE_WORK = "Receive work"
+    const val USER_PROFILE_SETTINGS = "Settings"
 }

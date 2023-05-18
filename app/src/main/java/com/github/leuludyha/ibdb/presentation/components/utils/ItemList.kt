@@ -1,30 +1,31 @@
-package com.github.leuludyha.ibdb.presentation.components
+package com.github.leuludyha.ibdb.presentation.components.utils
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.items
 import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.ibdb.presentation.Orientation
 
 @Composable
-fun <T : Keyed> PagingItemList(
+fun <T : Keyed> ItemList(
     modifier: Modifier = Modifier,
-    values: LazyPagingItems<T>,
+    values: List<T>,
     orientation: Orientation = Orientation.Horizontal,
     itemMapper: @Composable (t: T) -> Unit,
 ) {
     val content: LazyListScope.() -> Unit = {
-        items(items = values, key = { it.Id() }) { value ->
-            value?.let { itemMapper(it) }
-        }
+        items(
+            items = values,
+            key = { it.Id() }
+        ) { itemMapper(it) }
     }
 
     Surface {
@@ -49,7 +50,8 @@ private fun ItemColumn(
         modifier = modifier,
         content = content,
         contentPadding = padding,
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     )
 }
 
@@ -62,6 +64,7 @@ private fun ItemRow(
         modifier = modifier,
         content = content,
         contentPadding = padding,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
+        horizontalArrangement = Arrangement.spacedBy(4.dp),
+        verticalAlignment = Alignment.CenterVertically
     )
 }

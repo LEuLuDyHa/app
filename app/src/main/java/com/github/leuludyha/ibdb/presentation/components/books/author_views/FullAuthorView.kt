@@ -16,8 +16,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.github.leuludyha.domain.model.library.Author
 import com.github.leuludyha.domain.model.library.Mocks
-import com.github.leuludyha.ibdb.presentation.components.ItemList
 import com.github.leuludyha.ibdb.presentation.components.books.book_views.MiniBookView
+import com.github.leuludyha.ibdb.presentation.components.utils.ItemList
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.ui.theme.IBDBTheme
 
@@ -35,7 +35,11 @@ fun FullAuthorView(
         verticalArrangement = Arrangement.Top
     ) {
 
-        Text(text = author.toString(), style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = author.toString(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
         ItemList(
             values = works.value,

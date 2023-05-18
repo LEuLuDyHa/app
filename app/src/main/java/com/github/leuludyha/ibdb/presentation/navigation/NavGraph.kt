@@ -8,6 +8,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.github.leuludyha.ibdb.presentation.components.sharing.SharedWorkListener
 import com.github.leuludyha.ibdb.presentation.screen.HomeScreen
 import com.github.leuludyha.ibdb.presentation.screen.author_views.AuthorDetailsScreen
 import com.github.leuludyha.ibdb.presentation.screen.book_details.BookDetailsScreen
@@ -16,6 +17,7 @@ import com.github.leuludyha.ibdb.presentation.screen.profile.ProfileScreen
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.search.BookSearchScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
+import com.github.leuludyha.ibdb.presentation.screen.share.ShareScreen
 import com.github.leuludyha.ibdb.util.Constant
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,6 +94,20 @@ fun NavGraph(navController: NavHostController) {
                 GoogleMapsScreen(
                     paddingValues = padding
                 )
+            }
+            composable(
+                route = Screen.Share.route,
+                arguments = listOf(navArgument(Constant.SHARE_BOOK_ID_ARGUMENT_KEY) {
+                    type = NavType.StringType
+                })
+            ) { backStackEntry ->
+                backStackEntry.arguments
+                    ?.getString(Constant.SHARE_BOOK_ID_ARGUMENT_KEY)
+                    ?.let { workId -> ShareScreen(navController, padding, workId) }
+            }
+            composable(route = Screen.ReceiveNearbyWork.route) {
+                //TODO: Add Hana's screen once it is finished
+                SharedWorkListener(navController = navController)
             }
         }
     }

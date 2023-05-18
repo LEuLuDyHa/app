@@ -6,6 +6,7 @@ import android.os.Parcel
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Result
 import com.github.leuludyha.domain.repository.AuthRepository
@@ -83,7 +84,7 @@ class AuthenticationProviderTest {
     val errorViewModel = AuthenticationProviderViewModel(
         MockSignInClient(),
         SignInUseCases(OneTapSignInUseCase(MockErrorAuthRepository()), FirebaseSignInUseCase(MockErrorAuthRepository())),
-        AuthenticationContext(Mocks.mainUser)
+        AuthenticationContext(Mocks.mainUser, NearbyConnection.Empty)
     )
 
     class MockSuccessAuthRepository(
@@ -106,7 +107,7 @@ class AuthenticationProviderTest {
             OneTapSignInUseCase(MockSuccessAuthRepository(fireBaseSignInResult)),
             FirebaseSignInUseCase(MockSuccessAuthRepository(fireBaseSignInResult))
         ),
-        AuthenticationContext(Mocks.mainUser)
+        AuthenticationContext(Mocks.mainUser, NearbyConnection.Empty)
     )
 
     @Test

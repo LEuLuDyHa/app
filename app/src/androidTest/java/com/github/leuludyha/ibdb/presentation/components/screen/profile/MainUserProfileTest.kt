@@ -11,11 +11,13 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.user.MainUser
 import com.github.leuludyha.domain.model.user.preferences.UserPreferences
 import com.github.leuludyha.domain.model.user.preferences.UserStatistics
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfile
 import com.github.leuludyha.ibdb.presentation.screen.profile.UserProfileViewModel
+import com.github.leuludyha.ibdb.util.Constant
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -52,7 +54,7 @@ class MainUserProfileTest {
         latitude = 0.0,
         longitude = 0.0
     )
-    private val authContext = AuthenticationContext(mainUser)
+    private val authContext = AuthenticationContext(mainUser, NearbyConnection.Empty)
     private val viewModel = UserProfileViewModel(authContext)
 
     @Test
@@ -84,8 +86,8 @@ class MainUserProfileTest {
             )
         }
 
-        composeTestRule.onNodeWithText("My Friends").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Something").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Settings").assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_MY_FRIENDS).assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_RECEIVE_WORK).assertIsDisplayed()
+        composeTestRule.onNodeWithText(Constant.USER_PROFILE_SETTINGS).assertIsDisplayed()
     }
 }

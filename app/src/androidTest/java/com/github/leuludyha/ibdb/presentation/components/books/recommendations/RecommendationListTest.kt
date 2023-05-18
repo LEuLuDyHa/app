@@ -7,6 +7,7 @@ import androidx.navigation.testing.TestNavHostController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
+import com.github.leuludyha.domain.model.authentication.NearbyConnection
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.recommendation.RecommenderSystem
 import com.github.leuludyha.domain.model.user.MainUser
@@ -100,7 +101,7 @@ class RecommendationListTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 viewModel = RecommendationListViewModel(
                     recommender,
-                    AuthenticationContext(user2)
+                    AuthenticationContext(user2, NearbyConnection.Empty)
                 ),
                 onRecommendations = { }
             )
@@ -117,7 +118,7 @@ class RecommendationListTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 viewModel = RecommendationListViewModel(
                     recommender,
-                    AuthenticationContext(Mocks.mainUser)
+                    AuthenticationContext(Mocks.mainUser, NearbyConnection.Empty)
                 ),
                 onRecommendations = { }
             )
@@ -134,7 +135,7 @@ class RecommendationListTest {
                 navController = TestNavHostController(InstrumentationRegistry.getInstrumentation().context),
                 viewModel = RecommendationListViewModel(
                     recommender,
-                    AuthenticationContext(user2)
+                    AuthenticationContext(user2, NearbyConnection.Empty)
                 ),
                 onRecommendations = { }
             )

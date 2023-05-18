@@ -1,23 +1,10 @@
 package com.github.leuludyha.ibdb.presentation.components.auth.signup.add_friends
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PersonAdd
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,9 +49,10 @@ fun MiniContactFoundView(
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
-                    modifier = Modifier.size(80.dp).testTag("profile_picture"),
-                    painter = rememberImagePainter(
-                        // Take the member's google account's picture for now
+                    modifier = Modifier
+                        .size(80.dp)
+                        .testTag("profile_picture"),
+                    painter = rememberImagePainter(// Take the member's google account's picture for now
                         user.profilePictureUrl
                     ),
                     contentDescription = "Profile Picture",
@@ -77,8 +65,16 @@ fun MiniContactFoundView(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(text = contactName, style = MaterialTheme.typography.labelLarge)
-                    Text(text = user.username, style = MaterialTheme.typography.labelMedium)
+                    Text(
+                        text = contactName,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = user.username,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
             Row(

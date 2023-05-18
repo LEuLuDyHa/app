@@ -22,4 +22,9 @@ sealed class Screen(val route: String) {
     object FindBook : Screen("find_book")
     object UserProfile : Screen("user_profile")
     object GoogleMaps : Screen("maps")
+    object Share : Screen("share/{bookId}") {
+        fun shareBookId(bookId: String) = "share/$bookId"
+    }
+
+    object ReceiveNearbyWork: Screen("receive_nearby_work")
 }
