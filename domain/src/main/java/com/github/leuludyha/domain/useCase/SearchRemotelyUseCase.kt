@@ -10,8 +10,12 @@ class SearchRemotelyUseCase(
     private val networkProvider: NetworkProvider
 ) {
     operator fun invoke(context: Context, query: String) =
-        if(networkProvider.checkNetworkAvailable(context))
-            libraryRepository.searchRemotely(query)
-        else
+        try {
+            if(networkProvider.checkNetworkAvailable(context))
+                libraryRepository.searchRemotely(query)
+            else
+                flowOf()
+        } catch(e: Exception) {
             flowOf()
+        }
 }

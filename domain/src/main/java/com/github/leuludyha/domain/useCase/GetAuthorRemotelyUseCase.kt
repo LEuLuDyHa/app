@@ -11,8 +11,13 @@ class GetAuthorRemotelyUseCase(
     private val networkProvider: NetworkProvider
 ) {
     operator fun invoke(context: Context, authorId: String) =
-        if(networkProvider.checkNetworkAvailable(context))
-            libraryRepository.getAuthorRemotely(authorId)
-        else
-            flowOf(Result.Error("No internet connection"))
+        try {
+            if(networkProvider.checkNetworkAvailable(context))
+                libraryRepository.getAuthorRemotely(authorId)
+            else
+                flowOf(Result.Error("No internet connection"))
+        } catch(e: Exception) {
+            flowOf(Result.Error("Could not fetch author"))
+        }
+
 }

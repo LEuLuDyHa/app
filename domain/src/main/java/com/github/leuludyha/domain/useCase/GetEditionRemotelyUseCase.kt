@@ -11,8 +11,12 @@ class GetEditionRemotelyUseCase(
     private val networkProvider: NetworkProvider
 ) {
     operator fun invoke(context: Context, editionId: String) =
-        if(networkProvider.checkNetworkAvailable(context))
-            libraryRepository.getEditionRemotely(editionId)
-        else
-            flowOf(Result.Error("No internet connection"))
+        try {
+            if(networkProvider.checkNetworkAvailable(context))
+                libraryRepository.getEditionRemotely(editionId)
+            else
+                flowOf(Result.Error("No internet connection"))
+        } catch(e: Exception) {
+            flowOf(Result.Error("Could not fetch edition"))
+        }
 }
