@@ -6,10 +6,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import coil.size.Scale
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Work
@@ -58,7 +60,7 @@ private fun VerticalBookView(
     val subjects = work.subjects.collectAsState(initial = listOf())
 
     ElevatedCard(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentHeight()
             .width(200.dp)
             .testTag("minibook::button"),
@@ -77,12 +79,14 @@ private fun VerticalBookView(
                     .height(300.dp)
                     .fillMaxWidth()
                     .testTag("thumbnail"),
-                painter = rememberImagePainter(
-                    data =  covers.value.firstOrNull()?.urlForSize(CoverSize.Large),
-                    builder = {
-                        crossfade(true)
-                        scale(Scale.FILL)
-                    }),
+                painter = rememberAsyncImagePainter(
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Large))
+                        .apply(block = fun ImageRequest.Builder.() {
+                            crossfade(true)
+                            scale(Scale.FILL)
+                        }).build()
+                ),
                 contentScale = ContentScale.FillWidth,
                 contentDescription = stringResource(id = R.string.ui_bookCover_altText)
             )
@@ -155,12 +159,14 @@ private fun HorizontalBookView(
             if (covers.value.isNotEmpty()) {
                 Image(
                     modifier = Modifier.testTag("thumbnail"),
-                    painter = rememberImagePainter(
-                        data = covers.value.firstOrNull()?.urlForSize(CoverSize.Medium),
-                        builder = {
-                            crossfade(true)
-                            scale(Scale.FILL)
-                        }),
+                    painter = rememberAsyncImagePainter(
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(data = covers.value.firstOrNull()?.urlForSize(CoverSize.Medium))
+                            .apply(block = fun ImageRequest.Builder.() {
+                                crossfade(true)
+                                scale(Scale.FILL)
+                            }).build()
+                    ),
                     contentScale = ContentScale.FillHeight,
                     contentDescription = stringResource(id = R.string.ui_bookCover_altText)
                 )

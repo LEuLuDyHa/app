@@ -35,7 +35,11 @@ fun FullAuthorView(
         verticalArrangement = Arrangement.Top
     ) {
 
-        Text(text = author.toString(), style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = author.toString(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
 
         ItemList(
             values = works.value,

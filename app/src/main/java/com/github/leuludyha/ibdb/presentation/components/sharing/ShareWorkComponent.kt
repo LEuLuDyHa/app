@@ -146,7 +146,6 @@ private fun ShareInnerWorkComponent(
         SharerState.Connected -> {
             if (viewModel.connection.isConnected()) {
                 viewModel.connection.sendPacket(NearbyMsgPacket(NearbyMsgPacket.ShareWork, workId))
-                viewModel.connection.disconnect()
                 onSuccessfullyShared()
             } else {
                 setState(SharerState.Error)

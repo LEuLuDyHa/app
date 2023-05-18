@@ -68,8 +68,15 @@ open class NearbyConnectionImpl(
     /** All states of the Connection */
     enum class State { Idle, Advertising, Discovering, ConnectionPending, Connected }
 
+    private var pState: State = State.Idle
+
     /** The current state of the connection */
-    protected var state: State = State.Idle
+    protected var state
+        set(value) {
+            Log.w("STATE", "State changed to $value", Error())
+            pState = value
+        }
+        get() = pState
 
     /** The endpoint this connection is connected to or null if it is not connected */
     private var connectedEndpoint: Endpoint? = null
@@ -119,7 +126,10 @@ open class NearbyConnectionImpl(
                     State.ConnectionPending -> { /* All good */
                     }
                     // Discovery should have stopped on requestConnection
-                    else -> throw IllegalStateException("Something went wrong...")
+                    else -> throw IllegalStateException(
+                        "Something went wrong..." +
+                                "\nState is ${state}, Expected Pending or Advertising"
+                    )
                 }
 
                 connectedEndpoint = Endpoint(
@@ -239,6 +249,7 @@ open class NearbyConnectionImpl(
                 // First stop discovery
                 stopDiscovery()
                 // We request a connection to the specified endpoint.
+                updateStateTo(State.ConnectionPending)
                 client.requestConnection(username, endpointId, connectionLifecycleCallback)
             }
             // Trying to connect when only discovering or in other state
@@ -253,10 +264,11 @@ open class NearbyConnectionImpl(
             return
         }
 
+        updateStateTo(State.Idle)
         connectedEndpoint?.let {
             client.disconnectFromEndpoint(it.id)
             // Back to idle default mode
-            this.reset()
+            reset()
         } ?: throw IllegalStateException("The endpoint is null")
     }
 
@@ -265,9 +277,10 @@ open class NearbyConnectionImpl(
 //========== ======== ==== ==
 
     override fun stopAdvertising() {
-        if (state != State.Advertising) {
-            throw UnsupportedOperationException("The connection is not in advertising mode")
+        if (!isAdvertising()) {
+            return
         }
+
         client.stopAdvertising()
         updateStateTo(State.Idle)
     }
@@ -315,12 +328,16 @@ open class NearbyConnectionImpl(
 //========== ======== ==== ==
 
     override fun stopDiscovery() {
+        if (!isDiscovering()) {
+            return
+        }
+
         client.stopDiscovery()
+        // Update internal state
+        updateStateTo(State.Idle)
         // Clear endpoints found since we stopped discovering
         discoveredEndpointsIds.clear()
         notifyAll { it.onFoundEndpointsChanged() }
-        // Update internal state
-        updateStateTo(State.Idle)
     }
 
     override fun isDiscovering() = state == State.Discovering

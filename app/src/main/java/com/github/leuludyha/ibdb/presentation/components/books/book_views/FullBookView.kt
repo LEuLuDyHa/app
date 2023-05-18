@@ -56,7 +56,11 @@ fun FullBookView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Text(text = work.title.orEmpty(), style = MaterialTheme.typography.titleLarge)
+        Text(
+            text = work.title.orEmpty(),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground
+        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -108,6 +112,7 @@ fun MiniAuthorViews(
                 else -> "${authorLabel}s: "
             },
             style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
         ItemList(
             values = authors,
@@ -149,7 +154,8 @@ fun Subjects(
         )
         Text(
             text = subjects.take(3).toText(),
-            style = MaterialTheme.typography.titleSmall
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onBackground
         )
     }
 }

@@ -15,7 +15,6 @@ import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandl
 import com.github.leuludyha.domain.model.authentication.Endpoint
 import com.github.leuludyha.domain.model.authentication.NearbyMsgPacket
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 
 
 private enum class ListenerState {
@@ -25,7 +24,6 @@ private enum class ListenerState {
 /**
  * Listens to nearby user who want to share a work
  */
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun SharedWorkListener(
     navController: NavHostController,
@@ -73,8 +71,6 @@ private fun SharedWorkListenerComponent(
             }
 
             override fun onDisconnected(endpointId: String) {
-                setConnectedEndpoint(null)
-                setPacket(null)
                 if (!viewModel.connection.isAdvertising()) {
                     viewModel.connection.startAdvertising()
                 }

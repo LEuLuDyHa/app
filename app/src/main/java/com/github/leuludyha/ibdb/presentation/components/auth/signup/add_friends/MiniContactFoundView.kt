@@ -27,7 +27,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
 import com.github.leuludyha.domain.model.user.User
 import com.github.leuludyha.ibdb.R
 
@@ -62,9 +62,10 @@ fun MiniContactFoundView(
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
-                    modifier = Modifier.size(80.dp).testTag("profile_picture"),
-                    painter = rememberImagePainter(
-                        // Take the member's google account's picture for now
+                    modifier = Modifier
+                        .size(80.dp)
+                        .testTag("profile_picture"),
+                    painter = rememberAsyncImagePainter(// Take the member's google account's picture for now
                         user.profilePictureUrl
                     ),
                     contentDescription = "Profile Picture",
@@ -77,8 +78,16 @@ fun MiniContactFoundView(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.Start
                 ) {
-                    Text(text = contactName, style = MaterialTheme.typography.labelLarge)
-                    Text(text = user.username, style = MaterialTheme.typography.labelMedium)
+                    Text(
+                        text = contactName,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = user.username,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
                 }
             }
             Row(

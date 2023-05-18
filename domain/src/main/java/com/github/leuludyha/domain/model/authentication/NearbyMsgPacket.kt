@@ -6,6 +6,7 @@ private const val Delimiter = "/"
 class NearbyMsgPacket(
     val descriptor: String,
 ) {
+
     sealed class Prefix(val id: String)
 
     object AddFriend : Prefix("AddFriend")
@@ -14,6 +15,7 @@ class NearbyMsgPacket(
     constructor(prefix: Prefix, content: String) : this(
         Header + Delimiter + prefix.id + Delimiter + content
     )
+
 
     /** Prefix of the pack which identifies its type */
     val prefix get() = descriptor.split(Delimiter)[1]
