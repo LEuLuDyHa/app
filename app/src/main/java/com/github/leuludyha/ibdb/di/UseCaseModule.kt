@@ -64,4 +64,8 @@ object UseCaseModule {
     fun getSerializeWorkUseCase(libraryRepository: LibraryRepository) =
         SerializeWorkUseCase(libraryRepository)
 
+    @Provides
+    fun getSaveWorkLocallyUseCase(libraryRepository: LibraryRepository) =
+        SaveWorkLocallyUseCase(libraryRepository)
+
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.github.leuludyha.domain.model.authentication.ConnectionLifecycleHandler
 import com.github.leuludyha.domain.model.authentication.Endpoint
@@ -137,6 +138,7 @@ private fun SharedWorkListenerComponent(
             PacketProcessor(
                 endpoint = connectedEndpoint!!,
                 packet = packet!!,
+                viewModel = viewModel,
                 navController = navController,
                 onProcessed = {
                     if (viewModel.connection.isConnected()) {
@@ -163,6 +165,7 @@ private fun SharedWorkListenerComponent(
 private fun PacketProcessor(
     endpoint: Endpoint,
     packet: NearbyMsgPacket,
+    viewModel: SharedWorkListenerViewModel,
     navController: NavHostController,
     onProcessed: () -> Unit
 ) {
@@ -170,7 +173,8 @@ private fun PacketProcessor(
         NearbyMsgPacket.ShareWork.id -> {
             ProcessShareWorkPacket(
                 endpoint = endpoint,
-                workId = packet.content,
+                workJson = packet.content,
+                viewModel = viewModel,
                 navController = navController,
                 onProcessed = onProcessed
             )
@@ -197,7 +201,8 @@ private fun PacketProcessor(
 @Composable
 private fun ProcessShareWorkPacket(
     endpoint: Endpoint,
-    workId: String,
+    workJson: String,
+    viewModel: SharedWorkListenerViewModel,
     navController: NavHostController,
     onProcessed: () -> Unit
 ) {
@@ -208,8 +213,10 @@ private fun ProcessShareWorkPacket(
         text = { Text(text = "${endpoint.name} wants to share a book with you") },
         confirmButton = {
             Button(onClick = {
-                navController.navigate(Screen.BookDetails.passBookId(workId))
-                onProcessed()
+                viewModel.saveWorkFromJson(workJson) {
+                    navController.navigate(Screen.BookDetails.passBookId(workJson))
+                    onProcessed()
+                }
             }) { Text(text = "Accept") }
         },
         dismissButton = {
