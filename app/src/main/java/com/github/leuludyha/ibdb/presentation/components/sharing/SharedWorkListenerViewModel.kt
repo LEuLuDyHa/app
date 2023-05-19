@@ -20,13 +20,14 @@ class SharedWorkListenerViewModel @Inject constructor(
 
     val connection = authContext.nearbyConnection
 
-    fun saveWorkFromJson(workJson: String, nav: CompletionHandler) {
+    fun saveWorkFromJson(workJson: String, nav: (String) -> Unit) {
         val work = Json.decodeFromString<LoadedWork>(workJson).toWork()
 
         viewModelScope.launch {
             saveWorkLocallyUseCase(work)
-        }.invokeOnCompletion(nav)
-
+        }.invokeOnCompletion {
+            nav(work.id)
+        }
     }
 
 }

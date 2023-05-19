@@ -213,8 +213,8 @@ private fun ProcessShareWorkPacket(
         text = { Text(text = "${endpoint.name} wants to share a book with you") },
         confirmButton = {
             Button(onClick = {
-                viewModel.saveWorkFromJson(workJson) {
-                    navController.navigate(Screen.BookDetails.passBookId(workJson))
+                viewModel.saveWorkFromJson(workJson) { id ->
+                    navController.navigate(Screen.BookDetails.passBookId(id))
                     onProcessed()
                 }
             }) { Text(text = "Accept") }
