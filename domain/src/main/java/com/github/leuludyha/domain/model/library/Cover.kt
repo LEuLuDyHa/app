@@ -1,5 +1,8 @@
 package com.github.leuludyha.domain.model.library
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Cover(
     val id: Long
 ) {

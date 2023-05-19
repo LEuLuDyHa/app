@@ -1,8 +1,11 @@
 package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.interfaces.Keyed
-
+import com.github.leuludyha.domain.model.library.Loaded.LoadedWork
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.runBlocking
 
 // TODO add description, if possible
 data class Work(
@@ -28,4 +31,19 @@ data class Work(
     }
 
     override fun hashCode(): Int = id.hashCode()
+
+    fun toLoadedWork(): LoadedWork {
+        return runBlocking {
+             LoadedWork(
+                id = id,
+                title = title,
+                editions = editions.firstOrNull()?.map { it.toLoadedEdition() } ?: emptyList(),
+                authors = authors.firstOrNull()?.map { it.toLoadedAuthor() } ?: emptyList(),
+                covers = covers.firstOrNull() ?: emptyList(),
+                subjects = subjects.firstOrNull() ?: emptyList(),
+                nbOfPages = nbOfPages,
+            )
+        }
+    }
+
 }
