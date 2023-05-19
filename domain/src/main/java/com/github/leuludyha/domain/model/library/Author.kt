@@ -27,17 +27,29 @@ data class Author(
 
     override fun hashCode(): Int = id.hashCode()
 
-    fun toLoadedAuthor(): LoadedAuthor {
+    fun toLoadedAuthor(depth: Int = 3): LoadedAuthor {
         return runBlocking {
-            LoadedAuthor(
-                id = id,
-                name = name,
-                birthDate = birthDate,
-                deathDate = deathDate,
-                wikipedia = wikipedia,
-                works = works.first().map { it.toLoadedWork() },
-                covers = covers.first(),
-            )
+            if (depth > 0) {
+                LoadedAuthor(
+                    id = id,
+                    name = name,
+                    birthDate = birthDate,
+                    deathDate = deathDate,
+                    wikipedia = wikipedia,
+                    works = works.first().map { it.toLoadedWork(depth - 1) },
+                    covers = covers.first(),
+                )
+            } else {
+                LoadedAuthor(
+                    id = id,
+                    name = name,
+                    birthDate = birthDate,
+                    deathDate = deathDate,
+                    wikipedia = wikipedia,
+                    works = emptyList(),
+                    covers = covers.first(),
+                )
+            }
         }
     }
 

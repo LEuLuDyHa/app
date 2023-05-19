@@ -25,17 +25,29 @@ data class Edition(
 
     override fun hashCode(): Int = id.hashCode()
 
-    fun toLoadedEdition(): LoadedEdition {
+    fun toLoadedEdition(depth: Int = 3): LoadedEdition {
         return runBlocking {
-            LoadedEdition(
-                id = id,
-                title = title,
-                isbn13 = isbn13,
-                isbn10 = isbn10,
-                authors = authors.first().map { it.toLoadedAuthor() },
-                works = works.first().map { it.toLoadedWork() },
-                covers = covers.first()
-            )
+            if (depth > 0) {
+                LoadedEdition(
+                    id = id,
+                    title = title,
+                    isbn13 = isbn13,
+                    isbn10 = isbn10,
+                    authors = authors.first().map { it.toLoadedAuthor(depth - 1) },
+                    works = works.first().map { it.toLoadedWork(depth - 1) },
+                    covers = covers.first()
+                )
+            } else {
+                LoadedEdition(
+                    id = id,
+                    title = title,
+                    isbn13 = isbn13,
+                    isbn10 = isbn10,
+                    authors = emptyList(),
+                    works = emptyList(),
+                    covers = covers.first()
+                )
+            }
         }
     }
 
