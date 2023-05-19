@@ -2,7 +2,15 @@ package com.github.leuludyha.ibdb.presentation.screen.profile
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -61,12 +69,12 @@ fun UserProfile(
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
-            Button(Constant.USER_PROFILE_MY_FRIENDS)
+            // Button(Constant.USER_PROFILE_MY_FRIENDS)
             Button(Constant.USER_PROFILE_RECEIVE_WORK) {
                 // Start listening for people sharing other works
                 navController.navigate(Screen.ReceiveNearbyWork.route)
             }
-            Button(Constant.USER_PROFILE_SETTINGS)
+            // Button(Constant.USER_PROFILE_SETTINGS)
         }
     }
 }
@@ -78,8 +86,6 @@ private fun Button(text: String, onClick: () -> Unit = {}) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 16.dp, end = 16.dp)
-    ) {
-        Text(text)
-    }
+    ) { Text(text) }
 }
 

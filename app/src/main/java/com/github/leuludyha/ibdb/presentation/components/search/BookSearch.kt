@@ -5,6 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCodeScanner
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -14,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
@@ -43,6 +47,8 @@ fun BookSearch(
     val searchQuery by viewModel.searchQuery
     val foundWorks = viewModel.searchedWorks.collectAsLazyPagingItems()
 
+    val (focused, setFocused) = remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         if (query != null) {
             viewModel.searchQuery.value = query
@@ -66,7 +72,11 @@ fun BookSearch(
         }
     }
 
-    Column {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,6 +89,7 @@ fun BookSearch(
                 onValueChange = { viewModel.updateSearchQuery(it) },
                 singleLine = true,
                 modifier = Modifier
+                    .fillMaxWidth()
                     .testTag("book_search::search_field")
                     .background(MaterialTheme.colorScheme.secondaryContainer),
                 keyboardOptions = KeyboardOptions(
@@ -86,18 +97,23 @@ fun BookSearch(
                 ),
                 keyboardActions = KeyboardActions(onDone = {
                     viewModel.searchWorks(context, searchQuery)
-                })
+                }),
+                trailingIcon = {
+                    Row(
+                        modifier = Modifier.zIndex(100f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        IconButton(onClick = { viewModel.searchWorks(context, searchQuery) }) {
+                            Icon(Icons.Filled.Search, contentDescription = "")
+                        }
+                        IconButton(onClick = { navController.navigate(Screen.BarcodeScan.route) }) {
+                            Icon(Icons.Filled.QrCodeScanner, contentDescription = "")
+                        }
+                    }
+                }
             )
 
-            Button(
-                modifier = Modifier
-                    .testTag("book_search::barcode_scan_button"),
-                onClick = {
-                    navController.navigate(Screen.BarcodeScan.route)
-                }
-            ) {
-                Text(text = "Scanner")
-            }
         }
         if (queryLoading) {
             Column(

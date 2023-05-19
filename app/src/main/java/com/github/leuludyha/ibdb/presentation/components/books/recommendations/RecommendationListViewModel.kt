@@ -20,4 +20,5 @@ class RecommendationListViewModel @Inject constructor(
     fun getRecommendations(): Flow<List<Work>> {
         return recommender(authContext.principal)
     }
+
 }

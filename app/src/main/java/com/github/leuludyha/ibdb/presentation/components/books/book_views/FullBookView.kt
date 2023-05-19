@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.components.books.book_views
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +52,13 @@ fun FullBookView(
     val covers = work.covers.collectAsState(initial = listOf())
     val authors = work.authors.collectAsState(initial = listOf())
     val subjects = work.subjects.collectAsState(initial = listOf())
+
+    LaunchedEffect(covers) {
+        Log.i(
+            "COVERS",
+            "${covers.value}\nWork Id = ${work.id}"
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -151,6 +160,7 @@ fun Subjects(
                 else -> "${subjectLabel}s: "
             },
             style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onBackground
         )
         Text(
             text = subjects.take(3).toText(),

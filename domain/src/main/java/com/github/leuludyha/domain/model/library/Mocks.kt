@@ -1,6 +1,7 @@
 package com.github.leuludyha.domain.model.library
 
 import android.graphics.Bitmap
+import androidx.compose.runtime.mutableStateOf
 import androidx.paging.PagingData
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
 import com.github.leuludyha.domain.model.authentication.NearbyConnection
@@ -188,6 +189,25 @@ object Mocks {
         ),
     )
 
+    val workOzmaOfOz = Work(
+        id = "430318",
+        title = "Ozma of Oz",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf()),
+        covers = flowOf(listOf(Cover(430318L))),
+        subjects = flowOf(listOf("Fantasy", "Children's stories", "Fairy Tales"))
+    )
+
+    val workLePetitPrince = Work(
+        id = "10708267",
+        title = "Le Petit Prince",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf()),
+        covers = flowOf(listOf(Cover(10708267L))),
+        subjects = flowOf(listOf("Adventure", "Fantasy", "Friendship"))
+    )
+
+
     val workMrFoxPref = WorkPreference(
         work = workMrFox,
         readingState = WorkPreference.ReadingState.READING,
@@ -202,6 +222,54 @@ object Mocks {
         authors = flowOf(listOf()),
         covers = flowOf(listOf(Cover(12725451L))),
         subjects = flowOf(listOf("Censorship", "Futurology", "Surveillance"))
+    )
+
+
+    val authorJrrTolkien = Author(
+        id = "6155606",
+        name = "J.R.R Tolkien",
+        works = flowOf(listOf()),
+        birthDate = null,
+        deathDate = null,
+        wikipedia = null,
+        covers = flowOf(listOf(Cover(6155606L)))
+    )
+
+    private val workTheFellowshipOfTheRing = Work(
+        id = "8172085",
+        title = "The Fellowship of the Ring",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf(authorJrrTolkien)),
+        covers = flowOf(listOf(Cover(8172085L))),
+        subjects = flowOf(listOf("Elves", "Dwarves", "Evil"))
+    )
+
+    private val workTheTwoTowers = Work(
+        id = "11996846",
+        title = "The Two Towers",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf(authorJrrTolkien)),
+        covers = flowOf(listOf(Cover(11996846L))),
+        subjects = flowOf(listOf("Ents", "Orcs", "Hobbits"))
+    )
+
+    private val workTheReturnOfTheKing = Work(
+        id = "12530135",
+        title = "The Return of the King",
+        editions = flowOf(listOf()),
+        authors = flowOf(listOf(authorJrrTolkien)),
+        covers = flowOf(listOf(Cover(12530135L))),
+        subjects = flowOf(listOf("Elves", "Hobbits", "The Lord of the Rings"))
+    )
+
+    val weeklyPopularWorks = listOf(
+        workMrFox, dumbWork1984, workOzmaOfOz, workLePetitPrince
+    )
+
+    val jrrTolkienWorks = listOf(
+        workTheFellowshipOfTheRing,
+        workTheTwoTowers,
+        workTheReturnOfTheKing
     )
 
     val authorGeorgeOrwell: Author = Author(
@@ -280,6 +348,55 @@ object Mocks {
         statistics = UserStatistics(
             preferredWorks = listOf(workLaFermeDesAnimaux),
             preferredSubjects = listOf("Libertarianism"),
+            preferredAuthors = listOf(authorGeorgeOrwell),
+            averageNumberOfPages = 42
+        ),
+        friends = listOf(mainUser),
+        latitude = 46.522397,
+        longitude = 6.563162
+    )
+
+    val friend: MainUser = MainUser(
+        UUID.randomUUID().toString(),
+        username = "Steve",
+        userPreferences = UserPreferences(darkTheme = mutableStateOf(false)),
+        workPreferences = flowOf(
+            mapOf(
+                WorkPreference(work1984, WorkPreference.ReadingState.FINISHED, true).toPair(),
+                WorkPreference(workMrFox, WorkPreference.ReadingState.FINISHED, true).toPair(),
+                WorkPreference(
+                    workLaFermeDesAnimaux,
+                    WorkPreference.ReadingState.FINISHED,
+                    true
+                ).toPair(),
+                WorkPreference(
+                    workLePetitPrince,
+                    WorkPreference.ReadingState.FINISHED,
+                    true
+                ).toPair(),
+                WorkPreference(workOzmaOfOz, WorkPreference.ReadingState.FINISHED, true).toPair(),
+                WorkPreference(
+                    workTheFellowshipOfTheRing,
+                    WorkPreference.ReadingState.FINISHED,
+                    true
+                ).toPair(),
+                WorkPreference(
+                    workTheReturnOfTheKing,
+                    WorkPreference.ReadingState.FINISHED,
+                    true
+                ).toPair(),
+                WorkPreference(
+                    workTheTwoTowers,
+                    WorkPreference.ReadingState.FINISHED,
+                    true
+                ).toPair(),
+            )
+        ),
+        phoneNumber = "",
+        profilePictureUrl = "",
+        statistics = UserStatistics(
+            preferredWorks = listOf(work1984),
+            preferredSubjects = listOf("Censorship"),
             preferredAuthors = listOf(authorGeorgeOrwell),
             averageNumberOfPages = 42
         ),

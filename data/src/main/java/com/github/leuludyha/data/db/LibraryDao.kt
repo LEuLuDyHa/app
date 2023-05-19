@@ -403,7 +403,8 @@ interface LibraryDao {
      */
     suspend fun insert(context: Context, bmpProvider: BitmapProvider, workPref: WorkPreference, recursive: Boolean = true) {
         if(recursive) {
-            insert(context, bmpProvider, workPref.work, true)
+            // TODO Set recursive to true back
+            insert(context, bmpProvider, workPref.work, false)
         }
 
         insert(WorkPrefEntity.from(workPref))

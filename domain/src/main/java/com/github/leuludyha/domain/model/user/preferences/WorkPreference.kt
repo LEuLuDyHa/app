@@ -67,4 +67,8 @@ data class WorkPreference(
         result = 31 * result + (rating?.hashCode() ?: 0)
         return result
     }
+
+    fun toPair(): Pair<String, WorkPreference> {
+        return Pair(work.id, this)
+    }
 }

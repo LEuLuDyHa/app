@@ -102,9 +102,11 @@
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">
                 <map>
+                  <entry key="1552471216000YN" value="120" />
                   <entry key="Duration" value="90" />
                   <entry key="Pixel_6_API_33" value="120" />
                   <entry key="Tests" value="360" />
+                  <entry key="vivo&#10; V2109" value="120" />
                 </map>
               </option>
             </AndroidTestResultsTableState>
