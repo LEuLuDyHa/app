@@ -1,10 +1,10 @@
 package com.github.leuludyha.domain.model.library
 
 import com.github.leuludyha.domain.model.interfaces.Keyed
+import com.github.leuludyha.domain.model.library.Loaded.LoadedEdition
 import com.github.leuludyha.domain.model.library.Loaded.LoadedWork
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
 // TODO add description, if possible
@@ -32,17 +32,29 @@ data class Work(
 
     override fun hashCode(): Int = id.hashCode()
 
-    fun toLoadedWork(): LoadedWork {
+    fun toLoadedWork(depth: Int = 3): LoadedWork {
         return runBlocking {
-             LoadedWork(
-                id = id,
-                title = title,
-                editions = editions.firstOrNull()?.map { it.toLoadedEdition() } ?: emptyList(),
-                authors = authors.firstOrNull()?.map { it.toLoadedAuthor() } ?: emptyList(),
-                covers = covers.firstOrNull() ?: emptyList(),
-                subjects = subjects.firstOrNull() ?: emptyList(),
-                nbOfPages = nbOfPages,
-            )
+            if (depth > 0) {
+                LoadedWork(
+                    id = id,
+                    title = title,
+                    editions = editions.first().map { it.toLoadedEdition(depth - 1) },
+                    authors = authors.first().map { it.toLoadedAuthor(depth - 1) },
+                    covers = covers.first(),
+                    subjects = subjects.first(),
+                    nbOfPages = nbOfPages,
+                )
+            } else {
+                LoadedWork(
+                    id = id,
+                    title = title,
+                    editions = emptyList(),
+                    authors = emptyList(),
+                    covers = covers.first(),
+                    subjects = subjects.first(),
+                    nbOfPages = nbOfPages,
+                )
+            }
         }
     }
 
