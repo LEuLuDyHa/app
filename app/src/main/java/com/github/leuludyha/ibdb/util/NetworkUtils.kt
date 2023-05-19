@@ -4,17 +4,18 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.github.leuludyha.domain.util.NetworkProvider
 
 /**
  * Auxiliary functions related to network connection.
  */
-object NetworkUtils {
+object NetworkUtils: NetworkProvider {
     /**
      * This is implemented following the recommendations from [here](https://stackoverflow.com/questions/56709604/check-for-internet-connectivity-on-api29).
      *
      * @return true if a network is available. Both wifi and mobile are acceptable.
      */
-    fun checkNetworkAvailable(context: Context): Boolean {
+    override fun checkNetworkAvailable(context: Context): Boolean {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkAvailability =

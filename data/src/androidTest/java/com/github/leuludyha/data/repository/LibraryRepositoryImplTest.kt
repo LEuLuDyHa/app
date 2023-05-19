@@ -1,5 +1,6 @@
 package com.github.leuludyha.data.repository
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.library.CoverSize
 import com.github.leuludyha.domain.model.library.Mocks
 import com.github.leuludyha.domain.model.library.Mocks.authorGeorgeOrwell
@@ -18,7 +19,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class LibraryRepositoryImplTest {
     private lateinit var libraryRepository: LibraryRepository
 

@@ -1,5 +1,6 @@
 package com.github.leuludyha.ibdb.presentation.screen.book_details
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
@@ -22,10 +23,10 @@ class BookDetailsScreenViewModel @Inject constructor(
 
     val authContext = _authContext
 
-    fun loadWorkFrom(workId: String) {
+    fun loadWorkFrom(context: Context, workId: String) {
         viewModelScope.launch {
             if (_work.value == null) {
-                bookById(workId).collect {
+                bookById(context, workId).collect {
                     _work.value = it
                 }
             }

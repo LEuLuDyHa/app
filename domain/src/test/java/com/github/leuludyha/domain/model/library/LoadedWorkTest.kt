@@ -16,7 +16,8 @@ class LoadedWorkTest {
         listOf(
             Mocks.work1984,
             Mocks.workMrFox,
-            Mocks.workLaFermeDesAnimaux
+            Mocks.workLaFermeDesAnimaux,
+            Mocks.emptyWork
         ).forEach { work ->
             val json = Json.encodeToString(work.toLoadedWork())
             val workFromJson = Json.decodeFromString<LoadedWork>(json).toWork()

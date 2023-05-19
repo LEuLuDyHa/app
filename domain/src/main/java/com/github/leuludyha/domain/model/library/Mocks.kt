@@ -242,6 +242,15 @@ object Mocks {
         subjects = flowOf(listOf("Fiction", "Historical", "Political Science"))
     )
 
+    val emptyWork = Work(
+        title = "",
+        id = "",
+        editions = flowOf(),
+        authors = flowOf(),
+        covers = flowOf(),
+        subjects = flowOf()
+    )
+
     val userPreferences: UserPreferences = UserPreferences()
     val workPreferences: Map<String, WorkPreference> = mapOf(
         work1984.id to WorkPreference(work1984, WorkPreference.ReadingState.READING, false),

@@ -23,9 +23,11 @@ import com.github.leuludyha.domain.model.library.Work
 import com.github.leuludyha.domain.model.user.preferences.WorkPreference
 import com.github.leuludyha.domain.repository.LibraryRepository
 import com.github.leuludyha.domain.useCase.SearchRemotelyUseCase
+import com.github.leuludyha.ibdb.MockTrueNetworkProvider
 import com.github.leuludyha.ibdb.presentation.navigation.Screen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreen
 import com.github.leuludyha.ibdb.presentation.screen.search.barcode.BarcodeScreenViewModel
+import com.github.leuludyha.ibdb.util.NetworkUtils
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
@@ -56,7 +58,7 @@ class BookSearchTest {
                 composable(route = Screen.BookSearch.route) {
                     BookSearch(
                         navController, PaddingValues(), BookSearchViewModel(
-                            SearchRemotelyUseCase(LibraryRepositoryMock())
+                            SearchRemotelyUseCase(LibraryRepositoryMock(), NetworkUtils)
                         )
                     ) {
                         //Does nothing for this test
@@ -101,7 +103,7 @@ class BookSearchTest {
                 navController = navController,
                 outerPadding = PaddingValues(),
                 viewModel = BookSearchViewModel(
-                    SearchRemotelyUseCase(LibraryRepositoryMock())
+                    SearchRemotelyUseCase(LibraryRepositoryMock(), MockTrueNetworkProvider)
                 )
             ) {
                 result = it
@@ -137,7 +139,7 @@ class BookSearchTest {
                 navController = navController,
                 outerPadding = PaddingValues(),
                 viewModel = BookSearchViewModel(
-                    SearchRemotelyUseCase(LibraryRepositoryMock {null})
+                    SearchRemotelyUseCase(LibraryRepositoryMock {null}, MockTrueNetworkProvider)
 
                 )
             ) {

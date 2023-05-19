@@ -16,6 +16,7 @@ import com.github.leuludyha.domain.useCase.GetAuthorRemotelyUseCase
 import com.github.leuludyha.ibdb.EmptyDataMockLibraryRepositoryImpl
 import com.github.leuludyha.ibdb.LoadingMockLibraryRepositoryImpl
 import com.github.leuludyha.ibdb.NullErrorMessageMockLibraryRepositoryImpl
+import com.github.leuludyha.ibdb.util.NetworkUtils
 import com.google.common.truth.Truth.*
 import org.junit.Rule
 import org.junit.Test
@@ -35,7 +36,7 @@ class AuthorDetailsScreenTest {
                 authorId = authorRoaldDahl.id,
                 viewModel = AuthorDetailsScreenViewModel(
                     _authContext = Mocks.authContext,
-                    authorById = GetAuthorRemotelyUseCase(MockLibraryRepositoryImpl())
+                    authorById = GetAuthorRemotelyUseCase(MockLibraryRepositoryImpl(), NetworkUtils)
                 )
             )
         }
@@ -52,7 +53,7 @@ class AuthorDetailsScreenTest {
                 authorId = authorRoaldDahl.id,
                 viewModel = AuthorDetailsScreenViewModel(
                     _authContext = Mocks.authContext,
-                    authorById = GetAuthorRemotelyUseCase(EmptyDataMockLibraryRepositoryImpl())
+                    authorById = GetAuthorRemotelyUseCase(EmptyDataMockLibraryRepositoryImpl(), NetworkUtils)
                 )
             )
         }
@@ -69,7 +70,7 @@ class AuthorDetailsScreenTest {
                 authorId = authorGeorgeOrwell.id,
                 viewModel = AuthorDetailsScreenViewModel(
                     _authContext = Mocks.authContext,
-                    authorById = GetAuthorRemotelyUseCase(MockLibraryRepositoryImpl())
+                    authorById = GetAuthorRemotelyUseCase(MockLibraryRepositoryImpl(), NetworkUtils)
                 )
             )
         }
@@ -86,7 +87,7 @@ class AuthorDetailsScreenTest {
                 authorId = authorGeorgeOrwell.id,
                 viewModel = AuthorDetailsScreenViewModel(
                     _authContext = Mocks.authContext,
-                    authorById = GetAuthorRemotelyUseCase(NullErrorMessageMockLibraryRepositoryImpl())
+                    authorById = GetAuthorRemotelyUseCase(NullErrorMessageMockLibraryRepositoryImpl(), NetworkUtils)
                 )
             )
         }
@@ -103,7 +104,7 @@ class AuthorDetailsScreenTest {
                 authorId = authorGeorgeOrwell.id,
                 viewModel = AuthorDetailsScreenViewModel(
                     _authContext = Mocks.authContext,
-                    authorById = GetAuthorRemotelyUseCase(LoadingMockLibraryRepositoryImpl())
+                    authorById = GetAuthorRemotelyUseCase(LoadingMockLibraryRepositoryImpl(), NetworkUtils)
                 )
             )
         }

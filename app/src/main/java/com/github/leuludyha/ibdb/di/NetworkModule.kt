@@ -1,7 +1,9 @@
 package com.github.leuludyha.ibdb.di
 
 import com.github.leuludyha.data.api.LibraryApi
+import com.github.leuludyha.domain.util.NetworkProvider
 import com.github.leuludyha.ibdb.BuildConfig
+import com.github.leuludyha.ibdb.util.NetworkUtils
 import com.google.firebase.ktx.Firebase
 
 import dagger.Module
@@ -52,4 +54,9 @@ object NetworkModule {
         return Firebase
     }
 
+    @Provides
+    @Singleton
+    fun provideNetworkProvider(): NetworkProvider {
+        return NetworkUtils
+    }
 }

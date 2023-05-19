@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -30,8 +31,9 @@ fun AuthorDetailsScreen(
     authorId: String,
     viewModel: AuthorDetailsScreenViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     // Go fetch the author based on its author id
-    SideEffect{ viewModel.loadAuthorFrom(authorId) }
+    SideEffect{ viewModel.loadAuthorFrom(context, authorId) }
 
     // Collect the resulting work as a state
     val authorResult by viewModel.author.collectAsState()

@@ -4,6 +4,7 @@ import com.github.leuludyha.domain.model.interfaces.Keyed
 import com.github.leuludyha.domain.model.library.Loaded.LoadedAuthor
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 
 data class Author(
@@ -35,7 +36,7 @@ data class Author(
                 birthDate = birthDate,
                 deathDate = deathDate,
                 wikipedia = wikipedia,
-                works = works.first().map { it.toLoadedWork() },
+                works = works.firstOrNull()?.map { it.toLoadedWork() } ?: emptyList(),
                 covers = covers.first(),
             )
         }
