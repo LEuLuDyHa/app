@@ -17,7 +17,7 @@ class SharedWorkListenerTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun sharedWorkListenerDoesNotCrashWithoutPermissions() {
+    fun sharedWorkListenerDoesNotCrash() {
         composeTestRule.setContent {
             SharedWorkListener(
                 navController = rememberNavController(),
