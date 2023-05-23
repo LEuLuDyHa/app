@@ -51,11 +51,11 @@ class MockNearbyConnection : NearbyConnection {
     }
 
     override fun addListener(handler: ConnectionLifecycleHandler) {
-        //TODO: Add a few tests here if wanted
+        handler.onMount()
     }
 
     override fun removeListener(handler: ConnectionLifecycleHandler) {
-        //Nothing
+        handler.onDismount()
     }
 
     override fun isConnected(): Boolean {

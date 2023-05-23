@@ -257,7 +257,7 @@ private fun ProcessAddFriendPacket(
  * An animated Spinning Progress Bar.
  */
 @Composable
-private fun SpinningProgressBar(modifier: Modifier = Modifier) {
+fun SpinningProgressBar(modifier: Modifier = Modifier) {
     val count = 12
 
     val infiniteTransition = rememberInfiniteTransition()

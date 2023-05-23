@@ -107,4 +107,13 @@ class SharedWorkListenerTest {
         Truth.assertThat(clicked).isTrue()
     }
 
+    @Test
+    fun spinningProgressBarIsNotCrashing() {
+        composeTestRule.setContent {
+            SpinningProgressBar()
+        }
+
+        composeTestRule.waitForIdle()
+    }
+
 }
