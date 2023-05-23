@@ -17,6 +17,7 @@ import org.hamcrest.Matchers.`is` as Is
 class NearbyConnectionImplTest {
 
     private lateinit var connection: NearbyConnectionTester
+    private lateinit var failConnection: NearbyConnectionTester
 
     class MockConnectionLifecycleHandler: ConnectionLifecycleHandler() { }
 
@@ -26,6 +27,12 @@ class NearbyConnectionImplTest {
             ApplicationProvider.getApplicationContext(),
             "John Mockentosh",
             client = MockNearbyConnectionClient()
+        )
+
+        failConnection = NearbyConnectionTester(
+            ApplicationProvider.getApplicationContext(),
+            "Username",
+            client = MockFailingNearbyConnectionClient()
         )
     }
 
@@ -40,6 +47,12 @@ class NearbyConnectionImplTest {
         assertThat(connection.isDiscovering()).isTrue()
     }
 
+    @Test
+    fun internalStateIsIdleOnDiscoveryFailed() {
+        failConnection.startDiscovery()
+        assertThat(connection.internalState, Is(NearbyConnectionImpl.State.Idle))
+        assertThat(connection.isDiscovering()).isFalse()
+    }
 
     @Test
     fun internalStateIsIdleOnDiscoveryStopped() {
@@ -60,6 +73,13 @@ class NearbyConnectionImplTest {
         connection.startAdvertising()
         assertThat(connection.internalState, Is(NearbyConnectionImpl.State.Advertising))
         assertThat(connection.isAdvertising()).isTrue()
+    }
+
+    @Test
+    fun internalStateIsIdleOnAdvertisingFailed() {
+        failConnection.startAdvertising()
+        assertThat(connection.internalState, Is(NearbyConnectionImpl.State.Idle))
+        assertThat(connection.isAdvertising()).isFalse()
     }
 
     @Test
