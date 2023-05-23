@@ -160,7 +160,7 @@ private fun SharedWorkListenerComponent(
 }
 
 @Composable
-private fun PacketProcessor(
+fun PacketProcessor(
     endpoint: Endpoint,
     packet: NearbyMsgPacket,
     navController: NavHostController,
@@ -216,7 +216,7 @@ private fun ProcessShareWorkPacket(
             Button(onClick = {
                 // The user canceled, so we should reject the connection.
                 onProcessed()
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }) { Text(text = "Refuse") }
         },
         icon = { R.drawable.ic_dialog_alert }
@@ -238,14 +238,14 @@ private fun ProcessAddFriendPacket(
         confirmButton = {
             Button(onClick = {
                 onProcessed()
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }) { Text(text = "Accept") }
         },
         dismissButton = {
             Button(onClick = {
                 // The user canceled, so we should reject the connection.
                 onProcessed()
-                TODO("Not yet implemented")
+                //TODO("Not yet implemented")
             }) { Text(text = "Refuse") }
         },
         icon = { R.drawable.ic_dialog_alert }
