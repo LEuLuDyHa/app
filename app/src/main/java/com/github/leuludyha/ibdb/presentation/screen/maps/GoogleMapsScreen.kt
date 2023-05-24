@@ -36,6 +36,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.*
 import kotlinx.coroutines.launch
 
+
 /**
  * This screen opens a google maps composable. Currently implemented features include user
  * localisation and nearby users display. When clicking on a marker, it can open the actual
@@ -140,23 +141,33 @@ private fun MapsUI(
             locationPermissionState.launchPermissionRequest()
 
             //Center camera on user
-            if (locationPermissionState.hasPermission) {
-                fusedLocationClient.getCurrentLocation(
-                    Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-                    null
-                ).addOnSuccessListener {
-                    coroutineScope.launch {
-                        cameraPositionState.animate(
-                            CameraUpdateFactory.newCameraPosition(
-                                CameraPosition.fromLatLngZoom(
-                                    LatLng(it.latitude, it.longitude),
-                                    GoogleMapsScreenViewModel.ZoomLevels.Street.zoom
+            fusedLocationClient.locationAvailability.addOnCompleteListener { locAvailable ->
+                if (locationPermissionState.hasPermission
+                    && locAvailable.result.isLocationAvailable
+                ) {
+                    fusedLocationClient.getCurrentLocation(
+                        Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                        null
+                    ).addOnSuccessListener {
+                        coroutineScope.launch {
+                            cameraPositionState.animate(
+                                CameraUpdateFactory.newCameraPosition(
+                                    CameraPosition.fromLatLngZoom(
+                                        LatLng(it.latitude, it.longitude),
+                                        GoogleMapsScreenViewModel.ZoomLevels.Street.zoom
+                                    )
                                 )
                             )
-                        )
+                        }
                     }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "No location permission enabled or no gps enabled!",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-            }
+            }.addOnFailureListener { Toast.makeText(context, "Location error!", Toast.LENGTH_LONG).show() }
         }
 
         //This spacer is here to allow for google commands to appear when clicking on a marker
