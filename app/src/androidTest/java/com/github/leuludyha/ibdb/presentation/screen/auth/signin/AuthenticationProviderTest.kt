@@ -2,7 +2,6 @@ package com.github.leuludyha.ibdb.presentation.screen.auth.signin
 
 import android.app.PendingIntent
 import android.content.Intent
-import android.os.Parcel
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.leuludyha.domain.model.authentication.AuthenticationContext
@@ -94,7 +93,7 @@ class AuthenticationProviderTest {
             get() = null
 
         override suspend fun oneTapSignInWithGoogle(): OneTapSignInResponse =
-            Result.Success(BeginSignInResult(PendingIntent.readPendingIntentOrNullFromParcel(Parcel.obtain())!!))
+            Result.Success(null)
 
 
         override suspend fun firebaseSignInWithGoogle(googleCredential: AuthCredential): SignInWithGoogleResponse =
@@ -115,6 +114,30 @@ class AuthenticationProviderTest {
         composeTestRule.setContent {
             AuthenticationProvider(
                 viewModel = errorViewModel,
+                onSignedIn = { }
+            ) { }
+        }
+
+        assertThat(true).isTrue()
+    }
+
+    @Test
+    fun authenticationProviderWithSuccessFalseViewModelDoesNotCrash() {
+        composeTestRule.setContent {
+            AuthenticationProvider(
+                viewModel = successViewModel(false),
+                onSignedIn = { }
+            ) { }
+        }
+
+        assertThat(true).isTrue()
+    }
+
+    @Test
+    fun authenticationProviderWithSuccessTrueViewModelDoesNotCrash() {
+        composeTestRule.setContent {
+            AuthenticationProvider(
+                viewModel = successViewModel(true),
                 onSignedIn = { }
             ) { }
         }
